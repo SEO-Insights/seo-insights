@@ -1,0 +1,15 @@
+body {
+    font-size: 16px;
+    height: 450px;
+    margin: -1px auto 0 auto;
+    padding: 1px 0 0 0;
+    width: 600px;
+}
+#loading {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#ccc;
+}
