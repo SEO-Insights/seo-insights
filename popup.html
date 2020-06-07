@@ -2,14 +2,21 @@
 <html>
     <head>
         <title>SEO Insights</title>
+        <meta charset="utf-8">
         <script type="text/javascript" src="libs/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="libs/materialize.min.js"></script>
         <script type="text/javascript" src="popup.js"></script>
+        <link type="text/css" rel="stylesheet" href="libs/materialize.min.css">
         <link type="text/css" rel="stylesheet" href="popup.css">
     </head>
     <body>
-        <div id="loading">Extension is loading or not available on this tab...</div>
-        <span>Hello World!</span>
-        <div id="event1">Event 1</div>
-        <div id="event2">Event 2</div>
+
+        <!-- loading / not supported screen -->
+        <div id="not-supported">
+            <p>Erweiterung konnte nicht geladen werden. Ungültige URL!</p>
+        </div>
+
+        <!-- extension -->
+        <div><span data-seo-info="title"></span></div>
     </body>
 </html>

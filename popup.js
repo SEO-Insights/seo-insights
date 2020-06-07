@@ -1,54 +1,35 @@
-console.log('popup-script running');
-
-chrome.tabs.executeScript({
-    file: 'content.js'
-}, _=> {
-    var error = chrome.runtime.lastError;
-
-    if(error !== undefined) {
-        console.log('not valid tab');
+/**
+ * function to handle the result of the injection of the content script.
+ */
+function HandleNotSupported() {
+    if (chrome.runtime.lastError !== undefined) {
+        $('body').addClass('not-supported');
     } else {
-        $('div#loading').hide();
+        $('body').removeClass('not-supported');
     }
-});
+}
+
+//programmatically inject the content script.
+chrome.tabs.executeScript({file: 'libs/jquery-3.5.1.min.js'}, HandleNotSupported);
+chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
 $(document).ready(function() {
 
-    $('div#event1').on('click', function() {
-        console.log('event1 clicked');
-
+    //init
+    if ($('body').hasClass('not-supported') === false) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
         }, tabs => {
             chrome.tabs.sendMessage(
                 tabs[0].id,
-                {from: 'popup', subject: 'event1'},
+                {from: 'popup', subject: 'initialization'},
                 data
             );
         });
 
         const data = info => {
-            console.log(info);
-        }
-    });
-
-    $('div#event2').on('click', function() {
-        console.log('event2 clicked');
-
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }, tabs => {
-            chrome.tabs.sendMessage(
-                tabs[0].id,
-                {from: 'popup', subject: 'event2'},
-                data
-            );
-        });
-
-        const data = info => {
-            console.log(info);
-        }
-    });
+            $('span[data-seo-info="title"]').text(info.title);
+        };
+    }
 });
