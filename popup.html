@@ -10,13 +10,80 @@
         <link type="text/css" rel="stylesheet" href="popup.css">
     </head>
     <body>
+        <div class="container">
 
-        <!-- loading / not supported screen -->
-        <div id="not-supported">
-            <p>Erweiterung konnte nicht geladen werden. Ungültige URL!</p>
+            <!-- loading / not supported screen -->
+            <div id="not-supported">
+                <p>Erweiterung konnte nicht geladen werden. Ungültige URL!</p>
+            </div>
+
+            <!-- extension -->
+            <div class="row">
+                <div class="col s12">
+                  <ul class="tabs">
+                    <li class="tab col s3"><a href="#summary">Summary</a></li>
+                    <li class="tab col s3"><a href="#headings">Headings</a></li>
+                    <li class="tab col s3"><a href="#images">Images</a></li>
+                    <li class="tab col s3"><a href="#links">Links</a></li>
+                  </ul>
+                </div>
+
+                <!-- tab content of summary. -->
+                <div id="summary" class="col s12">
+
+                    <!-- common meta information -->
+                    <table id="meta-head">
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- tab content of headings. -->
+                <div id="headings" class="col s12">
+                  <table id="meta-headings">
+                    <thead>
+                      <tr>
+                        <th>h1</th>
+                        <th>h2</th>
+                        <th>h3</th>
+                        <th>h4</th>
+                        <th>h5</th>
+                        <th>h6</th>
+                        <th>total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-seo-info="meta-heading-h1-count"></td>
+                        <td data-seo-info="meta-heading-h2-count"></td>
+                        <td data-seo-info="meta-heading-h3-count"></td>
+                        <td data-seo-info="meta-heading-h4-count"></td>
+                        <td data-seo-info="meta-heading-h5-count"></td>
+                        <td data-seo-info="meta-heading-h6-count"></td>
+                        <td data-seo-info="meta-heading-total-count"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div id="meta-heading-list"></div>
+                </div>
+
+                <!-- tab content of images. -->
+                <div id="images" class="col s12">
+                  <span data-seo-info="meta-images-count-all"></span>
+
+                    <table id="meta-images">
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- tab content of links. -->
+                <div id="links" class="col s12">
+                  
+                    <table id="meta-links">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div> 
         </div>
-
-        <!-- extension -->
-        <div><span data-seo-info="title"></span></div>
     </body>
 </html>

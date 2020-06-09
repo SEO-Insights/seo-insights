@@ -1,5 +1,5 @@
 body {
-    font-size: 16px;
+    font-size: 14px;
     height: 600px;
     margin: -1px auto 0 auto;
     padding: 1px 0 0 0;
@@ -24,4 +24,52 @@ div#not-supported {
     position: absolute;
     right: 0;
     top: 0;
+}
+table td, table th {
+    padding: 5px;
+}
+body div.container {
+    width:95%;
+}
+div#meta-heading-list div[class^="level-"] span.badge {
+    float: none;
+}
+table#meta-links > tbody > tr > td span.badge {
+    float: none;
+    margin-right: 5px;
+}
+table#meta-head > tbody > tr > td > span.badge {
+    margin-right: 5px;
+}
+table#meta-head tr td:first-child, table#meta-links tr td:first-child {
+    font-weight: bold;
+    width: 150px;
+}
+table#meta-head tr td, table#meta-links tr td {
+    vertical-align: top;
+}
+div#meta-heading-list div[class^="level-"] span:nth-child(1) {
+    font-weight: bold;
+    padding-right: 10px;
+}
+div#meta-heading-list div.level-H1 {
+    padding-left:10px;
+}
+div#meta-heading-list div.level-H2 {
+    padding-left:20px;
+}
+div#meta-heading-list div.level-H3 {
+    padding-left:30px;
+}
+div#meta-heading-list div.level-H4 {
+    padding-left:40px;
+}
+div#meta-heading-list div.level-H5 {
+    padding-left:50px;
+}
+div#meta-heading-list div.level-H6 {
+    padding-left:60px;
+}
+table#meta-images > tbody > tr > td {
+    word-wrap: break-word;
 }
