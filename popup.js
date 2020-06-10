@@ -19,9 +19,9 @@ chrome.tabs.executeScript({file: 'scripts/links.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
 function GetAdditionalInfoHTML(objMetaElement) {
-    if (objMetaElement.count_chars > 0) {
-        var htmlBadgeCountChars = '<span class="new badge blue" data-badge-caption="chars">' + objMetaElement.count_chars + '</span>';
-        var htmlBadgeCountWords = '<span class="new badge blue" data-badge-caption="words">' + objMetaElement.count_words + '</span>';
+    if(objMetaElement.value.length > 0) {
+        var htmlBadgeCountChars = '<span class="new badge blue" data-badge-caption="chars">' + objMetaElement.value.length + '</span>';
+        var htmlBadgeCountWords = '<span class="new badge blue" data-badge-caption="words">' + GetWordCount(objMetaElement.value) + '</span>';
         return '<br>' + htmlBadgeCountChars + htmlBadgeCountWords;
     } else {
         return '';
@@ -46,29 +46,41 @@ $(document).ready(function() {
             );
         });
 
-        const data = info => {
-            let head = info['head'];
+        /**
+         * Summary
+         */
+        const data = objMetaTags => {
 
-            //define the required information (also if not available).
-            let required = ['title', 'description'];
+            //define the required information (also if not available in object).
+            var arrRequiredInfo = ['title', 'description'];
+            var arrDetailedInfo = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title'];
 
-            for (let infoItem of required) {
-                var objMeta = head[infoItem]; 
-                $('table#meta-head > tbody').append('<tr><td>' + EscapeHTML(objMeta.name) + GetAdditionalInfoHTML(objMeta) + '</td><td>' + objMeta.value + '</td>');
+            //iterate through all the required information.
+            for (let strRequiredInfo of arrRequiredInfo) {
+                var htmlAdditionalInfo = '';
+
+                if(arrDetailedInfo.includes(strRequiredInfo)) {
+                    htmlAdditionalInfo = GetAdditionalInfoHTML(objMetaTags[strRequiredInfo]);
+                }
+
+                $('table#meta-head-info > tbody').append('<tr><td>' + EscapeHTML(objMetaTags[strRequiredInfo].name) + htmlAdditionalInfo + '</td><td>' + objMetaTags[strRequiredInfo].value + '</td>');
             }
 
-            //iterate through all properties of the head information.
-            for (let infoItem in head) {
-                var objMeta = head[infoItem];
-                
-                //exclude all the empty properties (except required properties).
-                if ($.inArray(objMeta.name, required) === -1 && objMeta.value !== '') {
+            //iterate through all elements of the <head> element.
+            for (let strInfo in objMetaTags) {
+                if(!arrRequiredInfo.includes(strInfo) && objMetaTags[strInfo].value.trim() !== '') {
                     var htmlThemeColor = '';
+                    var htmlAdditionalInfo = '';
 
-                    if (objMeta.name === 'theme-color') {
-                        htmlThemeColor = '<span class="theme-color-preview" style="background:' + objMeta.value + '"></span>';
+                    if(objMetaTags[strInfo].name === 'theme-color') {
+                        htmlThemeColor = '<span class="theme-color-preview" style="background:' + objMetaTags[strInfo].value + '"></span>';
                     }
-                    $('table#meta-head > tbody').append('<tr><td>' + EscapeHTML(objMeta.name) + '</td><td>' + objMeta.value + htmlThemeColor + GetAdditionalInfoHTML(objMeta) + '</td>');
+
+                    if(arrDetailedInfo.includes(strInfo)) {
+                        htmlAdditionalInfo = GetAdditionalInfoHTML(objMetaTags[strInfo]);
+                    }
+
+                    $('table#meta-head-info > tbody').append('<tr><td>' + EscapeHTML(objMetaTags[strInfo].name) + htmlAdditionalInfo + '</td><td>' + objMetaTags[strInfo].value + htmlThemeColor + '</td>');
                 }
             }
         }

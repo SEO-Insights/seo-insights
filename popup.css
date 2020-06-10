@@ -38,15 +38,16 @@ table#meta-links > tbody > tr > td span.badge {
     float: none;
     margin-right: 5px;
 }
-table#meta-head > tbody > tr > td > span.badge {
+table#meta-head-info > tbody > tr > td > span.badge {
     margin-right: 5px;
 }
-table#meta-head tr td:first-child {
+table#meta-head-info tr td:first-child {
     font-weight: bold;
-    width: 150px;
+    width: 160px;
 }
-table#meta-head tr td, table#meta-links tr td {
+table#meta-head-info tr td, table#meta-links tr td {
     vertical-align: top;
+    word-break: break-word;
 }
 div#meta-heading-list div[class^="level-"] span:nth-child(1) {
     font-weight: bold;

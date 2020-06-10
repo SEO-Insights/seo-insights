@@ -2,11 +2,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.from === 'popup') {
         switch (message.subject) {
             case 'initialization':
-                var info = {
-                    'head': GetHeadInformation()
-                };
-
-                sendResponse(info);
+                sendResponse(GetInformationMetaTags());
                 break;
             case 'headings':
                 var info = {
