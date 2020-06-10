@@ -22,20 +22,12 @@ function EscapeHTML(str) {
     });
 }
 
-
 class MetaInfo {
     name = '';
     value = '';
-    count_chars = 0;
-    count_words = 0;
 
-    constructor(name, value, detailed = false) {
+    constructor(name, value) {
         this.name = name;
         this.value = (value || '').toString();
-
-        if (detailed === true) {
-            this.count_chars = this.value.length;
-            this.count_words = GetWordCount(this.value);
-        }
     }
 };
