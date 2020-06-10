@@ -2,31 +2,15 @@ function GetString(value) {
     return (value || "").toString();
 }
 
-// https://stackoverflow.com/a/30335883/3840840
-function GetWordsCount(value) {
-    return GetString(value).split(' ').filter(function(str) {
-        return str !== '';
-    }).length;
-}
-
-function escapeHtml(unsafe) {
-    return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
- }
-
 function GetHeadings() {
     let headings = [];
 
     $('h1, h2, h3, h4, h5, h6').each(function() {
         headings.push({
             'tag': this.tagName,
-            'title': escapeHtml($(this).text()),
+            'title': EscapeHTML($(this).text()),
             'count_chars': $(this).text().length,
-            'count_words': GetWordsCount($(this).text())
+            'count_words': GetWordCount($(this).text())
         });
     });
 

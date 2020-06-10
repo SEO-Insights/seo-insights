@@ -11,6 +11,7 @@ function HandleNotSupported() {
 
 //programmatically inject the content script.
 chrome.tabs.executeScript({file: 'libs/jquery-3.5.1.min.js'}, HandleNotSupported);
+chrome.tabs.executeScript({file: 'scripts/helper.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/head.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/image.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/heading.js'}, HandleNotSupported);
@@ -26,15 +27,6 @@ function GetAdditionalInfoHTML(objMetaElement) {
         return '';
     }
 }
-
-function escapeHtml(unsafe) {
-    return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
- }
 
 $(document).ready(function() {
 
@@ -62,7 +54,7 @@ $(document).ready(function() {
 
             for (let infoItem of required) {
                 var objMeta = head[infoItem]; 
-                $('table#meta-head > tbody').append('<tr><td>' + escapeHtml(objMeta.name) + GetAdditionalInfoHTML(objMeta) + '</td><td>' + objMeta.value + '</td>');
+                $('table#meta-head > tbody').append('<tr><td>' + EscapeHTML(objMeta.name) + GetAdditionalInfoHTML(objMeta) + '</td><td>' + objMeta.value + '</td>');
             }
 
             //iterate through all properties of the head information.
@@ -71,7 +63,12 @@ $(document).ready(function() {
                 
                 //exclude all the empty properties (except required properties).
                 if ($.inArray(objMeta.name, required) === -1 && objMeta.value !== '') {
-                    $('table#meta-head > tbody').append('<tr><td>' + escapeHtml(objMeta.name) + '</td><td>' + objMeta.value + GetAdditionalInfoHTML(objMeta) + '</td>');
+                    var htmlThemeColor = '';
+
+                    if (objMeta.name === 'theme-color') {
+                        htmlThemeColor = '<span class="theme-color-preview" style="background:' + objMeta.value + '"></span>';
+                    }
+                    $('table#meta-head > tbody').append('<tr><td>' + EscapeHTML(objMeta.name) + '</td><td>' + objMeta.value + htmlThemeColor + GetAdditionalInfoHTML(objMeta) + '</td>');
                 }
             }
         }
@@ -121,9 +118,14 @@ $(document).ready(function() {
 
             const data = info => {
                 $('*[data-seo-info="meta-images-count-all"]').text(info.images.count.all);
+                $('*[data-seo-info="meta-images-count-without-alt"]').text(info.images.count.without_alt);
+                $('*[data-seo-info="meta-images-count-without-src"]').text(info.images.count.without_src);
+                $('*[data-seo-info="meta-images-count-without-title"]').text(info.images.count.without_title);
 
                 for (let image of info.images.images) {
-                    $('table#meta-images > tbody').append('<tr><td>' + image.src + '</td></tr>');
+                    if (image.src.trim() !== '') {
+                        $('table#meta-images > tbody').append('<tr><td>' + image.src + '</td></tr>');
+                    }
                 }
             }
         });
@@ -141,6 +143,14 @@ $(document).ready(function() {
             });
 
             const data = info => {
+                $('*[data-seo-info="meta-links-count-all"]').text(info.links.count.all);
+                $('*[data-seo-info="meta-links-count-unique"]').text(info.links.count.all_unique);
+                $('*[data-seo-info="meta-links-count-internal"]').text(info.links.count.internal);
+                $('*[data-seo-info="meta-links-count-internal-unique"]').text(info.links.count.internal_unique);
+                $('*[data-seo-info="meta-links-count-external"]').text(info.links.count.external);
+                $('*[data-seo-info="meta-links-count-external-unique"]').text(info.links.count.external_unique);
+                $('*[data-seo-info="meta-links-count-without-target"]').text(info.links.count.missing);
+
                 for (let link of info.links.links) {
                     var badgeLevel = '';
 
