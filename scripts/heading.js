@@ -6,11 +6,13 @@ function GetHeadings() {
     let headings = [];
 
     $('h1, h2, h3, h4, h5, h6').each(function() {
+        var strJustElementText = $(this).clone().children().remove().end().text();
+
         headings.push({
             'tag': this.tagName,
-            'title': EscapeHTML($(this).text()),
-            'count_chars': $(this).text().length,
-            'count_words': GetWordCount($(this).text())
+            'title': EscapeHTML(strJustElementText),
+            'count_chars': strJustElementText.length,
+            'count_words': GetWordCount(strJustElementText)
         });
     });
 

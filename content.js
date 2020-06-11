@@ -4,6 +4,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             case 'initialization':
                 sendResponse(GetInformationMetaTags());
                 break;
+            case 'meta':
+                var info = {
+                    'opengraph': GetOpenGraphMeta(),
+                    'parsely': GetParselyMeta(),
+                    'twitter': GetTwitterMeta()
+                };
+
+                sendResponse(info);
+                break;
             case 'headings':
                 var info = {
                     'heading': GetHeadings()

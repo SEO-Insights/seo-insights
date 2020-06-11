@@ -72,6 +72,21 @@ var arrTwitterMetaElements = [
 ];
 
 /**
+ * sources:
+ *  - https://www.parse.ly/help/integration/metatags
+ */
+var arrParselyMetaElements = [
+    'parsely-author',
+    'parsely-image-url',
+    'parsely-link',
+    'parsely-pub-date',
+    'parsely-section',
+    'parsely-tags',
+    'parsely-type',
+    'parsely-title'
+];
+
+/**
  * function to get the information of the <head> element of the page.
  */
 function GetInformationMetaTags() {
@@ -134,4 +149,41 @@ function GetAllMetaNames() {
 
     //return the array with all found name values of the <meta> elements.
     return arrMetaNames;
+}
+
+/**
+ * function to get all Parse.ly <meta> elements.
+ */
+function GetParselyMeta() {
+    var info = new Object();
+
+    //iterate through the parsely <meta> elements of the <head> element.
+    for (var itemParselyMetaElement of arrParselyMetaElements) {
+        info[itemParselyMetaElement] = new MetaInfo(itemParselyMetaElement, $('head > meta[name="' + itemParselyMetaElement + '"]').attr('content'));
+    }
+
+    //return the object with the meta information.
+    return info;
+}
+
+function GetTwitterMeta() {
+    var info = new Object();
+
+    //iterate through the Twitter <meta> elements of the <head> element.
+    for (var itemTwitterMetaElement of arrTwitterMetaElements) {
+        info[itemTwitterMetaElement] = new MetaInfo(itemTwitterMetaElement, $('head > meta[name="' + itemTwitterMetaElement + '"]').attr('content'));
+    }
+
+    return info;
+}
+
+function GetOpenGraphMeta() {
+    var info = new Object();
+
+    //iterate through the OpenGraph <meta> elements of the <head> element.
+    for (var itemOpenGraphMetaElement of arrOpenGraphMetaElements) {
+        info[itemOpenGraphMetaElement] = new MetaInfo(itemOpenGraphMetaElement, $('head > meta[property="' + itemOpenGraphMetaElement + '"]').attr('content'));
+    }
+
+    return info;
 }

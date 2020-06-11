@@ -32,6 +32,7 @@ $(document).ready(function() {
 
     //initialize the materialize tabs.
     $('.tabs').tabs();
+    $('.collapsible').collapsible();
 
     //init
     if ($('body').hasClass('not-supported') === false) {
@@ -84,6 +85,49 @@ $(document).ready(function() {
                 }
             }
         }
+
+        $('a[href="#meta"]').on('click', function() {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, tabs => {
+                chrome.tabs.sendMessage(
+                    tabs[0].id,
+                    {from: 'popup', subject: 'meta'},
+                    data
+                );
+            });
+
+            const data = info => {
+                var objMetaOpenGraph = info['opengraph'];
+                var objMetaParsely = info['parsely'];
+                var objMetaTwitter = info['twitter'];
+
+                for (let strInfo in objMetaParsely) {
+                    var objMetaItem = objMetaParsely[strInfo];
+
+                    if (objMetaItem.value.trim() !== '') {
+                        $('table#meta-parsely > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    }
+                }
+
+                for (let strInfo in objMetaTwitter) {
+                    var objMetaItem = objMetaTwitter[strInfo];
+
+                    if (objMetaItem.value.trim() !== '') {
+                        $('table#meta-twitter > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    }
+                }
+
+                for (let strInfo in objMetaOpenGraph) {
+                    var objMetaItem = objMetaOpenGraph[strInfo];
+
+                    if (objMetaItem.value.trim() !== '') {
+                        $('table#meta-opengraph > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    }
+                }
+            }
+        });
 
         $('a[href="#headings"]').on('click', function() {
             chrome.tabs.query({
