@@ -4,175 +4,203 @@
         <title>SEO Insights</title>
         <meta charset="utf-8">
         <script type="text/javascript" src="libs/jquery-3.5.1.min.js"></script>
-        <script type="text/javascript" src="libs/materialize.min.js"></script>
+        <script type="text/javascript" src="libs/bootstrap.min.js"></script>
         <script type="text/javascript" src="scripts/helper.js"></script>
         <script type="text/javascript" src="popup.js"></script>
-        <link type="text/css" rel="stylesheet" href="libs/materialize.min.css">
+        <link type="text/css" rel="stylesheet" href="libs/bootstrap.min.css">
         <link type="text/css" rel="stylesheet" href="popup.css">
     </head>
     <body>
-        <div class="container">
+        <div class="container-fluid">
+
+            <!-- navigation controls -->
+            <nav>
+                <div class="nav nav-pills" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true">Summary</a>
+                    <a class="nav-item nav-link" id="nav-meta-tab" data-toggle="tab" href="#nav-meta" role="tab" aria-controls="nav-meta" aria-selected="false">Meta</a>
+                    <a class="nav-item nav-link" id="nav-headings-tab" data-toggle="tab" href="#nav-headings" role="tab" aria-controls="nav-headings" aria-selected="false">Headings</a>
+                    <a class="nav-item nav-link" id="nav-images-tab" data-toggle="tab" href="#nav-images" role="tab" aria-controls="nav-images" aria-selected="false">Images</a>
+                    <a class="nav-item nav-link" id="nav-links-tab" data-toggle="tab" href="#nav-links" role="tab" aria-controls="nav-links" aria-selected="false">Links</a>
+                </div>
+            </nav>
+
+            <!-- content of the tab pages -->
+            <div class="tab-content">
+
+                <!-- content of the summary tab page -->
+                <div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
+
+                    <!-- common meta information -->
+                    <table class="table table-sm table-striped" id="meta-head-info">
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- content of the meta tab page -->
+                <div class="tab-pane fade" id="nav-meta" role="tabpanel" aria-labelledby="nav-meta-tab">
+                    <div class="accordion" id="meta">
+                        <div class="card">
+                            <div class="card-header" id="meta-article-heading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-article-content" aria-expanded="true" aria-controls="meta-article-content">Article</button>
+                                </h2>
+                            </div>
+                            <div id="meta-article-content" class="collapse" aria-labelledby="meta-article-heading" data-parent="#meta">
+                                <div class="card-body">
+                                    <table class="table table-sm table-striped" id="meta-article">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="meta-opengraph-heading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-opengraph-content" aria-expanded="false" aria-controls="meta-opengraph-content">OpenGraph</button>
+                                </h2>
+                            </div>
+                            <div id="meta-opengraph-content" class="collapse" aria-labelledby="meta-opengraph-heading" data-parent="#meta">
+                                <div class="card-body">
+                                    <table class="table table-sm table-striped" id="meta-opengraph">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="meta-twitter-heading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-twitter-content" aria-expanded="false" aria-controls="meta-twitter-content">Twitter</button>
+                                </h2>
+                            </div>
+                            <div id="meta-twitter-content" class="collapse" aria-labelledby="meta-twitter-heading" data-parent="#meta">
+                                <div class="card-body">
+                                    <table class="table table-sm table-striped" id="meta-twitter">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="meta-parsely-heading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-parsely-content" aria-expanded="false" aria-controls="meta-parsely-content">Parse.ly</button>
+                                </h2>
+                            </div>
+                            <div id="meta-parsely-content" class="collapse" aria-labelledby="meta-parsely-heading" data-parent="#meta">
+                                <div class="card-body">
+                                    <table class="table table-sm table-striped" id="meta-parsely">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- content of the headings tab page -->
+                <div class="tab-pane fade" id="nav-headings" role="tabpanel" aria-labelledby="nav-headings-tab">
+                    <table class="table table-sm table-bordered" id="meta-headings-stats">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>h1</th>
+                                <th>h2</th>
+                                <th>h3</th>
+                                <th>h4</th>
+                                <th>h5</th>
+                                <th>h6</th>
+                                <th>total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-seo-info="meta-heading-h1-count"></td>
+                                <td data-seo-info="meta-heading-h2-count"></td>
+                                <td data-seo-info="meta-heading-h3-count"></td>
+                                <td data-seo-info="meta-heading-h4-count"></td>
+                                <td data-seo-info="meta-heading-h5-count"></td>
+                                <td data-seo-info="meta-heading-h6-count"></td>
+                                <td data-seo-info="meta-heading-total-count"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>Headings</h5>
+                    <table class="table table-sm" id="meta-headings">
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- content of the image tab page -->
+                <div class="tab-pane fade" id="nav-images" role="tabpanel" aria-labelledby="nav-images-tab">
+                    <table class="table table-sm table-bordered" id="meta-images-stats">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>all</th>
+                                <th>w/o <code>alt</code></th>
+                                <th>w/o <code>src</code></th>
+                                <th>w/o <code>title</code></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-seo-info="meta-images-count-all"></td>
+                                <td data-seo-info="meta-images-count-without-alt"></td>
+                                <td data-seo-info="meta-images-count-without-src"></td>
+                                <td data-seo-info="meta-images-count-without-title"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>Images</h5>
+                    <table class="table table-sm table-striped" id="meta-images">
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- content of the links tab page -->
+                <div class="tab-pane fade" id="nav-links" role="tabpanel" aria-labelledby="nav-links-tab">
+                    <table class="table table-sm table-bordered" id="meta-links-stats">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th colspan="3">links</th>
+                                <th colspan="2">internal</th>
+                                <th colspan="2">external</th>
+                            </tr>
+                            <tr>
+                                <th>all</th>
+                                <th>unique</th>
+                                <th>without target</th>
+                                <th>all</th>
+                                <th>unique</th>
+                                <th>all</th>
+                                <th>unique</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-seo-info="meta-links-count-all"></td>
+                                <td data-seo-info="meta-links-count-unique"></td>
+                                <td data-seo-info="meta-links-count-without-target"></td>
+                                <td data-seo-info="meta-links-count-internal"></td>
+                                <td data-seo-info="meta-links-count-internal-unique"></td>
+                                <td data-seo-info="meta-links-count-external"></td>
+                                <td data-seo-info="meta-links-count-external-unique"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>Links</h5>
+                    <table class="table table-sm table-striped" id="meta-links">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
 
             <!-- loading / not supported screen -->
             <div id="not-supported">
                 <p>Erweiterung konnte nicht geladen werden. Ungültige URL!</p>
             </div>
-
-            <!-- extension -->
-            <div class="row">
-                <div class="col s12">
-                  <ul class="tabs">
-                    <li class="tab col s3"><a href="#summary">Summary</a></li>
-                    <li class="tab col s3"><a href="#meta">Meta</a></li>
-                    <li class="tab col s3"><a href="#headings">Headings</a></li>
-                    <li class="tab col s3"><a href="#images">Images</a></li>
-                    <li class="tab col s3"><a href="#links">Links</a></li>
-                  </ul>
-                </div>
-
-                <!-- tab content of summary. -->
-                <div id="summary" class="col s12">
-
-                    <!-- common meta information -->
-                    <table id="meta-head-info">
-                        <tbody></tbody>
-                    </table>
-                </div>
-
-                <!-- tab content meta. -->
-                <div id="meta" class="col s12">
-                  <ul class="collapsible">
-                    <li id="meta-article-card">
-                      <div class="collapsible-header">Article</div>
-                      <div class="collapsible-body">
-                        <table id="meta-article">
-                          <tbody></tbody>
-                        </table>
-                      </div>
-                    </li>
-                    <li id="meta-opengraph-card">
-                      <div class="collapsible-header">OpenGraph</div>
-                      <div class="collapsible-body">
-                        <table id="meta-opengraph">
-                          <tbody></tbody>
-                        </table>
-                      </div>
-                    </li>
-                    <li id="meta-twitter-card">
-                      <div class="collapsible-header">Twitter</div>
-                      <div class="collapsible-body">
-                        <table id="meta-twitter">
-                          <tbody></tbody>
-                        </table>
-                      </div>
-                    </li>
-                    <li id="meta-parsely-card">
-                      <div class="collapsible-header">Parse.ly</div>
-                      <div class="collapsible-body">
-                        <table id="meta-parsely">
-                          <tbody></tbody>
-                        </table>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- tab content of headings. -->
-                <div id="headings" class="col s12">
-                  <table id="meta-headings-stats">
-                    <thead>
-                      <tr>
-                        <th>h1</th>
-                        <th>h2</th>
-                        <th>h3</th>
-                        <th>h4</th>
-                        <th>h5</th>
-                        <th>h6</th>
-                        <th>total</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td data-seo-info="meta-heading-h1-count"></td>
-                        <td data-seo-info="meta-heading-h2-count"></td>
-                        <td data-seo-info="meta-heading-h3-count"></td>
-                        <td data-seo-info="meta-heading-h4-count"></td>
-                        <td data-seo-info="meta-heading-h5-count"></td>
-                        <td data-seo-info="meta-heading-h6-count"></td>
-                        <td data-seo-info="meta-heading-total-count"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <h5 class="flow-text">Headings</h5>
-                  <div id="meta-heading-list"></div>
-                </div>
-
-                <!-- tab content of images. -->
-                <div id="images" class="col s12">
-                    <table id="meta-images-stats">
-                      <thead>
-                        <tr>
-                          <th>count</th>
-                          <th>without <code>alt</code></th>
-                          <th>without <code>src</code></th>
-                          <th>without <code>title</code></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td data-seo-info="meta-images-count-all"></td>
-                          <td data-seo-info="meta-images-count-without-alt"></td>
-                          <td data-seo-info="meta-images-count-without-src"></td>
-                          <td data-seo-info="meta-images-count-without-title"></td>
-                        </tr>
-                      </tbody>
-                    </table>
-
-                    <h5 class="flow-text">Images</h5>
-                    <table id="meta-images">
-                        <tbody></tbody>
-                    </table>
-                </div>
-
-                <!-- tab content of links. -->
-                <div id="links" class="col s12">
-                    <table id="meta-links-stats">
-                      <thead>
-                        <tr>
-                          <th colspan="2">links</th>
-                          <th colspan="2">internal</th>
-                          <th colspan="2">external</th>
-                          <th rowspan="2">without target</th>
-                        </tr>
-                        <tr>
-                          <th>all</th>
-                          <th>unique</th>
-                          <th>all</th>
-                          <th>unique</th>
-                          <th>all</th>
-                          <th>unique</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td data-seo-info="meta-links-count-all"></td>
-                          <td data-seo-info="meta-links-count-unique"></td>
-                          <td data-seo-info="meta-links-count-internal"></td>
-                          <td data-seo-info="meta-links-count-internal-unique"></td>
-                          <td data-seo-info="meta-links-count-external"></td>
-                          <td data-seo-info="meta-links-count-external-unique"></td>
-                          <td data-seo-info="meta-links-count-without-target"></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  
-                    <h5 class="flow-text">Links</h5>
-                    <table id="meta-links">
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div> 
         </div>
     </body>
 </html>

@@ -25,71 +25,138 @@ div#not-supported {
     right: 0;
     top: 0;
 }
-table td, table th {
-    padding: 5px;
+nav div.nav-tabs,
+nav div.nav-pills {
+    margin-top:5px;
 }
-body div.container {
-    width:95%;
-}
-div#meta-heading-list div[class^="level-"] span.badge {
-    float: none;
-}
-table#meta-links > tbody > tr > td span.badge {
-    float: none;
-    margin-right: 5px;
-}
-table#meta-head-info > tbody > tr > td > span.badge {
-    margin-right: 5px;
-}
-table#meta-head-info tr td:first-child {
+#nav-summary table tr td:first-child {
     font-weight: bold;
-    width: 160px;
+    min-width: 135px;
 }
-table#meta-head-info tr td, table#meta-links tr td {
-    vertical-align: top;
-    word-break: break-word;
+#nav-summary table tr td:first-child span:nth-of-type(1),
+#nav-links table tr td:first-child span:nth-of-type(1),
+#nav-links table tr td:first-child span:nth-of-type(2) {
+    margin-right: 5px;
 }
-div#meta-heading-list div[class^="level-"] span:nth-child(1) {
+table#meta-headings tr td[class^="level-"] span:nth-of-type(1) {
     font-weight: bold;
     padding-right: 10px;
 }
-div#meta-heading-list div.level-H1 {
+table#meta-headings tr td[class^="level-"] span:nth-of-type(2) {
+    margin-right: 5px;
+}
+table#meta-headings td.level-H1 {
     padding-left:10px;
 }
-div#meta-heading-list div.level-H2 {
+table#meta-headings td.level-H2 {
     padding-left:20px;
 }
-div#meta-heading-list div.level-H3 {
+table#meta-headings td.level-H3 {
     padding-left:30px;
 }
-div#meta-heading-list div.level-H4 {
+table#meta-headings td.level-H4 {
     padding-left:40px;
 }
-div#meta-heading-list div.level-H5 {
+table#meta-headings td.level-H5 {
     padding-left:50px;
 }
-div#meta-heading-list div.level-H6 {
+table#meta-headings td.level-H6 {
     padding-left:60px;
-}
-table#meta-images > tbody > tr > td {
-    word-wrap: break-word;
-}
-table#meta-images-stats td,
-table#meta-images-stats th,
-table#meta-links-stats td,
-table#meta-links-stats th,
-table#meta-headings-stats td,
-table#meta-headings-stats th {
-    text-align: center;
 }
 div#images h5 {
     font-weight: bold;
 }
-.theme-color-preview {
-    border: 1px solid black;
-    width: 15px;
-    display:inline-block;
-    height: 100%;
-    height:15px;
-    margin-left: 15px;
+div.tab-pane {
+    padding-top: 10px;
+}
+
+/*
+ * Summary
+ */
+#meta-head-info tbody tr td {
+    word-break: break-word;
+}
+
+/*
+ * Meta
+ */
+.card-header button span.badge {
+    float: right;
+    margin-top: 4px;
+}
+table#meta-article,
+table#meta-opengraph,
+table#meta-parsely,
+table#meta-twitter {
+    margin: 0;
+    word-break: break-word;
+ }
+
+table#meta-article tr td:first-child,
+table#meta-opengraph tr td:first-child,
+table#meta-parsely tr td:first-child,
+table#meta-twitter tr td:first-child {
+    font-weight: bold;
+    min-width: 135px;
+    width: auto;
+}
+#meta-article-content .card-body,
+#meta-opengraph-content .card-body,
+#meta-parsely-content .card-body,
+#meta-twitter-content .card-body {
+    padding: 0;
+}
+
+/*
+ *
+ */
+table#meta-headings-stats {
+    text-align: center;
+}
+
+/*
+ * Images
+ */
+table#meta-images-stats {
+    text-align: center;
+}
+table#meta-images {
+    word-break: break-all;
+}
+
+/*
+ * Links
+ */
+table#meta-links-stats {
+    text-align: center;
+}
+table#meta-links tbody tr td {
+    word-break: break-word;
+}
+
+/* 
+ * Overwrites for Bootstrap 4.5 to customize the design.
+ */
+span.badge {
+    border-radius: 0;
+}
+nav div.nav-pills a.nav-item,
+nav div.nav-tabs a.nav-item {
+    border-radius: 0;
+}
+.accordion .card {
+    border-radius: 0;
+}
+.accordion .card .btn.focus,
+.accordion .card .btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
+.accordion .card .card-header {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.accordion .card .card-header button {
+    color: #000;
+    font-weight: bold;
 }

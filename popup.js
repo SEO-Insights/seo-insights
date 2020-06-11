@@ -20,8 +20,8 @@ chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
 function GetAdditionalInfoHTML(objMetaElement) {
     if(objMetaElement.value.length > 0) {
-        var htmlBadgeCountChars = '<span class="new badge blue" data-badge-caption="chars">' + objMetaElement.value.length + '</span>';
-        var htmlBadgeCountWords = '<span class="new badge blue" data-badge-caption="words">' + GetWordCount(objMetaElement.value) + '</span>';
+        var htmlBadgeCountChars = '<span class="badge badge-success">' + objMetaElement.value.length + ' chars</span>';
+        var htmlBadgeCountWords = '<span class="badge badge-success">' + GetWordCount(objMetaElement.value) + ' words</span>';
         return '<br>' + htmlBadgeCountChars + htmlBadgeCountWords;
     } else {
         return '';
@@ -43,10 +43,6 @@ function GetAvailableProperties(obj) {
 
 $(document).ready(function() {
 
-    //initialize the materialize tabs.
-    $('.tabs').tabs();
-    $('.collapsible').collapsible();
-
     //init
     if ($('body').hasClass('not-supported') === false) {
         chrome.tabs.query({
@@ -64,6 +60,8 @@ $(document).ready(function() {
          * Summary
          */
         const data = objMetaTags => {
+
+            console.log("Init");
 
             $('table#meta-head-info > tbody').empty();
 
@@ -85,23 +83,18 @@ $(document).ready(function() {
             //iterate through all elements of the <head> element.
             for (let strInfo in objMetaTags) {
                 if(!arrRequiredInfo.includes(strInfo) && objMetaTags[strInfo].value.trim() !== '') {
-                    var htmlThemeColor = '';
                     var htmlAdditionalInfo = '';
-
-                    if(objMetaTags[strInfo].name === 'theme-color') {
-                        htmlThemeColor = '<span class="theme-color-preview" style="background:' + objMetaTags[strInfo].value + '"></span>';
-                    }
 
                     if(arrDetailedInfo.includes(strInfo)) {
                         htmlAdditionalInfo = GetAdditionalInfoHTML(objMetaTags[strInfo]);
                     }
 
-                    $('table#meta-head-info > tbody').append('<tr><td>' + EscapeHTML(objMetaTags[strInfo].name) + htmlAdditionalInfo + '</td><td>' + objMetaTags[strInfo].value + htmlThemeColor + '</td>');
+                    $('table#meta-head-info > tbody').append('<tr><td>' + EscapeHTML(objMetaTags[strInfo].name) + htmlAdditionalInfo + '</td><td>' + objMetaTags[strInfo].value + '</td>');
                 }
             }
         }
 
-        $('a[href="#meta"]').on('click', function() {
+        $('a[href="#nav-meta"]').on('click', function() {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
@@ -125,15 +118,15 @@ $(document).ready(function() {
                 var objMetaParsely = info['parsely'];
                 var objMetaTwitter = info['twitter'];
 
-                $('li#meta-article-card > div[class*="header"] > .badge').remove();
-                $('li#meta-opengraph-card > div[class*="header"] > .badge').remove();
-                $('li#meta-parsely-card > div[class*="header"] > .badge').remove();
-                $('li#meta-twitter-card > div[class*="header"] > .badge').remove();
-
-                $('li#meta-article-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaArticle) + '</span>');
-                $('li#meta-opengraph-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaOpenGraph) + '</span>');
-                $('li#meta-parsely-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaParsely) + '</span>');
-                $('li#meta-twitter-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaTwitter) + '</span>');
+                $('#meta-article-heading button > .badge').remove();
+                $('#meta-opengraph-heading button > .badge').remove();
+                $('#meta-parsely-heading button > .badge').remove();
+                $('#meta-twitter-heading button > .badge').remove();
+                
+                $('#meta-article-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaArticle) + ' items</span>');
+                $('#meta-opengraph-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaOpenGraph) + ' items</span>');
+                $('#meta-parsely-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaParsely) + ' items</span>');
+                $('#meta-twitter-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaTwitter) + ' items</span>');
 
                 console.log(GetAvailableProperties(objMetaArticle));
 
@@ -171,7 +164,7 @@ $(document).ready(function() {
             }
         });
 
-        $('a[href="#headings"]').on('click', function() {
+        $('a[href="#nav-headings"]').on('click', function() {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
@@ -185,7 +178,7 @@ $(document).ready(function() {
 
             const data = info => {
 
-                $('div#meta-heading-list').empty();
+                $('table#meta-headings').empty();
                 
                 //headInfo
                 let heading = info['heading'];
@@ -199,12 +192,12 @@ $(document).ready(function() {
                 $('*[data-seo-info="meta-heading-total-count"]').text(heading.counts.all);
 
                 for (let infoHeading of heading.headings) {
-                    $('div#meta-heading-list').append('<div class="level-' + infoHeading.tag + '"><span>' + infoHeading.tag + '</span>' + infoHeading.title + '<br><span class="new badge blue" data-badge-caption="chars">' + infoHeading.count_chars + '</span><span class="new badge blue" data-badge-caption="words">' + infoHeading.count_words + '</span></div>');
+                    $('table#meta-headings').append('<tr><td class="level-' + infoHeading.tag + '"><span>' + infoHeading.tag + '</span>' + infoHeading.title + '<br><span class="badge badge-success">' + infoHeading.count_chars + ' chars</span><span class="badge badge-success">' + infoHeading.count_words + ' words</span></td></tr>');
                 }
             }
         });
 
-        $('a[href="#images"]').on('click', function() {
+        $('a[href="#nav-images"]').on('click', function() {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
@@ -233,7 +226,7 @@ $(document).ready(function() {
             }
         });
 
-        $('a[href="#links"]').on('click', function() {
+        $('a[href="#nav-links"]').on('click', function() {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
@@ -261,12 +254,12 @@ $(document).ready(function() {
                     var badgeLevel = '';
 
                     if (link.level !== 0 && (['script', 'anchor']).includes(link.type) === false) {
-                        badgeLevel = '<span class="new badge blue" data-badge-caption="levels">' + link.level + '</span>';
+                        badgeLevel = '<span class="badge badge-success">' + link.level + ' levels</span>';
                     }
 
-                    var badgeCount = '<span class="new badge blue" data-badge-caption="x">' + link.count + '</span>';
+                    var badgeCount = '<span class="badge badge-success">' + link.count + 'x</span>';
 
-                    $('table#meta-links > tbody').append('<tr><td>' + link.href + '<br><span class="new badge blue" data-seo-info="meta-links-type" data-badge-caption="">' + link.type + '</span>' + badgeLevel + badgeCount + '</td></tr>');
+                    $('table#meta-links > tbody').append('<tr><td>' + link.href + '<br><span class="badge badge-success" data-seo-info="meta-links-type">' + link.type + '</span>' + badgeLevel + badgeCount + '</td></tr>');
                 }
             }
         });

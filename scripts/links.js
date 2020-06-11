@@ -53,6 +53,7 @@ function GetHyperlinks() {
                 'count': 1,
                 'href': href,
                 'internal': is_internal,
+                'rel': this.rel,
                 'title': this.title,
                 'type': linktype,
                 'level': count_level
