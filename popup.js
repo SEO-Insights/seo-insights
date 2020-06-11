@@ -28,6 +28,19 @@ function GetAdditionalInfoHTML(objMetaElement) {
     }
 }
 
+function GetAvailableProperties(obj) {
+    var count = 0;
+    for (var k in obj) {
+        if (obj.hasOwnProperty(k)) {
+            if(obj[k] !== '') {
+                ++count;
+            }
+        }
+    }
+
+    return count;
+}
+
 $(document).ready(function() {
 
     //initialize the materialize tabs.
@@ -51,6 +64,8 @@ $(document).ready(function() {
          * Summary
          */
         const data = objMetaTags => {
+
+            $('table#meta-head-info > tbody').empty();
 
             //define the required information (also if not available in object).
             var arrRequiredInfo = ['title', 'description'];
@@ -99,9 +114,36 @@ $(document).ready(function() {
             });
 
             const data = info => {
+                
+                $('table#meta-article > tbody').empty();
+                $('table#meta-opengraph > tbody').empty();
+                $('table#meta-parsely > tbody').empty();
+                $('table#meta-twitter > tbody').empty();
+                
+                var objMetaArticle = info['article'];
                 var objMetaOpenGraph = info['opengraph'];
                 var objMetaParsely = info['parsely'];
                 var objMetaTwitter = info['twitter'];
+
+                $('li#meta-article-card > div[class*="header"] > .badge').remove();
+                $('li#meta-opengraph-card > div[class*="header"] > .badge').remove();
+                $('li#meta-parsely-card > div[class*="header"] > .badge').remove();
+                $('li#meta-twitter-card > div[class*="header"] > .badge').remove();
+
+                $('li#meta-article-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaArticle) + '</span>');
+                $('li#meta-opengraph-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaOpenGraph) + '</span>');
+                $('li#meta-parsely-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaParsely) + '</span>');
+                $('li#meta-twitter-card > div[class*="header"]').append('<span class="new badge blue" data-badge-caption="items">' + GetAvailableProperties(objMetaTwitter) + '</span>');
+
+                console.log(GetAvailableProperties(objMetaArticle));
+
+                for (let strInfo in objMetaArticle) {
+                    var objMetaItem = objMetaArticle[strInfo];
+
+                    if (objMetaItem.value.trim() !== '') {
+                        $('table#meta-article > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    }
+                }
 
                 for (let strInfo in objMetaParsely) {
                     var objMetaItem = objMetaParsely[strInfo];
@@ -143,6 +185,8 @@ $(document).ready(function() {
 
             const data = info => {
 
+                $('div#meta-heading-list').empty();
+                
                 //headInfo
                 let heading = info['heading'];
 
@@ -173,6 +217,9 @@ $(document).ready(function() {
             });
 
             const data = info => {
+
+                $('table#meta-images > tbody').empty();
+
                 $('*[data-seo-info="meta-images-count-all"]').text(info.images.count.all);
                 $('*[data-seo-info="meta-images-count-without-alt"]').text(info.images.count.without_alt);
                 $('*[data-seo-info="meta-images-count-without-src"]').text(info.images.count.without_src);
@@ -199,6 +246,9 @@ $(document).ready(function() {
             });
 
             const data = info => {
+
+                $('table#meta-links > tbody').empty();
+
                 $('*[data-seo-info="meta-links-count-all"]').text(info.links.count.all);
                 $('*[data-seo-info="meta-links-count-unique"]').text(info.links.count.all_unique);
                 $('*[data-seo-info="meta-links-count-internal"]').text(info.links.count.internal);

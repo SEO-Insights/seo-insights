@@ -6,9 +6,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 break;
             case 'meta':
                 var info = {
-                    'opengraph': GetOpenGraphMeta(),
-                    'parsely': GetParselyMeta(),
-                    'twitter': GetTwitterMeta()
+                    'article': MetaInformation.GetArticle(),
+                    'opengraph': MetaInformation.GetOpenGraph(),
+                    'parsely': MetaInformation.GetParsely(),
+                    'twitter': MetaInformation.GetTwitter()
                 };
 
                 sendResponse(info);
