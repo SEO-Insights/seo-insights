@@ -44,13 +44,19 @@ function GetInformationMetaTags() {
 
         //add the meta information to the object if the name is known.
         if (arrMetaElements.includes(strMetaName)) {
-            info[strMetaName] = new MetaInfo(strMetaName, $(this).attr('content'));
+            info[strMetaName] = {
+                'name': strMetaName,
+                'value': GetString($(this).attr('content'))
+            };
         }
     });
 
     //iterate through the common elements of the <head> element.
     for(var itemCommonElement of arrCommonElements) {
-        info[itemCommonElement] = new MetaInfo(itemCommonElement, $('head > ' + itemCommonElement).text());
+        info[itemCommonElement] = {
+            'name': itemCommonElement,
+            'value': GetString($('head > ' + itemCommonElement).text())
+        };
     }
 
     $.extend(info, MetaInformation.GetOpenGraph());
@@ -175,7 +181,10 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesArticle.includes(strMetaName)) {
-                    info[strMetaName] = new MetaInfo(strMetaName, $(this).attr('content'));
+                    info[strMetaName] = {
+                        'name': strMetaName,
+                        'value': GetString($(this).attr('content'))
+                    };
                 }
             });
 
@@ -195,7 +204,10 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesOpenGraph.includes(strMetaName)) {
-                    info[strMetaName] = new MetaInfo(strMetaName, $(this).attr('content'));
+                    info[strMetaName] = {
+                        'name': strMetaName,
+                        'value': GetString($(this).attr('content'))
+                    };
                 }
             });
 
@@ -215,7 +227,10 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesParsely.includes(strMetaName)) {
-                    info[strMetaName] = new MetaInfo(strMetaName, $(this).attr('content'));
+                    info[strMetaName] = {
+                        'name': strMetaName,
+                        'value': GetString($(this).attr('content'))
+                    };
                 }
             });
 
@@ -235,7 +250,10 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesTwitter.includes(strMetaName)) {
-                    info[strMetaName] = new MetaInfo(strMetaName, $(this).attr('content'));
+                    info[strMetaName] = {
+                        'name': strMetaName,
+                        'value': GetString($(this).attr('content'))
+                    };
                 }
             });
 

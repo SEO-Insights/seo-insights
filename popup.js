@@ -61,8 +61,6 @@ $(document).ready(function() {
          */
         const data = objMetaTags => {
 
-            console.log("Init");
-
             $('table#meta-head-info > tbody').empty();
 
             //define the required information (also if not available in object).
@@ -72,6 +70,11 @@ $(document).ready(function() {
             //iterate through all the required information.
             for (let strRequiredInfo of arrRequiredInfo) {
                 var htmlAdditionalInfo = '';
+                var objMetaInfo = objMetaTags[strRequiredInfo];
+
+                if(objMetaInfo === undefined) {
+                    continue;
+                }
 
                 if(arrDetailedInfo.includes(strRequiredInfo)) {
                     htmlAdditionalInfo = GetAdditionalInfoHTML(objMetaTags[strRequiredInfo]);

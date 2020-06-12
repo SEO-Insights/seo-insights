@@ -22,12 +22,6 @@ function EscapeHTML(str) {
     });
 }
 
-class MetaInfo {
-    name = '';
-    value = '';
-
-    constructor(name, value) {
-        this.name = name;
-        this.value = (value || '').toString();
-    }
-};
+function GetString(value) {
+    return (value || '').toString();
+}
