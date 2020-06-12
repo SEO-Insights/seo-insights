@@ -1,74 +1,4 @@
 /**
- * sources:
- *  - https://html.spec.whatwg.org/#the-title-element
- */
-var arrCommonElements = [
-    'title'
-];
-
-/**
- * sources:
- *  - https://support.google.com/webmasters/answer/79812
- *  - https://html.spec.whatwg.org/#standard-metadata-names
- *  - https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240
- */
-var arrMetaElements = [
-    'application-name',
-    'author',
-    'bingbot',
-    'description',
-    'generator',
-    'google',
-    'googlebot',
-    'google-site-verification',
-    'keywords',
-    'msnbot',
-    'rating',
-    'referrer',
-    'robots',
-    'theme-color',
-    'viewport'
-];
-
-/**
- * function to get the information of the <head> element of the page.
- */
-function GetInformationMetaTags() {
-    var info = new Object();
-
-    //iterate through all the common <meta> elements with name attribute.
-    $('head > meta[name]').each(function() {
-
-        //normalize the name of the <meta> element.
-        var strMetaName = $(this).attr('name').trim().toLowerCase();
-
-        //add the meta information to the object if the name is known.
-        if (arrMetaElements.includes(strMetaName)) {
-            info[strMetaName] = {
-                'name': strMetaName,
-                'value': GetString($(this).attr('content'))
-            };
-        }
-    });
-
-    //iterate through the common elements of the <head> element.
-    for(var itemCommonElement of arrCommonElements) {
-        info[itemCommonElement] = {
-            'name': itemCommonElement,
-            'value': GetString($('head > ' + itemCommonElement).text())
-        };
-    }
-
-    $.extend(info, MetaInformation.GetOpenGraph());
-    $.extend(info, MetaInformation.GetParsely());
-    $.extend(info, MetaInformation.GetTwitter());
-    $.extend(info, MetaInformation.GetArticle());
-    
-    //return the object with the meta information.
-    return info;
-}
-
-/**
  * function to get all property values of the <meta> elements.
  */
 function GetAllMetaProperties() {
@@ -102,6 +32,42 @@ function GetAllMetaNames() {
  * Module MetaInformation
  */
 var MetaInformation = (function() {
+
+    /**
+     * The known tags for the general meta information.
+     * 
+     * sources:
+     *  - https://html.spec.whatwg.org/#the-title-element
+     */
+    var arrTagsGeneral = [
+        'title'
+    ];
+
+    /**
+     * The known names for the general meta information.
+     * 
+     * sources:
+     *  - https://support.google.com/webmasters/answer/79812
+     *  - https://html.spec.whatwg.org/#standard-metadata-names
+     *  - https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240
+     */
+    var arrMetaNamesGeneral = [
+        'application-name',
+        'author',
+        'bingbot',
+        'description',
+        'generator',
+        'google',
+        'googlebot',
+        'google-site-verification',
+        'keywords',
+        'msnbot',
+        'rating',
+        'referrer',
+        'robots',
+        'theme-color',
+        'viewport'
+    ];
 
     /**
      * The known properties for the Article meta information.
@@ -143,6 +109,8 @@ var MetaInformation = (function() {
         'parsely-author',
         'parsely-image-url',
         'parsely-link',
+        'parsely-metadata',
+        'parsely-post-id',
         'parsely-pub-date',
         'parsely-section',
         'parsely-tags',
@@ -170,6 +138,60 @@ var MetaInformation = (function() {
     return {
 
         /**
+         * Get the general meta information.
+         */
+        GetGeneral: function() {
+            var info = new Object();
+
+            //iterate through all the <meta> elements with name attribute.
+            $('head > meta[name]').each(function() {
+                var strMetaName = $(this).attr('name').trim().toLocaleLowerCase();
+
+                //add the information of this <meta> element if known.
+                if (arrMetaNamesGeneral.includes(strMetaName)) {
+                    var strMetaValue = GetString($(this).attr('content')).trim();
+
+                    //check if the value of the <meta> element is empty.
+                    //in this case we don't have to add the value to the object.
+                    if (strMetaValue === '') {
+                        return;
+                    }
+
+                    //check if the property is already available.
+                    //so it looks like a seconds <meta> element with same name already exists.
+                    if (info.hasOwnProperty(strMetaName)) {
+
+                        //decide to convert the property value to an array or add the value to the existing array.
+                        if (Array.isArray(info[strMetaName])) {
+                            info[strMetaName].push(strMetaValue);
+                        } else {
+                            info[strMetaName] = [info[strMetaName], strMetaValue];
+                        }
+                    } else {
+                        info[strMetaName] = strMetaValue;
+                    }
+                }
+            });
+
+            //iterate through the general elements of the <head> element.
+            for (var strGeneralTag of arrTagsGeneral) {
+                var strTagValue = GetString($('head > ' + strGeneralTag).text()).trim();
+
+                //check if the value of the general tag is empty.
+                //in this case we don't have to add the value to the object.
+                if (strTagValue === '') {
+                    continue;
+                }
+
+                //add the value to the object.
+                info[strGeneralTag] = strTagValue;
+            }
+
+            //return the general meta information.
+            return info;
+        },
+
+        /**
          * Get the Article meta information.
          */
         GetArticle: function() {
@@ -181,10 +203,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesArticle.includes(strMetaName)) {
-                    info[strMetaName] = {
-                        'name': strMetaName,
-                        'value': GetString($(this).attr('content'))
-                    };
+                    info[strMetaName] = GetString($(this).attr('content'));
                 }
             });
 
@@ -204,10 +223,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesOpenGraph.includes(strMetaName)) {
-                    info[strMetaName] = {
-                        'name': strMetaName,
-                        'value': GetString($(this).attr('content'))
-                    };
+                    info[strMetaName] = GetString($(this).attr('content'));
                 }
             });
 
@@ -227,10 +243,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesParsely.includes(strMetaName)) {
-                    info[strMetaName] = {
-                        'name': strMetaName,
-                        'value': GetString($(this).attr('content'))
-                    };
+                    info[strMetaName] = GetString($(this).attr('content'));
                 }
             });
 
@@ -250,10 +263,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesTwitter.includes(strMetaName)) {
-                    info[strMetaName] = {
-                        'name': strMetaName,
-                        'value': GetString($(this).attr('content'))
-                    };
+                    info[strMetaName] = GetString($(this).attr('content'));
                 }
             });
 

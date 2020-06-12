@@ -18,10 +18,10 @@ chrome.tabs.executeScript({file: 'scripts/heading.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/links.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
-function GetAdditionalInfoHTML(objMetaElement) {
-    if(objMetaElement.value.length > 0) {
-        var htmlBadgeCountChars = '<span class="badge badge-success">' + objMetaElement.value.length + ' chars</span>';
-        var htmlBadgeCountWords = '<span class="badge badge-success">' + GetWordCount(objMetaElement.value) + ' words</span>';
+function GetAdditionalInfoHTML(strValue) {
+    if (strValue.length > 0) {
+        var htmlBadgeCountChars = '<span class="badge badge-success">' + strValue.length + ' chars</span>';
+        var htmlBadgeCountWords = '<span class="badge badge-success">' + GetWordCount(strValue) + ' words</span>';
         return '<br>' + htmlBadgeCountChars + htmlBadgeCountWords;
     } else {
         return '';
@@ -59,8 +59,9 @@ $(document).ready(function() {
         /**
          * Summary
          */
-        const data = objMetaTags => {
+        const data = objMetaInfo => {
 
+            //clear the table because we refresh this table here with current values.
             $('table#meta-head-info > tbody').empty();
 
             //define the required information (also if not available in object).
@@ -69,33 +70,57 @@ $(document).ready(function() {
 
             //iterate through all the required information.
             for (let strRequiredInfo of arrRequiredInfo) {
-                var htmlAdditionalInfo = '';
-                var objMetaInfo = objMetaTags[strRequiredInfo];
 
-                if(objMetaInfo === undefined) {
+                //check if the property is available.
+                if (!objMetaInfo.hasOwnProperty(strRequiredInfo)) {
                     continue;
                 }
 
-                if(arrDetailedInfo.includes(strRequiredInfo)) {
-                    htmlAdditionalInfo = GetAdditionalInfoHTML(objMetaTags[strRequiredInfo]);
+                //get the value of the meta information and reset the addtional HTML information.
+                var strMetaValue = '';
+                var strAdditionalInfoHTML = '';
+
+                //the value can be an array with multiple values or a single value.
+                if (Array.isArray(objMetaInfo[strRequiredInfo])) {
+                    strMetaValue = objMetaInfo[strRequiredInfo].join('; ');
+                } else {
+                    strMetaValue = objMetaInfo[strRequiredInfo];
+                }
+                
+                //check if the current info need more details.
+                if (arrDetailedInfo.includes(strRequiredInfo)) {
+                    strAdditionalInfoHTML = GetAdditionalInfoHTML(strMetaValue);
                 }
 
-                $('table#meta-head-info > tbody').append('<tr><td>' + EscapeHTML(objMetaTags[strRequiredInfo].name) + htmlAdditionalInfo + '</td><td>' + objMetaTags[strRequiredInfo].value + '</td>');
+                //add the current meta info to the table.
+                $('table#meta-head-info > tbody').append('<tr><td>' + strRequiredInfo + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strMetaValue) + '</td>');
             }
 
-            //iterate through all elements of the <head> element.
-            for (let strInfo in objMetaTags) {
-                if(!arrRequiredInfo.includes(strInfo) && objMetaTags[strInfo].value.trim() !== '') {
-                    var htmlAdditionalInfo = '';
+            //iterate through all the elements of the <head> element.
+            for (let strMetaName in objMetaInfo) {
+                var strMetaValue = '';
 
-                    if(arrDetailedInfo.includes(strInfo)) {
-                        htmlAdditionalInfo = GetAdditionalInfoHTML(objMetaTags[strInfo]);
+                //the value can be an array with multiple values or a single value.
+                if (Array.isArray(objMetaInfo[strMetaName])) {
+                    strMetaValue = objMetaInfo[strMetaName].join('; ');
+                } else {
+                    strMetaValue = GetString(objMetaInfo[strMetaName]);
+                }
+
+                //don't show the required meta information again.
+                if (!arrRequiredInfo.includes(strMetaName) && strMetaValue.trim() !== '') {
+                    var strAdditionalInfoHTML = '';
+
+                    //check if the current info need more details.
+                    if (arrDetailedInfo.includes(strMetaName)) {
+                        strAdditionalInfoHTML = GetAdditionalInfoHTML(strMetaValue);
                     }
 
-                    $('table#meta-head-info > tbody').append('<tr><td>' + EscapeHTML(objMetaTags[strInfo].name) + htmlAdditionalInfo + '</td><td>' + objMetaTags[strInfo].value + '</td>');
+                    //add the current meta info to the table.
+                    $('table#meta-head-info > tbody').append('<tr><td>' + strMetaName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strMetaValue) + '</td>');
                 }
             }
-        }
+        };
 
         $('a[href="#nav-meta"]').on('click', function() {
             chrome.tabs.query({
@@ -133,35 +158,35 @@ $(document).ready(function() {
 
                 console.log(GetAvailableProperties(objMetaArticle));
 
-                for (let strInfo in objMetaArticle) {
-                    var objMetaItem = objMetaArticle[strInfo];
+                for (let strArticleName in objMetaArticle) {
+                    var strArticleValue = objMetaArticle[strArticleName];
 
-                    if (objMetaItem.value.trim() !== '') {
-                        $('table#meta-article > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    if (strArticleValue.trim() !== '') {
+                        $('table#meta-article > tbody').append('<tr><td>' + strArticleName + '</td><td>' + EscapeHTML(strArticleValue) + '</td>');
                     }
                 }
 
-                for (let strInfo in objMetaParsely) {
-                    var objMetaItem = objMetaParsely[strInfo];
+                for (let strParselyName in objMetaParsely) {
+                    var strParselyValue = objMetaParsely[strParselyName];
 
-                    if (objMetaItem.value.trim() !== '') {
-                        $('table#meta-parsely > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    if (strParselyValue.trim() !== '') {
+                        $('table#meta-parsely > tbody').append('<tr><td>' + strParselyName + '</td><td>' + EscapeHTML(strParselyValue) + '</td>');
                     }
                 }
 
-                for (let strInfo in objMetaTwitter) {
-                    var objMetaItem = objMetaTwitter[strInfo];
+                for (let strTwitterName in objMetaTwitter) {
+                    var strTwitterValue = objMetaTwitter[strTwitterName];
 
-                    if (objMetaItem.value.trim() !== '') {
-                        $('table#meta-twitter > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    if (strTwitterValue.trim() !== '') {
+                        $('table#meta-twitter > tbody').append('<tr><td>' + strTwitterName + '</td><td>' + EscapeHTML(strTwitterValue) + '</td>');
                     }
                 }
 
-                for (let strInfo in objMetaOpenGraph) {
-                    var objMetaItem = objMetaOpenGraph[strInfo];
+                for (let strOpenGraphName in objMetaOpenGraph) {
+                    var strOpenGraphValue = objMetaOpenGraph[strOpenGraphName];
 
-                    if (objMetaItem.value.trim() !== '') {
-                        $('table#meta-opengraph > tbody').append('<tr><td>' + EscapeHTML(objMetaItem.name) + '</td><td>' + objMetaItem.value + '</td>');
+                    if (strOpenGraphValue.trim() !== '') {
+                        $('table#meta-opengraph > tbody').append('<tr><td>' + strOpenGraphName + '</td><td>' + EscapeHTML(strOpenGraphValue) + '</td>');
                     }
                 }
             }

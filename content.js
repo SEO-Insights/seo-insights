@@ -2,7 +2,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.from === 'popup') {
         switch (message.subject) {
             case 'initialization':
-                sendResponse(GetInformationMetaTags());
+
+                //output all meta name and property values for debug.
+                console.log(GetAllMetaProperties());
+                console.log(GetAllMetaNames());
+
+                sendResponse(MetaInformation.GetGeneral());
                 break;
             case 'meta':
                 var info = {
