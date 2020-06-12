@@ -1,3 +1,21 @@
+chrome.tabs.query({
+    active: true,
+    currentWindow: true
+}, tabs => {
+    chrome.tabs.onUpdated.addListener(function (tabId , info) {
+        if (tabs[0].id === tabId) {
+            if (info.status === 'complete') {
+                $('body').removeClass('not-supported');
+                console.log('Reload');
+                location.reload();    
+            } else {
+                $('body').addClass('not-supported');
+            }
+            
+        }
+    });
+});
+
 /**
  * function to handle the result of the injection of the content script.
  */
@@ -16,6 +34,7 @@ chrome.tabs.executeScript({file: 'scripts/head.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/image.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/heading.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/links.js'}, HandleNotSupported);
+chrome.tabs.executeScript({file: 'scripts/files.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
 function GetAdditionalInfoHTML(strValue) {
@@ -110,14 +129,20 @@ $(document).ready(function() {
                 //don't show the required meta information again.
                 if (!arrRequiredInfo.includes(strMetaName) && strMetaValue.trim() !== '') {
                     var strAdditionalInfoHTML = '';
+                    var strThemeColorHTML = '';
 
                     //check if the current info need more details.
                     if (arrDetailedInfo.includes(strMetaName)) {
                         strAdditionalInfoHTML = GetAdditionalInfoHTML(strMetaValue);
                     }
 
+                    //we create a little label to show the theme-color as color.
+                    if (strMetaName === 'theme-color') {
+                        strThemeColorHTML = '<div class="theme-color" style="background: ' + strMetaValue + '"></div>';
+                    }
+
                     //add the current meta info to the table.
-                    $('table#meta-head-info > tbody').append('<tr><td>' + strMetaName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strMetaValue) + '</td>');
+                    $('table#meta-head-info > tbody').append('<tr><td>' + strMetaName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strMetaValue) + strThemeColorHTML + '</td>');
                 }
             }
         };
@@ -156,7 +181,8 @@ $(document).ready(function() {
                 $('#meta-parsely-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaParsely) + ' items</span>');
                 $('#meta-twitter-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaTwitter) + ' items</span>');
 
-                console.log(GetAvailableProperties(objMetaArticle));
+                var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
+                var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
 
                 for (let strArticleName in objMetaArticle) {
                     var strArticleValue = objMetaArticle[strArticleName];
@@ -175,19 +201,39 @@ $(document).ready(function() {
                 }
 
                 for (let strTwitterName in objMetaTwitter) {
-                    var strTwitterValue = objMetaTwitter[strTwitterName];
+                    var strTwitterValue = GetString(objMetaTwitter[strTwitterName]).trim();
+                    var strAdditionalInfoHTML = '';
 
-                    if (strTwitterValue.trim() !== '') {
-                        $('table#meta-twitter > tbody').append('<tr><td>' + strTwitterName + '</td><td>' + EscapeHTML(strTwitterValue) + '</td>');
+                    //don't do anything in case there is no value.
+                    if (strTwitterValue === '') {
+                        continue;
                     }
+
+                    //get the additional information if needed.
+                    if (arrDetailedInfoTwitter.includes(strTwitterName)) {
+                        strAdditionalInfoHTML = GetAdditionalInfoHTML(strTwitterValue);
+                    }
+
+                    //set the Twitter information to the table.
+                    $('table#meta-twitter > tbody').append('<tr><td>' + strTwitterName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strTwitterValue) + '</td>');
                 }
 
                 for (let strOpenGraphName in objMetaOpenGraph) {
-                    var strOpenGraphValue = objMetaOpenGraph[strOpenGraphName];
+                    var strOpenGraphValue = GetString(objMetaOpenGraph[strOpenGraphName]).trim();
+                    var strAdditionalInfoHTML = '';
 
-                    if (strOpenGraphValue.trim() !== '') {
-                        $('table#meta-opengraph > tbody').append('<tr><td>' + strOpenGraphName + '</td><td>' + EscapeHTML(strOpenGraphValue) + '</td>');
+                    //don't do anything in case there is no value.
+                    if (strOpenGraphValue === '') {
+                        continue;
                     }
+
+                    //get the additional information if needed.
+                    if (arrDetailedInfoOpenGraph.includes(strOpenGraphName)) {
+                        strAdditionalInfoHTML = GetAdditionalInfoHTML(strOpenGraphValue);
+                    }
+                    
+                    //set the OpenGraph information to the table.
+                    $('table#meta-opengraph > tbody').append('<tr><td>' + strOpenGraphName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strOpenGraphValue) + '</td>');
                 }
             }
         });
@@ -288,6 +334,32 @@ $(document).ready(function() {
                     var badgeCount = '<span class="badge badge-success">' + link.count + 'x</span>';
 
                     $('table#meta-links > tbody').append('<tr><td>' + link.href + '<br><span class="badge badge-success" data-seo-info="meta-links-type">' + link.type + '</span>' + badgeLevel + badgeCount + '</td></tr>');
+                }
+            }
+        });
+
+        $('a[href="#nav-files"]').on('click', function() {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, tabs => {
+                chrome.tabs.sendMessage(
+                    tabs[0].id,
+                    {from: 'popup', subject: 'files'},
+                    data
+                );
+            });
+
+            const data = filesInfo => {
+                var listStylesheet = filesInfo['stylesheet'];
+                var listJavaScript = filesInfo['javascript'];
+
+                for (let fileStylesheet of listStylesheet) {
+                    $('table#files-stylesheet').append('<tr><td>' + fileStylesheet + '</td></tr>');
+                }
+
+                for (let fileJavaScript of listJavaScript) {
+                    $('table#files-javascript').append('<tr><td>' + fileJavaScript + '</td></tr>');
                 }
             }
         });

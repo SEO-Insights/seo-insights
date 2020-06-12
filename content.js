@@ -2,6 +2,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.from === 'popup') {
         switch (message.subject) {
             case 'initialization':
+                console.log('Init called!');
 
                 //output all meta name and property values for debug.
                 console.log(GetAllMetaProperties());
@@ -36,6 +37,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             case 'links':
                 var info = {
                     'links': GetHyperlinks()
+                };
+
+                sendResponse(info);
+                break;
+            case 'files':
+                var info = {
+                    'stylesheet': FileInformation.GetStylesheetFiles(),
+                    'javascript': FileInformation.GetJavaScriptFiles()
                 };
 
                 sendResponse(info);

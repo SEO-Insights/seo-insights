@@ -137,6 +137,10 @@ var MetaInformation = (function() {
 
     return {
 
+        GetCanonical: function() {
+            return $('head > link[rel="canonical"]').attr('href');
+        },
+
         /**
          * Get the general meta information.
          */
@@ -186,6 +190,9 @@ var MetaInformation = (function() {
                 //add the value to the object.
                 info[strGeneralTag] = strTagValue;
             }
+
+            //get the canonical link of the site.
+            info['canonical'] = GetString(this.GetCanonical()).trim();
 
             //return the general meta information.
             return info;
