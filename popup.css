@@ -141,7 +141,8 @@ table#meta-images {
 /*
  * Links
  */
-table#meta-links-stats {
+table#meta-links-stats,
+table#meta-links-protocol-stats {
     text-align: center;
 }
 table#meta-links tbody tr td {
@@ -159,6 +160,9 @@ table#files-javascript {
 div#files-stylesheet-content .card-body,
 div#files-javascript-content .card-body {
     padding: 0;
+}
+div#files-javascript-heading button span.badge {
+    float: right;
 }
 
 /* 

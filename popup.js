@@ -311,31 +311,32 @@ $(document).ready(function() {
                     data
                 );
             });
+            
+            const data = listHyperlinks => {
 
-            const data = info => {
-
+                //remove all the rows of the hyperlinks table.
                 $('table#meta-links > tbody').empty();
 
-                $('*[data-seo-info="meta-links-count-all"]').text(info.links.count.all);
-                $('*[data-seo-info="meta-links-count-unique"]').text(info.links.count.all_unique);
-                $('*[data-seo-info="meta-links-count-internal"]').text(info.links.count.internal);
-                $('*[data-seo-info="meta-links-count-internal-unique"]').text(info.links.count.internal_unique);
-                $('*[data-seo-info="meta-links-count-external"]').text(info.links.count.external);
-                $('*[data-seo-info="meta-links-count-external-unique"]').text(info.links.count.external_unique);
-                $('*[data-seo-info="meta-links-count-without-target"]').text(info.links.count.missing);
+                //set the statistics for the hyperlinks.
+                $('*[data-seo-info="meta-links-count-all"]').text(listHyperlinks.map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-count-unique"]').text(listHyperlinks.length);
+                $('*[data-seo-info="meta-links-count-internal"]').text(listHyperlinks.filter(link => link.internal === true).map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-count-internal-unique"]').text(listHyperlinks.filter(link => link.internal === true).length);
+                $('*[data-seo-info="meta-links-count-external"]').text(listHyperlinks.filter(link => link.internal === false).map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-count-external-unique"]').text(listHyperlinks.filter(link => link.internal === false).length);
 
-                for (let link of info.links.links) {
-                    var badgeLevel = '';
+                //set the statistics for the protocols of the hyperlinks.
+                $('*[data-seo-info="meta-links-protocol-http"]').text(listHyperlinks.filter(link => link.url.protocol === 'http').map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-protocol-https"]').text(listHyperlinks.filter(link => link.url.protocol === 'https').map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-protocol-mailto"]').text(listHyperlinks.filter(link => link.url.protocol === 'mailto').map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-protocol-javascript"]').text(listHyperlinks.filter(link => link.url.protocol === 'javascript').map(link => link.count).reduce((a, c)=> a + c, 0));
+                $('*[data-seo-info="meta-links-protocol-whatsapp"]').text(listHyperlinks.filter(link => link.url.protocol === 'whatsapp').map(link => link.count).reduce((a, c)=> a + c, 0));
 
-                    if (link.level !== 0 && (['script', 'anchor']).includes(link.type) === false) {
-                        badgeLevel = '<span class="badge badge-success">' + link.level + ' levels</span>';
-                    }
-
-                    var badgeCount = '<span class="badge badge-success">' + link.count + 'x</span>';
-
-                    $('table#meta-links > tbody').append('<tr><td>' + link.href + '<br><span class="badge badge-success" data-seo-info="meta-links-type">' + link.type + '</span>' + badgeLevel + badgeCount + '</td></tr>');
+                //iterate through the hyperlinks and set them to the table.
+                for (const itemHyperlink of listHyperlinks) {
+                    $('table#meta-links > tbody').append('<tr><td>' + itemHyperlink.value + '</td></tr>');
                 }
-            }
+            };
         });
 
         $('a[href="#nav-files"]').on('click', function() {
@@ -354,6 +355,12 @@ $(document).ready(function() {
                 var listStylesheet = filesInfo['stylesheet'];
                 var listJavaScript = filesInfo['javascript'];
 
+                $('div#files-stylesheet-heading button span.badge').remove();
+                $('div#files-javascript-heading button span.badge').remove();
+
+                $('div#files-stylesheet-heading button').append('<span class="badge badge-success">' + listStylesheet.length + ' files</span>');
+                $('div#files-javascript-heading button').append('<span class="badge badge-success">' + listJavaScript.length + ' files</span>');
+                
                 for (let fileStylesheet of listStylesheet) {
                     $('table#files-stylesheet').append('<tr><td>' + fileStylesheet + '</td></tr>');
                 }

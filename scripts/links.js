@@ -1,76 +1,96 @@
-function GetHyperlinks() {
-    var links = [];
-    var host = location.host;
-    var origin = location.origin;
-    var baseurl = location.origin + location.pathname;
-    
-    $('a').each(function() {
-        var href = undefined;
-        var is_internal = undefined;
-        var linktype = '';
-        var count_level = 0;
-
-        try {
-            var url = new URL(this.href, baseurl);
-            is_internal = (url.host === host);
-            href = this.href;
-
-            href = href.replace(baseurl, ''); //to get the anchors
-            href = href.replace(origin, ''); //to get internal pages without origin. 
-
-            count_level = GetString(url.pathname).split('/').filter(function(str) {
-                return str !== '';
-            }).length;
-
-            switch(url.protocol) {
-                case 'https:':
-                    linktype = 'url (secure)';
-                    break;
-                case 'http:':
-                    linktype = 'url (not secure)';
-                    break;
-                case 'mailto:':
-                    linktype = 'email';
-                    break;
-                case 'javascript:':
-                    linktype = 'script';
-                    break;
-            }
-
-            if(url.hash !== "") {
-                linktype = 'anchor'
-            }
-        } catch(_) {
-            href = undefined;
-        }
-
-        var link = links.find(link => link.href === href);
-
-        if(link !== undefined) {
-            link.count += 1;
-        } else {
-            links.push({
-                'count': 1,
-                'href': href,
-                'internal': is_internal,
-                'rel': this.rel,
-                'title': this.title,
-                'type': linktype,
-                'level': count_level
-            });
-        }
-    });
-
+/**
+ * Module for Hyperlinks.
+ */
+var Hyperlinks = (function() {
     return {
-        'count': {
-            'all': links.map(link => link.count).reduce((a, c)=> a + c, 0),
-            'all_unique': links.length,
-            'internal': links.filter(link => link.internal === true).map(link => link.count).reduce((a, c)=> a + c, 0),
-            'internal_unique': links.filter(link => link.internal === true).length,
-            'external': links.filter(link => link.internal === false).map(link => link.count).reduce((a, c)=> a + c, 0),
-            'external_unique': links.filter(link => link.internal === false).length,
-            'missing': links.filter(link => link.href === undefined).map(link => link.count).reduce((a, c)=> a + c, 0)   
+        /**
+         * Function to get all hyperlinks of the current site.
+         * 
+         * @return {Object[]} An array with all found hyperlinks information.
+         */
+        GetAll: function() {
+            var listHyperlinks = [];
+
+            //iterate through all hyperlink elements of the site.
+            $('body a').each(function() {
+                try {
+                    //get the URL as object if reference is valid.
+                    //in case the reference is not valid we ignore the hyperlink element.
+                    const objUrl = new URL(($(this).attr('href') || '').toString(), Hyperlinks.GetBaseURL());
+
+                    //check if the URL already exists in the array.
+                    var objAvailableURL = listHyperlinks.find(objItemURL => objItemURL.url.href === objUrl.href);
+
+                    //add the hyperlink if not exists or update count of this hyperlink.
+                    if (objAvailableURL === undefined) {
+
+                        //get the full URL of the Hyperlink.
+                        var strHyperlink = objUrl.href;
+
+                        //remove the the whole base URL and the origin of the current site.
+                        strHyperlink = strHyperlink.replace(Hyperlinks.GetBaseURL(), '');
+                        strHyperlink = strHyperlink.replace(location.origin, '');
+
+                        //add the object with information of the Hyperlink to the array.
+                        listHyperlinks.push({
+                            'count': 1,
+                            'internal': Hyperlinks.IsInternal(objUrl.href),
+                            'rel': ($(this).attr('rel') || '').toString(),
+                            'title': ($(this).attr('title') || '').toString(),
+                            'url': {
+                                'hash': objUrl.hash,
+                                'href': objUrl.href,
+                                'origin': objUrl.origin,
+                                'pathname': objUrl.pathname,
+                                'protocol': (objUrl.protocol || '').toString().replace(':', '')
+                            },
+                            'value': strHyperlink
+                        });
+                    } else {
+                        objAvailableURL.count++;
+                    }
+                } catch(_) { }
+            });
+
+            //return all found hyperlinks.
+            return listHyperlinks;
         },
-        'links': links
+
+        /**
+         * Function to get the base URL of the current site.
+         * 
+         * @return {string} The base URL of the current site.
+         */
+        GetBaseURL: function() {
+            return (location.origin + location.pathname);
+        },
+
+        /**
+         * Function to get all external hyperlinks of the current site.
+         * 
+         * @return {Object[]} An array with all found external hyperlinks.
+         */
+        GetExternal: function() {
+            return Hyperlinks.GetAll().filter(objLink => objLink.internal === false);
+        },
+
+        /**
+         * Function to get all internal hyperlinks of the current site.
+         * 
+         * @return {Object[]} An array with all found internal hyperlinks.
+         */
+        GetInternal: function() {
+            return Hyperlinks.GetAll().filter(objLink => objLink.internal === true);
+        },
+
+        /**
+         * Funtion to check if a full URL is a internal URL.
+         * 
+         * @param {string} strFullURL The full URL to check if it is a internal URL.
+         * @return {boolean} The state if the full URL is a internal URL.
+         */
+        IsInternal: function(strFullURL) {
+            return strFullURL.startsWith(Hyperlinks.GetBaseURL());
+        }
     };
-}
+})();

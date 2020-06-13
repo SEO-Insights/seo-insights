@@ -4,6 +4,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             case 'initialization':
                 console.log('Init called!');
 
+                console.log(Hyperlinks.GetExternal());
+
                 //output all meta name and property values for debug.
                 console.log(GetAllMetaProperties());
                 console.log(GetAllMetaNames());
@@ -35,11 +37,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(info);
                 break;
             case 'links':
-                var info = {
-                    'links': GetHyperlinks()
-                };
-
-                sendResponse(info);
+                sendResponse(Hyperlinks.GetAll());
                 break;
             case 'files':
                 var info = {
