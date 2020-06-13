@@ -97,7 +97,8 @@ table#meta-head-info tbody tr td div.theme-color {
 table#meta-article,
 table#meta-opengraph,
 table#meta-parsely,
-table#meta-twitter {
+table#meta-twitter,
+table#meta-others {
     margin: 0;
     word-break: break-word;
  }
@@ -105,7 +106,8 @@ table#meta-twitter {
 table#meta-article tr td:first-child,
 table#meta-opengraph tr td:first-child,
 table#meta-parsely tr td:first-child,
-table#meta-twitter tr td:first-child {
+table#meta-twitter tr td:first-child,
+table#meta-others tr td:first-child {
     font-weight: bold;
     min-width: 135px;
     width: auto;
@@ -113,11 +115,13 @@ table#meta-twitter tr td:first-child {
 div#meta-article-content .card-body,
 div#meta-opengraph-content .card-body,
 div#meta-parsely-content .card-body,
-div#meta-twitter-content .card-body {
+div#meta-twitter-content .card-body,
+div#meta-others-content .card-body {
     padding: 0;
 }
 div#meta-opengraph-content table#meta-opengraph tr td:first-child span:first-of-type,
-div#meta-twitter-content table#meta-twitter tr td:first-child span:first-of-type {
+div#meta-twitter-content table#meta-twitter tr td:first-child span:first-of-type,
+div#meta-others-content table#meta-others tr td:first-child span:first-of-type {
     margin-right: 5px;
 }
 

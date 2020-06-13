@@ -2,11 +2,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.from === 'popup') {
         switch (message.subject) {
             case SUBJECT.SUMMARY:
-
-                //output all meta name and property values for debug.
-                console.log(GetAllMetaProperties());
-                console.log(GetAllMetaNames());
-
                 sendResponse(MetaInformation.GetGeneral());
                 break;
             case SUBJECT.META:
@@ -14,7 +9,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                     'article': MetaInformation.GetArticle(),
                     'opengraph': MetaInformation.GetOpenGraph(),
                     'parsely': MetaInformation.GetParsely(),
-                    'twitter': MetaInformation.GetTwitter()
+                    'twitter': MetaInformation.GetTwitter(),
+                    'others': MetaInformation.GetOthers()
                 };
 
                 sendResponse(info);

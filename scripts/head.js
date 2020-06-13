@@ -1,35 +1,5 @@
 /**
- * function to get all property values of the <meta> elements.
- */
-function GetAllMetaProperties() {
-    var arrMetaProperties = [];
-
-    //get all property attributes of the <meta> elements and add the values to the array.
-    $('head > meta[property]').each(function() {
-        arrMetaProperties.push($(this).attr('property'));
-    });
-
-    //return the array with all found property values of the <meta> elements.
-    return arrMetaProperties;
-}
-
-/**
- * function to get all name values of the <meta> elements.
- */
-function GetAllMetaNames() {
-    var arrMetaNames = [];
-
-    //get all name attributes of the <meta> elements and add the values to the array.
-    $('head > meta[name]').each(function() {
-        arrMetaNames.push($(this).attr('name'));
-    });
-
-    //return the array with all found name values of the <meta> elements.
-    return arrMetaNames;
-}
-
-/**
- * Module MetaInformation
+ * Module for Meta Information.
  */
 var MetaInformation = (function() {
 
@@ -235,6 +205,30 @@ var MetaInformation = (function() {
             });
 
             //return the information.
+            return info;
+        },
+
+        GetOthers: function() {
+            var info = new Object();
+
+            //iterate through all <meta> elements with name attribute.
+            $('head > meta[name]').each(function() {
+                var strMetaName = ($(this).attr('name') || '').toString();
+
+                if (!arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesTwitter.includes(strMetaName)) {
+                    info[strMetaName] = GetString($(this).attr('content'));
+                }
+            });
+
+            //iterate through all <meta> elements with property attribute.
+            $('head > meta[property]').each(function() {
+                var strMetaProperty = ($(this).attr('property') || '').toString();
+
+                if (!arrMetaPropertiesArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty)) {
+                    info[strMetaProperty] = GetString($(this).attr('content'));
+                }
+            });
+
             return info;
         },
 
