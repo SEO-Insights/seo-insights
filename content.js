@@ -1,10 +1,7 @@
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.from === 'popup') {
         switch (message.subject) {
-            case 'initialization':
-                console.log('Init called!');
-
-                console.log(Hyperlinks.GetExternal());
+            case SUBJECT.SUMMARY:
 
                 //output all meta name and property values for debug.
                 console.log(GetAllMetaProperties());
@@ -12,7 +9,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
                 sendResponse(MetaInformation.GetGeneral());
                 break;
-            case 'meta':
+            case SUBJECT.META:
                 var info = {
                     'article': MetaInformation.GetArticle(),
                     'opengraph': MetaInformation.GetOpenGraph(),
@@ -22,24 +19,24 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
                 sendResponse(info);
                 break;
-            case 'headings':
+            case SUBJECT.HEADING:
                 var info = {
                     'heading': GetHeadings()
                 };
 
                 sendResponse(info);
                 break;
-            case 'images':
+            case SUBJECT.IMAGE:
                 var info = {
                     'images': GetImages()
                 };
 
                 sendResponse(info);
                 break;
-            case 'links':
+            case SUBJECT.HYPERLINK:
                 sendResponse(Hyperlinks.GetAll());
                 break;
-            case 'files':
+            case SUBJECT.FILE:
                 var info = {
                     'stylesheet': FileInformation.GetStylesheetFiles(),
                     'javascript': FileInformation.GetJavaScriptFiles()

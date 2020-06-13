@@ -25,3 +25,15 @@ function EscapeHTML(str) {
 function GetString(value) {
     return (value || '').toString();
 }
+
+/**
+ * The enum for the different subjects of this chrome extension.
+ */
+const SUBJECT = {
+    FILE: 'file',
+    HEADING: 'heading',
+    HYPERLINK: 'hyperlink',
+    IMAGE: 'image',
+    META: 'meta',
+    SUMMARY: 'summary'
+};

@@ -70,7 +70,7 @@ $(document).ready(function() {
         }, tabs => {
             chrome.tabs.sendMessage(
                 tabs[0].id,
-                {from: 'popup', subject: 'initialization'},
+                {from: 'popup', subject: SUBJECT.SUMMARY},
                 data
             );
         });
@@ -154,7 +154,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: 'meta'},
+                    {from: 'popup', subject: SUBJECT.META},
                     data
                 );
             });
@@ -245,7 +245,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: 'headings'},
+                    {from: 'popup', subject: SUBJECT.HEADING},
                     data
                 );
             });
@@ -278,7 +278,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: 'images'},
+                    {from: 'popup', subject: SUBJECT.IMAGE},
                     data
                 );
             });
@@ -307,7 +307,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: 'links'},
+                    {from: 'popup', subject: SUBJECT.HYPERLINK},
                     data
                 );
             });
@@ -346,7 +346,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: 'files'},
+                    {from: 'popup', subject: SUBJECT.FILE},
                     data
                 );
             });
