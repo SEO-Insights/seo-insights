@@ -161,33 +161,33 @@ $(document).ready(function() {
 
             const data = info => {
                 
-                $('table#meta-article > tbody').empty();
+                $('table#meta-facebook > tbody').empty();
                 $('table#meta-opengraph > tbody').empty();
+                $('table#meta-opengraph-article > tbody').empty();
                 $('table#meta-parsely > tbody').empty();
                 $('table#meta-twitter > tbody').empty();
                 
-                var objMetaArticle = info['article'];
                 var objMetaFacebook = info['facebook'];
                 var objMetaOpenGraph = info['opengraph'];
+                var objMetaArticle = info['opengraph-article'];
                 var objMetaOthers = info['others'];
                 var objMetaParsely = info['parsely'];
                 var objMetaTwitter = info['twitter'];
                 
-                $('#meta-article-heading button > .badge').remove();
+                $('#meta-opengraph-article-heading button > .badge').remove();
                 $('#meta-facebook-heading button > .badge').remove();
                 $('#meta-opengraph-heading button > .badge').remove();
                 $('#meta-others-heading button > .badge').remove();
                 $('#meta-parsely-heading button > .badge').remove();
                 $('#meta-twitter-heading button > .badge').remove();
                 
-                $('#meta-article-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaArticle) + ' items</span>');
+                $('#meta-opengraph-article-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaArticle) + ' items</span>');
                 $('#meta-facebook-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaFacebook) + ' items</span>');
                 $('#meta-opengraph-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaOpenGraph) + ' items</span>');
                 $('#meta-others-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaOthers) + ' items</span>');
                 $('#meta-parsely-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaParsely) + ' items</span>');
                 $('#meta-twitter-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaTwitter) + ' items</span>');
                 
-
                 var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
                 var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
 
@@ -203,7 +203,7 @@ $(document).ready(function() {
                     var strArticleValue = objMetaArticle[strArticleName];
 
                     if (strArticleValue.trim() !== '') {
-                        $('table#meta-article > tbody').append('<tr><td>' + strArticleName + '</td><td>' + EscapeHTML(strArticleValue) + '</td></tr>');
+                        $('table#meta-opengraph-article > tbody').append('<tr><td>' + strArticleName + '</td><td>' + EscapeHTML(strArticleValue) + '</td></tr>');
                     }
                 }
 

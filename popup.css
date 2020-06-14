@@ -94,7 +94,7 @@ table#meta-head-info tbody tr td div.theme-color {
     float: right;
     margin-top: 4px;
 }
-table#meta-article,
+table#meta-opengraph-article,
 table#meta-facebook,
 table#meta-opengraph,
 table#meta-others,
@@ -104,7 +104,7 @@ table#meta-twitter {
     word-break: break-word;
  }
 
-table#meta-article tr td:first-child,
+table#meta-opengraph-article tr td:first-child,
 table#meta-facebook tr td:first-child,
 table#meta-opengraph tr td:first-child,
 table#meta-others tr td:first-child,
@@ -114,7 +114,7 @@ table#meta-twitter tr td:first-child {
     min-width: 135px;
     width: auto;
 }
-div#meta-article-content .card-body,
+div#meta-opengraph-article-content .card-body,
 div#meta-facebook-content .card-body,
 div#meta-opengraph-content .card-body,
 div#meta-others-content .card-body,

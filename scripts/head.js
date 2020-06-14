@@ -43,12 +43,15 @@ var MetaInformation = (function() {
      * The known properties for the Article meta information.
      * 
      * sources:
-     *  - https://yoast.com/3-seo-quick-wins/
+     *  - https://ogp.me/#type_article
      */
-    var arrMetaPropertiesArticle = [
+    var arrMetaPropertiesOpenGraphArticle = [
         'article:author',
-        'article:publisher',
-        'article:modified_time'
+        'article:expiration_time',
+        'article:modified_time',
+        'article:published_time',
+        'article:section',
+        'article:tag'
     ];
 
     /**
@@ -219,26 +222,6 @@ var MetaInformation = (function() {
         },
 
         /**
-         * Get the Article meta information.
-         */
-        GetArticle: function() {
-            var info = new Object();
-
-            //iterate through the Article <meta> elements of the <head> element.
-            $('head > meta[property^="article:"]').each(function() {
-                var strMetaName = $(this).attr('property').trim();
-
-                //add the meta information if known.
-                if (arrMetaPropertiesArticle.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
-                }
-            });
-
-            //return the information.
-            return info;
-        },
-
-        /**
          * Get the Facebook meta information.
          */
         GetFacebook: function() {
@@ -278,6 +261,26 @@ var MetaInformation = (function() {
             return info;
         },
 
+        /**
+         * Get the Article meta information.
+         */
+        GetOpenGraphArticle: function() {
+            var info = new Object();
+
+            //iterate through the Article <meta> elements of the <head> element.
+            $('head > meta[property^="article:"]').each(function() {
+                var strMetaName = $(this).attr('property').trim();
+
+                //add the meta information if known.
+                if (arrMetaPropertiesOpenGraphArticle.includes(strMetaName)) {
+                    info[strMetaName] = GetString($(this).attr('content'));
+                }
+            });
+
+            //return the information.
+            return info;
+        },
+
         GetOthers: function() {
             var info = new Object();
 
@@ -294,7 +297,7 @@ var MetaInformation = (function() {
             $('head > meta[property]').each(function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
-                if (!arrMetaPropertiesArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty)) {
+                if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty)) {
                     info[strMetaProperty] = GetString($(this).attr('content'));
                 }
             });
