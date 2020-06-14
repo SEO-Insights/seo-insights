@@ -52,6 +52,39 @@ var MetaInformation = (function() {
     ];
 
     /**
+     * The known properties for the Facebook meta information.
+     * 
+     * sources:
+     *  - https://developers.facebook.com/docs/applinks/metadata-reference/
+     */
+    var arrMetaPropertiesFacebook = [
+        'al:ios:url',
+        'al:ios:app_store_id',
+        'al:ios:app_name',
+        'al:iphone:url',
+        'al:iphone:app_store_id',
+        'al:iphone:app_name',
+        'al:ipad:url',
+        'al:ipad:app_store_id',
+        'al:ipad:app_name',
+        'al:android:url',
+        'al:android:package',
+        'al:android:class',
+        'al:android:app_name',
+        'al:windows_phone:url',
+        'al:windows_phone:app_id',
+        'al:windows_phone:app_name',
+        'al:windows:url',
+        'al:windows:app_id',
+        'al:windows:app_name',
+        'al:windows_universal:url',
+        'al:windows_universal:app_id',
+        'al:windows_universal:app_name',
+        'al:web:url',
+        'al:web:should_fallback'
+    ];
+
+    /**
      * The known properties for the OpenGraph meta information.
      * 
      * sources:
@@ -189,6 +222,26 @@ var MetaInformation = (function() {
         },
 
         /**
+         * Get the Facebook meta information.
+         */
+        GetFacebook: function() {
+            var info = new Object();
+
+            //iterate through the Facebook <meta> ekements of the <head> element.
+            $('head > meta[property^="al:"]').each(function() {
+                var strMetaName = $(this).attr('property').trim();
+
+                //add the meta information if known.
+                if (arrMetaPropertiesFacebook.includes(strMetaName)) {
+                    info[strMetaName] = GetString($(this).attr('content'));
+                }
+            });
+
+            //return the information.
+            return info;
+        },
+
+        /**
          * Get the OpenGraph meta information.
          */
         GetOpenGraph: function() {
@@ -224,7 +277,7 @@ var MetaInformation = (function() {
             $('head > meta[property]').each(function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
-                if (!arrMetaPropertiesArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty)) {
+                if (!arrMetaPropertiesArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty)) {
                     info[strMetaProperty] = GetString($(this).attr('content'));
                 }
             });

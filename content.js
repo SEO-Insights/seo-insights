@@ -5,15 +5,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(MetaInformation.GetGeneral());
                 break;
             case SUBJECT.META:
-                var info = {
+                sendResponse({
                     'article': MetaInformation.GetArticle(),
+                    'facebook': MetaInformation.GetFacebook(),
                     'opengraph': MetaInformation.GetOpenGraph(),
+                    'others': MetaInformation.GetOthers(),
                     'parsely': MetaInformation.GetParsely(),
-                    'twitter': MetaInformation.GetTwitter(),
-                    'others': MetaInformation.GetOthers()
-                };
-
-                sendResponse(info);
+                    'twitter': MetaInformation.GetTwitter()
+                });
                 break;
             case SUBJECT.HEADING:
                 var info = {
