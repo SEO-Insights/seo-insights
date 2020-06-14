@@ -6,7 +6,7 @@ function GetHeadings() {
     let headings = [];
 
     $('h1, h2, h3, h4, h5, h6').each(function() {
-        var strJustElementText = $(this).clone().children().remove().end().text();
+        var strJustElementText = $(this).text();
 
         headings.push({
             'tag': this.tagName,
