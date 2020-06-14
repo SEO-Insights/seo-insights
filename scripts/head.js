@@ -130,7 +130,7 @@ var MetaInformation = (function() {
      * sources:
      *  - https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/markup
      */
-    var arrMetaNamesTwitter = [
+    var arrMetaNamesPropertiesTwitter = [
         'twitter:app:id:googleplay',
         'twitter:app:id:ipad',
         'twitter:app:id:iphone',
@@ -288,7 +288,7 @@ var MetaInformation = (function() {
             $('head > meta[name]').each(function() {
                 var strMetaName = ($(this).attr('name') || '').toString();
 
-                if (!arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesTwitter.includes(strMetaName)) {
+                if (!arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
                     info[strMetaName] = GetString($(this).attr('content'));
                 }
             });
@@ -297,7 +297,7 @@ var MetaInformation = (function() {
             $('head > meta[property]').each(function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
-                if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty)) {
+                if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
                     info[strMetaProperty] = GetString($(this).attr('content'));
                 }
             });
@@ -333,11 +333,27 @@ var MetaInformation = (function() {
 
             //iterate through the Twitter <meta> elements of the <head> element.
             $('head > meta[name^="twitter:"]').each(function() {
-                var strMetaName = $(this).attr('name').trim();
+                var strMetaName = ($(this).attr('name') || '').toString().trim();
 
                 //add the meta information if known.
-                if (arrMetaNamesTwitter.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
+                if (arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
+                    info[strMetaName] = ($(this).attr('content') || '').toString().trim();
+                }
+            });
+
+            /**
+             * Open Graph protocol also specifies the use of property and content attributes for markup while Twitter cards use name and content. 
+             * Twitter's parser will fall back to using property and content, so there is no need to modify existing Open Graph protocol markup if it already exists.
+             * source: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started
+             */
+
+            //iterate through the Twitter <meta> elements of the <head> element.
+            $('head > meta[property^="twitter:"]').each(function() {
+                var strMetaProperty = ($(this).attr('property') || '').toString().trim();
+
+                //add the meta information if known.
+                if (arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
+                    info[strMetaProperty] = ($(this).attr('content') || '').toString().trim();
                 }
             });
 
