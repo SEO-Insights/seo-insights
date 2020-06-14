@@ -125,21 +125,38 @@ var MetaInformation = (function() {
      * The known names for the Twitter meta information.
      * 
      * sources:
-     *  - https://yoast.com/3-seo-quick-wins/
-     *  - https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/summary-card-with-large-image
+     *  - https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/markup
      */
     var arrMetaNamesTwitter = [
+        'twitter:app:id:googleplay',
+        'twitter:app:id:ipad',
+        'twitter:app:id:iphone',
+        'twitter:app:name:googleplay',
+        'twitter:app:name:ipad',
+        'twitter:app:name:iphone',
+        'twitter:app:url:googleplay',
+        'twitter:app:url:ipad',
+        'twitter:app:url:iphone',
         'twitter:card',
         'twitter:creator',
+        'twitter:creator:id',
         'twitter:description',
         'twitter:image',
         'twitter:image:alt',
+        'twitter:player',
+        'twitter:player:height',
+        'twitter:player:stream',
+        'twitter:player:width',
         'twitter:site',
+        'twitter:site:id',
         'twitter:title'
     ];
 
     return {
 
+        /**
+         * Get the canonical url from meta information.
+         */
         GetCanonical: function() {
             return $('head > link[rel="canonical"]').attr('href');
         },
