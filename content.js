@@ -22,11 +22,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(info);
                 break;
             case SUBJECT.IMAGE:
-                var info = {
-                    'images': GetImages()
-                };
-
-                sendResponse(info);
+                sendResponse(ImageInformation.GetImages());
                 break;
             case SUBJECT.HYPERLINK:
                 sendResponse(Hyperlinks.GetAll());

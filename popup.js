@@ -306,18 +306,20 @@ $(document).ready(function() {
                 );
             });
 
-            const data = info => {
+            const data = listImages => {
 
+                //remove all the rows of the hyperlinks table.
                 $('table#meta-images > tbody').empty();
 
-                $('*[data-seo-info="meta-images-count-all"]').text(info.images.count.all);
-                $('*[data-seo-info="meta-images-count-without-alt"]').text(info.images.count.without_alt);
-                $('*[data-seo-info="meta-images-count-without-src"]').text(info.images.count.without_src);
-                $('*[data-seo-info="meta-images-count-without-title"]').text(info.images.count.without_title);
+                //set the statistics of the images.
+                $('*[data-seo-info="meta-images-count-all"]').text(listImages.length);
+                $('*[data-seo-info="meta-images-count-without-alt"]').text(listImages.filter(image => GetString(image.alt).trim() === "").length);
+                $('*[data-seo-info="meta-images-count-without-src"]').text(listImages.filter(image => GetString(image.src).trim() === "").length);
+                $('*[data-seo-info="meta-images-count-without-title"]').text(listImages.filter(image => GetString(image.title).trim() === "").length);
 
-                for (let image of info.images.images) {
-                    if (image.src.trim() !== '') {
-                        $('table#meta-images > tbody').append('<tr><td>' + image.src + '</td></tr>');
+                for (let itemImage of listImages) {
+                    if (itemImage.src !== '') {
+                        $('table#meta-images > tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
                     }
                 }
             }

@@ -1,20 +1,28 @@
-function GetImages() {
-    var images = [];
-
-    $('img').each(function() {
-        images.push({
-            'alt': this.alt,
-            'src': this.src
-        });
-    });
-
+/**
+ * Module for Image Information.
+ */
+var ImageInformation = (function() {
     return {
-        'count': {
-            'all': images.length,
-            'without_alt': images.filter(image => GetString(image.alt).trim() === "").length,
-            'without_src': images.filter(image => GetString(image.src).trim() === "").length,
-            'without_title': images.filter(image => GetString(image.title).trim() === "").length           
-        },
-        'images': images
-    };
-}
+
+        /**
+         * Function to get all images of the site.
+         * 
+         * @return {Object[]} An array with all found images of the site.
+         */
+        GetImages: function() {
+            var listImages = [];
+
+            //iterate through all image elements of the site.
+            $('body img').each(function() {
+                listImages.push({
+                    'alt': ($(this).attr('alt') || '').toString().trim(),
+                    'src': ($(this).attr('src') || '').toString().trim(),
+                    'title': ($(this).attr('title') || '').toString().trim()
+                });
+            });
+
+            //return the array with all found images.
+            return listImages;
+        }
+    }
+})();
