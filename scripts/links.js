@@ -23,13 +23,17 @@ var Hyperlinks = (function() {
 
                     //add the hyperlink if not exists or update count of this hyperlink.
                     if (objAvailableURL === undefined) {
-
-                        //get the full URL of the Hyperlink.
                         var strHyperlink = objUrl.href;
 
-                        //remove the the whole base URL and the origin of the current site.
-                        strHyperlink = strHyperlink.replace(Hyperlinks.GetBaseURL(), '');
-                        strHyperlink = strHyperlink.replace(location.origin, '');
+                        //remove the whole base URL (but only if the base url is not set as hyperlink value).
+                        if (strHyperlink !== Hyperlinks.GetBaseURL()) {
+                            strHyperlink = strHyperlink.replace(Hyperlinks.GetBaseURL(), '');
+                        }
+
+                        //remove the origin of the URL (but only if the origin is not set as hyperlink value).
+                        if (strHyperlink !== location.origin) {
+                            strHyperlink = strHyperlink.replace(location.origin, '');
+                        }
 
                         //add the object with information of the Hyperlink to the array.
                         listHyperlinks.push({
