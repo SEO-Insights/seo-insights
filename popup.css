@@ -41,22 +41,22 @@ table#meta-headings tr td[class^="level-"] span:nth-of-type(1) {
 table#meta-headings tr td[class^="level-"] span:nth-of-type(2) {
     margin-right: 5px;
 }
-table#meta-headings td.level-H1 {
+table#meta-headings td.level-h1 {
     padding-left:10px;
 }
-table#meta-headings td.level-H2 {
+table#meta-headings td.level-h2 {
     padding-left:20px;
 }
-table#meta-headings td.level-H3 {
+table#meta-headings td.level-h3 {
     padding-left:30px;
 }
-table#meta-headings td.level-H4 {
+table#meta-headings td.level-h4 {
     padding-left:40px;
 }
-table#meta-headings td.level-H5 {
+table#meta-headings td.level-h5 {
     padding-left:50px;
 }
-table#meta-headings td.level-H6 {
+table#meta-headings td.level-h6 {
     padding-left:60px;
 }
 div#images h5 {

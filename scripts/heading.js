@@ -1,33 +1,30 @@
-function GetString(value) {
-    return (value || "").toString();
-}
+/**
+ * Module for Heading Information.
+ */
+var HeadingInformation = (function() {
+    return {
 
-function GetHeadings() {
-    let headings = [];
+        /**
+         * Function to get all headings of the site.
+         * 
+         * @return {Object[]} An array with all found headings of the site.
+         */
+        GetHeadings: function() {
+            var listHeadings = [];
 
-    $('h1, h2, h3, h4, h5, h6').each(function() {
-        var strJustElementText = $(this).text();
+            //iterate through all the heading elements of the site.
+            $('h1, h2, h3, h4, h5, h6').each(function() {
+                var strHeadingText = $(this).text();
 
-        headings.push({
-            'tag': this.tagName,
-            'title': EscapeHTML(strJustElementText),
-            'count_chars': strJustElementText.length,
-            'count_words': GetWordCount(strJustElementText)
-        });
-    });
+                //add the found heading to the array.
+                listHeadings.push({
+                    'type': ($(this).prop('tagName') || '').toString().trim().toLowerCase(),
+                    'value': strHeadingText
+                });
+            });
 
-    let info = {
-        'counts': {
-            'all': headings.length,
-            'h1': headings.filter(heading => GetString(heading.tag).trim() === "H1").length,
-            'h2': headings.filter(heading => GetString(heading.tag).trim() === "H2").length,
-            'h3': headings.filter(heading => GetString(heading.tag).trim() === "H3").length,
-            'h4': headings.filter(heading => GetString(heading.tag).trim() === "H4").length,
-            'h5': headings.filter(heading => GetString(heading.tag).trim() === "H5").length,
-            'h6': headings.filter(heading => GetString(heading.tag).trim() === "H6").length
-        },
-        'headings': headings
+            //return the heading information.
+            return listHeadings;
+        }
     }
-
-    return info;
-}
+})();

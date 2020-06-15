@@ -15,11 +15,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 });
                 break;
             case SUBJECT.HEADING:
-                var info = {
-                    'heading': GetHeadings()
-                };
-
-                sendResponse(info);
+                sendResponse(HeadingInformation.GetHeadings());
                 break;
             case SUBJECT.IMAGE:
                 sendResponse(ImageInformation.GetImages());
@@ -28,12 +24,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(Hyperlinks.GetAll());
                 break;
             case SUBJECT.FILE:
-                var info = {
+                sendResponse({
                     'stylesheet': FileInformation.GetStylesheetFiles(),
                     'javascript': FileInformation.GetJavaScriptFiles()
-                };
-
-                sendResponse(info);
+                });
                 break;
         }
     }

@@ -164,6 +164,7 @@ $(document).ready(function() {
                 $('table#meta-facebook > tbody').empty();
                 $('table#meta-opengraph > tbody').empty();
                 $('table#meta-opengraph-article > tbody').empty();
+                $('table#meta-others > tbody').empty();
                 $('table#meta-parsely > tbody').empty();
                 $('table#meta-twitter > tbody').empty();
                 
@@ -273,25 +274,20 @@ $(document).ready(function() {
                 );
             });
 
-            const data = info => {
+            const data = listHeadings => {
 
                 $('table#meta-headings').empty();
                 
-                //headInfo
-                let heading = info['heading'];
-
-                $('*[data-seo-info="meta-heading-h1-count"]').text(heading.counts.h1);
-                $('*[data-seo-info="meta-heading-h2-count"]').text(heading.counts.h2);
-                $('*[data-seo-info="meta-heading-h3-count"]').text(heading.counts.h3);
-                $('*[data-seo-info="meta-heading-h4-count"]').text(heading.counts.h4);
-                $('*[data-seo-info="meta-heading-h5-count"]').text(heading.counts.h5);
-                $('*[data-seo-info="meta-heading-h6-count"]').text(heading.counts.h6);
-                $('*[data-seo-info="meta-heading-total-count"]').text(heading.counts.all);
-
-                for (let infoHeading of heading.headings) {
-                    $('table#meta-headings').append('<tr><td class="level-' + infoHeading.tag + '"><span>' + infoHeading.tag + '</span>' + infoHeading.title + '<br><span class="badge badge-success">' + infoHeading.count_chars + ' chars</span><span class="badge badge-success">' + infoHeading.count_words + ' words</span></td></tr>');
+                for (i = 1; i <= 6; i++) {
+                    $('*[data-seo-info="meta-heading-h' + i + '-count"]').text(listHeadings.filter(itemHeading => itemHeading.type === 'h' + i).length);
                 }
-            }
+
+                $('*[data-seo-info="meta-heading-total-count"]').text(listHeadings.length);
+                
+                for (let itemHeading of listHeadings) {
+                    $('table#meta-headings').append('<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.value + '<br><span class="badge badge-success">' + itemHeading.value.length + ' chars</span><span class="badge badge-success">' + GetWordCount(itemHeading.value) + ' words</span></td></tr>');
+                }
+            };
         });
 
         $('a[href="#nav-images"]').on('click', function() {
@@ -380,6 +376,9 @@ $(document).ready(function() {
                 var listStylesheet = filesInfo['stylesheet'];
                 var listJavaScript = filesInfo['javascript'];
 
+                $('table#files-stylesheet > tbody').empty();
+                $('table#files-javascript > tbody').empty();
+
                 $('div#files-stylesheet-heading button span.badge').remove();
                 $('div#files-javascript-heading button span.badge').remove();
 
@@ -387,11 +386,11 @@ $(document).ready(function() {
                 $('div#files-javascript-heading button').append('<span class="badge badge-success">' + listJavaScript.length + ' files</span>');
                 
                 for (let fileStylesheet of listStylesheet) {
-                    $('table#files-stylesheet').append('<tr><td>' + fileStylesheet + '</td></tr>');
+                    $('table#files-stylesheet > tbody').append('<tr><td>' + fileStylesheet + '</td></tr>');
                 }
 
                 for (let fileJavaScript of listJavaScript) {
-                    $('table#files-javascript').append('<tr><td>' + fileJavaScript + '</td></tr>');
+                    $('table#files-javascript > tbody').append('<tr><td>' + fileJavaScript + '</td></tr>');
                 }
             }
         });
