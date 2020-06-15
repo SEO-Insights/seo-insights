@@ -161,7 +161,7 @@ var MetaInformation = (function() {
          * Get the canonical url from meta information.
          */
         GetCanonical: function() {
-            return $('head > link[rel="canonical"]').attr('href');
+            return ($('head > link[rel="canonical"]').attr('href') || '').toString();
         },
 
         /**
@@ -176,7 +176,7 @@ var MetaInformation = (function() {
 
                 //add the information of this <meta> element if known.
                 if (arrMetaNamesGeneral.includes(strMetaName)) {
-                    var strMetaValue = GetString($(this).attr('content')).trim();
+                    var strMetaValue = ($(this).attr('content') || '').toString().trim();
 
                     //check if the value of the <meta> element is empty.
                     //in this case we don't have to add the value to the object.
@@ -202,7 +202,7 @@ var MetaInformation = (function() {
 
             //iterate through the general elements of the <head> element.
             for (var strGeneralTag of arrTagsGeneral) {
-                var strTagValue = GetString($('head > ' + strGeneralTag).text()).trim();
+                var strTagValue = ($('head > ' + strGeneralTag).text() || '').toString().trim();
 
                 //check if the value of the general tag is empty.
                 //in this case we don't have to add the value to the object.
@@ -215,7 +215,7 @@ var MetaInformation = (function() {
             }
 
             //get the canonical link of the site.
-            info['canonical'] = GetString(this.GetCanonical()).trim();
+            info['canonical'] = MetaInformation.GetCanonical().trim();
 
             //return the general meta information.
             return info;
@@ -233,7 +233,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesFacebook.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
+                    info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
 
@@ -253,7 +253,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesOpenGraph.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
+                    info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
 
@@ -273,7 +273,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesOpenGraphArticle.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
+                    info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
 
@@ -289,7 +289,7 @@ var MetaInformation = (function() {
                 var strMetaName = ($(this).attr('name') || '').toString();
 
                 if (!arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
+                    info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
 
@@ -298,7 +298,7 @@ var MetaInformation = (function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
                 if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
-                    info[strMetaProperty] = GetString($(this).attr('content'));
+                    info[strMetaProperty] = ($(this).attr('content') || '').toString();
                 }
             });
 
@@ -317,7 +317,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesParsely.includes(strMetaName)) {
-                    info[strMetaName] = GetString($(this).attr('content'));
+                    info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
 

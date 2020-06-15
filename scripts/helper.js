@@ -22,14 +22,10 @@ function EscapeHTML(str) {
     });
 }
 
-function GetString(value) {
-    return (value || '').toString();
-}
-
 /**
  * The enum for the different subjects of this chrome extension.
  */
-const SUBJECT = {
+var SUBJECT = {
     FILE: 'file',
     HEADING: 'heading',
     HYPERLINK: 'hyperlink',

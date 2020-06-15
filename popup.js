@@ -123,7 +123,7 @@ $(document).ready(function() {
                 if (Array.isArray(objMetaInfo[strMetaName])) {
                     strMetaValue = objMetaInfo[strMetaName].join('; ');
                 } else {
-                    strMetaValue = GetString(objMetaInfo[strMetaName]);
+                    strMetaValue = (objMetaInfo[strMetaName] || '').toString();
                 }
 
                 //don't show the required meta information again.
@@ -225,7 +225,7 @@ $(document).ready(function() {
                 }
 
                 for (let strTwitterName in objMetaTwitter) {
-                    var strTwitterValue = GetString(objMetaTwitter[strTwitterName]).trim();
+                    var strTwitterValue = (objMetaTwitter[strTwitterName] || '').toString().trim();
                     var strAdditionalInfoHTML = '';
 
                     //don't do anything in case there is no value.
@@ -243,7 +243,7 @@ $(document).ready(function() {
                 }
 
                 for (let strOpenGraphName in objMetaOpenGraph) {
-                    var strOpenGraphValue = GetString(objMetaOpenGraph[strOpenGraphName]).trim();
+                    var strOpenGraphValue = (objMetaOpenGraph[strOpenGraphName] || '').toString().trim();
                     var strAdditionalInfoHTML = '';
 
                     //don't do anything in case there is no value.
@@ -309,9 +309,9 @@ $(document).ready(function() {
 
                 //set the statistics of the images.
                 $('*[data-seo-info="meta-images-count-all"]').text(listImages.length);
-                $('*[data-seo-info="meta-images-count-without-alt"]').text(listImages.filter(image => GetString(image.alt).trim() === "").length);
-                $('*[data-seo-info="meta-images-count-without-src"]').text(listImages.filter(image => GetString(image.src).trim() === "").length);
-                $('*[data-seo-info="meta-images-count-without-title"]').text(listImages.filter(image => GetString(image.title).trim() === "").length);
+                $('*[data-seo-info="meta-images-count-without-alt"]').text(listImages.filter(image => (image.alt || '').toString().trim() === "").length);
+                $('*[data-seo-info="meta-images-count-without-src"]').text(listImages.filter(image => (image.src || '').toString().trim() === "").length);
+                $('*[data-seo-info="meta-images-count-without-title"]').text(listImages.filter(image => (image.title || '').toString().trim() === "").length);
 
                 for (let itemImage of listImages) {
                     if (itemImage.src !== '') {
