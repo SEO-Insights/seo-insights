@@ -57,9 +57,6 @@ table#meta-headings td.level-h5 {
 table#meta-headings td.level-h6 {
     padding-left:60px;
 }
-div#images h5 {
-    font-weight: bold;
-}
 div.tab-pane {
     padding-top: 10px;
 }
@@ -136,10 +133,10 @@ table#meta-headings-stats {
 /*
  * Images
  */
-table#meta-images-stats {
+div#view-images table#statistics-images {
     text-align: center;
 }
-table#meta-images {
+div#view-images table#list-images > tbody {
     word-break: break-all;
 }
 
@@ -150,7 +147,7 @@ div#view-hyperlinks table#statistics-hyperlinks,
 div#view-hyperlinks table#statistics-protocols {
     text-align: center;
 }
-div#view-hyperlinks table#list-hyperlinks tbody tr td {
+div#view-hyperlinks table#list-hyperlinks > tbody {
     word-break: break-word;
 }
 

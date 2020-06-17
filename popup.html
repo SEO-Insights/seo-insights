@@ -19,7 +19,7 @@
                     <a class="nav-item nav-link active" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true">Summary</a>
                     <a class="nav-item nav-link" id="nav-meta-tab" data-toggle="tab" href="#nav-meta" role="tab" aria-controls="nav-meta" aria-selected="false">Meta</a>
                     <a class="nav-item nav-link" id="nav-headings-tab" data-toggle="tab" href="#nav-headings" role="tab" aria-controls="nav-headings" aria-selected="false">Headings</a>
-                    <a class="nav-item nav-link" id="nav-images-tab" data-toggle="tab" href="#nav-images" role="tab" aria-controls="nav-images" aria-selected="false">Images</a>
+                    <a class="nav-item nav-link" id="view-images-tab" data-toggle="tab" href="#view-images" role="tab" aria-controls="view-images" aria-selected="false">Images</a>
                     <a class="nav-item nav-link" id="view-hyperlinks-tab" data-toggle="tab" href="#view-hyperlinks" role="tab" aria-controls="view-hyperlinks" aria-selected="false">Links</a>
                     <a class="nav-item nav-link" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="false">Files</a>
                 </div>
@@ -160,35 +160,37 @@
                     </table>
                 </div>
 
-                <!-- content of the image tab page -->
-                <div class="tab-pane fade" id="nav-images" role="tabpanel" aria-labelledby="nav-images-tab">
-                    <table class="table table-sm table-bordered" id="meta-images-stats">
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <!-- ------------------------------------------ View for Images ----------------------------------------- -->
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <div class="tab-pane fade" id="view-images" role="tabpanel" aria-labelledby="view-images-tab">
+
+                    <!-- statistics for images -->
+                    <table class="table table-sm table-bordered" id="statistics-images">
                         <thead class="thead-dark">
                             <tr>
                                 <th>all</th>
-                                <th>w/o <code>alt</code></th>
-                                <th>w/o <code>src</code></th>
-                                <th>w/o <code>title</code></th>
+                                <th>w/o alt</th>
+                                <th>w/o src</th>
+                                <th>w/o title</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-seo-info="meta-images-count-all"></td>
-                                <td data-seo-info="meta-images-count-without-alt"></td>
-                                <td data-seo-info="meta-images-count-without-src"></td>
-                                <td data-seo-info="meta-images-count-without-title"></td>
+                                <td data-seo-info="images-all"></td>
+                                <td data-seo-info="images-without-alt"></td>
+                                <td data-seo-info="images-without-src"></td>
+                                <td data-seo-info="images-without-title"></td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <h5>Images</h5>
-                    <table class="table table-sm table-striped" id="meta-images">
+                    <!-- list of images -->
+                    <table class="table table-sm table-striped" id="list-images">
                         <tbody></tbody>
                     </table>
                 </div>
-
-
-
+                
                 <!-- ---------------------------------------------------------------------------------------------------- -->
                 <!-- ---------------------------------------- View for Hyperlinks --------------------------------------- -->
                 <!-- ---------------------------------------------------------------------------------------------------- -->

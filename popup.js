@@ -290,36 +290,8 @@ $(document).ready(function() {
             };
         });
 
-        $('a[href="#nav-images"]').on('click', function() {
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, tabs => {
-                chrome.tabs.sendMessage(
-                    tabs[0].id,
-                    {source: SOURCE.POPUP, subject: SUBJECT.IMAGE},
-                    data
-                );
-            });
-
-            const data = listImages => {
-
-                //remove all the rows of the hyperlinks table.
-                $('table#meta-images > tbody').empty();
-
-                //set the statistics of the images.
-                $('*[data-seo-info="meta-images-count-all"]').text(listImages.length);
-                $('*[data-seo-info="meta-images-count-without-alt"]').text(listImages.filter(image => (image.alt || '').toString().trim() === "").length);
-                $('*[data-seo-info="meta-images-count-without-src"]').text(listImages.filter(image => (image.src || '').toString().trim() === "").length);
-                $('*[data-seo-info="meta-images-count-without-title"]').text(listImages.filter(image => (image.title || '').toString().trim() === "").length);
-
-                for (let itemImage of listImages) {
-                    if (itemImage.src !== '') {
-                        $('table#meta-images > tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
-                    }
-                }
-            }
-        });
+        //Images
+        $('a[href="#view-images"]').on('click', ViewImages());
 
         //Hyperlinks
         $('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks());
@@ -360,6 +332,42 @@ $(document).ready(function() {
         });
     }
 });
+
+/**
+ * View for Images.
+ */
+function ViewImages() {
+
+    //get the current / active tab of the current window and send a message
+    //to the content script to get the information from website.
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            {source: SOURCE.POPUP, subject: SUBJECT.IMAGE},
+            fnResponse
+        );
+    });
+
+    //define and execute the callback function called by the content script.
+    const fnResponse = arrImages => {
+        var objTableImages = $('div#view-images table#list-images');
+        var objTableStatsImages = $('div#view-images table#statistics-images');
+
+        //remove all rows of the images table.
+        objTableImages.children('tbody').empty();
+
+        //iterate through the images and add them to the table.
+        for (let itemImage of arrImages) {
+            objTableImages.append('<tr><td>' + itemImage.src + '</td></tr>');
+        }
+
+        //set the statistics for the images.
+        objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
+        objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => (image.alt || '').toString().trim() === "").length);
+        objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => (image.src || '').toString().trim() === "").length);
+        objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => (image.title || '').toString().trim() === "").length);
+    };      
+}
 
 /**
  * View for Hyperlinks.
