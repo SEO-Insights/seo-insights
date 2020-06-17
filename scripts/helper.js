@@ -33,3 +33,10 @@ var SUBJECT = {
     META: 'meta',
     SUMMARY: 'summary'
 };
+
+/**
+ * The enum for different sources of this chrome extension.
+ */
+var SOURCE = {
+    POPUP: 'popup'
+};

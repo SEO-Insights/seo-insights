@@ -29,9 +29,7 @@ nav div.nav-pills {
     font-weight: bold;
     min-width: 135px;
 }
-#nav-summary table tr td:first-child span:nth-of-type(1),
-#nav-links table tr td:first-child span:nth-of-type(1),
-#nav-links table tr td:first-child span:nth-of-type(2) {
+#nav-summary table tr td:first-child span:nth-of-type(1) {
     margin-right: 5px;
 }
 table#meta-headings tr td[class^="level-"] span:nth-of-type(1) {
@@ -146,13 +144,13 @@ table#meta-images {
 }
 
 /*
- * Links
+ * Hyperlinks
  */
-table#meta-links-stats,
-table#meta-links-protocol-stats {
+div#view-hyperlinks table#statistics-hyperlinks,
+div#view-hyperlinks table#statistics-protocols {
     text-align: center;
 }
-table#meta-links tbody tr td {
+div#view-hyperlinks table#list-hyperlinks tbody tr td {
     word-break: break-word;
 }
 

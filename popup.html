@@ -20,7 +20,7 @@
                     <a class="nav-item nav-link" id="nav-meta-tab" data-toggle="tab" href="#nav-meta" role="tab" aria-controls="nav-meta" aria-selected="false">Meta</a>
                     <a class="nav-item nav-link" id="nav-headings-tab" data-toggle="tab" href="#nav-headings" role="tab" aria-controls="nav-headings" aria-selected="false">Headings</a>
                     <a class="nav-item nav-link" id="nav-images-tab" data-toggle="tab" href="#nav-images" role="tab" aria-controls="nav-images" aria-selected="false">Images</a>
-                    <a class="nav-item nav-link" id="nav-links-tab" data-toggle="tab" href="#nav-links" role="tab" aria-controls="nav-links" aria-selected="false">Links</a>
+                    <a class="nav-item nav-link" id="view-hyperlinks-tab" data-toggle="tab" href="#view-hyperlinks" role="tab" aria-controls="view-hyperlinks" aria-selected="false">Links</a>
                     <a class="nav-item nav-link" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="false">Files</a>
                 </div>
             </nav>
@@ -187,9 +187,15 @@
                     </table>
                 </div>
 
-                <!-- content of the links tab page -->
-                <div class="tab-pane fade" id="nav-links" role="tabpanel" aria-labelledby="nav-links-tab">
-                    <table class="table table-sm table-bordered" id="meta-links-stats">
+
+
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <!-- ---------------------------------------- View for Hyperlinks --------------------------------------- -->
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <div class="tab-pane fade" id="view-hyperlinks" role="tabpanel" aria-labelledby="view-hyperlinks-tab">
+
+                    <!-- statistics for hyperlinks -->
+                    <table class="table table-sm table-bordered" id="statistics-hyperlinks">
                         <thead class="thead-dark">
                             <tr>
                                 <th colspan="2">links</th>
@@ -207,17 +213,18 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-seo-info="meta-links-count-all"></td>
-                                <td data-seo-info="meta-links-count-unique"></td>
-                                <td data-seo-info="meta-links-count-internal"></td>
-                                <td data-seo-info="meta-links-count-internal-unique"></td>
-                                <td data-seo-info="meta-links-count-external"></td>
-                                <td data-seo-info="meta-links-count-external-unique"></td>
+                                <td data-seo-info="hyperlinks-all"></td>
+                                <td data-seo-info="hyperlinks-all-unique"></td>
+                                <td data-seo-info="hyperlinks-internal"></td>
+                                <td data-seo-info="hyperlinks-internal-unique"></td>
+                                <td data-seo-info="hyperlinks-external"></td>
+                                <td data-seo-info="hyperlinks-external-unique"></td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <table class="table table-sm table-bordered" id="meta-links-protocol-stats">
+                    <!-- statistics for protocols -->
+                    <table class="table table-sm table-bordered" id="statistics-protocols">
                         <thead class="thead-dark">
                             <tr>
                                 <th>http</th>
@@ -229,20 +236,23 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-seo-info="meta-links-protocol-http"></td>
-                                <td data-seo-info="meta-links-protocol-https"></td>
-                                <td data-seo-info="meta-links-protocol-mailto"></td>
-                                <td data-seo-info="meta-links-protocol-javascript"></td>
-                                <td data-seo-info="meta-links-protocol-whatsapp"></td>
+                                <td data-seo-info="hyperlinks-protocol-http"></td>
+                                <td data-seo-info="hyperlinks-protocol-https"></td>
+                                <td data-seo-info="hyperlinks-protocol-mailto"></td>
+                                <td data-seo-info="hyperlinks-protocol-javascript"></td>
+                                <td data-seo-info="hyperlinks-protocol-whatsapp"></td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <h5>Links</h5>
-                    <table class="table table-sm table-striped" id="meta-links">
+                    <!-- list of hyperlinks -->
+                    <table class="table table-sm table-striped" id="list-hyperlinks">
                         <tbody></tbody>
                     </table>
                 </div>
+
+
+
 
                 <!-- content of the links tab page -->
                 <div class="tab-pane fade" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">

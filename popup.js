@@ -70,7 +70,7 @@ $(document).ready(function() {
         }, tabs => {
             chrome.tabs.sendMessage(
                 tabs[0].id,
-                {from: 'popup', subject: SUBJECT.SUMMARY},
+                {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
                 data
             );
         });
@@ -154,7 +154,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: SUBJECT.META},
+                    {source: SOURCE.POPUP, subject: SUBJECT.META},
                     data
                 );
             });
@@ -269,7 +269,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: SUBJECT.HEADING},
+                    {source: SOURCE.POPUP, subject: SUBJECT.HEADING},
                     data
                 );
             });
@@ -297,7 +297,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: SUBJECT.IMAGE},
+                    {source: SOURCE.POPUP, subject: SUBJECT.IMAGE},
                     data
                 );
             });
@@ -321,44 +321,8 @@ $(document).ready(function() {
             }
         });
 
-        $('a[href="#nav-links"]').on('click', function() {
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, tabs => {
-                chrome.tabs.sendMessage(
-                    tabs[0].id,
-                    {from: 'popup', subject: SUBJECT.HYPERLINK},
-                    data
-                );
-            });
-            
-            const data = listHyperlinks => {
-
-                //remove all the rows of the hyperlinks table.
-                $('table#meta-links > tbody').empty();
-
-                //set the statistics for the hyperlinks.
-                $('*[data-seo-info="meta-links-count-all"]').text(listHyperlinks.map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-count-unique"]').text(listHyperlinks.length);
-                $('*[data-seo-info="meta-links-count-internal"]').text(listHyperlinks.filter(link => link.internal === true).map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-count-internal-unique"]').text(listHyperlinks.filter(link => link.internal === true).length);
-                $('*[data-seo-info="meta-links-count-external"]').text(listHyperlinks.filter(link => link.internal === false).map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-count-external-unique"]').text(listHyperlinks.filter(link => link.internal === false).length);
-
-                //set the statistics for the protocols of the hyperlinks.
-                $('*[data-seo-info="meta-links-protocol-http"]').text(listHyperlinks.filter(link => link.url.protocol === 'http').map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-protocol-https"]').text(listHyperlinks.filter(link => link.url.protocol === 'https').map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-protocol-mailto"]').text(listHyperlinks.filter(link => link.url.protocol === 'mailto').map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-protocol-javascript"]').text(listHyperlinks.filter(link => link.url.protocol === 'javascript').map(link => link.count).reduce((a, c)=> a + c, 0));
-                $('*[data-seo-info="meta-links-protocol-whatsapp"]').text(listHyperlinks.filter(link => link.url.protocol === 'whatsapp').map(link => link.count).reduce((a, c)=> a + c, 0));
-
-                //iterate through the hyperlinks and set them to the table.
-                for (const itemHyperlink of listHyperlinks) {
-                    $('table#meta-links > tbody').append('<tr><td>' + itemHyperlink.value + '</td></tr>');
-                }
-            };
-        });
+        //Hyperlinks
+        $('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks());
 
         $('a[href="#nav-files"]').on('click', function() {
             chrome.tabs.query({
@@ -367,7 +331,7 @@ $(document).ready(function() {
             }, tabs => {
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    {from: 'popup', subject: SUBJECT.FILE},
+                    {source: SOURCE.POPUP, subject: SUBJECT.FILE},
                     data
                 );
             });
@@ -396,3 +360,49 @@ $(document).ready(function() {
         });
     }
 });
+
+/**
+ * View for Hyperlinks.
+ */
+function ViewHyperlinks() {
+
+    //get the current / active tab of the current window and send a message
+    //to the content script to get the information from website.
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            {source: SOURCE.POPUP, subject: SUBJECT.HYPERLINK},
+            fnResponse
+        );
+    });
+
+    //define and execute the callback function called by the content script.
+    const fnResponse = arrHyperlinks => {
+        var objTableHyperlinks = $('div#view-hyperlinks table#list-hyperlinks');
+        var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
+        var objTableStatsProtocols = $('div#view-hyperlinks table#statistics-protocols');
+
+        //remove all rows of the hyperlinks table.
+        objTableHyperlinks.children('tbody').empty();
+
+        //iterate through the hyperlinks and add them to the table.
+        for (let itemHyperlink of arrHyperlinks) {
+            objTableHyperlinks.append('<tr><td>' + itemHyperlink.value + '</td></tr>');
+        }
+
+        //set the statistics for the hyperlinks.
+        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-all"]').text(arrHyperlinks.map(link => link.count).reduce((a, b) => a + b, 0));
+        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-all-unique"]').text(arrHyperlinks.length);
+        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-internal"]').text(arrHyperlinks.filter(link => link.internal === true).map(link => link.count).reduce((a, b)=> a + b, 0));
+        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-internal-unique"]').text(arrHyperlinks.filter(link => link.internal === true).length);
+        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-external"]').text(arrHyperlinks.filter(link => link.internal === false).map(link => link.count).reduce((a, b)=> a + b, 0));
+        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-external-unique"]').text(arrHyperlinks.filter(link => link.internal === false).length);
+
+        //set the statistics for the protocols of the hyperlinks.
+        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-http"]').text(arrHyperlinks.filter(link => link.url.protocol === 'http').map(link => link.count).reduce((a, b)=> a + b, 0));
+        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-https"]').text(arrHyperlinks.filter(link => link.url.protocol === 'https').map(link => link.count).reduce((a, b)=> a + b, 0));
+        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-mailto"]').text(arrHyperlinks.filter(link => link.url.protocol === 'mailto').map(link => link.count).reduce((a, b)=> a + b, 0));
+        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-javascript"]').text(arrHyperlinks.filter(link => link.url.protocol === 'javascript').map(link => link.count).reduce((a, b)=> a + b, 0));
+        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-whatsapp"]').text(arrHyperlinks.filter(link => link.url.protocol === 'whatsapp').map(link => link.count).reduce((a, b)=> a + b, 0));
+    };
+}

@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    if (message.from === 'popup') {
+    if (message.source === SOURCE.POPUP) {
         switch (message.subject) {
             case SUBJECT.SUMMARY:
                 sendResponse(MetaInformation.GetGeneral());
