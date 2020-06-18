@@ -18,7 +18,7 @@
                 <div class="nav nav-pills" role="tablist">
                     <a class="nav-item nav-link active" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true">Summary</a>
                     <a class="nav-item nav-link" id="nav-meta-tab" data-toggle="tab" href="#nav-meta" role="tab" aria-controls="nav-meta" aria-selected="false">Meta</a>
-                    <a class="nav-item nav-link" id="nav-headings-tab" data-toggle="tab" href="#nav-headings" role="tab" aria-controls="nav-headings" aria-selected="false">Headings</a>
+                    <a class="nav-item nav-link" id="view-headings-tab" data-toggle="tab" href="#view-headings" role="tab" aria-controls="view-headings" aria-selected="false">Headings</a>
                     <a class="nav-item nav-link" id="view-images-tab" data-toggle="tab" href="#view-images" role="tab" aria-controls="view-images" aria-selected="false">Images</a>
                     <a class="nav-item nav-link" id="view-hyperlinks-tab" data-toggle="tab" href="#view-hyperlinks" role="tab" aria-controls="view-hyperlinks" aria-selected="false">Links</a>
                     <a class="nav-item nav-link" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="false">Files</a>
@@ -127,9 +127,13 @@
                     </div>
                 </div>
 
-                <!-- content of the headings tab page -->
-                <div class="tab-pane fade" id="nav-headings" role="tabpanel" aria-labelledby="nav-headings-tab">
-                    <table class="table table-sm table-bordered" id="meta-headings-stats">
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <!-- ---------------------------------------- View for Headings ----------------------------------------- -->
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <div class="tab-pane fade" id="view-headings" role="tabpanel" aria-labelledby="view-headings-tab">
+
+                    <!-- statistics for headings -->
+                    <table class="table table-sm table-bordered" id="statistics-headings">
                         <thead class="thead-dark">
                             <tr>
                                 <th>h1</th>
@@ -143,19 +147,19 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-seo-info="meta-heading-h1-count"></td>
-                                <td data-seo-info="meta-heading-h2-count"></td>
-                                <td data-seo-info="meta-heading-h3-count"></td>
-                                <td data-seo-info="meta-heading-h4-count"></td>
-                                <td data-seo-info="meta-heading-h5-count"></td>
-                                <td data-seo-info="meta-heading-h6-count"></td>
-                                <td data-seo-info="meta-heading-total-count"></td>
+                                <td data-seo-info="headings-h1"></td>
+                                <td data-seo-info="headings-h2"></td>
+                                <td data-seo-info="headings-h3"></td>
+                                <td data-seo-info="headings-h4"></td>
+                                <td data-seo-info="headings-h5"></td>
+                                <td data-seo-info="headings-h6"></td>
+                                <td data-seo-info="headings-all"></td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <h5>Headings</h5>
-                    <table class="table table-sm" id="meta-headings">
+                    <!-- list of headings -->
+                    <table class="table table-sm" id="list-headings">
                         <tbody></tbody>
                     </table>
                 </div>

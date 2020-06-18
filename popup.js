@@ -37,14 +37,20 @@ chrome.tabs.executeScript({file: 'scripts/links.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/files.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
-function GetAdditionalInfoHTML(strValue) {
-    if (strValue.length > 0) {
-        var htmlBadgeCountChars = '<span class="badge badge-success">' + strValue.length + ' chars</span>';
-        var htmlBadgeCountWords = '<span class="badge badge-success">' + GetWordCount(strValue) + ' words</span>';
-        return '<br>' + htmlBadgeCountChars + htmlBadgeCountWords;
-    } else {
+function GetTextWordInformation(strValue, newLine = false) {
+    strValue = (strValue || '').toString().trim();
+
+    //don't create information for empty string values.
+    if (strValue.length === 0) {
         return '';
     }
+
+    //create the badges with information about text and words.
+    var strCharsBadgeHTML = '<span class="badge badge-success">' + strValue.length + ' chars</span>';
+    var strWordsBadgeHTML = '<span class="badge badge-success">' + GetWordCount(strValue) + ' words</span>';
+
+    //return the badges with information.
+    return ((newLine === true) ? '<br>' : '') + strCharsBadgeHTML + strWordsBadgeHTML;
 }
 
 function GetAvailableProperties(obj) {
@@ -108,7 +114,7 @@ $(document).ready(function() {
                 
                 //check if the current info need more details.
                 if (arrDetailedInfo.includes(strRequiredInfo)) {
-                    strAdditionalInfoHTML = GetAdditionalInfoHTML(strMetaValue);
+                    strAdditionalInfoHTML = GetTextWordInformation(strMetaValue, true);
                 }
 
                 //add the current meta info to the table.
@@ -133,7 +139,7 @@ $(document).ready(function() {
 
                     //check if the current info need more details.
                     if (arrDetailedInfo.includes(strMetaName)) {
-                        strAdditionalInfoHTML = GetAdditionalInfoHTML(strMetaValue);
+                        strAdditionalInfoHTML = GetTextWordInformation(strMetaValue, true);
                     }
 
                     //we create a little label to show the theme-color as color.
@@ -235,7 +241,7 @@ $(document).ready(function() {
 
                     //get the additional information if needed.
                     if (arrDetailedInfoTwitter.includes(strTwitterName)) {
-                        strAdditionalInfoHTML = GetAdditionalInfoHTML(strTwitterValue);
+                        strAdditionalInfoHTML = GetTextWordInformation(strTwitterValue, true);
                     }
 
                     //set the Twitter information to the table.
@@ -253,7 +259,7 @@ $(document).ready(function() {
 
                     //get the additional information if needed.
                     if (arrDetailedInfoOpenGraph.includes(strOpenGraphName)) {
-                        strAdditionalInfoHTML = GetAdditionalInfoHTML(strOpenGraphValue);
+                        strAdditionalInfoHTML = GetTextWordInformation(strOpenGraphValue, true);
                     }
                     
                     //set the OpenGraph information to the table.
@@ -262,33 +268,8 @@ $(document).ready(function() {
             }
         });
 
-        $('a[href="#nav-headings"]').on('click', function() {
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, tabs => {
-                chrome.tabs.sendMessage(
-                    tabs[0].id,
-                    {source: SOURCE.POPUP, subject: SUBJECT.HEADING},
-                    data
-                );
-            });
-
-            const data = listHeadings => {
-
-                $('table#meta-headings').empty();
-                
-                for (i = 1; i <= 6; i++) {
-                    $('*[data-seo-info="meta-heading-h' + i + '-count"]').text(listHeadings.filter(itemHeading => itemHeading.type === 'h' + i).length);
-                }
-
-                $('*[data-seo-info="meta-heading-total-count"]').text(listHeadings.length);
-                
-                for (let itemHeading of listHeadings) {
-                    $('table#meta-headings').append('<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.value + '<br><span class="badge badge-success">' + itemHeading.value.length + ' chars</span><span class="badge badge-success">' + GetWordCount(itemHeading.value) + ' words</span></td></tr>');
-                }
-            };
-        });
+        //Headings
+        $('a[href="#view-headings"]').on('click', ViewHeadings());
 
         //Images
         $('a[href="#view-images"]').on('click', ViewImages());
@@ -334,6 +315,44 @@ $(document).ready(function() {
 });
 
 /**
+ * View for Headings.
+ */
+function ViewHeadings() {
+
+    //get the current / active tab of the current window and send a message
+    //to the content script to get the information from website.
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            {source: SOURCE.POPUP, subject: SUBJECT.HEADING},
+            fnResponse  
+        );
+    });
+
+    //define and execute the callback function called by the content script.
+    const fnResponse = arrHeadings => {
+        var objTableHeadings = $('div#view-headings table#list-headings');
+        var objTableStatsHeadings = $('div#view-headings table#statistics-headings');
+
+        //remove all rows of the headings table.
+        objTableHeadings.children('tbody').empty();
+
+        //iterate through the different levels of headings.
+        for (level = 1; level <= 6; level++) {
+            objTableStatsHeadings.find('td[data-seo-info="headings-h' + level + '"]').text(arrHeadings.filter(heading => heading.type === 'h' + level).length);
+        }
+
+        //set the total count of headings to the table.
+        objTableStatsHeadings.find('td[data-seo-info="headings-all"]').text(arrHeadings.length);
+
+        //iterate through the headings and add them to the table.
+        for (let itemHeading of arrHeadings) {
+            objTableHeadings.children('tbody').append('<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.value + GetTextWordInformation(itemHeading.value, true) + '</td></tr>');
+        }
+    };
+}
+
+/**
  * View for Images.
  */
 function ViewImages() {
@@ -358,7 +377,7 @@ function ViewImages() {
 
         //iterate through the images and add them to the table.
         for (let itemImage of arrImages) {
-            objTableImages.append('<tr><td>' + itemImage.src + '</td></tr>');
+            objTableImages.children('tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
         }
 
         //set the statistics for the images.
@@ -395,7 +414,7 @@ function ViewHyperlinks() {
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
-            objTableHyperlinks.append('<tr><td>' + itemHyperlink.value + '</td></tr>');
+            objTableHyperlinks.children('tbody').append('<tr><td>' + itemHyperlink.value + '</td></tr>');
         }
 
         //set the statistics for the hyperlinks.
