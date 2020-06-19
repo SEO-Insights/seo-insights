@@ -21,7 +21,7 @@
                     <a class="nav-item nav-link" id="view-headings-tab" data-toggle="tab" href="#view-headings" role="tab" aria-controls="view-headings" aria-selected="false">Headings</a>
                     <a class="nav-item nav-link" id="view-images-tab" data-toggle="tab" href="#view-images" role="tab" aria-controls="view-images" aria-selected="false">Images</a>
                     <a class="nav-item nav-link" id="view-hyperlinks-tab" data-toggle="tab" href="#view-hyperlinks" role="tab" aria-controls="view-hyperlinks" aria-selected="false">Links</a>
-                    <a class="nav-item nav-link" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="false">Files</a>
+                    <a class="nav-item nav-link" id="view-files-tab" data-toggle="tab" href="#view-files" role="tab" aria-controls="view-files" aria-selected="false">Files</a>
                 </div>
             </nav>
 
@@ -257,19 +257,18 @@
                     </table>
                 </div>
 
-
-
-
-                <!-- content of the links tab page -->
-                <div class="tab-pane fade" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                    <div class="accordion" id="files">
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <!-- ------------------------------------------ View for Files ------------------------------------------ -->
+                <!-- ---------------------------------------------------------------------------------------------------- -->
+                <div class="tab-pane fade" id="view-files" role="tabpanel" aria-labelledby="view-files-tab">
+                    <div class="accordion" id="files-accordion">
                         <div class="card">
-                            <div class="card-header" id="files-stylesheet-heading">
+                            <div class="card-header" id="stylesheet-heading">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#files-stylesheet-content" aria-expanded="true" aria-controls="files-stylesheet-content">Stylesheets</button>
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#stylesheet-content" aria-expanded="true" aria-controls="stylesheet-content">Stylesheets</button>
                                 </h2>
                             </div>
-                            <div id="files-stylesheet-content" class="collapse" aria-labelledby="files-stylesheet-heading" data-parent="#files">
+                            <div id="stylesheet-content" class="collapse" aria-labelledby="stylesheet-heading" data-parent="#files-accordion">
                                 <div class="card-body">
                                     <table class="table table-sm table-striped" id="files-stylesheet">
                                         <tbody></tbody>
@@ -278,12 +277,12 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="files-javascript-heading">
+                            <div class="card-header" id="javascript-heading">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#files-javascript-content" aria-expanded="false" aria-controls="files-javascript-content">JavaScript</button>
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#javascript-content" aria-expanded="false" aria-controls="javascript-content">JavaScript</button>
                                 </h2>
                             </div>
-                            <div id="files-javascript-content" class="collapse" aria-labelledby="files-javascript-heading" data-parent="#files">
+                            <div id="javascript-content" class="collapse" aria-labelledby="javascript-heading" data-parent="#files-accordion">
                                 <div class="card-body">
                                     <table class="table table-sm table-striped" id="files-javascript">
                                         <tbody></tbody>

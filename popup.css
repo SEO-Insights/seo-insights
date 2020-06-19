@@ -150,17 +150,14 @@ div#view-hyperlinks table#list-hyperlinks > tbody {
 /*
  * Files
  */
-table#files-stylesheet,
-table#files-javascript {
+div#view-files table#files-stylesheet,
+div#view-files table#files-javascript {
     margin: 0;
     word-break: break-word;
 }
-div#files-stylesheet-content .card-body,
-div#files-javascript-content .card-body {
+div#view-files div#stylesheet-content .card-body,
+div#view-files div#javascript-content .card-body {
     padding: 0;
-}
-div#files-javascript-heading button span.badge {
-    float: right;
 }
 
 /* 

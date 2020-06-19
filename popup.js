@@ -277,42 +277,50 @@ $(document).ready(function() {
         //Hyperlinks
         $('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks());
 
-        $('a[href="#nav-files"]').on('click', function() {
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, tabs => {
-                chrome.tabs.sendMessage(
-                    tabs[0].id,
-                    {source: SOURCE.POPUP, subject: SUBJECT.FILE},
-                    data
-                );
-            });
-
-            const data = filesInfo => {
-                var listStylesheet = filesInfo['stylesheet'];
-                var listJavaScript = filesInfo['javascript'];
-
-                $('table#files-stylesheet > tbody').empty();
-                $('table#files-javascript > tbody').empty();
-
-                $('div#files-stylesheet-heading button span.badge').remove();
-                $('div#files-javascript-heading button span.badge').remove();
-
-                $('div#files-stylesheet-heading button').append('<span class="badge badge-success">' + listStylesheet.length + ' files</span>');
-                $('div#files-javascript-heading button').append('<span class="badge badge-success">' + listJavaScript.length + ' files</span>');
-                
-                for (let fileStylesheet of listStylesheet) {
-                    $('table#files-stylesheet > tbody').append('<tr><td>' + fileStylesheet + '</td></tr>');
-                }
-
-                for (let fileJavaScript of listJavaScript) {
-                    $('table#files-javascript > tbody').append('<tr><td>' + fileJavaScript + '</td></tr>');
-                }
-            }
-        });
+        //Files
+        $('a[href="#view-files"]').on('click', ViewFiles());
     }
 });
+
+/**
+ * View for Files.
+ */
+function ViewFiles() {
+
+    //get the current / active tab of the current window and send a message
+    //to the content script to get the information from website.
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            {source: SOURCE.POPUP, subject: SUBJECT.FILE},
+            fnResponse   
+        );
+    });
+
+    //define and execute the callback function called by the content script.
+    const fnResponse = objFiles => {
+        var objTableStylesheet = $('div#view-files table#files-stylesheet');
+        var objTableJavaScript = $('div#view-files table#files-javascript');
+
+        //get the arrays with files.
+        var arrStylesheet = objFiles['stylesheet'];
+        var arrJavaScript = objFiles['javascript'];
+
+        //remove all rows of the stylesheet and javascript table.
+        objTableStylesheet.children('tbody').empty();
+        objTableJavaScript.children('tbody').empty();
+
+        //iterate through the stylesheet files and add them to the table.
+        for (let itemStylesheet of arrStylesheet) {
+            objTableStylesheet.children('tbody').append('<tr><td>' + itemStylesheet + '</td></tr>');
+        }
+
+        //iterate through the javascript files and add them to the table.
+        for (let itemJavaScript of arrJavaScript) {
+            objTableJavaScript.children('tbody').append('<tr><td>' + itemJavaScript + '</td></tr>');
+        }
+    };
+}
 
 /**
  * View for Headings.
