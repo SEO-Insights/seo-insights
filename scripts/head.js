@@ -88,24 +88,6 @@ var MetaInformation = (function() {
     ];
 
     /**
-     * The known properties for the OpenGraph meta information.
-     * 
-     * sources:
-     *  - https://yoast.com/3-seo-quick-wins/
-     */
-    var arrMetaPropertiesOpenGraph = [
-        'og:description',
-        'og:image',
-        'og:image:height',
-        'og:image:width',
-        'og:locale',
-        'og:site_name',
-        'og:title',
-        'og:type',
-        'og:url'
-    ];
-
-    /**
      * The known names for the Parse.ly meta information.
      * 
      * sources:
@@ -252,7 +234,7 @@ var MetaInformation = (function() {
                 var strMetaName = $(this).attr('property').trim();
 
                 //add the meta information if known.
-                if (arrMetaPropertiesOpenGraph.includes(strMetaName)) {
+                if (OpenGraphTags.findIndex(objTag => objTag.name === strMetaName) > -1) {
                     info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
@@ -297,7 +279,8 @@ var MetaInformation = (function() {
             $('head > meta[property]').each(function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
-                if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && !arrMetaPropertiesOpenGraph.includes(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
+                //add the unknown meta information to the object.
+                if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && OpenGraphTags.findIndex(objTag => objTag.name === strMetaProperty) === -1 && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
                     info[strMetaProperty] = ($(this).attr('content') || '').toString();
                 }
             });

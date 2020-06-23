@@ -30,6 +30,7 @@ function HandleNotSupported() {
 //programmatically inject the content script.
 chrome.tabs.executeScript({file: 'libs/jquery-3.5.1.min.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/helper.js'}, HandleNotSupported);
+chrome.tabs.executeScript({file: 'scripts/opengraph.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/head.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/image.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/heading.js'}, HandleNotSupported);
@@ -64,6 +65,16 @@ function GetAvailableProperties(obj) {
     }
 
     return count;
+}
+
+/**
+ * Function to get the HTML attributes to display a tooltip for the OpenGraph tag.
+ * @param {string} strName The OpenGraph tag name to get the description if available.
+ * @param {string} strPosition The position of the tooltip (top, left, right, bottom).
+ * @returns {string} The HTML attributes to display a tooltip.
+ */
+function GetOpenGraphTooltipAttributes(strName, strPosition = 'top') {
+    return ' data-toggle="tooltip" data-placement="' + strPosition + '" title="' + EscapeHTML((OpenGraphTags.find(x => x.name === strName).description || '').toString()) + '"';
 }
 
 $(document).ready(function() {
@@ -263,8 +274,11 @@ $(document).ready(function() {
                     }
                     
                     //set the OpenGraph information to the table.
-                    $('table#meta-opengraph > tbody').append('<tr><td>' + strOpenGraphName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strOpenGraphValue) + '</td></tr>');
+                    $('table#meta-opengraph > tbody').append('<tr><td' + GetOpenGraphTooltipAttributes(strOpenGraphName, 'top') + '>' + strOpenGraphName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strOpenGraphValue) + '</td></tr>');
                 }
+
+                //enable the tooltips on this table on hover.
+                $('table#meta-opengraph [data-toggle="tooltip"]').tooltip({trigger: 'hover'});
             }
         });
 
