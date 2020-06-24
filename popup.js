@@ -398,15 +398,15 @@ function ViewImages() {
         objTableImages.children('tbody').empty();
 
         //iterate through the images and add them to the table.
-        for (let itemImage of arrImages) {
+        for (let itemImage of arrImages.filter(image => image.src !== '')) {
             objTableImages.children('tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
         }
 
         //set the statistics for the images.
         objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
-        objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => (image.alt || '').toString().trim() === "").length);
-        objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => (image.src || '').toString().trim() === "").length);
-        objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => (image.title || '').toString().trim() === "").length);
+        objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);
+        objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
+        objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
     };      
 }
 
