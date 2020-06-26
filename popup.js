@@ -337,6 +337,12 @@ function ViewFiles() {
         var arrStylesheet = objFiles['stylesheet'];
         var arrJavaScript = objFiles['javascript'];
 
+        //remove and add the badge to display the number of stylesheet and javascript files.
+        $('#stylesheet-heading button > .badge').remove();
+        $('#stylesheet-heading button').append('<span class="badge badge-success">' + arrStylesheet.length + ' items</span>');
+        $('#javascript-heading button > .badge').remove();
+        $('#javascript-heading button').append('<span class="badge badge-success">' +arrJavaScript.length + ' items</span>');
+
         //remove all rows of the stylesheet and javascript table.
         objTableStylesheet.children('tbody').empty();
         objTableJavaScript.children('tbody').empty();
