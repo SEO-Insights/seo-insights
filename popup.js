@@ -30,6 +30,7 @@ function HandleNotSupported() {
 //programmatically inject the content script.
 chrome.tabs.executeScript({file: 'libs/jquery-3.5.1.min.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/helper.js'}, HandleNotSupported);
+chrome.tabs.executeScript({file: 'scripts/dublincore.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/opengraph.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/head.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/image.js'}, HandleNotSupported);
@@ -184,6 +185,7 @@ $(document).ready(function() {
                 $('table#meta-others > tbody').empty();
                 $('table#meta-parsely > tbody').empty();
                 $('table#meta-twitter > tbody').empty();
+                $('table#meta-dublin-core > tbody').empty();
                 
                 var objMetaFacebook = info['facebook'];
                 var objMetaOpenGraph = info['opengraph'];
@@ -191,13 +193,15 @@ $(document).ready(function() {
                 var objMetaOthers = info['others'];
                 var objMetaParsely = info['parsely'];
                 var objMetaTwitter = info['twitter'];
-                
+                var objMetaDublinCore = info['dublin-core'];
+
                 $('#meta-opengraph-article-heading button > .badge').remove();
                 $('#meta-facebook-heading button > .badge').remove();
                 $('#meta-opengraph-heading button > .badge').remove();
                 $('#meta-others-heading button > .badge').remove();
                 $('#meta-parsely-heading button > .badge').remove();
                 $('#meta-twitter-heading button > .badge').remove();
+                $('#meta-dublin-core-heading button > .badge').remove();
                 
                 $('#meta-opengraph-article-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaArticle) + ' items</span>');
                 $('#meta-facebook-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaFacebook) + ' items</span>');
@@ -205,6 +209,7 @@ $(document).ready(function() {
                 $('#meta-others-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaOthers) + ' items</span>');
                 $('#meta-parsely-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaParsely) + ' items</span>');
                 $('#meta-twitter-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaTwitter) + ' items</span>');
+                $('#meta-dublin-core-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaDublinCore) + ' items</span>');
                 
                 var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
                 var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
@@ -275,6 +280,18 @@ $(document).ready(function() {
                     
                     //set the OpenGraph information to the table.
                     $('table#meta-opengraph > tbody').append('<tr><td' + GetOpenGraphTooltipAttributes(strOpenGraphName, 'top') + '>' + strOpenGraphName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strOpenGraphValue) + '</td></tr>');
+                }
+
+                for (let strDublinCoreName in objMetaDublinCore) {
+                    var strDublinCoreValue = (objMetaDublinCore[strDublinCoreName] || '').toString().trim();
+
+                    //don't do anything in case there is no value.
+                    if (strOpenGraphValue === '') {
+                        continue;
+                    }
+
+                    //set the OpenGraph information to the table.
+                    $('table#meta-dublin-core > tbody').append('<tr><td>' + strDublinCoreName + '</td><td>' + EscapeHTML(strDublinCoreValue) + '</td></tr>');
                 }
 
                 //enable the tooltips on this table on hover.

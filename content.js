@@ -11,7 +11,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                     'opengraph-article': MetaInformation.GetOpenGraphArticle(),
                     'others': MetaInformation.GetOthers(),
                     'parsely': MetaInformation.GetParsely(),
-                    'twitter': MetaInformation.GetTwitter()
+                    'twitter': MetaInformation.GetTwitter(),
+                    'dublin-core': MetaInformation.GetDublinCore()
                 });
                 break;
             case SUBJECT.HEADING:

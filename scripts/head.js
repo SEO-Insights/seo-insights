@@ -255,11 +255,29 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaPropertiesOpenGraphArticle.includes(strMetaName)) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString();
+                    if (info.hasOwnProperty(strMetaName)) {
+                        info[strMetaName] += ', ' + ($(this).attr('content') || '').toString();
+                    } else {
+                        info[strMetaName] = ($(this).attr('content') || '').toString();
+                    }
                 }
             });
 
             //return the information.
+            return info;
+        },
+
+        GetDublinCore: function() {
+            var info = new Object();
+
+            $('head > meta[name^="DC."]').each(function() {
+                var strMetaName = $(this).attr('name').trim();
+
+                if (DublinCoreTermsTags.findIndex(objTag => objTag.name === strMetaName) > -1) {
+                    info[strMetaName] = ($(this).attr('content') || '').toString();
+                }
+            });
+
             return info;
         },
 
