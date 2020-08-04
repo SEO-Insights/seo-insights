@@ -78,10 +78,14 @@ function GetOpenGraphTooltipAttributes(strName, strPosition = 'top') {
     return ' data-toggle="tooltip" data-placement="' + strPosition + '" title="' + EscapeHTML((OpenGraphTags.find(x => x.name === strName).description || '').toString()) + '"';
 }
 
+//the url of the current tab.
+var tabUrl = '';
+
 $(document).ready(function() {
 
     //init
     if ($('body').hasClass('not-supported') === false) {
+       
         chrome.tabs.query({
             active: true,
             currentWindow: true
@@ -91,6 +95,9 @@ $(document).ready(function() {
                 {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
                 data
             );
+
+            //get the url of the current tab.
+            tabUrl =  tabs[0].url;
         });
 
         /**
@@ -348,15 +355,44 @@ function ViewFiles() {
         objTableJavaScript.children('tbody').empty();
 
         //iterate through the stylesheet files and add them to the table.
-        for (let itemStylesheet of arrStylesheet) {
-            objTableStylesheet.children('tbody').append('<tr><td>' + itemStylesheet + '</td></tr>');
+        for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
+            objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '">' + arrStylesheet[indexStylesheet] + '<span class="badge badge-success" data="status"></span></td></tr>');
+            SetFileStatus(arrStylesheet[indexStylesheet], '#files-stylesheet td#item-' + indexStylesheet + ' span[data=status]');
         }
 
         //iterate through the javascript files and add them to the table.
-        for (let itemJavaScript of arrJavaScript) {
-            objTableJavaScript.children('tbody').append('<tr><td>' + itemJavaScript + '</td></tr>');
+        for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
+            objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '">' + arrJavaScript[indexJavaScript] + '<span class="badge" data="status"></span></td></tr>');
+            SetFileStatus(arrJavaScript[indexJavaScript], '#files-javascript td#item-' + indexJavaScript + ' span[data=status]');
         }
     };
+}
+
+/**
+ * Function to get the status of a file path and set the result to a HTML element.
+ * @param {string} filePath The file path to check the status.
+ * @param {string} selector The selector of the HTML element to set the status.
+ */
+function SetFileStatus(filePath, id) {
+    
+    //get the url of the tab and the file url.
+    let objTabUrl = new URL(tabUrl);
+    let objFileUrl = new URL(filePath, objTabUrl.href);
+
+    //create a new request to test the file url status.
+    let xhrFileStatus = new XMLHttpRequest();
+
+    //set the callback function for the ready state change.
+    xhrFileStatus.onreadystatechange = function() {
+        if (xhrFileStatus.readyState === 4) {
+            $(id).text(xhrFileStatus.status);
+        }
+    }
+
+    //now open the request and send nothing to get the status of the file.
+    console.log(objFileUrl.href);
+    xhrFileStatus.open('GET', objFileUrl.href, true);
+    xhrFileStatus.send(null);
 }
 
 /**
