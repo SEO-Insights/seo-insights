@@ -307,16 +307,16 @@ $(document).ready(function() {
         });
 
         //Headings
-        $('a[href="#view-headings"]').on('click', ViewHeadings());
+        $('a[href="#view-headings"]').on('click', ViewHeadings);
 
         //Images
-        $('a[href="#view-images"]').on('click', ViewImages());
+        $('a[href="#view-images"]').on('click', ViewImages);
 
         //Hyperlinks
-        $('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks());
+        $('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks);
 
         //Files
-        $('a[href="#view-files"]').on('click', ViewFiles());
+        $('a[href="#view-files"]').on('click', ViewFiles);
     }
 });
 
@@ -374,7 +374,7 @@ function ViewFiles() {
  * @param {string} selector The selector of the HTML element to set the status.
  */
 function SetFileStatus(filePath, id) {
-    
+    /**
     //get the url of the tab and the file url.
     let objTabUrl = new URL(tabUrl);
     let objFileUrl = new URL(filePath, objTabUrl.href);
@@ -385,6 +385,9 @@ function SetFileStatus(filePath, id) {
     //set the callback function for the ready state change.
     xhrFileStatus.onreadystatechange = function() {
         if (xhrFileStatus.readyState === 4) {
+            if (xhrFileStatus.status === 500) {
+                console.log(objFileUrl.href);
+            }
             $(id).text(xhrFileStatus.status);
         }
     }
@@ -393,12 +396,14 @@ function SetFileStatus(filePath, id) {
     console.log(objFileUrl.href);
     xhrFileStatus.open('GET', objFileUrl.href, true);
     xhrFileStatus.send(null);
+    */
 }
 
 /**
  * View for Headings.
  */
 function ViewHeadings() {
+    console.log('Heading');
 
     //get the current / active tab of the current window and send a message
     //to the content script to get the information from website.
@@ -457,8 +462,11 @@ function ViewImages() {
         objTableImages.children('tbody').empty();
 
         //iterate through the images and add them to the table.
+        let i = 0;
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
-            objTableImages.children('tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
+            objTableImages.children('tbody').append('<tr><td id="item-' + i + '">' + itemImage.src + '<span class="badge badge-success" data="status"></span></td></tr>');
+            SetFileStatus(itemImage.src, '#list-images td#item-' + i + ' span[data=status]');
+            i++;
         }
 
         //set the statistics for the images.
@@ -494,8 +502,11 @@ function ViewHyperlinks() {
         objTableHyperlinks.children('tbody').empty();
 
         //iterate through the hyperlinks and add them to the table.
+        let i = 0;
         for (let itemHyperlink of arrHyperlinks) {
-            objTableHyperlinks.children('tbody').append('<tr><td>' + itemHyperlink.value + '</td></tr>');
+            objTableHyperlinks.children('tbody').append('<tr><td id="item-' + i + '">' + itemHyperlink.value + '<span class="badge badge-success" data="status"></span></td></tr>');
+            SetFileStatus(itemHyperlink.value, '#list-hyperlinks td#item-' + i + ' span[data=status]');
+            i++;
         }
 
         //set the statistics for the hyperlinks.
