@@ -466,7 +466,7 @@ function ViewImages() {
 
         //iterate through the images and add them to the table.
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
-            objTableImages.children('tbody').append('<tr><td id="item-' + i + '">' + itemImage.src + '<span class="badge badge-success" data="status"></span></td></tr>');
+            objTableImages.children('tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
         }
 
         //set the statistics for the images.
@@ -503,7 +503,7 @@ function ViewHyperlinks() {
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
-            objTableHyperlinks.children('tbody').append('<tr><td id="item-' + i + '">' + itemHyperlink.value + '<span class="badge badge-success" data="status"></span></td></tr>');
+            objTableHyperlinks.children('tbody').append('<tr><td>' + itemHyperlink.value + '</td></tr>');
         }
 
         //set the statistics for the hyperlinks.

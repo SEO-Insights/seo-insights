@@ -55,7 +55,7 @@ table#meta-head-info tbody tr td div.theme-color {
 table#info-headers tbody tr td {
     word-break: break-word;
 }
-#table#info-headers tr td:first-child {
+table#info-headers tr td:first-child {
     font-weight: bold;
     min-width: 135px;
 }
