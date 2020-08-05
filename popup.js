@@ -340,20 +340,7 @@ $(document).ready(function() {
 });
 
 function ViewHeader() {
-
-    //get the current / active tab of the current window and send a message
-    //to the content script to get the information from website.
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.tabs.sendMessage(
-            tabs[0].id,
-            {source: SOURCE.POPUP, subject: SUBJECT.HEADER},
-            fnResponse   
-        );
-    });
-
-    const fnResponse = objFiles => {
-        GetHeaderInformation(tabUrl);
-    }
+    GetHeaderInformation(tabUrl);
 }
 
 /**
