@@ -52,6 +52,13 @@ table#meta-head-info tbody tr td div.theme-color {
     margin-left: 10px;
     width: 75px;
 }
+table#info-headers tbody tr td {
+    word-break: break-word;
+}
+#table#info-headers tr td:first-child {
+    font-weight: bold;
+    min-width: 135px;
+}
 
 /*
  * Meta

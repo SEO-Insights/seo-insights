@@ -31,7 +31,8 @@ var SUBJECT = {
     HYPERLINK: 'hyperlink',
     IMAGE: 'image',
     META: 'meta',
-    SUMMARY: 'summary'
+    SUMMARY: 'summary',
+    HEADER: 'header'
 };
 
 /**

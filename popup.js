@@ -78,6 +78,22 @@ function GetOpenGraphTooltipAttributes(strName, strPosition = 'top') {
     return ' data-toggle="tooltip" data-placement="' + strPosition + '" title="' + EscapeHTML((OpenGraphTags.find(x => x.name === strName).description || '').toString()) + '"';
 }
 
+
+function GetHeaderInformation(url) {
+    fetch(url).then(function(response) {
+        for (var p of response.headers.entries()) {
+            $('table#info-headers > tbody').append(GetInformationRow(p[0], p[1]));
+        }
+
+        $('table#info-headers > tbody').append(GetInformationRow('HTTP Status', response.status));
+        $('table#info-headers > tbody').append(GetInformationRow('HTTP Version', response.statusText.trim() === '' ? 'HTTP/2' : 'HTTP/1'));
+    });
+}
+
+function GetInformationRow(strValueColumn1, strValueColumn2) {
+    return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
+}
+
 //the url of the current tab.
 var tabUrl = '';
 
@@ -104,7 +120,7 @@ $(document).ready(function() {
          * Summary
          */
         const data = objMetaInfo => {
-
+            
             //clear the table because we refresh this table here with current values.
             $('table#meta-head-info > tbody').empty();
 
@@ -137,7 +153,7 @@ $(document).ready(function() {
                 }
 
                 //add the current meta info to the table.
-                $('table#meta-head-info > tbody').append('<tr><td>' + strRequiredInfo + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strMetaValue) + '</td>');
+                $('table#meta-head-info > tbody').append(GetInformationRow(strRequiredInfo + strAdditionalInfoHTML, EscapeHTML(strMetaValue)));
             }
 
             //iterate through all the elements of the <head> element.
@@ -167,7 +183,7 @@ $(document).ready(function() {
                     }
 
                     //add the current meta info to the table.
-                    $('table#meta-head-info > tbody').append('<tr><td>' + strMetaName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strMetaValue) + strThemeColorHTML + '</td>');
+                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + strAdditionalInfoHTML, EscapeHTML(strMetaValue) + strThemeColorHTML));
                 }
             }
         };
@@ -225,7 +241,7 @@ $(document).ready(function() {
                     var strOthersValue = objMetaOthers[strOthersName];
 
                     if (strOthersValue.trim() !== '') {
-                        $('table#meta-others > tbody').append('<tr><td>' + strOthersName + '</td><td>' + EscapeHTML(strOthersValue) + '</td></tr>');
+                        $('table#meta-others > tbody').append(GetInformationRow(strOthersName, EscapeHTML(strOthersValue)));
                     }
                 }
 
@@ -233,7 +249,7 @@ $(document).ready(function() {
                     var strArticleValue = objMetaArticle[strArticleName];
 
                     if (strArticleValue.trim() !== '') {
-                        $('table#meta-opengraph-article > tbody').append('<tr><td>' + strArticleName + '</td><td>' + EscapeHTML(strArticleValue) + '</td></tr>');
+                        $('table#meta-opengraph-article > tbody').append(GetInformationRow(strArticleName, EscapeHTML(strArticleValue)));
                     }
                 }
 
@@ -241,7 +257,7 @@ $(document).ready(function() {
                     var strFacebookValue = objMetaFacebook[strFacebookName];
 
                     if (strFacebookValue.trim() !== '') {
-                        $('table#meta-facebook > tbody').append('<tr><td>' + strFacebookName + '</td><td>' + EscapeHTML(strFacebookValue) + '</td></tr>');
+                        $('table#meta-facebook > tbody').append(GetInformationRow(strFacebookName, EscapeHTML(strFacebookValue)));
                     }
                 }
 
@@ -249,7 +265,7 @@ $(document).ready(function() {
                     var strParselyValue = objMetaParsely[strParselyName];
 
                     if (strParselyValue.trim() !== '') {
-                        $('table#meta-parsely > tbody').append('<tr><td>' + strParselyName + '</td><td>' + EscapeHTML(strParselyValue) + '</td></tr>');
+                        $('table#meta-parsely > tbody').append(GetInformationRow(strParselyName, EscapeHTML(strParselyValue)));
                     }
                 }
 
@@ -268,7 +284,7 @@ $(document).ready(function() {
                     }
 
                     //set the Twitter information to the table.
-                    $('table#meta-twitter > tbody').append('<tr><td>' + strTwitterName + strAdditionalInfoHTML + '</td><td>' + EscapeHTML(strTwitterValue) + '</td></tr>');
+                    $('table#meta-twitter > tbody').append(GetInformationRow(strTwitterName + strAdditionalInfoHTML, EscapeHTML(strTwitterValue)));
                 }
 
                 for (let strOpenGraphName in objMetaOpenGraph) {
@@ -298,7 +314,7 @@ $(document).ready(function() {
                     }
 
                     //set the OpenGraph information to the table.
-                    $('table#meta-dublin-core > tbody').append('<tr><td>' + strDublinCoreName + '</td><td>' + EscapeHTML(strDublinCoreValue) + '</td></tr>');
+                    $('table#meta-dublin-core > tbody').append(GetInformationRow(strDublinCoreName, EscapeHTML(strDublinCoreValue)));
                 }
 
                 //enable the tooltips on this table on hover.
@@ -317,8 +333,28 @@ $(document).ready(function() {
 
         //Files
         $('a[href="#view-files"]').on('click', ViewFiles);
+
+        //Headers
+        $('a[href="#view-headers"]').on('click', ViewHeader);
     }
 });
+
+function ViewHeader() {
+
+    //get the current / active tab of the current window and send a message
+    //to the content script to get the information from website.
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            {source: SOURCE.POPUP, subject: SUBJECT.HEADER},
+            fnResponse   
+        );
+    });
+
+    const fnResponse = objFiles => {
+        GetHeaderInformation(tabUrl);
+    }
+}
 
 /**
  * View for Files.
@@ -357,46 +393,13 @@ function ViewFiles() {
         //iterate through the stylesheet files and add them to the table.
         for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
             objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '">' + arrStylesheet[indexStylesheet] + '<span class="badge badge-success" data="status"></span></td></tr>');
-            SetFileStatus(arrStylesheet[indexStylesheet], '#files-stylesheet td#item-' + indexStylesheet + ' span[data=status]');
         }
 
         //iterate through the javascript files and add them to the table.
         for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
             objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '">' + arrJavaScript[indexJavaScript] + '<span class="badge" data="status"></span></td></tr>');
-            SetFileStatus(arrJavaScript[indexJavaScript], '#files-javascript td#item-' + indexJavaScript + ' span[data=status]');
         }
     };
-}
-
-/**
- * Function to get the status of a file path and set the result to a HTML element.
- * @param {string} filePath The file path to check the status.
- * @param {string} selector The selector of the HTML element to set the status.
- */
-function SetFileStatus(filePath, id) {
-    /**
-    //get the url of the tab and the file url.
-    let objTabUrl = new URL(tabUrl);
-    let objFileUrl = new URL(filePath, objTabUrl.href);
-
-    //create a new request to test the file url status.
-    let xhrFileStatus = new XMLHttpRequest();
-
-    //set the callback function for the ready state change.
-    xhrFileStatus.onreadystatechange = function() {
-        if (xhrFileStatus.readyState === 4) {
-            if (xhrFileStatus.status === 500) {
-                console.log(objFileUrl.href);
-            }
-            $(id).text(xhrFileStatus.status);
-        }
-    }
-
-    //now open the request and send nothing to get the status of the file.
-    console.log(objFileUrl.href);
-    xhrFileStatus.open('GET', objFileUrl.href, true);
-    xhrFileStatus.send(null);
-    */
 }
 
 /**
@@ -462,11 +465,8 @@ function ViewImages() {
         objTableImages.children('tbody').empty();
 
         //iterate through the images and add them to the table.
-        let i = 0;
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
             objTableImages.children('tbody').append('<tr><td id="item-' + i + '">' + itemImage.src + '<span class="badge badge-success" data="status"></span></td></tr>');
-            SetFileStatus(itemImage.src, '#list-images td#item-' + i + ' span[data=status]');
-            i++;
         }
 
         //set the statistics for the images.
@@ -502,11 +502,8 @@ function ViewHyperlinks() {
         objTableHyperlinks.children('tbody').empty();
 
         //iterate through the hyperlinks and add them to the table.
-        let i = 0;
         for (let itemHyperlink of arrHyperlinks) {
             objTableHyperlinks.children('tbody').append('<tr><td id="item-' + i + '">' + itemHyperlink.value + '<span class="badge badge-success" data="status"></span></td></tr>');
-            SetFileStatus(itemHyperlink.value, '#list-hyperlinks td#item-' + i + ' span[data=status]');
-            i++;
         }
 
         //set the statistics for the hyperlinks.
