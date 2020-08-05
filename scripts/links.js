@@ -8,11 +8,11 @@ var Hyperlinks = (function() {
          * 
          * @return {Object[]} An array with all found hyperlinks information.
          */
-        GetAll: function() {
+        GetAll: function(frameDocument = undefined) {
             var listHyperlinks = [];
-
+            
             //iterate through all hyperlink elements of the site.
-            $('body a').each(function() {
+            $('body a', frameDocument).each(function() {
                 try {
                     //get the URL as object if reference is valid.
                     //in case the reference is not valid we ignore the hyperlink element.

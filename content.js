@@ -19,10 +19,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(HeadingInformation.GetHeadings());
                 break;
             case SUBJECT.IMAGE:
-                sendResponse(ImageInformation.GetImages());
+                var arrImages = [];
+
+                if (top.frames.length > 0) {
+                    for (frameIndex = 0; frameIndex < top.frames.length; frameIndex++) {
+                        arrImages = arrImages.concat(ImageInformation.GetImages(top.frames[frameIndex].document));
+                    }
+                }
+
+                arrImages = arrImages.concat(ImageInformation.GetImages());
+
+                sendResponse(arrImages);
                 break;
             case SUBJECT.HYPERLINK:
-                sendResponse(Hyperlinks.GetAll());
+                var arrHyperlinks = [];
+
+                if (top.frames.length > 0) {
+                    for (frameIndex = 0; frameIndex < top.frames.length; frameIndex++) {
+                        arrHyperlinks = arrHyperlinks.concat(Hyperlinks.GetAll(top.frames[frameIndex].document));
+                    }
+                }
+
+                arrHyperlinks = arrHyperlinks.concat(Hyperlinks.GetAll());
+                
+                sendResponse(arrHyperlinks);
                 break;
             case SUBJECT.FILE:
                 sendResponse({
