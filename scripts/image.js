@@ -1,28 +1,57 @@
 /**
- * Module for Image Information.
+ * Module for Images.
  */
-var ImageInformation = (function() {
+var ImageModule = (function() {
+
+    /**
+     * private functions of the module.
+     */
+
+     /**
+      * Function to get all images of the document.
+      * @param {Document} context The context used for jQuery.
+      * @returns {Object[]} An object array with basic information of the images. 
+      */
+    function GetImagesOfDocument(context = undefined) {
+        let arrImages = [];
+
+        //iterate through all image elements of the page.
+        $('img', context).each(function() {
+
+            //add the basic information of the image to the array.
+            arrImages.push({
+                'alt': ($(this).attr('alt') || '').toString().trim(),
+                'src': ($(this).attr('src') || '').toString().trim(),
+                'title': ($(this).attr('title') || '').toString().trim()
+            });
+        });
+
+        //return all found image elements of the page.
+        return arrImages;
+    }
+
+    /**
+     * public functions of the module.
+     */
     return {
 
         /**
-         * Function to get all images of the site.
-         * 
-         * @return {Object[]} An array with all found images of the site.
+         * Function to get all images of the current website.
+         * @returns {Object[]} An object array with basic information of the images.
          */
-        GetImages: function(frameDocument = undefined) {
-            var listImages = [];
+        GetImages: function() {
+            let arrImages = [];
 
-            //iterate through all image elements of the site.
-            $('body img', frameDocument).each(function() {
-                listImages.push({
-                    'alt': ($(this).attr('alt') || '').toString().trim(),
-                    'src': ($(this).attr('src') || '').toString().trim(),
-                    'title': ($(this).attr('title') || '').toString().trim()
-                });
-            });
+            //iterate through the frames of the page to get the images of the available frames.
+            for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
+                arrImages = arrImages.concat(GetImagesOfDocument(window.frames[frameIndex].document));
+            }
 
-            //return the array with all found images.
-            return listImages;
+            //get all images outside of frames.
+            arrImages = arrImages.concat(GetImagesOfDocument());
+
+            //return all the found images of the page.
+            return arrImages;
         }
     }
 })();
