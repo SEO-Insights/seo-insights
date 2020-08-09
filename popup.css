@@ -142,8 +142,30 @@ div#view-headings table#list-headings td[class^="level-"] span:nth-of-type(2) {
 div#view-images table#statistics-images {
     text-align: center;
 }
-div#view-images table#list-images > tbody {
+table#statistics-images {
     word-break: break-all;
+}
+table#list-images {
+    table-layout: fixed;
+}
+table#list-images td div.img-container {
+    display: none;
+    visibility: hidden;
+}
+table#list-images td:hover div.img-container {
+    display: block;
+    visibility: visible;
+}
+table#list-images div.img-container img {
+    max-height: 200px;
+    max-width: 200px;
+    margin: 5px;
+    width: auto;
+    height: auto;
+}
+table#list-images td,
+table#list-images tr {
+    width:100%;
 }
 
 /*

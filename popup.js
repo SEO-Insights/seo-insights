@@ -453,7 +453,7 @@ function ViewImages() {
 
         //iterate through the images and add them to the table.
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
-            objTableImages.children('tbody').append('<tr><td>' + itemImage.src + '</td></tr>');
+            objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '<div class="img-container"><img src="' + itemImage.src + '"></div></a></td></tr>');
         }
 
         //set the statistics for the images.
