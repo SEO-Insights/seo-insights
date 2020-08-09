@@ -22,17 +22,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(ImageModule.GetImages());
                 break;
             case SUBJECT.HYPERLINK:
-                var arrHyperlinks = [];
-
-                if (top.frames.length > 0) {
-                    for (frameIndex = 0; frameIndex < top.frames.length; frameIndex++) {
-                        arrHyperlinks = arrHyperlinks.concat(Hyperlinks.GetAll(top.frames[frameIndex].document));
-                    }
-                }
-
-                arrHyperlinks = arrHyperlinks.concat(Hyperlinks.GetAll());
-                
-                sendResponse(arrHyperlinks);
+                sendResponse(LinkModule.GetLinks());
                 break;
             case SUBJECT.FILE:
                 sendResponse({

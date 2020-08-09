@@ -35,7 +35,7 @@ chrome.tabs.executeScript({file: 'scripts/opengraph.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/head.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/image.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/heading.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/links.js'}, HandleNotSupported);
+chrome.tabs.executeScript({file: 'scripts/link.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'scripts/files.js'}, HandleNotSupported);
 chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
 
@@ -490,7 +490,7 @@ function ViewHyperlinks() {
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
-            objTableHyperlinks.children('tbody').append('<tr><td>' + itemHyperlink.value + '</td></tr>');
+            objTableHyperlinks.children('tbody').append('<tr><td>' + itemHyperlink.url.href + '</td></tr>');
         }
 
         //set the statistics for the hyperlinks.
