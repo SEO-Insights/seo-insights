@@ -3,12 +3,10 @@
  */
 var ImageModule = (function() {
 
-    /**
-     * private functions of the module.
-     */
+    //private functions of the module.
 
      /**
-      * Function to get all images of the document.
+      * function to get all images of the document.
       * @param {Document} context The context used for jQuery.
       * @returns {Object[]} An object array with basic information of the images. 
       */
@@ -30,13 +28,11 @@ var ImageModule = (function() {
         return arrImages;
     }
 
-    /**
-     * public functions of the module.
-     */
+    //public functions of the module.
     return {
 
         /**
-         * Function to get all images of the current website.
+         * function to get all images of the current website.
          * @returns {Object[]} An object array with basic information of the images.
          */
         GetImages: function() {
@@ -44,7 +40,11 @@ var ImageModule = (function() {
 
             //iterate through the frames of the page to get the images of the available frames.
             for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
-                arrImages = arrImages.concat(GetImagesOfDocument(window.frames[frameIndex].document));
+                
+                //there are also blocked frames so we have to try to get the document of the frame.
+                try {
+                    arrImages = arrImages.concat(GetImagesOfDocument(window.frames[frameIndex].document));
+                } catch(_) { }
             }
 
             //get all images outside of frames.

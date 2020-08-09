@@ -1,9 +1,9 @@
 /**
- * Module for Links / Hyperlinks
+ * Module for Links / Hyperlinks.
  */
 var LinkModule = (function() {
     
-    // private functions of the module.
+    //private functions of the module.
 
     /**
      * function to get the base url of the current site.
@@ -21,28 +21,28 @@ var LinkModule = (function() {
     function GetLinksOfDocument(context = undefined) {
         let arrLinks = [];
 
-        // iterate through all link elements of the site.
+        //iterate through all link elements of the site.
         $('a', context).each(function() {
             try {
 
-                // get the url of the link element.
+                //get the url of the link element.
                 let strUrl = ($(this).attr('href') || '').toString().trim();
                 
-                // get the url object of the link.
-                // this can also be used to make sure the link is a vlid url.
+                //get the url object of the link.
+                //this can also be used to make sure the link is a vlid url.
                 let objLinkUrl = new URL(strUrl, GetBaseUrl());
 
-                // all links are collected in an array once.
-                // so try to find the current link in the array to update the count.
+                //all links are collected in an array once.
+                //so try to find the current link in the array to update the count.
                 let linkUrlAvailable = arrLinks.find(itemUrl => itemUrl.url.href === objLinkUrl.href);
 
-                // check if the link is available on the array.
+                //check if the link is available on the array.
                 if (linkUrlAvailable) {
                     linkUrlAvailable.count++;
                     return;
                 }
 
-                // add the information of the link as object to the array.
+                //add the information of the link as object to the array.
                 arrLinks.push({
                     'count': 1,
                     'internal': IsInternal(objLinkUrl.href),
@@ -72,9 +72,7 @@ var LinkModule = (function() {
         return url.startsWith(location.origin);
     }
 
-    /**
-     * public functions of the module.
-     */
+    //public functions of the module.
     return {
 
         /**
@@ -86,7 +84,11 @@ var LinkModule = (function() {
 
             //iterate through the frames of the site to get the links of the available frames.
             for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
-                arrLinks = arrLinks.concat(GetLinksOfDocument(window.frames[frameIndex].document));
+                
+                //there are also blocked frames so we have to try to get the document of the frame.
+                try {
+                    arrLinks = arrLinks.concat(GetLinksOfDocument(window.frames[frameIndex].document));
+                } catch(_) { }
             }
 
             //get all links outside of frames.
