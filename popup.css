@@ -157,6 +157,7 @@ table#list-images td:hover div.img-container {
     visibility: visible;
 }
 table#list-images div.img-container img {
+    background-image: url('img/bg-img-pattern.png');
     max-height: 200px;
     max-width: 200px;
     margin: 5px;
@@ -166,6 +167,10 @@ table#list-images div.img-container img {
 table#list-images td,
 table#list-images tr {
     width:100%;
+}
+table#list-images tr td a,
+table#list-images tr td a:link {
+    word-break: break-all;
 }
 
 /*
