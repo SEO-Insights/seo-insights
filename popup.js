@@ -423,7 +423,7 @@ function ViewHeadings() {
 
         //iterate through the headings and add them to the table.
         for (let itemHeading of arrHeadings) {
-            objTableHeadings.children('tbody').append('<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.value + GetTextWordInformation(itemHeading.value, true) + '</td></tr>');
+            objTableHeadings.children('tbody').append('<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>');
         }
     };
 }

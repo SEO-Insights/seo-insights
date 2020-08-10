@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 });
                 break;
             case SUBJECT.HEADING:
-                sendResponse(HeadingInformation.GetHeadings());
+                sendResponse(HeadingModule.GetHeadings());
                 break;
             case SUBJECT.IMAGE:
                 sendResponse(ImageModule.GetImages());
