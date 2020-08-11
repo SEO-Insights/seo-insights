@@ -103,6 +103,12 @@ div#meta-twitter-content table#meta-twitter tr td:first-child span:first-of-type
 div#meta-others-content table#meta-others tr td:first-child span:first-of-type {
     margin-right: 5px;
 }
+table#meta-head-info td span.info {
+    color: grey;
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: normal;
+}
 
 /*
  * Headings

@@ -197,7 +197,15 @@ var MetaInformation = (function() {
             }
 
             //get the canonical link of the site.
-            info['canonical'] = MetaInformation.GetCanonical().trim();
+            try {
+                let objCanonicalUrl = new URL(MetaInformation.GetCanonical().trim());
+                let objCurrentSiteUrl = new URL(location.origin + location.pathname);
+
+                info['canonical'] = {
+                    'selfref': (objCanonicalUrl.href === objCurrentSiteUrl.href),
+                    'value': objCanonicalUrl.href
+                };
+            } catch(_) { }
 
             //return the general meta information.
             return info;

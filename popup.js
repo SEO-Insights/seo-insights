@@ -160,6 +160,18 @@ $(document).ready(function() {
             for (let strMetaName in objMetaInfo) {
                 var strMetaValue = '';
 
+                if (strMetaName === 'canonical') {
+                    let objCanonical = objMetaInfo[strMetaName];
+
+                    if (objCanonical.selfref === true) {
+                        $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + '<br><span class="info">self-referential</span>', EscapeHTML(objCanonical.value)));
+                    } else {
+                        $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName, EscapeHTML(objCanonical.value)));
+                    }
+
+                    continue;
+                }
+
                 //the value can be an array with multiple values or a single value.
                 if (Array.isArray(objMetaInfo[strMetaName])) {
                     strMetaValue = objMetaInfo[strMetaName].join('; ');
