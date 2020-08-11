@@ -428,6 +428,20 @@ function ViewHeadings() {
     };
 }
 
+function GetImageInfo(objImageInfo) {
+    let strImageInfo = '';
+
+    if (objImageInfo.alt !== '') {
+        strImageInfo = strImageInfo + '<br><span class="info"><strong>alt:</strong> ' + objImageInfo.alt + '</span>';
+    }
+
+    if (objImageInfo.title !== '') {
+        strImageInfo = strImageInfo + '<br><span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>'
+    }
+    
+    return strImageInfo;
+}
+
 /**
  * View for Images.
  */
@@ -453,7 +467,11 @@ function ViewImages() {
 
         //iterate through the images and add them to the table.
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
-            objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '<div class="img-container"><img src="' + itemImage.src + '"></div></a></td></tr>');
+            if (itemImage.filename) {
+                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.filename + '<div class="img-container"><img src="' + itemImage.src + '"></div></a>' + GetImageInfo(itemImage) + '</td></tr>');
+            } else {
+                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '<div class="img-container"><img src="' + itemImage.src + '"></div></a>' + GetImageInfo(itemImage) + '</td></tr>');
+            }
         }
 
         //set the statistics for the images.

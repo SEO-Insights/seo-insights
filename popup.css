@@ -172,6 +172,15 @@ table#list-images tr td a,
 table#list-images tr td a:link {
     word-break: break-all;
 }
+table#list-images td span.info {
+    color: grey;
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: normal;
+}
+table#list-images td span.info strong {
+    font-weight: bold;
+}
 
 /*
  * Hyperlinks
