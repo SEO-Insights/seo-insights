@@ -47,12 +47,12 @@ function GetTextWordInformation(strValue, newLine = false) {
         return '';
     }
 
-    //create the badges with information about text and words.
-    var strCharsBadgeHTML = '<span class="badge badge-success">' + strValue.length + ' chars</span>';
-    var strWordsBadgeHTML = '<span class="badge badge-success">' + GetWordCount(strValue) + ' words</span>';
+    //create the tags for information about characters and words.
+    var strCharsHTML = '<span class="info">' + strValue.length + ' chars</span>';
+    var strWordsHTML = '<span class="info">' + GetWordCount(strValue) + ' words</span>';
 
-    //return the badges with information.
-    return ((newLine === true) ? '<br>' : '') + strCharsBadgeHTML + strWordsBadgeHTML;
+    //return the tags with information.
+    return ((newLine === true) ? '<br>' : '') + strCharsHTML + strWordsHTML;
 }
 
 function GetAvailableProperties(obj) {
@@ -383,7 +383,7 @@ function ViewFiles() {
         $('#stylesheet-heading button > .badge').remove();
         $('#stylesheet-heading button').append('<span class="badge badge-success">' + arrStylesheet.length + ' items</span>');
         $('#javascript-heading button > .badge').remove();
-        $('#javascript-heading button').append('<span class="badge badge-success">' +arrJavaScript.length + ' items</span>');
+        $('#javascript-heading button').append('<span class="badge badge-success">' + arrJavaScript.length + ' items</span>');
 
         //remove all rows of the stylesheet and javascript table.
         objTableStylesheet.children('tbody').empty();
@@ -391,12 +391,12 @@ function ViewFiles() {
 
         //iterate through the stylesheet files and add them to the table.
         for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
-            objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '">' + arrStylesheet[indexStylesheet] + '<span class="badge badge-success" data="status"></span></td></tr>');
+            objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '">' + arrStylesheet[indexStylesheet] + '</td></tr>');
         }
 
         //iterate through the javascript files and add them to the table.
         for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
-            objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '">' + arrJavaScript[indexJavaScript] + '<span class="badge" data="status"></span></td></tr>');
+            objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '">' + arrJavaScript[indexJavaScript] + '</td></tr>');
         }
     };
 }

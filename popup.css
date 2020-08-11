@@ -60,6 +60,16 @@ table#info-headers tr td:first-child {
     min-width: 135px;
 }
 
+table td span.info {
+    color: grey;
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: normal;
+}
+table td span.info strong {
+    font-weight: bolder;
+}
+
 /*
  * Meta
  */
@@ -102,12 +112,6 @@ div#meta-opengraph-content table#meta-opengraph tr td:first-child span:first-of-
 div#meta-twitter-content table#meta-twitter tr td:first-child span:first-of-type,
 div#meta-others-content table#meta-others tr td:first-child span:first-of-type {
     margin-right: 5px;
-}
-table#meta-head-info td span.info {
-    color: grey;
-    font-size: 0.9em;
-    font-style: italic;
-    font-weight: normal;
 }
 
 /*
@@ -177,15 +181,6 @@ table#list-images tr {
 table#list-images tr td a,
 table#list-images tr td a:link {
     word-break: break-all;
-}
-table#list-images td span.info {
-    color: grey;
-    font-size: 0.9em;
-    font-style: italic;
-    font-weight: normal;
-}
-table#list-images td span.info strong {
-    font-weight: bold;
 }
 
 /*
