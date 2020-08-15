@@ -171,10 +171,21 @@ $(document).ready(function() {
 
                     continue;
                 }
-
-                //the value can be an array with multiple values or a single value.
+ 
+                //check if there are multiple values. the values should be escaped and formatted.
                 if (Array.isArray(objMetaInfo[strMetaName])) {
-                    strMetaValue = objMetaInfo[strMetaName].join('; ');
+
+                    //escape the HTML of the meta value so HTML tags are visible.
+                    for (indexValue = 0; indexValue < objMetaInfo[strMetaName].length; indexValue++) {
+                        objMetaInfo[strMetaName][indexValue] = EscapeHTML(objMetaInfo[strMetaName][indexValue]);
+                    }
+
+                    //format multiple values as list.
+                    if (objMetaInfo[strMetaName].length > 1) {
+                        strMetaValue = '<ul><li>' + objMetaInfo[strMetaName].join('</li><li>') + '</li></ul>';
+                    } else {
+                        strMetaValue = objMetaInfo[strMetaName];
+                    }  
                 } else {
                     strMetaValue = (objMetaInfo[strMetaName] || '').toString();
                 }
@@ -195,7 +206,7 @@ $(document).ready(function() {
                     }
 
                     //add the current meta info to the table.
-                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + strAdditionalInfoHTML, EscapeHTML(strMetaValue) + strThemeColorHTML));
+                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + strAdditionalInfoHTML, strMetaValue + strThemeColorHTML));
                 }
             }
         };

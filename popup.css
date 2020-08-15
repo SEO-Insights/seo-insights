@@ -59,6 +59,10 @@ table#info-headers tr td:first-child {
     font-weight: bold;
     min-width: 135px;
 }
+table#meta-head-info td ul {
+    padding-left: 20px;
+    margin: 0;
+}
 
 table td span.info {
     color: grey;
