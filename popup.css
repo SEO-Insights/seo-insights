@@ -1,8 +1,6 @@
 body {
     font-size: 14px;
     height: 600px;
-    margin: -1px auto 0 auto;
-    padding: 1px 0 0 0;
     width: 600px;
 }
 body div#not-supported {
@@ -12,6 +10,11 @@ body div#not-supported {
 body.not-supported div#not-supported {
     display:block;
     visibility: visible;
+}
+div.container-fluid {
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
 }
 div#not-supported {
     background: #fff;
@@ -37,6 +40,28 @@ div.tab-pane {
 }
 div#not-supported div.alert {
     margin: 15px 0 15px;
+}
+nav {
+    background: #fff;
+    position: sticky;
+    top: 0;
+}
+nav div.nav.nav-pills {
+    margin: 0;
+}
+div.container-fluid div.tab-content {
+    padding: 0 15px 2rem; 
+}
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2rem;
+    font-size: 0.9em;
+    font-style: italic;
+    color: grey;
+    text-align: center;
+    line-height:2rem;
 }
 
 /*
