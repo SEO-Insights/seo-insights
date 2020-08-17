@@ -34,7 +34,7 @@
                 <div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
 
                     <!-- common meta information -->
-                    <table class="table table-sm table-striped" id="meta-head-info">
+                    <table class="table-sm item-list" id="meta-head-info">
                         <tbody></tbody>
                     </table>
                 </div>
@@ -50,7 +50,7 @@
                             </div>
                             <div id="meta-facebook-content" class="collapse" aria-labelledby="meta-facebook-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-facebook">
+                                    <table class="table table-sm item-list" id="meta-facebook">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -64,7 +64,7 @@
                             </div>
                             <div id="meta-opengraph-content" class="collapse" aria-labelledby="meta-opengraph-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-opengraph">
+                                    <table class="table table-sm item-list" id="meta-opengraph">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -78,7 +78,7 @@
                             </div>
                             <div id="meta-opengraph-article-content" class="collapse" aria-labelledby="meta-opengraph-article-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-opengraph-article">
+                                    <table class="table table-sm item-list" id="meta-opengraph-article">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -92,7 +92,7 @@
                             </div>
                             <div id="meta-twitter-content" class="collapse" aria-labelledby="meta-twitter-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-twitter">
+                                    <table class="table table-sm item-list" id="meta-twitter">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -106,7 +106,7 @@
                             </div>
                             <div id="meta-parsely-content" class="collapse" aria-labelledby="meta-parsely-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-parsely">
+                                    <table class="table table-sm item-list" id="meta-parsely">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -120,7 +120,7 @@
                             </div>
                             <div id="meta-dublin-core-content" class="collapse" aria-labelledby="meta-dublin-core-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-dublin-core">
+                                    <table class="table table-sm item-list" id="meta-dublin-core">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -134,7 +134,7 @@
                             </div>
                             <div id="meta-others-content" class="collapse" aria-labelledby="meta-others-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="meta-others">
+                                    <table class="table table-sm item-list" id="meta-others">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -175,7 +175,7 @@
                     </table>
 
                     <!-- list of headings -->
-                    <table class="table table-sm" id="list-headings">
+                    <table class="table table-sm item-list" id="list-headings">
                         <tbody></tbody>
                     </table>
                 </div>
@@ -206,9 +206,11 @@
                     </table>
 
                     <!-- list of images -->
-                    <table class="table table-sm table-striped" id="list-images">
+                    <table class="table table-sm item-list" id="list-images">
                         <tbody></tbody>
                     </table>
+
+                    <div class="img-preview"></div>
                 </div>
                 
                 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -270,7 +272,7 @@
                     </table>
 
                     <!-- list of hyperlinks -->
-                    <table class="table table-sm table-striped" id="list-hyperlinks">
+                    <table class="table table-sm item-list" id="list-hyperlinks">
                         <tbody></tbody>
                     </table>
                 </div>
@@ -288,7 +290,7 @@
                             </div>
                             <div id="stylesheet-content" class="collapse" aria-labelledby="stylesheet-heading" data-parent="#files-accordion">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="files-stylesheet">
+                                    <table class="table table-sm item-list" id="files-stylesheet">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -302,7 +304,7 @@
                             </div>
                             <div id="javascript-content" class="collapse" aria-labelledby="javascript-heading" data-parent="#files-accordion">
                                 <div class="card-body">
-                                    <table class="table table-sm table-striped" id="files-javascript">
+                                    <table class="table table-sm item-list" id="files-javascript">
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -315,20 +317,15 @@
                 <!-- ----------------------------------------- View for Headers ----------------------------------------- -->
                 <!-- ---------------------------------------------------------------------------------------------------- -->
                 <div class="tab-pane fade" id="view-headers" role="tabpanel" aria-labelledby="view-headers-tab">
-                    <table class="table table-sm table-striped" id="info-headers">
+                    <table class="table table-sm item-list" id="info-headers">
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- loading / not supported screen -->
-            <div id="not-supported">
-                <div class="container-fluid">
-                    <div class="alert alert-warning" role="alert"><strong>Hinweis:</strong> Erweiterung konnte nicht geladen werden. Ungültige URL!</div>
-                </div>
-            </div>
+            <div class="alert alert-warning" role="alert"><strong>Hinweis:</strong> Erweiterung konnte nicht geladen werden. Ungültige URL!</div>
 
-            <footer id="footer">~ made in Germany by <a target="_blank" href="https://sebastianbrosch.de">sebastianbrosch.de</a> ~</footer>
+            <footer>~ made in Germany by <a target="_blank" href="https://sebastianbrosch.de">sebastianbrosch.de</a> ~</footer>
         </div>
     </body>
 </html>

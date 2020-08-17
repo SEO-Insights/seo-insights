@@ -241,21 +241,45 @@ $(document).ready(function() {
                 var objMetaTwitter = info['twitter'];
                 var objMetaDublinCore = info['dublin-core'];
 
-                $('#meta-opengraph-article-heading button > .badge').remove();
-                $('#meta-facebook-heading button > .badge').remove();
-                $('#meta-opengraph-heading button > .badge').remove();
-                $('#meta-others-heading button > .badge').remove();
-                $('#meta-parsely-heading button > .badge').remove();
-                $('#meta-twitter-heading button > .badge').remove();
-                $('#meta-dublin-core-heading button > .badge').remove();
-                
-                $('#meta-opengraph-article-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaArticle) + ' items</span>');
-                $('#meta-facebook-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaFacebook) + ' items</span>');
-                $('#meta-opengraph-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaOpenGraph) + ' items</span>');
-                $('#meta-others-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaOthers) + ' items</span>');
-                $('#meta-parsely-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaParsely) + ' items</span>');
-                $('#meta-twitter-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaTwitter) + ' items</span>');
-                $('#meta-dublin-core-heading button').append('<span class="badge badge-success">' + GetAvailableProperties(objMetaDublinCore) + ' items</span>');
+                let objItemMetaFacebook = $('#meta-facebook-heading button');
+                let objItemMetaOpenGraph = $('#meta-opengraph-heading button');
+                let objItemMetaOpenGraphArticle = $('#meta-opengraph-article-heading button');
+                let objItemMetaTwitter = $('#meta-twitter-heading button');
+                let objItemMetaDublinCore = $('#meta-dublin-core-heading button');
+                let objItemMetaParsely = $('#meta-parsely-heading button');
+                let objItemMetaOthers = $('#meta-others-heading button');
+
+                //remove the current information of the button.
+                $('.info', objItemMetaFacebook).remove();
+                $('.info', objItemMetaOpenGraph).remove();
+                $('.info', objItemMetaOpenGraphArticle).remove();
+                $('.info', objItemMetaTwitter).remove();
+                $('.info', objItemMetaDublinCore).remove();
+                $('.info', objItemMetaParsely).remove();
+                $('.info', objItemMetaOthers).remove();
+
+                //set the new information of the group and disable / enable the container.
+                let cntMetaFacebook = GetAvailableProperties(objMetaFacebook);
+                $(objItemMetaFacebook).append('<span class="info">' + cntMetaFacebook + ' items</span>');
+                $(objItemMetaFacebook).prop('disabled', (cntMetaFacebook === 0));
+                let cntMetaOpenGraph = GetAvailableProperties(objMetaOpenGraph);
+                $(objItemMetaOpenGraph).append('<span class="info">' + cntMetaOpenGraph + ' items</span>');
+                $(objItemMetaOpenGraph).prop('disabled', (cntMetaOpenGraph === 0));
+                let cntMetaOpenGraphArticle = GetAvailableProperties(objMetaArticle);
+                $(objItemMetaOpenGraphArticle).append('<span class="info">' + cntMetaOpenGraphArticle + ' items</span>');
+                $(objItemMetaOpenGraphArticle).prop('disabled', (cntMetaOpenGraphArticle === 0));
+                let cntMetaTwitter = GetAvailableProperties(objMetaTwitter);
+                $(objItemMetaTwitter).append('<span class="info">' + cntMetaTwitter + ' items</span>');
+                $(objItemMetaTwitter).prop('disabled', (cntMetaTwitter === 0));
+                let cntMetaDublinCore = GetAvailableProperties(objMetaDublinCore);
+                $(objItemMetaDublinCore).append('<span class="info">' + cntMetaDublinCore + ' items</span>');
+                $(objItemMetaDublinCore).prop('disabled', (cntMetaDublinCore === 0));
+                let cntMetaParsely = GetAvailableProperties(objMetaParsely);
+                $(objItemMetaParsely).append('<span class="info">' + cntMetaParsely + ' items</span>');
+                $(objItemMetaParsely).prop('disabled', (cntMetaParsely === 0));
+                let cntMetaOthers = GetAvailableProperties(objMetaOthers);
+                $(objItemMetaOthers).append('<span class="info">' + cntMetaOthers + ' items</span>');
+                $(objItemMetaOthers).prop('disabled', (cntMetaOthers === 0));
                 
                 var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
                 var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
@@ -390,12 +414,15 @@ function ViewFiles() {
         var arrStylesheet = objFiles['stylesheet'];
         var arrJavaScript = objFiles['javascript'];
 
-        //remove and add the badge to display the number of stylesheet and javascript files.
-        $('#stylesheet-heading button > .badge').remove();
-        $('#stylesheet-heading button').append('<span class="badge badge-success">' + arrStylesheet.length + ' items</span>');
-        $('#javascript-heading button > .badge').remove();
-        $('#javascript-heading button').append('<span class="badge badge-success">' + arrJavaScript.length + ' items</span>');
-
+        let objFilesStylesheet = $('#stylesheet-heading button');
+        $('.info', objFilesStylesheet).remove();
+        $(objFilesStylesheet).append('<span class="info">' + arrStylesheet.length + ' items</span>');
+        $(objFilesStylesheet).prop('disabled', (arrStylesheet.length === 0));
+        let objFilesJavaScript = $('#javascript-heading button');
+        $('.info', objFilesJavaScript).remove();
+        $(objFilesJavaScript).append('<span class="info">' + arrJavaScript.length + ' items</span>');
+        $(objFilesJavaScript).prop('disabled', (arrJavaScript.length === 0));
+        
         //remove all rows of the stylesheet and javascript table.
         objTableStylesheet.children('tbody').empty();
         objTableJavaScript.children('tbody').empty();
@@ -455,11 +482,11 @@ function GetImageInfo(objImageInfo) {
     let strImageInfo = '';
 
     if (objImageInfo.alt !== '') {
-        strImageInfo = strImageInfo + '<br><span class="info"><strong>alt:</strong> ' + objImageInfo.alt + '</span>';
+        strImageInfo = strImageInfo + '<span class="info"><strong>alt:</strong> ' + objImageInfo.alt + '</span>';
     }
 
     if (objImageInfo.title !== '') {
-        strImageInfo = strImageInfo + '<br><span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>'
+        strImageInfo = strImageInfo + '<span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>'
     }
     
     return strImageInfo;
@@ -491,9 +518,9 @@ function ViewImages() {
         //iterate through the images and add them to the table.
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
             if (itemImage.filename) {
-                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.filename + '<div class="img-container"><img src="' + itemImage.src + '"></div></a>' + GetImageInfo(itemImage) + '</td></tr>');
+                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.filename + '</a>' + GetImageInfo(itemImage) + '</td></tr>');
             } else {
-                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '<div class="img-container"><img src="' + itemImage.src + '"></div></a>' + GetImageInfo(itemImage) + '</td></tr>');
+                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '</a>' + GetImageInfo(itemImage) + '</td></tr>');
             }
         }
 
@@ -502,6 +529,16 @@ function ViewImages() {
         objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);
         objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
         objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
+
+        $('table#list-images td').hover(
+            function() {
+                $('div.img-preview').empty();
+                $('div.img-preview').append('<img src="' + $('a', this).attr('href') + '">'); 
+             
+            }, function() {
+                $('div.img-preview').empty();
+            }
+          );
     };      
 }
 
@@ -531,7 +568,7 @@ function ViewHyperlinks() {
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
-            objTableHyperlinks.children('tbody').append('<tr><td>' + itemHyperlink.url.href + '</td></tr>');
+            objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a></td></tr>');
         }
 
         //set the statistics for the hyperlinks.

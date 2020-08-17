@@ -1,267 +1,180 @@
+/** main size and visibility of the extension. */
 body {
     font-size: 14px;
     height: 600px;
     width: 600px;
 }
-body div#not-supported {
+body > div.container-fluid > nav,
+body > div.container-fluid > div.tab-content {
+    display: block;
+    visibility: visible;
+}
+body.not-supported {
+    height: 85px;
+    width: 600px;
+}
+body > div.container-fluid > div.alert,
+body.not-supported > div.container-fluid > nav,
+body.not-supported > div.container-fluid > div.tab-content {
     display: none;
     visibility: hidden;
 }
-body.not-supported div#not-supported {
-    display:block;
+body.not-supported > div.container-fluid > div.alert {
+    border-radius: 0;
+    display: block;
+    margin: 15px;
     visibility: visible;
 }
+
+/** main areas of the extension. */
 div.container-fluid {
+    min-height: 100%;
     padding: 0;
-    min-height: 100vh;
     position: relative;
 }
-div#not-supported {
-    background: #fff;
+div.container-fluid div.tab-content {
+    padding: 7px 15px 2rem; 
+}
+div.container-fluid footer {
     bottom: 0;
-    left: 0;
+    color: grey;
+    font-size: 0.9em;
+    font-style: italic;
+    height: 2rem;
+    line-height: 2rem;
     position: absolute;
-    right: 0;
-    top: 0;
+    text-align: center;
+    width: 100%;
 }
-nav div.nav-tabs,
-nav div.nav-pills {
-    margin-top:5px;
-}
-#nav-summary table tr td:first-child {
-    font-weight: bold;
-    min-width: 135px;
-}
-#nav-summary table tr td:first-child span:nth-of-type(1) {
-    margin-right: 5px;
-}
-div.tab-pane {
-    padding-top: 10px;
-}
-div#not-supported div.alert {
-    margin: 15px 0 15px;
-}
+
+/** navigation (tabs) of the extension. */
 nav {
     background: #fff;
     position: sticky;
     top: 0;
 }
-nav div.nav.nav-pills {
+nav div.nav-pills a.nav-item {
+    border-radius: 0;
+}
+
+/** table to display the basic meta information of the site. */
+table.item-list {
+    border-collapse: separate; 
+    border-spacing: 0 7px; 
     margin: 0;
-}
-div.container-fluid div.tab-content {
-    padding: 0 15px 2rem; 
-}
-#footer {
-    position: absolute;
-    bottom: 0;
     width: 100%;
-    height: 2rem;
-    font-size: 0.9em;
-    font-style: italic;
-    color: grey;
-    text-align: center;
-    line-height:2rem;
 }
-
-/*
- * Summary
- */
-table#meta-head-info tbody tr td {
-    word-break: break-word;
-}
-table#meta-head-info tbody tr td div.theme-color {
-    border: 1px solid #000;
-    display: inline-block;
-    height: 11px;
-    margin-left: 10px;
-    width: 75px;
-}
-table#info-headers tbody tr td {
-    word-break: break-word;
-}
-table#info-headers tr td:first-child {
-    font-weight: bold;
+table.item-list tr td:nth-child(1) {
+    background: #f7f7f7;
+    border-color: #f0f0f0;
+    border-style: solid;
+    border-width: 1px 0 1px 1px;
+    font-weight: bolder;
     min-width: 135px;
+    vertical-align: top;
 }
-table#meta-head-info td ul {
-    padding-left: 20px;
-    margin: 0;
-}
-
-table td span.info {
+table.item-list tr td:nth-child(1) span.info {
     color: grey;
     font-size: 0.9em;
     font-style: italic;
     font-weight: normal;
 }
-table td span.info strong {
+table.item-list tr td:nth-child(1) span.info strong {
     font-weight: bolder;
 }
-
-/*
- * Meta
- */
-.card-header button span.badge {
-    float: right;
-    margin-top: 4px;
-}
-table#meta-opengraph-article,
-table#meta-facebook,
-table#meta-opengraph,
-table#meta-others,
-table#meta-parsely,
-table#meta-twitter,
-table#meta-dublin-core {
-    margin: 0;
-    word-break: break-word;
- }
-
-table#meta-opengraph-article tr td:first-child,
-table#meta-facebook tr td:first-child,
-table#meta-opengraph tr td:first-child,
-table#meta-others tr td:first-child,
-table#meta-parsely tr td:first-child,
-table#meta-twitter tr td:first-child,
-table#meta-dublin-core tr td:first-child {
-    font-weight: bold;
-    min-width: 135px;
-    width: auto;
-}
-div#meta-opengraph-article-content .card-body,
-div#meta-facebook-content .card-body,
-div#meta-opengraph-content .card-body,
-div#meta-others-content .card-body,
-div#meta-parsely-content .card-body,
-div#meta-twitter-content .card-body,
-div#meta-dublin-core-content .card-body {
-    padding: 0;
-}
-div#meta-opengraph-content table#meta-opengraph tr td:first-child span:first-of-type,
-div#meta-twitter-content table#meta-twitter tr td:first-child span:first-of-type,
-div#meta-others-content table#meta-others tr td:first-child span:first-of-type {
+table.item-list tr td:nth-child(1) span.info:not(:last-child) {
     margin-right: 5px;
 }
-
-/*
- * Headings
- */
-div#view-headings table#statistics-headings {
-    text-align: center;
-}
-div#view-headings table#list-headings td[class^="level-"] span:nth-of-type(1) {
-    font-weight: bold;
-    padding-right: 10px;
-}
-div#view-headings table#list-headings td.level-h1 {
-    padding-left: 10px;
-}
-div#view-headings table#list-headings td.level-h2 {
-    padding-left: 20px;
-}
-div#view-headings table#list-headings td.level-h3 {
-    padding-left: 30px;
-}
-div#view-headings table#list-headings td.level-h4 {
-    padding-left: 40px;
-}
-div#view-headings table#list-headings td.level-h5 {
-    padding-left: 50px;
-}
-div#view-headings table#list-headings td.level-h6 {
-    padding-left: 60px;
-}
-div#view-headings table#list-headings td[class^="level-"] span:nth-of-type(2) {
-    margin-right: 5px;
-}
-
-/*
- * Images
- */
-div#view-images table#statistics-images {
-    text-align: center;
-}
-table#statistics-images {
+table.item-list tr td:nth-child(1) a,
+table.item-list tr td:nth-child(1) a:link {
+    display: block;
     word-break: break-all;
 }
-table#list-images {
-    table-layout: fixed;
+table.item-list tr td:nth-child(2) {
+    background: #f7f7f7;
+    border-color: #f0f0f0;
+    border-style: solid;
+    border-width: 1px 1px 1px 0;
+    vertical-align: top;
+    word-break: break-word;
 }
-table#list-images td div.img-container {
-    display: none;
-    visibility: hidden;
+table.item-list tr td:nth-child(2) ul {
+    margin: 0;
+    padding: 0 0 0 20px;
 }
-table#list-images td:hover div.img-container {
-    display: block;
-    visibility: visible;
+table.item-list tr td:nth-child(2) div.theme-color {
+    border: 1px solid #f0f0f0;
+    display: inline-block;
+    height: 20px;
+    margin-left: 10px;
+    vertical-align: bottom;
+    width: 100px;
 }
-table#list-images div.img-container img {
+table.item-list tr td:nth-child(1):last-child {
+    border-right-width: 1px;
+    font-weight: normal;
+    word-break: break-all;
+}
+table[id^="statistics-"] {
+    text-align: center;
+}
+td[class^="level-"] span:nth-of-type(1) {
+    font-weight: bolder;
+    padding-right: 7px;
+}
+td.level-h1 {
+    padding-left: 5px;
+}
+td.level-h2 {
+    padding-left: 15px;
+}
+td.level-h3 {
+    padding-left: 25px;
+}
+td.level-h4 {
+    padding-left: 35px;
+}
+td.level-h5 {
+    padding-left: 45px;
+}
+td.level-h6 {
+    padding-left: 55px;
+}
+
+/** cards to display lists in categories. */
+div.accordion div.card {
+    border-radius: 0;
+}
+div.accordion div.card div.card-body {
+    padding: 1px 7px 0;
+}
+div.accordion div.card div.card-header {
+    padding: 0;
+}
+div.accordion div.card div.card-header button {
+    border-radius: 0;
+    box-shadow: none;
+    color: #000;
+    font-weight: bolder;
+    outline: 0;
+}
+div.accordion div.card div.card-header button span.info {
+    color: grey;
+    float: right;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+/** table for the images. */
+div#view-images div.img-preview img {
     background-image: url('img/bg-img-pattern.png');
+    border: 2px solid black;
+    bottom: 10px;
+    height: auto;
     max-height: 200px;
     max-width: 200px;
-    margin: 5px;
+    position: fixed;
+    right: 10px;
     width: auto;
-    height: auto;
-}
-table#list-images td,
-table#list-images tr {
-    width:100%;
-}
-table#list-images tr td a,
-table#list-images tr td a:link {
-    word-break: break-all;
-}
-
-/*
- * Hyperlinks
- */
-div#view-hyperlinks table#statistics-hyperlinks,
-div#view-hyperlinks table#statistics-protocols {
-    text-align: center;
-}
-div#view-hyperlinks table#list-hyperlinks > tbody {
-    word-break: break-word;
-}
-
-/*
- * Files
- */
-div#view-files table#files-stylesheet,
-div#view-files table#files-javascript {
-    margin: 0;
-    word-break: break-word;
-}
-div#view-files div#stylesheet-content .card-body,
-div#view-files div#javascript-content .card-body {
-    padding: 0;
-}
-
-/* 
- * Overwrites for Bootstrap 4.5 to customize the design.
- */
-div.alert {
-    border-radius: 0;
-}
-span.badge {
-    border-radius: 0;
-}
-nav div.nav-pills a.nav-item,
-nav div.nav-tabs a.nav-item {
-    border-radius: 0;
-}
-.accordion .card {
-    border-radius: 0;
-}
-.accordion .card .btn.focus,
-.accordion .card .btn:focus {
-    outline: 0;
-    box-shadow: none;
-}
-.accordion .card .card-header {
-    padding-bottom: 0;
-    padding-top: 0;
-}
-.accordion .card .card-header button {
-    color: #000;
-    font-weight: bold;
+    z-index: 100;
 }
