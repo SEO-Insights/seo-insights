@@ -78,6 +78,7 @@ table.item-list tr td:nth-child(1) span.info {
     font-size: 0.9em;
     font-style: italic;
     font-weight: normal;
+    word-break: keep-all;
 }
 table.item-list tr td:nth-child(1) span.info strong {
     font-weight: bolder;
@@ -118,26 +119,31 @@ table.item-list tr td:nth-child(1):last-child {
 table[id^="statistics-"] {
     text-align: center;
 }
-td[class^="level-"] span:nth-of-type(1) {
+
+/** design for the headings information. */
+table#list-headings td[class^="level-"] span:nth-of-type(1) {
     font-weight: bolder;
     padding-right: 7px;
 }
-td.level-h1 {
+table#list-headings td[class^="level-"] {
+    word-break: keep-all;
+}
+table#list-headings td.level-h1 {
     padding-left: 5px;
 }
-td.level-h2 {
+table#list-headings td.level-h2 {
     padding-left: 15px;
 }
-td.level-h3 {
+table#list-headings td.level-h3 {
     padding-left: 25px;
 }
-td.level-h4 {
+table#list-headings td.level-h4 {
     padding-left: 35px;
 }
-td.level-h5 {
+table#list-headings td.level-h5 {
     padding-left: 45px;
 }
-td.level-h6 {
+table#list-headings td.level-h6 {
     padding-left: 55px;
 }
 

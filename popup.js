@@ -478,7 +478,7 @@ function ViewHeadings() {
     };
 }
 
-function GetImageInfo(objImageInfo) {
+function GetImageInfo(objImageInfo, strID = '') {
     let strImageInfo = '';
 
     if (objImageInfo.alt !== '') {
@@ -486,7 +486,15 @@ function GetImageInfo(objImageInfo) {
     }
 
     if (objImageInfo.title !== '') {
-        strImageInfo = strImageInfo + '<span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>'
+        strImageInfo = strImageInfo + '<span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>';
+    }
+
+    if (objImageInfo.filename && strID !== '') {
+        let img = new Image;
+        img.onload = function() {
+            $('tr#' + strID + ' td').append('<span class="info"><strong>size:</strong> ' + img.width + ' x ' + img.height + '</span>');
+        };
+        img.src = objImageInfo.src;
     }
     
     return strImageInfo;
@@ -515,10 +523,11 @@ function ViewImages() {
         //remove all rows of the images table.
         objTableImages.children('tbody').empty();
 
-        //iterate through the images and add them to the table.
-        for (let itemImage of arrImages.filter(image => image.src !== '')) {
+        for (let indexImage = 0; indexImage < arrImages.length; indexImage++) {
+            let itemImage = arrImages[indexImage];
+
             if (itemImage.filename) {
-                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.filename + '</a>' + GetImageInfo(itemImage) + '</td></tr>');
+                objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.filename + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
             } else {
                 objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '</a>' + GetImageInfo(itemImage) + '</td></tr>');
             }
