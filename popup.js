@@ -478,7 +478,7 @@ function ViewHeadings() {
     };
 }
 
-function GetImageInfo(objImageInfo, strID = '') {
+function GetImageInfo(objImageInfo, strID) {
     let strImageInfo = '';
 
     if (objImageInfo.alt !== '') {
@@ -489,7 +489,7 @@ function GetImageInfo(objImageInfo, strID = '') {
         strImageInfo = strImageInfo + '<span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>';
     }
 
-    if (objImageInfo.filename && strID !== '') {
+    if (objImageInfo.src) {
         let img = new Image;
         img.onload = function() {
             $('tr#' + strID + ' td').append('<span class="info"><strong>size:</strong> ' + img.width + ' x ' + img.height + '</span>');
@@ -519,20 +519,17 @@ function ViewImages() {
     const fnResponse = arrImages => {
         var objTableImages = $('div#view-images table#list-images');
         var objTableStatsImages = $('div#view-images table#statistics-images');
+        let indexImage = 0;
 
         //remove all rows of the images table.
         objTableImages.children('tbody').empty();
 
-        for (let indexImage = 0; indexImage < arrImages.length; indexImage++) {
-            let itemImage = arrImages[indexImage];
-
-            if (itemImage.filename) {
-                objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.filename + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
-            } else {
-                objTableImages.children('tbody').append('<tr><td><a target="_blank" href="' + itemImage.src + '">' + itemImage.src + '</a>' + GetImageInfo(itemImage) + '</td></tr>');
-            }
+        //run through all images of the array with a source value.
+        for (let itemImage of arrImages.filter(image => image.src !== '')) {
+            indexImage++;
+            objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + ((itemImage.filename) ? itemImage.filename : itemImage.src) + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
         }
-
+        
         //set the statistics for the images.
         objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
         objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);

@@ -147,6 +147,11 @@ table#list-headings td.level-h6 {
     padding-left: 55px;
 }
 
+/** design for the images information. */
+tr[id^="img"] span.info {
+    display:block;
+}
+
 /** cards to display lists in categories. */
 div.accordion div.card {
     border-radius: 0;
