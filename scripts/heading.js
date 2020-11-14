@@ -37,7 +37,7 @@ var HeadingModule = (function() {
         GetHeadings: function() {
             let arrHeadings = [];
 
-            //iterate through the frames of the site to get the images of the available frames.
+            //iterate through the frames of the site to get the headings of the available frames.
             for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 
                 //there are also blocked frames so we have to try to get the document of the frame.

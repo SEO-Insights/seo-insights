@@ -104,7 +104,7 @@ table.item-list tr td:nth-child(2) ul {
     padding: 0 0 0 20px;
 }
 table.item-list tr td:nth-child(2) div.theme-color {
-    border: 1px solid #f0f0f0;
+    border: 1px solid #a0a0a0;
     display: inline-block;
     height: 20px;
     margin-left: 10px;
@@ -170,7 +170,6 @@ div.accordion div.card div.card-header button {
     outline: 0;
 }
 div.accordion div.card div.card-header button span.info {
-    color: grey;
     float: right;
     font-size: 0.9em;
     font-style: italic;
