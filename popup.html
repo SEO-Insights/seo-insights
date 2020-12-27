@@ -24,6 +24,7 @@
                     <a class="nav-item nav-link" id="view-hyperlinks-tab" data-toggle="tab" href="#view-hyperlinks" role="tab" aria-controls="view-hyperlinks" aria-selected="false">Links</a>
                     <a class="nav-item nav-link" id="view-files-tab" data-toggle="tab" href="#view-files" role="tab" aria-controls="view-files" aria-selected="false">Files</a>
                     <a class="nav-item nav-link" id="view-headers-tab" data-toggle="tab" href="#view-headers" role="tab" aria-controls="view-headers" aria-selected="false">Headers</a>
+                    <a class="nav-item nav-link" id="view-tools-tab" data-toggle="tab" href="#view-tools" role="tab" aria-controls="view-tools" aria-selected="false">Tools</a>
                 </div>
             </nav>
 
@@ -310,6 +311,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-header" id="special-heading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#special-content" aria-expanded="false" aria-controls="special-content">Special</button>
+                                </h2>
+                            </div>
+                            <div id="special-content" class="collapse" aria-labelledby="special-heading" data-parent="#files-accordion">
+                                <div class="card-body">
+                                    <table class="table table-sm item-list" id="files-special">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -321,11 +336,13 @@
                         <tbody></tbody>
                     </table>
                 </div>
+
+                <div class="tab-pane fade" id="view-tools" role="tabpanel" aria-labelledby="view-tools-tab">
+                    
+                </div>
             </div>
 
             <div class="alert alert-warning" role="alert"><strong>Hinweis:</strong> Erweiterung konnte nicht geladen werden. Ungültige URL!</div>
-
-            <footer>~ made in Germany by <a target="_blank" href="https://sebastianbrosch.de">sebastianbrosch.de</a> ~</footer>
         </div>
     </body>
 </html>

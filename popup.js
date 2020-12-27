@@ -90,12 +90,79 @@ function GetHeaderInformation(url) {
     });
 }
 
+function IsAvailableGoogleAnalytics() {
+    if (typeof window.gtag === "function") { 
+        $('table#meta-head-info > tbody').append(GetInformationRow('Google Analytics', 'Ja'));
+    }
+}
+
 function GetInformationRow(strValueColumn1, strValueColumn2) {
     return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
 }
 
+function MetaGeneratorRenderer(metaGenerator) {
+    //check if there are multiple values. the values should be escaped and formatted.
+    if (Array.isArray(metaGenerator)) {
+
+        //escape the HTML of the meta value so HTML tags are visible.
+        for (indexValue = 0; indexValue < metaGenerator.length; indexValue++) {
+            metaGenerator[indexValue] = EscapeHTML(metaGenerator[indexValue]);
+        }
+
+        //format multiple values as list.
+        if (metaGenerator.length > 1) {
+            strMetaValue = '<ul>';
+            metaGenerator.forEach(meta => {
+                strMetaValue += '<li>' + GetGeneratorLink(meta) + '</li>';
+            });
+            strMetaValue += '</ul>';
+        } else {
+            strMetaValue = GetGeneratorLink(metaGenerator);
+        }  
+    } else {
+        strMetaValue = GetGeneratorLink((metaGenerator || '').toString());
+    }
+
+    return strMetaValue;
+}
+
 //the url of the current tab.
 var tabUrl = '';
+
+/**
+ * function to get the link to the generator website.
+ * @param {string} name The generator name to get the link of the generator website.
+ * @return {string} The link to the generator website or the generator name itself.
+ */
+function GetGeneratorLink(name) {
+
+    //define the keywords of the generator to get the link to the generator website.
+    let arrGeneratorLinks = [
+        ['chimpify', 'https://www.chimpify.de/'],
+        ['ghost', 'https://ghost.org/'],
+        ['hubspot', 'https://www.hubspot.de/products/cms'],
+        ['hugo', 'https://gohugo.io/'],
+        ['jekyll', 'https://jekyllrb.com/'],
+        ['joomla', 'https://www.joomla.org/'],
+        ['mediawiki', 'https://www.mediawiki.org/wiki/MediaWiki'],
+        ['publii', 'https://getpublii.com/'],
+        ['typo3', 'https://typo3.org/'],
+        ['wordpress', 'https://wordpress.org/'],
+        ['woocommerce', 'https://woocommerce.com/']
+    ];
+
+    //get the link to the generator based on the name.
+    var arrFoundLinks = arrGeneratorLinks.filter(item => name.toLowerCase().includes(item[0]));
+
+    //check if there is a found link to the generator website.
+    //the link is only used if it is the only one found in the array.
+    if (arrFoundLinks.length == 1) {
+        document.createElement("a", )
+        return '<a href="' + arrFoundLinks[1] + '" target="_blank">' + name + '</a>';
+    } else {
+        return name;
+    }
+}
 
 $(document).ready(function() {
 
@@ -123,6 +190,8 @@ $(document).ready(function() {
             
             //clear the table because we refresh this table here with current values.
             $('table#meta-head-info > tbody').empty();
+
+            IsAvailableGoogleAnalytics();
 
             //define the required information (also if not available in object).
             var arrRequiredInfo = ['title', 'description'];
@@ -169,6 +238,11 @@ $(document).ready(function() {
                         $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName, EscapeHTML(objCanonical.value)));
                     }
 
+                    continue;
+                }
+
+                if (strMetaName === 'generator') {
+                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName, MetaGeneratorRenderer(objMetaInfo[strMetaName])));
                     continue;
                 }
  
@@ -383,6 +457,13 @@ $(document).ready(function() {
 
         //Headers
         $('a[href="#view-headers"]').on('click', ViewHeader);
+
+        $('a[href="#view-tools"]').on('click', function() {
+            $('div#view-tools').append('<a href="https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(tabUrl) + '" target="_blank">Google PageSpeed Insights</a>');
+            $('div#view-tools').append('<a href="https://jigsaw.w3.org/css-validator/validator?uri=' + encodeURIComponent(tabUrl) + '&lang=de" target="_blank">W3C CSS Validation Service</a>'); //TODO - change language on multilanguage version
+            $('div#view-tools').append('<a href="https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl) + '" target="_blank">Nu Html Checker</a>');
+            $('div#view-tools').append('<a href="https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl) + '" target="_blank">GTmetrix | Website Speed and Performance Optimization</a>');
+        });
     }
 });
 
@@ -409,6 +490,7 @@ function ViewFiles() {
     const fnResponse = objFiles => {
         var objTableStylesheet = $('div#view-files table#files-stylesheet');
         var objTableJavaScript = $('div#view-files table#files-javascript');
+        var objTablSpecial = $('div#view-files table#files-special');
 
         //get the arrays with files.
         var arrStylesheet = objFiles['stylesheet'];
@@ -436,6 +518,20 @@ function ViewFiles() {
         for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
             objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '">' + arrJavaScript[indexJavaScript] + '</td></tr>');
         }
+
+        var strSitemapURL = (new URL(tabUrl)).origin + '/sitemap.xml';
+        fetch(strSitemapURL).then(function(response) {
+            if (response.status == 200) {
+                $('div#view-files table#files-special tbody').append(GetInformationRow('sitemap.xml', '<a href="' + strSitemapURL + '" target="_blank">sitemap.xml</a>'));
+            }
+        });
+
+        var strRobotsURL = (new URL(tabUrl)).origin + '/robots.txt';
+        fetch(strRobotsURL).then(function(response) {
+            if (response.status == 200) {
+                $('div#view-files table#files-special tbody').append(GetInformationRow('robots.txt', '<a href="' + strRobotsURL + '" target="_blank">robots.txt</a>'));
+            }
+        });
     };
 }
 
