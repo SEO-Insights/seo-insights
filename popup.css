@@ -188,3 +188,13 @@ div#view-images div.img-preview img {
     width: auto;
     z-index: 100;
 }
+table#info-tools div.heading {
+    font-weight: bold;
+}
+table#info-tools .full-link {
+    color: #000;
+    text-decoration: none;
+}
+table#info-tools .full-link:hover {
+    text-decoration: none;
+}

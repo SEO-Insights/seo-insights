@@ -458,17 +458,39 @@ $(document).ready(function() {
         //Headers
         $('a[href="#view-headers"]').on('click', ViewHeader);
 
-        $('a[href="#view-tools"]').on('click', function() {
-            $('div#view-tools').append('<a href="https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(tabUrl) + '" target="_blank">Google PageSpeed Insights</a>');
-            $('div#view-tools').append('<a href="https://jigsaw.w3.org/css-validator/validator?uri=' + encodeURIComponent(tabUrl) + '&lang=de" target="_blank">W3C CSS Validation Service</a>'); //TODO - change language on multilanguage version
-            $('div#view-tools').append('<a href="https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl) + '" target="_blank">Nu Html Checker</a>');
-            $('div#view-tools').append('<a href="https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl) + '" target="_blank">GTmetrix | Website Speed and Performance Optimization</a>');
-        });
+        $('a[href="#view-tools"]').on('click', ViewTools);
     }
 });
 
 function ViewHeader() {
     GetHeaderInformation(tabUrl);
+}
+
+/**
+ * View for Tools.
+ */
+function ViewTools() {
+
+    //get the table of the tools list.
+    var objTableTools = $('div#view-tools table#info-tools');
+
+    //remove all available tools.
+    objTableTools.children('tbody').empty();
+    objTableTools.children('tbody').append(GetToolsItem('Google PageSpeed Insights', 'PageSpeed Insights analysiert den Inhalt einer Webseite und erstellt dann Vorschläge zur Verbesserung der Geschwindigkeit dieser Seite.', 'https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(tabUrl)));
+    objTableTools.children('tbody').append(GetToolsItem('W3C CSS Validation Service', 'Der W3C CSS Validator ist freie Software des W3C, die Webdesignern und Webentwicklern dabei helfen soll, ihre Cascading Style Sheets (CSS) zu überprüfen.', 'https://jigsaw.w3.org/css-validator/validator?uri=' + encodeURIComponent(tabUrl)));
+    objTableTools.children('tbody').append(GetToolsItem('Nu Html Checker', 'The Nu Html Checker (v.Nu) is an ongoing experiment in better HTML checking, and its behavior remains subject to change.', 'https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl)));
+    objTableTools.children('tbody').append(GetToolsItem('GTmetrix | Website Speed and Performance Optimization', 'GTmetrix is a free tool that analyzes your page\'s speed performance.  Using PageSpeed and YSlow, GTmetrix generates scores for your pages and offers actionable recommendations on how to fix them.', 'https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl)));
+    objTableTools.children('tbody').append(GetToolsItem('Test für Rich-Suchergebnisse – Google Search Console', 'Teste deine öffentlich zugängliche Seite, um herauszufinden, welche Rich-Suchergebnisse über die darin enthaltenen strukturierten Daten generiert werden können.', 'https://search.google.com/test/rich-results?url=' + encodeURIComponent(tabUrl)));
+}
+
+/**
+ * function to get the tool item to display on the list of the tool view.
+ * @param {string} title The title of the tool.
+ * @param {string} description The description of the tool.
+ * @param {string} link The link to the tool website with website specific parameter.
+ */
+function GetToolsItem(title, description, link) {
+    return '<tr><td><a class="full-link" href="' + link + '" target="_blank"><div class="heading">' + title + '</div><span class="info">' + description + '</span></a></td></tr>';
 }
 
 /**
