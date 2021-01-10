@@ -33,7 +33,7 @@ div.container-fluid {
     position: relative;
 }
 div.container-fluid div.tab-content {
-    padding: 7px 15px 2rem; 
+    padding: 7px; 
 }
 div.container-fluid footer {
     bottom: 0;
@@ -107,9 +107,13 @@ table.item-list tr td:nth-child(2) div.theme-color {
     border: 1px solid #a0a0a0;
     display: inline-block;
     height: 20px;
-    margin-left: 10px;
+    line-height: 18px;
+    text-align: center;
     vertical-align: bottom;
     width: 100px;
+}
+table.item-list tr td:nth-child(2) div.theme-color:not(:first-child) {
+    margin-left: 10px;
 }
 table.item-list tr td:nth-child(1):last-child {
     border-right-width: 1px;
@@ -197,4 +201,7 @@ table#info-tools .full-link {
 }
 table#info-tools .full-link:hover {
     text-decoration: none;
+}
+div.tab-pane table.table {
+    margin-bottom: 0;
 }

@@ -100,6 +100,19 @@ function GetInformationRow(strValueColumn1, strValueColumn2) {
     return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
 }
 
+function GetColorValueRow(metaName, metaValue) {
+    var strMetaValueHTML = '';
+    if (Array.isArray(metaValue) && metaValue.length > 0) {
+        for (let strThemeColor of metaValue) {
+            strMetaValueHTML += '<div class="theme-color" style="background: ' + strThemeColor + '; color: ' + invertColor(strThemeColor, true) + '">' + strThemeColor + '</div>';
+        }
+    } else {
+        strMetaValueHTML += '<div class="theme-color" style="background: ' + metaValue + '; color: ' + invertColor(metaValue, true) + '">' + metaValue + '</div>';
+    }
+
+    return GetInformationRow(metaName,strMetaValueHTML );
+}
+
 function MetaGeneratorRenderer(metaGenerator) {
     //check if there are multiple values. the values should be escaped and formatted.
     if (Array.isArray(metaGenerator)) {
@@ -245,6 +258,12 @@ $(document).ready(function() {
                     $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName, MetaGeneratorRenderer(objMetaInfo[strMetaName])));
                     continue;
                 }
+
+                if (strMetaName === 'theme-color') {
+                    console.log(objMetaInfo[strMetaName]);
+                    $('table#meta-head-info > tbody').append(GetColorValueRow(strMetaName, objMetaInfo[strMetaName]));
+                    continue;
+                }
  
                 //check if there are multiple values. the values should be escaped and formatted.
                 if (Array.isArray(objMetaInfo[strMetaName])) {
@@ -267,20 +286,14 @@ $(document).ready(function() {
                 //don't show the required meta information again.
                 if (!arrRequiredInfo.includes(strMetaName) && strMetaValue.trim() !== '') {
                     var strAdditionalInfoHTML = '';
-                    var strThemeColorHTML = '';
 
                     //check if the current info need more details.
                     if (arrDetailedInfo.includes(strMetaName)) {
                         strAdditionalInfoHTML = GetTextWordInformation(strMetaValue, true);
                     }
 
-                    //we create a little label to show the theme-color as color.
-                    if (strMetaName === 'theme-color') {
-                        strThemeColorHTML = '<div class="theme-color" style="background: ' + strMetaValue + '"></div>';
-                    }
-
                     //add the current meta info to the table.
-                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + strAdditionalInfoHTML, strMetaValue + strThemeColorHTML));
+                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + strAdditionalInfoHTML, strMetaValue));
                 }
             }
         };
@@ -481,6 +494,7 @@ function ViewTools() {
     objTableTools.children('tbody').append(GetToolsItem('Nu Html Checker', 'The Nu Html Checker (v.Nu) is an ongoing experiment in better HTML checking, and its behavior remains subject to change.', 'https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl)));
     objTableTools.children('tbody').append(GetToolsItem('GTmetrix | Website Speed and Performance Optimization', 'GTmetrix is a free tool that analyzes your page\'s speed performance.  Using PageSpeed and YSlow, GTmetrix generates scores for your pages and offers actionable recommendations on how to fix them.', 'https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl)));
     objTableTools.children('tbody').append(GetToolsItem('Test für Rich-Suchergebnisse – Google Search Console', 'Teste deine öffentlich zugängliche Seite, um herauszufinden, welche Rich-Suchergebnisse über die darin enthaltenen strukturierten Daten generiert werden können.', 'https://search.google.com/test/rich-results?url=' + encodeURIComponent(tabUrl)));
+    objTableTools.children('tbody').append(GetToolsItem('Test auf Optimierung für Mobilgeräte – Google Search Console', 'Teste, wie einfach die Nutzung deiner Seite auf einem Mobilgerät für Besucher ist.', 'https://search.google.com/test/mobile-friendly?url=' + encodeURIComponent(tabUrl)));
 }
 
 /**
@@ -544,14 +558,14 @@ function ViewFiles() {
         var strSitemapURL = (new URL(tabUrl)).origin + '/sitemap.xml';
         fetch(strSitemapURL).then(function(response) {
             if (response.status == 200) {
-                $('div#view-files table#files-special tbody').append(GetInformationRow('sitemap.xml', '<a href="' + strSitemapURL + '" target="_blank">sitemap.xml</a>'));
+                $('div#view-files table#files-special tbody').append('<tr><td id="item-sitemapxml"><a href="' + strSitemapURL + '" target="_blank">sitemap.xml</a></td></tr>');
             }
         });
 
         var strRobotsURL = (new URL(tabUrl)).origin + '/robots.txt';
         fetch(strRobotsURL).then(function(response) {
             if (response.status == 200) {
-                $('div#view-files table#files-special tbody').append(GetInformationRow('robots.txt', '<a href="' + strRobotsURL + '" target="_blank">robots.txt</a>'));
+                $('div#view-files table#files-special tbody').append('<tr><td id="item-robotstxt"><a href="' + strRobotsURL + '" target="_blank">robots.txt</a></td></tr>');
             }
         });
     };
@@ -583,15 +597,16 @@ function ViewHeadings() {
 
         //iterate through the different levels of headings.
         for (level = 1; level <= 6; level++) {
-            objTableStatsHeadings.find('td[data-seo-info="headings-h' + level + '"]').text(arrHeadings.filter(heading => heading.type === 'h' + level).length);
+            objTableStatsHeadings.find('td[id="headings-h' + level + '"]').text(arrHeadings.filter(heading => heading.type === 'h' + level).length);
         }
 
         //set the total count of headings to the table.
-        objTableStatsHeadings.find('td[data-seo-info="headings-all"]').text(arrHeadings.length);
+        objTableStatsHeadings.find('td[id="headings-empty"]').text(arrHeadings.filter(heading => heading.text.trim() === '').length);
+        objTableStatsHeadings.find('td[id="headings-all"]').text(arrHeadings.length);
 
-        //iterate through the headings and add them to the table.
-        for (let itemHeading of arrHeadings) {
-            objTableHeadings.children('tbody').append('<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>');
+        for (itemHeading of arrHeadings) {
+            var strTableRow = '<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>';
+            $(objTableHeadings).children('tbody').append(strTableRow);
         }
     };
 }
@@ -692,7 +707,18 @@ function ViewHyperlinks() {
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
-            objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a></td></tr>');
+            var strRelativeInfo = '';
+            var strTitleInfo = '';
+
+            if ((itemHyperlink.rel || '').toString().trim() !== '') {
+                strRelativeInfo = '<span class="info"><strong>rel:</strong> ' + (itemHyperlink.rel || '').toString().trim() + '</span>';
+            }
+
+            if ((itemHyperlink.title || '').toString().trim() !== '') {
+                strTitleInfo = '<span class="info"><strong>title:</strong> ' + (itemHyperlink.title || '').toString().trim() + '</span>';
+            }
+            
+            objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
         }
 
         //set the statistics for the hyperlinks.

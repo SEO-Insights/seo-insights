@@ -146,6 +146,76 @@ var MetaInformation = (function() {
             return ($('head > link[rel="canonical"]').attr('href') || '').toString();
         },
 
+        GetHeadings: function() {
+
+            let itemsHeading = [];
+
+            $('body h1, body h2, body h3, body h4, body h5, body h6').each(function() {
+                itemsHeading.push({
+                    'type': $(this).prop('tagName').toLocaleLowerCase(),
+                    'title': $(this).text()
+                });
+            });
+
+            console.log(itemsHeading);
+        },
+
+        GetMetaCharacterEncoding: function() {
+
+            let itemsCharacterEncoding = [];
+
+            $('head > meta[charset]').each(function() {
+                itemsCharacterEncoding.push({
+                    'name': 'charset',
+                    'value': $(this).attr('charset')
+                });
+            });
+
+            console.log(itemsCharacterEncoding);
+        },
+
+        GetPragmaDirectives: function() {
+            
+            let itemsPragmaDirective = [];
+
+            $('head > meta[http-equiv]').each(function() {
+                itemsPragmaDirective.push({
+                    'name': $(this).attr('http-equiv').trim().toLocaleLowerCase(),
+                    'value': $(this).attr('content')
+                });
+            });
+
+            console.log(itemsPragmaDirective);
+        },
+
+        GetMetaElements: function() {
+
+            //array to store the information of the <meta> elements.
+            let itemsMetaElement = [];
+
+            //iterate through all the <meta> elements with name or property attribute.
+            $('head > meta[name], head > meta[property]').each(function() {
+
+                //add the <meta> element with name attribute to the array.
+                if ($(this).is('[name]')) {
+                    itemsMetaElement.push({
+                        'name': $(this).attr('name').trim().toLocaleLowerCase(),
+                        'value': $(this).attr('content')
+                    });
+                }
+
+                //add the <meta> element with property attribute to the array.
+                if ($(this).is('[property]')) {
+                    itemsMetaElement.push({
+                        'name': $(this).attr('property').trim().toLocaleLowerCase(),
+                        'value': $(this).attr('content')
+                    });
+                }
+            });
+
+            console.log(itemsMetaElement);
+        },
+
         /**
          * Get the general meta information.
          */
