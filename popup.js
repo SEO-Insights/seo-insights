@@ -90,53 +90,99 @@ function GetHeaderInformation(url) {
     });
 }
 
-function IsAvailableGoogleAnalytics() {
-    if (typeof window.gtag === "function") { 
-        $('table#meta-head-info > tbody').append(GetInformationRow('Google Analytics', 'Ja'));
-    }
-}
+
+
+
 
 function GetInformationRow(strValueColumn1, strValueColumn2) {
     return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
 }
 
-function GetColorValueRow(metaName, metaValue) {
-    var strMetaValueHTML = '';
-    if (Array.isArray(metaValue) && metaValue.length > 0) {
-        for (let strThemeColor of metaValue) {
-            strMetaValueHTML += '<div class="theme-color" style="background: ' + strThemeColor + '; color: ' + invertColor(strThemeColor, true) + '">' + strThemeColor + '</div>';
-        }
-    } else {
-        strMetaValueHTML += '<div class="theme-color" style="background: ' + metaValue + '; color: ' + invertColor(metaValue, true) + '">' + metaValue + '</div>';
+/**
+ * function to get a row with formatted color value(s).
+ * 
+ * @param {string} metaName The name of the meta element.
+ * @param {string|string[]} metaValue The value of the meta element or an array of values.
+ * @returns {string} The row with information of the meta element (value formatted as color).
+ */
+function GetColorRow(metaName, metaValue) {
+    
+    if (typeof metaValue === 'string') {
+        metaValue = [metaValue];
     }
+    
+    if (Array.isArray(metaValue) && metaValue.length > 0) {
+        var htmlColorValue = '';
 
-    return GetInformationRow(metaName,strMetaValueHTML );
+        for (let colorValue of metaValue) {
+            htmlColorValue += '<div class="theme-color" style="background: ' + colorValue + '; color: ' + invertColor(colorValue, true) + '">' + colorValue + '</div>';
+        }
+
+        return GetInformationRow(metaName, htmlColorValue);
+    }
 }
 
-function MetaGeneratorRenderer(metaGenerator) {
-    //check if there are multiple values. the values should be escaped and formatted.
-    if (Array.isArray(metaGenerator)) {
+
+
+
+
+function GetDefaultRow(metaName, metaValue) {
+    var arrDetailedInfo = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title'];
+    var strMetaValueHTML = '';
+
+    if (Array.isArray(metaValue) && metaValue.length > 0) {
 
         //escape the HTML of the meta value so HTML tags are visible.
-        for (indexValue = 0; indexValue < metaGenerator.length; indexValue++) {
-            metaGenerator[indexValue] = EscapeHTML(metaGenerator[indexValue]);
+        for (indexValue = 0; indexValue < metaValue.length; indexValue++) {
+            metaValue[indexValue] = EscapeHTML(metaValue[indexValue]);
         }
 
         //format multiple values as list.
-        if (metaGenerator.length > 1) {
+        if (metaValue.length > 1) {
+            strMetaValueHTML = '<ul><li>' + metaValue.join('</li><li>') + '</li></ul>';
+        } else {
+            strMetaValueHTML = metaValue;
+        }  
+    } else {
+        strMetaValueHTML = metaValue;
+    }
+
+    if (arrDetailedInfo.includes(metaName)) {
+        return GetInformationRow(metaName + GetTextWordInformation(metaValue, true), strMetaValueHTML);
+    } else {
+        return GetInformationRow(metaName, strMetaValueHTML);
+    }
+}
+function GetCanonicalRow(metaName, metaValue) {
+    if (metaValue.selfref === true) {
+        return GetInformationRow(metaName + '<br><span class="info">self-referential</span>', EscapeHTML(metaValue.value));
+    } else {
+        return GetInformationRow(metaName, EscapeHTML(metaValue.value));
+    }
+}
+function GetGeneratorRow(metaName, metaValue) {
+    if (Array.isArray(metaValue)) {
+
+        //escape the HTML of the meta value so HTML tags are visible.
+        for (indexValue = 0; indexValue < metaValue.length; indexValue++) {
+            metaValue[indexValue] = EscapeHTML(metaValue[indexValue]);
+        }
+
+        //format multiple values as list.
+        if (metaValue.length > 1) {
             strMetaValue = '<ul>';
-            metaGenerator.forEach(meta => {
+            metaValue.forEach(meta => {
                 strMetaValue += '<li>' + GetGeneratorLink(meta) + '</li>';
             });
             strMetaValue += '</ul>';
         } else {
-            strMetaValue = GetGeneratorLink(metaGenerator);
+            strMetaValue = GetGeneratorLink(metaValue);
         }  
     } else {
-        strMetaValue = GetGeneratorLink((metaGenerator || '').toString());
+        strMetaValue = GetGeneratorLink((metaValue || '').toString());
     }
 
-    return strMetaValue;
+    return GetInformationRow(metaName, strMetaValue);
 }
 
 //the url of the current tab.
@@ -170,15 +216,14 @@ function GetGeneratorLink(name) {
     //check if there is a found link to the generator website.
     //the link is only used if it is the only one found in the array.
     if (arrFoundLinks.length == 1) {
-        document.createElement("a", )
         return '<a href="' + arrFoundLinks[1] + '" target="_blank">' + name + '</a>';
     } else {
         return name;
     }
 }
 
-$(document).ready(function() {
-
+jQuery(function() {
+    
     //init
     if ($('body').hasClass('not-supported') === false) {
        
@@ -203,97 +248,23 @@ $(document).ready(function() {
             
             //clear the table because we refresh this table here with current values.
             $('table#meta-head-info > tbody').empty();
-
-            IsAvailableGoogleAnalytics();
-
-            //define the required information (also if not available in object).
-            var arrRequiredInfo = ['title', 'description'];
-            var arrDetailedInfo = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title'];
-
-            //iterate through all the required information.
-            for (let strRequiredInfo of arrRequiredInfo) {
-
-                //check if the property is available.
-                if (!objMetaInfo.hasOwnProperty(strRequiredInfo)) {
-                    continue;
-                }
-
-                //get the value of the meta information and reset the addtional HTML information.
-                var strMetaValue = '';
-                var strAdditionalInfoHTML = '';
-
-                //the value can be an array with multiple values or a single value.
-                if (Array.isArray(objMetaInfo[strRequiredInfo])) {
-                    strMetaValue = objMetaInfo[strRequiredInfo].join('; ');
-                } else {
-                    strMetaValue = objMetaInfo[strRequiredInfo];
-                }
-                
-                //check if the current info need more details.
-                if (arrDetailedInfo.includes(strRequiredInfo)) {
-                    strAdditionalInfoHTML = GetTextWordInformation(strMetaValue, true);
-                }
-
-                //add the current meta info to the table.
-                $('table#meta-head-info > tbody').append(GetInformationRow(strRequiredInfo + strAdditionalInfoHTML, EscapeHTML(strMetaValue)));
-            }
+            window.scrollTo(0, 0);
 
             //iterate through all the elements of the <head> element.
             for (let strMetaName in objMetaInfo) {
-                var strMetaValue = '';
-
-                if (strMetaName === 'canonical') {
-                    let objCanonical = objMetaInfo[strMetaName];
-
-                    if (objCanonical.selfref === true) {
-                        $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + '<br><span class="info">self-referential</span>', EscapeHTML(objCanonical.value)));
-                    } else {
-                        $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName, EscapeHTML(objCanonical.value)));
-                    }
-
-                    continue;
-                }
-
-                if (strMetaName === 'generator') {
-                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName, MetaGeneratorRenderer(objMetaInfo[strMetaName])));
-                    continue;
-                }
-
-                if (strMetaName === 'theme-color') {
-                    console.log(objMetaInfo[strMetaName]);
-                    $('table#meta-head-info > tbody').append(GetColorValueRow(strMetaName, objMetaInfo[strMetaName]));
-                    continue;
-                }
- 
-                //check if there are multiple values. the values should be escaped and formatted.
-                if (Array.isArray(objMetaInfo[strMetaName])) {
-
-                    //escape the HTML of the meta value so HTML tags are visible.
-                    for (indexValue = 0; indexValue < objMetaInfo[strMetaName].length; indexValue++) {
-                        objMetaInfo[strMetaName][indexValue] = EscapeHTML(objMetaInfo[strMetaName][indexValue]);
-                    }
-
-                    //format multiple values as list.
-                    if (objMetaInfo[strMetaName].length > 1) {
-                        strMetaValue = '<ul><li>' + objMetaInfo[strMetaName].join('</li><li>') + '</li></ul>';
-                    } else {
-                        strMetaValue = objMetaInfo[strMetaName];
-                    }  
-                } else {
-                    strMetaValue = (objMetaInfo[strMetaName] || '').toString();
-                }
-
-                //don't show the required meta information again.
-                if (!arrRequiredInfo.includes(strMetaName) && strMetaValue.trim() !== '') {
-                    var strAdditionalInfoHTML = '';
-
-                    //check if the current info need more details.
-                    if (arrDetailedInfo.includes(strMetaName)) {
-                        strAdditionalInfoHTML = GetTextWordInformation(strMetaValue, true);
-                    }
-
-                    //add the current meta info to the table.
-                    $('table#meta-head-info > tbody').append(GetInformationRow(strMetaName + strAdditionalInfoHTML, strMetaValue));
+                switch (strMetaName) {
+                    case 'canonical':
+                        $('table#meta-head-info > tbody').append(GetCanonicalRow(strMetaName, objMetaInfo[strMetaName]));
+                        break;
+                    case 'generator':
+                        $('table#meta-head-info > tbody').append(GetGeneratorRow(strMetaName, objMetaInfo[strMetaName]));
+                        break;
+                    case 'theme-color':
+                        $('table#meta-head-info > tbody').append(GetColorRow(strMetaName, objMetaInfo[strMetaName]));
+                        break;
+                    default:
+                        $('table#meta-head-info > tbody').append(GetDefaultRow(strMetaName, objMetaInfo[strMetaName]));
+                        break;
                 }
             }
         };
@@ -319,6 +290,7 @@ $(document).ready(function() {
                 $('table#meta-parsely > tbody').empty();
                 $('table#meta-twitter > tbody').empty();
                 $('table#meta-dublin-core > tbody').empty();
+                window.scrollTo(0, 0);
                 
                 var objMetaFacebook = info['facebook'];
                 var objMetaOpenGraph = info['opengraph'];
@@ -443,7 +415,7 @@ $(document).ready(function() {
                     var strDublinCoreValue = (objMetaDublinCore[strDublinCoreName] || '').toString().trim();
 
                     //don't do anything in case there is no value.
-                    if (strOpenGraphValue === '') {
+                    if (strDublinCoreValue === '') {
                         continue;
                     }
 
@@ -486,6 +458,7 @@ function ViewTools() {
 
     //get the table of the tools list.
     var objTableTools = $('div#view-tools table#info-tools');
+    window.scrollTo(0, 0);
 
     //remove all available tools.
     objTableTools.children('tbody').empty();
@@ -526,7 +499,6 @@ function ViewFiles() {
     const fnResponse = objFiles => {
         var objTableStylesheet = $('div#view-files table#files-stylesheet');
         var objTableJavaScript = $('div#view-files table#files-javascript');
-        var objTablSpecial = $('div#view-files table#files-special');
 
         //get the arrays with files.
         var arrStylesheet = objFiles['stylesheet'];
@@ -544,6 +516,7 @@ function ViewFiles() {
         //remove all rows of the stylesheet and javascript table.
         objTableStylesheet.children('tbody').empty();
         objTableJavaScript.children('tbody').empty();
+        window.scrollTo(0, 0);
 
         //iterate through the stylesheet files and add them to the table.
         for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
@@ -575,8 +548,7 @@ function ViewFiles() {
  * View for Headings.
  */
 function ViewHeadings() {
-    console.log('Heading');
-
+    
     //get the current / active tab of the current window and send a message
     //to the content script to get the information from website.
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
@@ -594,6 +566,7 @@ function ViewHeadings() {
 
         //remove all rows of the headings table.
         objTableHeadings.children('tbody').empty();
+        window.scrollTo(0, 0);
 
         //iterate through the different levels of headings.
         for (level = 1; level <= 6; level++) {
@@ -656,6 +629,7 @@ function ViewImages() {
 
         //remove all rows of the images table.
         objTableImages.children('tbody').empty();
+        window.scrollTo(0, 0);
 
         //run through all images of the array with a source value.
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
@@ -669,15 +643,12 @@ function ViewImages() {
         objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
         objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
 
-        $('table#list-images td').hover(
-            function() {
-                $('div.img-preview').empty();
-                $('div.img-preview').append('<img src="' + $('a', this).attr('href') + '">'); 
-             
-            }, function() {
-                $('div.img-preview').empty();
-            }
-          );
+        $('table#list-images td').on('mouseenter', function() {
+            $('div.img-preview').empty();
+            $('div.img-preview').append('<img src="' + $('a', this).attr('href') + '">');      
+        }).on('mouseleave', function() {
+            $('div.img-preview').empty();
+        });
     };      
 }
 
@@ -704,6 +675,7 @@ function ViewHyperlinks() {
 
         //remove all rows of the hyperlinks table.
         objTableHyperlinks.children('tbody').empty();
+        window.scrollTo(0, 0);
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
