@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "version_name": "0.0.1",
     "description": "SEO Insights is a browser extension to get insights of the current site.",
+    "options_page": "options.html",
     "icons": {
         "16": "icon16.png",
         "48": "icon48.png",
@@ -15,6 +16,7 @@
         "default_title": "SEO Insights"
     },
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "storage"
     ]
 }
