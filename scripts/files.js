@@ -2,12 +2,29 @@
  * Module MetaInformation
  */
 var FileInformation = (function() {
-    return {
+
+    function GetBaseUrl() {
+        return (location.origin + location.pathname);
+    }
+
+    return {    
         GetJavaScriptFiles: function() {
             var info = [];
 
             $('script[src]').each(function() {
-                info.push($(this).attr('src'));
+
+                //get the hyperlink of the javascript.
+                var strJavaScriptURL = ($(this).attr('src') || '').toString().trim();
+
+                var urlObject = new URL(strJavaScriptURL, GetBaseUrl());
+
+                info.push({
+                    'original': strJavaScriptURL,
+                    'url': {
+                        'href': urlObject.href,
+                        'origin': urlObject.origin
+                    }
+                });
             });
 
             return info;
@@ -16,7 +33,22 @@ var FileInformation = (function() {
             var info = [];
 
             $('link[rel="stylesheet"]').each(function() {
-                info.push($(this).attr('href'));
+
+                //get the hyperlink of the stylesheet.
+                var strStylesheetURL = ($(this).attr('href') || '').toString().trim();
+
+                //get the url object of the link.
+                //this can also be used to make sure the link is a valid url.
+                var urlObject = new URL(strStylesheetURL, GetBaseUrl());
+
+                console.log(urlObject);
+                info.push({
+                    'original': strStylesheetURL,
+                    'url': {
+                        'href': urlObject.href,
+                        'origin': urlObject.origin
+                    }
+                });
             });
 
             return info;

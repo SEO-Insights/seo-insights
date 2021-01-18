@@ -441,12 +441,12 @@ function ViewFiles() {
 
         //iterate through the stylesheet files and add them to the table.
         for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
-            objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '">' + arrStylesheet[indexStylesheet] + '</td></tr>');
+            objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '"><a href="' + arrStylesheet[indexStylesheet].url.href + '" target="_blank">' + arrStylesheet[indexStylesheet].original + '</a></td></tr>');
         }
 
         //iterate through the javascript files and add them to the table.
         for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
-            objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '">' + arrJavaScript[indexJavaScript] + '</td></tr>');
+            objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a></td></tr>');
         }
 
         var strSitemapURL = (new URL(tabUrl)).origin + '/sitemap.xml';
