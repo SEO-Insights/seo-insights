@@ -125,30 +125,36 @@ table[id^="statistics-"] {
 }
 
 /** design for the headings information. */
-table#list-headings td[class^="level-"] span:nth-of-type(1) {
+table#list-headings tr[class^="level-"] td span:nth-of-type(1) {
     font-weight: bolder;
     padding-right: 7px;
 }
-table#list-headings td[class^="level-"] {
+table#list-headings tr[class^="level-"] {
     word-break: keep-all;
 }
-table#list-headings td.level-h1 {
+table#list-headings tr.level-h1 td {
     padding-left: 5px;
 }
-table#list-headings td.level-h2 {
+table#list-headings tr.level-h2 td {
     padding-left: 15px;
 }
-table#list-headings td.level-h3 {
+table#list-headings tr.level-h3 td {
     padding-left: 25px;
 }
-table#list-headings td.level-h4 {
+table#list-headings tr.level-h4 td {
     padding-left: 35px;
 }
-table#list-headings td.level-h5 {
+table#list-headings tr.level-h5 td {
     padding-left: 45px;
 }
-table#list-headings td.level-h6 {
+table#list-headings tr.level-h6 td {
     padding-left: 55px;
+}
+td[id^="headings-h"].green {
+    background-color: green;
+}
+td[id^="headings-h"] {
+    background-color: white;
 }
 
 /** design for the images information. */
@@ -204,4 +210,7 @@ table#info-tools .full-link:hover {
 }
 div.tab-pane table.table {
     margin-bottom: 0;
+}
+div#view-headings table#statistics-headings {
+    user-select: none;
 }

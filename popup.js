@@ -55,19 +55,6 @@ function GetTextWordInformation(strValue, newLine = false) {
     return ((newLine === true) ? '<br>' : '') + strCharsHTML + strWordsHTML;
 }
 
-function GetAvailableProperties(obj) {
-    var count = 0;
-    for (var k in obj) {
-        if (obj.hasOwnProperty(k)) {
-            if(obj[k] !== '') {
-                ++count;
-            }
-        }
-    }
-
-    return count;
-}
-
 function GetHeaderInformation(url) {
     fetch(url).then(function(response) {
         for (var p of response.headers.entries()) {
@@ -183,6 +170,7 @@ function GetGeneratorLink(name) {
     //define the keywords of the generator to get the link to the generator website.
     let arrGeneratorLinks = [
         ['chimpify', 'https://www.chimpify.de/'],
+        ['drupal', 'https://www.drupal.de/'],
         ['ghost', 'https://ghost.org/'],
         ['hubspot', 'https://www.hubspot.de/products/cms'],
         ['hugo', 'https://gohugo.io/'],
@@ -267,16 +255,10 @@ jQuery(function() {
             });
 
             const data = info => {
-                
-                $('table#meta-facebook > tbody').empty();
-                $('table#meta-opengraph > tbody').empty();
-                $('table#meta-opengraph-article > tbody').empty();
-                $('table#meta-others > tbody').empty();
-                $('table#meta-parsely > tbody').empty();
-                $('table#meta-twitter > tbody').empty();
-                $('table#meta-dublin-core > tbody').empty();
-                $('table#meta-errors > tbody').empty();
                 window.scrollTo(0, 0);
+
+                //clear all meta tables.
+                $('table[id^=meta-details-] > tbody').empty();
                 
                 var objMetaFacebook = info['facebook'];
                 var objMetaOpenGraph = info['opengraph'];
@@ -291,52 +273,27 @@ jQuery(function() {
 
                 for (let strOthersName in objMetaOthers) {
                     var strOthersValue = (objMetaOthers[strOthersName] || '').toString().trim();
-
-                    if (strOthersValue === '') {
-                        continue;
-                    }
-                    
-                    $('table#meta-others > tbody').append(GetInformationRow(strOthersName, EscapeHTML(strOthersValue)));
+                    $('table#meta-details-others > tbody').append(GetInformationRow(strOthersName, EscapeHTML(strOthersValue)));
                 }
 
                 for (let strArticleName in objMetaArticle) {
                     var strArticleValue = (objMetaArticle[strArticleName] || '').toString().trim();
-
-                    if (strArticleValue === '') {
-                        continue;
-                    }
-
-                    $('table#meta-opengraph-article > tbody').append(GetInformationRow(strArticleName, EscapeHTML(strArticleValue)));
+                    $('table#meta-details-opengraph-article > tbody').append(GetInformationRow(strArticleName, EscapeHTML(strArticleValue)));
                 }
 
                 for (let strFacebookName in objMetaFacebook) {
                     var strFacebookValue = (objMetaFacebook[strFacebookName] || '').toString().trim();
-
-                    if (strFacebookValue === '') {
-                        continue;
-                    }
-
-                    $('table#meta-facebook > tbody').append(GetInformationRow(strFacebookName, EscapeHTML(strFacebookValue)));
+                    $('table#meta-details-facebook > tbody').append(GetInformationRow(strFacebookName, EscapeHTML(strFacebookValue)));
                 }
 
                 for (let strParselyName in objMetaParsely) {
                     var strParselyValue = (objMetaParsely[strParselyName] || '').toString().trim();
-
-                    if (strParselyValue === '') {
-                        continue;
-                    }
-
-                    $('table#meta-parsely > tbody').append(GetInformationRow(strParselyName, EscapeHTML(strParselyValue)));
+                    $('table#meta-details-parsely > tbody').append(GetInformationRow(strParselyName, EscapeHTML(strParselyValue)));
                 }
 
                 for (let strTwitterName in objMetaTwitter) {
                     var strTwitterValue = (objMetaTwitter[strTwitterName] || '').toString().trim();
                     var strAdditionalInfoHTML = '';
-
-                    //don't do anything in case there is no value.
-                    if (strTwitterValue === '') {
-                        continue;
-                    }
 
                     //get the additional information if needed.
                     if (arrDetailedInfoTwitter.includes(strTwitterName)) {
@@ -344,17 +301,12 @@ jQuery(function() {
                     }
 
                     //set the Twitter information to the table.
-                    $('table#meta-twitter > tbody').append(GetInformationRow(strTwitterName + strAdditionalInfoHTML, EscapeHTML(strTwitterValue)));
+                    $('table#meta-details-twitter > tbody').append(GetInformationRow(strTwitterName + strAdditionalInfoHTML, EscapeHTML(strTwitterValue)));
                 }
 
                 for (let strOpenGraphName in objMetaOpenGraph) {
                     var strOpenGraphValue = (objMetaOpenGraph[strOpenGraphName] || '').toString().trim();
                     var strAdditionalInfoHTML = '';
-
-                    //don't do anything in case there is no value.
-                    if (strOpenGraphValue === '') {
-                        continue;
-                    }
 
                     //get the additional information if needed.
                     if (arrDetailedInfoOpenGraph.includes(strOpenGraphName)) {
@@ -362,42 +314,34 @@ jQuery(function() {
                     }
                     
                     //set the OpenGraph information to the table.
-                    $('table#meta-opengraph > tbody').append(GetInformationRow(strOpenGraphName + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
+                    $('table#meta-details-opengraph > tbody').append(GetInformationRow(strOpenGraphName + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
                 }
 
                 if (Object.keys(objMetaOpenGraph).length > 0) {
-                    var cntError = 0;
     
                     //The four required properties for every page are: og:title, og:type, og:image, og:url
                     //https://ogp.me/
                     for (itemRequiredOpenGraph of ['og:title', 'og:type', 'og:image', 'og:url']) {
                         if (!objMetaOpenGraph.hasOwnProperty(itemRequiredOpenGraph)) {
-                            $('table#meta-errors > tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
+                            $('table#meta-details-errors > tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
                         }
                     }
                 }
 
                 for (let strDublinCoreName in objMetaDublinCore) {
                     var strDublinCoreValue = (objMetaDublinCore[strDublinCoreName] || '').toString().trim();
-
-                    //don't do anything in case there is no value.
-                    if (strDublinCoreValue === '') {
-                        continue;
-                    }
-
-                    //set the OpenGraph information to the table.
-                    $('table#meta-dublin-core > tbody').append(GetInformationRow(strDublinCoreName, EscapeHTML(strDublinCoreValue)));
+                    $('table#meta-details-dublin-core > tbody').append(GetInformationRow(strDublinCoreName, EscapeHTML(strDublinCoreValue)));
                 }
 
                 //now all lists are created so it is possible to count the items of each list.
-                SetItemsCount($('#meta-facebook-heading'), $('table#meta-facebook'));
-                SetItemsCount($('#meta-twitter-heading'), $('table#meta-twitter'));
-                SetItemsCount($('#meta-opengraph-heading'), $('table#meta-opengraph'));
-                SetItemsCount($('#meta-opengraph-article-heading'), $('table#meta-opengraph-article'));
-                SetItemsCount($('#meta-dublin-core-heading'), $('table#meta-dublin-core'));
-                SetItemsCount($('#meta-parsely-heading'), $('table#meta-parsely'));
-                SetItemsCount($('#meta-others-heading'), $('table#meta-others'));
-                SetItemsCount($('#meta-errors-heading'), $('table#meta-errors'));
+                SetItemsCount($('#meta-details-facebook-heading'), $('table#meta-details-facebook'));
+                SetItemsCount($('#meta-details-twitter-heading'), $('table#meta-details-twitter'));
+                SetItemsCount($('#meta-details-opengraph-heading'), $('table#meta-details-opengraph'));
+                SetItemsCount($('#meta-details-opengraph-article-heading'), $('table#meta-details-opengraph-article'));
+                SetItemsCount($('#meta-details-dublin-core-heading'), $('table#meta-details-dublin-core'));
+                SetItemsCount($('#meta-details-parsely-heading'), $('table#meta-details-parsely'));
+                SetItemsCount($('#meta-details-others-heading'), $('table#meta-details-others'));
+                SetItemsCount($('#meta-details-errors-heading'), $('table#meta-details-errors'));
             }
         });
 
@@ -552,14 +496,30 @@ function ViewHeadings() {
         //iterate through the different levels of headings.
         for (level = 1; level <= 6; level++) {
             objTableStatsHeadings.find('td[id="headings-h' + level + '"]').text(arrHeadings.filter(heading => heading.type === 'h' + level).length);
+
+            //set events to toggle hide and show of the headings on click.
+            $('td[id="headings-h' + level + '"]').on('click', {'level': level}, function(event) {
+                
+                //don't filter the headings if there is no heading.
+                if ($('tr.level-h' + event.data.level).length === 0) {
+                    return;
+                }
+
+                if ($('tr.level-h' + event.data.level).is(':hidden')) {
+                    $('tr.level-h' + event.data.level).show();
+                    $(this).css('color', '#000');
+                } else {
+                    $('tr.level-h' + event.data.level).hide();
+                    $(this).css('color', '#ccc');
+                }
+            });
         }
 
         //set the total count of headings to the table.
-        objTableStatsHeadings.find('td[id="headings-empty"]').text(arrHeadings.filter(heading => heading.text.trim() === '').length);
         objTableStatsHeadings.find('td[id="headings-all"]').text(arrHeadings.length);
 
         for (itemHeading of arrHeadings) {
-            var strTableRow = '<tr><td class="level-' + itemHeading.type + '"><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>';
+            var strTableRow = '<tr class="level-' + itemHeading.type + ' is-empty"><td><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>';
             $(objTableHeadings).children('tbody').append(strTableRow);
         }
     };
