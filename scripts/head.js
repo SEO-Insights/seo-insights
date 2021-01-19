@@ -269,7 +269,7 @@ var MetaInformation = (function() {
             //get the canonical link of the site.
             try {
                 let objCanonicalUrl = new URL(MetaInformation.GetCanonical().trim());
-                let objCurrentSiteUrl = new URL(location.origin + location.pathname);
+                let objCurrentSiteUrl = new URL(GetBaseUrl());
 
                 info['canonical'] = {
                     'selfref': (objCanonicalUrl.href === objCurrentSiteUrl.href),

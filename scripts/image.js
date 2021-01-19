@@ -43,7 +43,7 @@ var ImageModule = (function() {
                     }
 
                     //get the image url (relative or absolute) as url object.
-                    let objImageUrl = new URL(strImageSource, (location.origin + location.pathname));
+                    let objImageUrl = new URL(strImageSource, (GetBaseUrl()));
                     let strImageUrl = (objImageUrl.href || '').toString().trim();
 
                     //set the image source to the object and add the object to the array.

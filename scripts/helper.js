@@ -45,6 +45,14 @@ var entityMap = {
     "/": '&#x2F;'
 };
 
+/**
+ * function to get the base url of the current site.
+ * @returns {string} The base url of the current site.
+ */
+function GetBaseUrl() {
+    return (location.origin + location.pathname);
+}
+
 function EscapeHTML(str) {
     return String(str).replace(/[&<>"'\/]/g, function(s) {
         return entityMap[s];

@@ -1,12 +1,7 @@
 /**
- * Module MetaInformation
+ * Module FileInformation
  */
 var FileInformation = (function() {
-
-    function GetBaseUrl() {
-        return (location.origin + location.pathname);
-    }
-
     return {    
         GetJavaScriptFiles: function() {
             var info = [];
@@ -41,7 +36,6 @@ var FileInformation = (function() {
                 //this can also be used to make sure the link is a valid url.
                 var urlObject = new URL(strStylesheetURL, GetBaseUrl());
 
-                console.log(urlObject);
                 info.push({
                     'original': strStylesheetURL,
                     'url': {

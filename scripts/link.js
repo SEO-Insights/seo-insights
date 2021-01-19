@@ -4,15 +4,7 @@
 var LinkModule = (function() {
     
     //private functions of the module.
-
-    /**
-     * function to get the base url of the current site.
-     * @returns {string} The base url of the current site.
-     */
-    function GetBaseUrl() {
-        return (location.origin + location.pathname);
-    }
-
+    
     /**
      * function to get all links of a document / site.
      * @param {Document} context The optional document used as context for jQuery. 
@@ -29,7 +21,7 @@ var LinkModule = (function() {
                 let strUrl = ($(this).attr('href') || '').toString().trim();
                 
                 //get the url object of the link.
-                //this can also be used to make sure the link is a vlid url.
+                //this can also be used to make sure the link is a valid url.
                 let objLinkUrl = new URL(strUrl, GetBaseUrl());
 
                 //all links are collected in an array once.
