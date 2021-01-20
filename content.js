@@ -22,7 +22,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 sendResponse(ImageModule.GetImages());
                 break;
             case SUBJECT.HYPERLINK:
-                sendResponse(LinkModule.GetLinks());
+                sendResponse({
+                    'links': LinkModule.GetLinks(),
+                    'alternate': MetaInformation.GetMetaAlternate()
+                });
                 break;
             case SUBJECT.FILE:
                 sendResponse({

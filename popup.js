@@ -221,6 +221,7 @@ jQuery(function() {
             
             //clear the table because we refresh this table here with current values.
             $('table#meta-head-info > tbody').empty();
+
             window.scrollTo(0, 0);
 
             //iterate through all the elements of the <head> element.
@@ -609,13 +610,19 @@ function ViewHyperlinks() {
     });
 
     //define and execute the callback function called by the content script.
-    const fnResponse = arrHyperlinks => {
+    const fnResponse = objHyperlinks => {
         var objTableHyperlinks = $('div#view-hyperlinks table#list-hyperlinks');
+        var objTableAlternate = $('div#view-hyperlinks table#list-alternate');
         var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
         var objTableStatsProtocols = $('div#view-hyperlinks table#statistics-protocols');
 
         //remove all rows of the hyperlinks table.
         objTableHyperlinks.children('tbody').empty();
+        objTableAlternate.children('tbody').empty();
+
+        var arrHyperlinks = objHyperlinks['links'];
+        var arrAlternate = objHyperlinks['alternate'];
+
         window.scrollTo(0, 0);
 
         //iterate through the hyperlinks and add them to the table.
@@ -632,6 +639,21 @@ function ViewHyperlinks() {
             }
             
             objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
+        }
+
+        for (let objAlternateItem of arrAlternate) {
+            var strTitleInfo = '';
+            var strLangInfo = '';
+
+            if ((objAlternateItem.title || '').toString().trim() !== '') {
+                strTitleInfo = '<span class="info"><strong>title:</strong> ' + (objAlternateItem.title || '').toString().trim() + '</span>';
+            }
+
+            if ((objAlternateItem.hreflang || '').toString().trim() !== '') {
+                strLangInfo = '<span class="info"><strong>lang:</strong> ' + (objAlternateItem.hreflang || '').toString().trim() + '</span>';
+            }
+
+            objTableAlternate.children('tbody').append('<tr><td><a href="' + objAlternateItem['href'] + '" target="_blank">' + objAlternateItem['href'] + '</a>' + strTitleInfo + strLangInfo + '</td></tr>');
         }
 
         //set the statistics for the hyperlinks.

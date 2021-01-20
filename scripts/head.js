@@ -228,7 +228,7 @@ var MetaInformation = (function() {
 
                 //add the information of this <meta> element if known.
                 if (arrMetaNamesGeneral.includes(strMetaName)) {
-                    var strMetaValue = ($(this).attr('content') || '').toString().trim();
+                    var strMetaValue = EscapeHTML(($(this).attr('content') || '').toString().trim());
 
                     //check if the value of the <meta> element is empty.
                     //in this case we don't have to add the value to the object.
@@ -437,6 +437,21 @@ var MetaInformation = (function() {
             });
 
             //return the information.
+            return info;
+        },
+
+        GetMetaAlternate: function() {
+            var info = [];
+
+            //iterate through the <meta> elements of the <head> element with alternate.
+            $('head > link[rel="alternate"]').each(function() {
+                info.push({
+                    'title': ($(this).attr('title') || '').toString().trim(),
+                    'href': ($(this).attr('href') || '').toString().trim(),
+                    'hreflang': ($(this).attr('hreflang') || '').toString().trim()
+                });
+            });
+
             return info;
         }
     }
