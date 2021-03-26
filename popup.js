@@ -28,16 +28,18 @@ function HandleNotSupported() {
 }
 
 //programmatically inject the content script.
-chrome.tabs.executeScript({file: 'libs/jquery-3.5.1.min.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/helper.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/dublincore.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/opengraph.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/head.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/image.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/heading.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/link.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'scripts/files.js'}, HandleNotSupported);
-chrome.tabs.executeScript({file: 'content.js'}, HandleNotSupported);
+chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+    chrome.scripting.executeScript({files: ['libs/jquery-3.5.1.min.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/dublincore.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tabs[0].id}});
+    chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tabs[0].id}});
+});
 
 function GetTextWordInformation(strValue, newLine = false) {
     strValue = (strValue || '').toString().trim();
