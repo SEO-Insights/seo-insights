@@ -1,73 +1,65 @@
-/**
- * Class to structure the Dublin Core tag information.
- */
-class DublinCoreTagInfo {
-    constructor(name, description) {
-        this.name = name;
-        this.description = description;
-    }
-}
 
-/**
- * The Dublin Core meta tags with additional information.
- * 
- * source:
- *  - https://www.dublincore.org/specifications/dublin-core/dcmi-terms/#section-2
- */
-let DublinCoreTermsTags = [
-    new DublinCoreTagInfo('DC.abstract', 'A summary of the resource.'),
-    new DublinCoreTagInfo('DC.accessRights', 'Information about who access the resource or an indication of its security status.'),
-    new DublinCoreTagInfo('DC.accrualMethod', 'The method by which items are added to a collection.'),
-    new DublinCoreTagInfo('DC.accrualPeriodicity', 'The frequency with which items are added to a collection.'),
-    new DublinCoreTagInfo('DC.accrualPolicy', 'The policy governing the addition of items to a collection.'),
-    new DublinCoreTagInfo('DC.alternative', 'An alternative name for the resource.'),
-    new DublinCoreTagInfo('DC.audience', 'A class of agents for whom the resource is intended or useful.'),
-    new DublinCoreTagInfo('DC.available', 'Date that the resource became or will become available.'),
-    new DublinCoreTagInfo('DC.bibliographicCitationMore', 'A bibliographic reference for the resource.'),
-    new DublinCoreTagInfo('DC.conformsTo', 'An established standard to which the described resource conforms.'),
-    new DublinCoreTagInfo('DC.contributor', 'An entity responsible for making contributions to the resource.'),
-    new DublinCoreTagInfo('DC.coverage', 'The spatial or temporal topic of the resource, spatial applicability of the resource, or jurisdiction under which the resource is relevant.'),
-    new DublinCoreTagInfo('DC.created', 'Date of creation of the resource.'),
-    new DublinCoreTagInfo('DC.creator', 'An entity responsible for making the resource.'),
-    new DublinCoreTagInfo('DC.date', 'A point or period of time associated with an event in the lifecycle of the resource.'),
-    new DublinCoreTagInfo('DC.dateAccepted', 'Date of acceptance of the resource.'),
-    new DublinCoreTagInfo('DC.dateCopyrighted', 'Date of copyright of the resource.'),
-    new DublinCoreTagInfo('DC.dateSubmitted', 'Date of submission of the resource.'),
-    new DublinCoreTagInfo('DC.description', 'An account of the resource.'),
-    new DublinCoreTagInfo('DC.educationLevel', 'A class of agents, defined in terms of progression through an educational or training context, for which the described resource is intended.'),
-    new DublinCoreTagInfo('DC.extent', 'The size or duration of the resource.'),
-    new DublinCoreTagInfo('DC.format', 'The file format, physical medium, or dimensions of the resource.'),
-    new DublinCoreTagInfo('DC.hasFormat', 'A related resource that is substantially the same as the pre-existing described resource, but in another format.'),
-    new DublinCoreTagInfo('DC.hasPart', 'A related resource that is included either physically or logically in the described resource.'),
-    new DublinCoreTagInfo('DC.hasVersion', 'A related resource that is a version, edition, or adaptation of the described resource.'),
-    new DublinCoreTagInfo('DC.identifier', 'An unambiguous reference to the resource within a given context.'),
-    new DublinCoreTagInfo('DC.instructionalMethod', 'A process, used to engender knowledge, attitudes and skills, that the described resource is designed to support.'),
-    new DublinCoreTagInfo('DC.isFormatOf', 'A pre-existing related resource that is substantially the same as the described resource, but in another format.'),
-    new DublinCoreTagInfo('DC.isPartOf', 'A related resource in which the described resource is physically or logically included.'),
-    new DublinCoreTagInfo('DC.isReferencedBy', 'A related resource that references, cites, or otherwise points to the described resource.'),
-    new DublinCoreTagInfo('DC.isReplacedBy', 'A related resource that supplants, displaces, or supersedes the described resource.'),
-    new DublinCoreTagInfo('DC.isRequiredBy', 'A related resource that requires the described resource to support its function, delivery, or coherence.'),
-    new DublinCoreTagInfo('DC.issued', 'Date of formal issuance of the resource.'),
-    new DublinCoreTagInfo('DC.isVersionOf', 'A related resource of which the described resource is a version, edition, or adaptation.'),
-    new DublinCoreTagInfo('DC.language', 'A language of the resource.'),
-    new DublinCoreTagInfo('DC.license', 'A legal document giving official permission to do something with the resource.'),
-    new DublinCoreTagInfo('DC.mediator', 'An entity that mediates access to the resource.'),
-    new DublinCoreTagInfo('DC.medium', 'The material or physical carrier of the resource.'),
-    new DublinCoreTagInfo('DC.modified', 'Date on which the resource was changed.'),
-    new DublinCoreTagInfo('DC.provenance', 'A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.'),
-    new DublinCoreTagInfo('DC.publisher', 'An entity responsible for making the resource available.'),
-    new DublinCoreTagInfo('DC.references', 'A related resource that is referenced, cited, or otherwise pointed to by the described resource.'),
-    new DublinCoreTagInfo('DC.relation', 'A related resource.'),
-    new DublinCoreTagInfo('DC.replaces', 'A related resource that is supplanted, displaced, or superseded by the described resource.'),
-    new DublinCoreTagInfo('DC.requires', 'A related resource that is required by the described resource to support its function, delivery, or coherence.'),
-    new DublinCoreTagInfo('DC.rights', 'Information about rights held in and over the resource.'),
-    new DublinCoreTagInfo('DC.rightsHolder', 'A person or organization owning or managing rights over the resource.'),
-    new DublinCoreTagInfo('DC.source', 'A related resource from which the described resource is derived.'),
-    new DublinCoreTagInfo('DC.spatial', 'Spatial characteristics of the resource.'),
-    new DublinCoreTagInfo('DC.subject', 'A topic of the resource.'),
-    new DublinCoreTagInfo('DC.tableOfContents', 'A list of subunits of the resource.'),
-    new DublinCoreTagInfo('DC.temporal', 'Temporal characteristics of the resource.'),
-    new DublinCoreTagInfo('DC.title', 'A name given to the resource.'),
-    new DublinCoreTagInfo('DC.type', 'The nature or genre of the resource.'),
-    new DublinCoreTagInfo('DC.valid', 'Date (often a range) of validity of a resource.')
-];
+
+    /**
+     * The Dublin Core meta tags with additional information.
+     *
+     * source:
+     *  - https://www.dublincore.org/specifications/dublin-core/dcmi-terms/#section-2
+     */
+    var DublinCoreTermsTags = [
+        {name: 'DC.abstract', description: 'A summary of the resource.'},
+        {name: 'DC.accessRights', description: 'Information about who access the resource or an indication of its security status.'},
+        {name: 'DC.accrualMethod', description: 'The method by which items are added to a collection.'},
+        {name: 'DC.accrualPeriodicity', description: 'The frequency with which items are added to a collection.'},
+        {name: 'DC.accrualPolicy', description: 'The policy governing the addition of items to a collection.'},
+        {name: 'DC.alternative', description: 'An alternative name for the resource.'},
+        {name: 'DC.audience', description: 'A class of agents for whom the resource is intended or useful.'},
+        {name: 'DC.available', description: 'Date that the resource became or will become available.'},
+        {name: 'DC.bibliographicCitationMore', description: 'A bibliographic reference for the resource.'},
+        {name: 'DC.conformsTo', description: 'An established standard to which the described resource conforms.'},
+        {name: 'DC.contributor', description: 'An entity responsible for making contributions to the resource.'},
+        {name: 'DC.coverage', description: 'The spatial or temporal topic of the resource, spatial applicability of the resource, or jurisdiction under which the resource is relevant.'},
+        {name: 'DC.created', description: 'Date of creation of the resource.'},
+        {name: 'DC.creator', description: 'An entity responsible for making the resource.'},
+        {name: 'DC.date', description: 'A point or period of time associated with an event in the lifecycle of the resource.'},
+        {name: 'DC.dateAccepted', description: 'Date of acceptance of the resource.'},
+        {name: 'DC.dateCopyrighted', description: 'Date of copyright of the resource.'},
+        {name: 'DC.dateSubmitted', description: 'Date of submission of the resource.'},
+        {name: 'DC.description', description: 'An account of the resource.'},
+        {name: 'DC.educationLevel', description: 'A class of agents, defined in terms of progression through an educational or training context, for which the described resource is intended.'},
+        {name: 'DC.extent', description: 'The size or duration of the resource.'},
+        {name: 'DC.format', description: 'The file format, physical medium, or dimensions of the resource.'},
+        {name: 'DC.hasFormat', description: 'A related resource that is substantially the same as the pre-existing described resource, but in another format.'},
+        {name: 'DC.hasPart', description: 'A related resource that is included either physically or logically in the described resource.'},
+        {name: 'DC.hasVersion', description: 'A related resource that is a version, edition, or adaptation of the described resource.'},
+        {name: 'DC.identifier', description: 'An unambiguous reference to the resource within a given context.'},
+        {name: 'DC.instructionalMethod', description: 'A process, used to engender knowledge, attitudes and skills, that the described resource is designed to support.'},
+        {name: 'DC.isFormatOf', description: 'A pre-existing related resource that is substantially the same as the described resource, but in another format.'},
+        {name: 'DC.isPartOf', description: 'A related resource in which the described resource is physically or logically included.'},
+        {name: 'DC.isReferencedBy', description: 'A related resource that references, cites, or otherwise points to the described resource.'},
+        {name: 'DC.isReplacedBy', description: 'A related resource that supplants, displaces, or supersedes the described resource.'},
+        {name: 'DC.isRequiredBy', description: 'A related resource that requires the described resource to support its function, delivery, or coherence.'},
+        {name: 'DC.issued', description: 'Date of formal issuance of the resource.'},
+        {name: 'DC.isVersionOf', description: 'A related resource of which the described resource is a version, edition, or adaptation.'},
+        {name: 'DC.language', description: 'A language of the resource.'},
+        {name: 'DC.license', description: 'A legal document giving official permission to do something with the resource.'},
+        {name: 'DC.mediator', description: 'An entity that mediates access to the resource.'},
+        {name: 'DC.medium', description: 'The material or physical carrier of the resource.'},
+        {name: 'DC.modified', description: 'Date on which the resource was changed.'},
+        {name: 'DC.provenance', description: 'A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.'},
+        {name: 'DC.publisher', description: 'An entity responsible for making the resource available.'},
+        {name: 'DC.references', description: 'A related resource that is referenced, cited, or otherwise pointed to by the described resource.'},
+        {name: 'DC.relation', description: 'A related resource.'},
+        {name: 'DC.replaces', description: 'A related resource that is supplanted, displaced, or superseded by the described resource.'},
+        {name: 'DC.requires', description: 'A related resource that is required by the described resource to support its function, delivery, or coherence.'},
+        {name: 'DC.rights', description: 'Information about rights held in and over the resource.'},
+        {name: 'DC.rightsHolder', description: 'A person or organization owning or managing rights over the resource.'},
+        {name: 'DC.source', description: 'A related resource from which the described resource is derived.'},
+        {name: 'DC.spatial', description: 'Spatial characteristics of the resource.'},
+        {name: 'DC.subject', description: 'A topic of the resource.'},
+        {name: 'DC.tableOfContents', description: 'A list of subunits of the resource.'},
+        {name: 'DC.temporal', description: 'Temporal characteristics of the resource.'},
+        {name: 'DC.title', description: 'A name given to the resource.'},
+        {name: 'DC.type', description: 'The nature or genre of the resource.'},
+        {name: 'DC.valid', description: 'Date (often a range) of validity of a resource.'}
+    ];

@@ -1,4 +1,10 @@
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+var IsInitializedContent;
+
+if (!IsInitializedContent) {
+  IsInitializedContent = true;
+  // rest of code ...
+  // No return value here, so the return value is "undefined" (without quotes).
+  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.source === SOURCE.POPUP) {
         switch (message.subject) {
             case SUBJECT.SUMMARY:
@@ -36,3 +42,5 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         }
     }
 });
+}
+

@@ -1,3 +1,4 @@
+
 /**
  * Module for Meta Information.
  */
@@ -5,7 +6,7 @@ var MetaInformation = (function() {
 
     /**
      * The known tags for the general meta information.
-     * 
+     *
      * sources:
      *  - https://html.spec.whatwg.org/#the-title-element
      */
@@ -15,7 +16,7 @@ var MetaInformation = (function() {
 
     /**
      * The known names for the general meta information.
-     * 
+     *
      * sources:
      *  - https://support.google.com/webmasters/answer/79812
      *  - https://html.spec.whatwg.org/#standard-metadata-names
@@ -41,7 +42,7 @@ var MetaInformation = (function() {
 
     /**
      * The known properties for the Article meta information.
-     * 
+     *
      * sources:
      *  - https://ogp.me/#type_article
      */
@@ -56,7 +57,7 @@ var MetaInformation = (function() {
 
     /**
      * The known properties for the Facebook meta information.
-     * 
+     *
      * sources:
      *  - https://developers.facebook.com/docs/applinks/metadata-reference/
      */
@@ -89,7 +90,7 @@ var MetaInformation = (function() {
 
     /**
      * The known names for the Parse.ly meta information.
-     * 
+     *
      * sources:
      *  - https://www.parse.ly/help/integration/metatags
      */
@@ -108,7 +109,7 @@ var MetaInformation = (function() {
 
     /**
      * The known names for the Twitter meta information.
-     * 
+     *
      * sources:
      *  - https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/markup
      */
@@ -156,8 +157,6 @@ var MetaInformation = (function() {
                     'title': $(this).text()
                 });
             });
-
-            console.log(itemsHeading);
         },
 
         GetMetaCharacterEncoding: function() {
@@ -170,12 +169,10 @@ var MetaInformation = (function() {
                     'value': $(this).attr('charset')
                 });
             });
-
-            console.log(itemsCharacterEncoding);
         },
 
         GetPragmaDirectives: function() {
-            
+
             let itemsPragmaDirective = [];
 
             $('head > meta[http-equiv]').each(function() {
@@ -184,8 +181,6 @@ var MetaInformation = (function() {
                     'value': $(this).attr('content')
                 });
             });
-
-            console.log(itemsPragmaDirective);
         },
 
         GetMetaElements: function() {
@@ -212,8 +207,6 @@ var MetaInformation = (function() {
                     });
                 }
             });
-
-            console.log(itemsMetaElement);
         },
 
         /**
@@ -421,7 +414,7 @@ var MetaInformation = (function() {
             });
 
             /**
-             * Open Graph protocol also specifies the use of property and content attributes for markup while Twitter cards use name and content. 
+             * Open Graph protocol also specifies the use of property and content attributes for markup while Twitter cards use name and content.
              * Twitter's parser will fall back to using property and content, so there is no need to modify existing Open Graph protocol markup if it already exists.
              * source: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started
              */

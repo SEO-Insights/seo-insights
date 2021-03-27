@@ -1,45 +1,46 @@
-chrome.tabs.query({
-    active: true,
-    currentWindow: true
-}, tabs => {
-    chrome.tabs.onUpdated.addListener(function (tabId , info) {
-        if (tabs[0].id === tabId) {
-            if (info.status === 'complete') {
-                $('body').removeClass('not-supported');
-                console.log('Reload');
-                location.reload();    
-            } else {
-                $('body').addClass('not-supported');
-            }
-            
-        }
+(function() {
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+    const tab = tabs[0];
+
+    //check whether it is possbile to inject a content script to the current tab.
+    if (!CanInjectContentScript(tab)) {
+      $('body').addClass('not-supported');
+      return false;
+    } else {
+      $('body').removeClass('not-supported');
+    }
+
+    //programmatically inject the content scripts to the current tab.
+    chrome.scripting.executeScript({files: ['libs/jquery-3.5.1.min.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/dublincore.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
+      chrome.tabs.sendMessage(tab.id, {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY}, CallbackSummary);
     });
-});
+  });
+})();
 
 /**
- * function to handle the result of the injection of the content script.
+ * Returns the state whether a content script can be injected into a tab.
+ * @param {chrome.tabs.Tab} tab The tab which should be checked whether a content script can be injected.
+ * @returns {boolean} The state whether a content script can be injected.
  */
-function HandleNotSupported() {
-    if (chrome.runtime.lastError !== undefined) {
-        $('body').addClass('not-supported');
-    } else {
-        $('body').removeClass('not-supported');
-    }
+function CanInjectContentScript(tab) {
+  return (tab.url.startsWith('http://') || tab.url.startsWith('https://'));
 }
 
-//programmatically inject the content script.
-chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    chrome.scripting.executeScript({files: ['libs/jquery-3.5.1.min.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/dublincore.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tabs[0].id}});
-    chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tabs[0].id}});
-});
+
+
+
+
+
+
 
 function GetTextWordInformation(strValue, newLine = false) {
     strValue = (strValue || '').toString().trim();
@@ -74,17 +75,17 @@ function GetInformationRow(strValueColumn1, strValueColumn2) {
 
 /**
  * function to get a row with formatted color value(s).
- * 
+ *
  * @param {string} metaName The name of the meta element.
  * @param {string|string[]} metaValue The value of the meta element or an array of values.
  * @returns {string} The row with information of the meta element (value formatted as color).
  */
 function GetColorRow(metaName, metaValue) {
-    
+
     if (typeof metaValue === 'string') {
         metaValue = [metaValue];
     }
-    
+
     if (Array.isArray(metaValue) && metaValue.length > 0) {
         var htmlColorValue = '';
 
@@ -116,7 +117,7 @@ function GetDefaultRow(metaName, metaValue) {
             strMetaValueHTML = '<ul><li>' + metaValue.join('</li><li>') + '</li></ul>';
         } else {
             strMetaValueHTML = metaValue;
-        }  
+        }
     } else {
         strMetaValueHTML = metaValue;
     }
@@ -151,7 +152,7 @@ function GetGeneratorRow(metaName, metaValue) {
             strMetaValue += '</ul>';
         } else {
             strMetaValue = GetGeneratorLink(metaValue);
-        }  
+        }
     } else {
         strMetaValue = GetGeneratorLink((metaValue || '').toString());
     }
@@ -197,55 +198,56 @@ function GetGeneratorLink(name) {
     }
 }
 
+
+function CallbackSummary(meta) {
+  //clear the table because we refresh this table here with current values.
+  $('table#meta-head-info > tbody').empty();
+
+  window.scrollTo(0, 0);
+
+  //iterate through all the elements of the <head> element.
+  for (let strMetaName in meta) {
+      switch (strMetaName) {
+          case 'canonical':
+              $('table#meta-head-info > tbody').append(GetCanonicalRow(strMetaName, meta[strMetaName]));
+              break;
+          case 'generator':
+              $('table#meta-head-info > tbody').append(GetGeneratorRow(strMetaName, meta[strMetaName]));
+              break;
+          case 'theme-color':
+              $('table#meta-head-info > tbody').append(GetColorRow(strMetaName, meta[strMetaName]));
+              break;
+          default:
+              $('table#meta-head-info > tbody').append(GetDefaultRow(strMetaName, meta[strMetaName]));
+              break;
+      }
+  }
+}
+
+
 jQuery(function() {
-    
+
+
+
+
+
     //init
     if ($('body').hasClass('not-supported') === false) {
-       
+
+      $('a[href="#view-summary"]').on('click', function() {
         chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }, tabs => {
-            chrome.tabs.sendMessage(
-                tabs[0].id,
-                {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
-                data
-            );
+          active: true,
+          currentWindow: true
+      }, tabs => {
+          chrome.tabs.sendMessage(
+              tabs[0].id,
+              {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
+              CallbackSummary
+          );
+      });
+      });
 
-            //get the url of the current tab.
-            tabUrl =  tabs[0].url;
-        });
-
-        /**
-         * Summary
-         */
-        const data = objMetaInfo => {
-            
-            //clear the table because we refresh this table here with current values.
-            $('table#meta-head-info > tbody').empty();
-
-            window.scrollTo(0, 0);
-
-            //iterate through all the elements of the <head> element.
-            for (let strMetaName in objMetaInfo) {
-                switch (strMetaName) {
-                    case 'canonical':
-                        $('table#meta-head-info > tbody').append(GetCanonicalRow(strMetaName, objMetaInfo[strMetaName]));
-                        break;
-                    case 'generator':
-                        $('table#meta-head-info > tbody').append(GetGeneratorRow(strMetaName, objMetaInfo[strMetaName]));
-                        break;
-                    case 'theme-color':
-                        $('table#meta-head-info > tbody').append(GetColorRow(strMetaName, objMetaInfo[strMetaName]));
-                        break;
-                    default:
-                        $('table#meta-head-info > tbody').append(GetDefaultRow(strMetaName, objMetaInfo[strMetaName]));
-                        break;
-                }
-            }
-        };
-
-        $('a[href="#nav-meta"]').on('click', function() {
+        $('a[href="#view-meta"]').on('click', function() {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
@@ -262,7 +264,7 @@ jQuery(function() {
 
                 //clear all meta tables.
                 $('table[id^=meta-details-] > tbody').empty();
-                
+
                 var objMetaFacebook = info['facebook'];
                 var objMetaOpenGraph = info['opengraph'];
                 var objMetaArticle = info['opengraph-article'];
@@ -315,13 +317,13 @@ jQuery(function() {
                     if (arrDetailedInfoOpenGraph.includes(strOpenGraphName)) {
                         strAdditionalInfoHTML = GetTextWordInformation(strOpenGraphValue, true);
                     }
-                    
+
                     //set the OpenGraph information to the table.
                     $('table#meta-details-opengraph > tbody').append(GetInformationRow(strOpenGraphName + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
                 }
 
                 if (Object.keys(objMetaOpenGraph).length > 0) {
-    
+
                     //The four required properties for every page are: og:title, og:type, og:image, og:url
                     //https://ogp.me/
                     for (itemRequiredOpenGraph of ['og:title', 'og:type', 'og:image', 'og:url']) {
@@ -424,7 +426,7 @@ function ViewFiles() {
         chrome.tabs.sendMessage(
             tabs[0].id,
             {source: SOURCE.POPUP, subject: SUBJECT.FILE},
-            fnResponse   
+            fnResponse
         );
     });
 
@@ -436,7 +438,7 @@ function ViewFiles() {
         //get the arrays with files.
         var arrStylesheet = objFiles['stylesheet'];
         var arrJavaScript = objFiles['javascript'];
-        
+
         //remove all rows of the stylesheet and javascript table.
         objTableStylesheet.children('tbody').empty();
         objTableJavaScript.children('tbody').empty();
@@ -476,14 +478,14 @@ function ViewFiles() {
  * View for Headings.
  */
 function ViewHeadings() {
-    
+
     //get the current / active tab of the current window and send a message
     //to the content script to get the information from website.
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
         chrome.tabs.sendMessage(
             tabs[0].id,
             {source: SOURCE.POPUP, subject: SUBJECT.HEADING},
-            fnResponse  
+            fnResponse
         );
     });
 
@@ -502,7 +504,7 @@ function ViewHeadings() {
 
             //set events to toggle hide and show of the headings on click.
             $('td[id="headings-h' + level + '"]').on('click', {'level': level}, function(event) {
-                
+
                 //don't filter the headings if there is no heading.
                 if ($('tr.level-h' + event.data.level).length === 0) {
                     return;
@@ -546,7 +548,7 @@ function GetImageInfo(objImageInfo, strID) {
         };
         img.src = objImageInfo.src;
     }
-    
+
     return strImageInfo;
 }
 
@@ -580,7 +582,7 @@ function ViewImages() {
             indexImage++;
             objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + ((itemImage.filename) ? itemImage.filename : itemImage.src) + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
         }
-        
+
         //set the statistics for the images.
         objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
         objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);
@@ -589,11 +591,11 @@ function ViewImages() {
 
         $('table#list-images td').on('mouseenter', function() {
             $('div.img-preview').empty();
-            $('div.img-preview').append('<img src="' + $('a', this).attr('href') + '">');      
+            $('div.img-preview').append('<img src="' + $('a', this).attr('href') + '">');
         }).on('mouseleave', function() {
             $('div.img-preview').empty();
         });
-    };      
+    };
 }
 
 /**
@@ -639,7 +641,7 @@ function ViewHyperlinks() {
             if ((itemHyperlink.title || '').toString().trim() !== '') {
                 strTitleInfo = '<span class="info"><strong>title:</strong> ' + (itemHyperlink.title || '').toString().trim() + '</span>';
             }
-            
+
             objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
         }
 
