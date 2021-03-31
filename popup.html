@@ -3,7 +3,7 @@
     <head>
         <title>SEO Insights</title>
         <meta charset="utf-8">
-        <script type="text/javascript" src="libs/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="libs/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="libs/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="scripts/helper.js"></script>
         <script type="text/javascript" src="scripts/opengraph.js"></script>
@@ -65,23 +65,106 @@
                             </div>
                             <div id="meta-details-opengraph-content" class="collapse" aria-labelledby="meta-details-opengraph-heading" data-parent="#meta">
                                 <div class="card-body">
-                                    <table class="table table-sm item-list" id="meta-details-opengraph">
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="meta-details-opengraph-article-heading">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-details-opengraph-article-content" aria-expanded="true" aria-controls="meta-details-opengraph-article-content">OpenGraph: Article</button>
-                                </h2>
-                            </div>
-                            <div id="meta-details-opengraph-article-content" class="collapse" aria-labelledby="meta-details-opengraph-article-heading" data-parent="#meta">
-                                <div class="card-body">
-                                    <table class="table table-sm item-list" id="meta-details-opengraph-article">
-                                        <tbody></tbody>
-                                    </table>
+                                    <div class="accordion" id="meta-opengraph">
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-basic-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-opengraph-basic-content" aria-expanded="false" aria-controls="meta-opengraph-basic-content">Basic</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-basic-content" class="collapse show" aria-labelledby="meta-opengraph-basic-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-basic">
+                                                        <tbody></tbody>
+                                                    </table>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-article-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-article-collapse" aria-expanded="true" aria-controls="meta-opengraph-article-collapse">Article</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-article-collapse" class="collapse" aria-labelledby="meta-opengraph-article-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-article">
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-audio-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-audio-collapse" aria-expanded="true" aria-controls="meta-opengraph-audio-collapse">Audio</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-audio-collapse" class="collapse" aria-labelledby="meta-opengraph-audio-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-audio">
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-book-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-book-collapse" aria-expanded="true" aria-controls="meta-opengraph-book-collapse">Book</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-book-collapse" class="collapse" aria-labelledby="meta-opengraph-book-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-book">
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-image-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-image-collapse" aria-expanded="true" aria-controls="meta-opengraph-image-collapse">Image</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-image-collapse" class="collapse" aria-labelledby="meta-opengraph-image-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-image">
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-profile-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-profile-collapse" aria-expanded="true" aria-controls="meta-opengraph-profile-collapse">Profile</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-profile-collapse" class="collapse" aria-labelledby="meta-opengraph-profile-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-profile">
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>                
+                                        <div class="card">
+                                            <div class="card-header" id="meta-opengraph-video-heading">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-video-collapse" aria-expanded="true" aria-controls="meta-opengraph-video-collapse">Video</button>
+                                                </h2>
+                                            </div>
+                                            <div id="meta-opengraph-video-collapse" class="collapse" aria-labelledby="meta-opengraph-video-heading" data-parent="#meta-opengraph">
+                                                <div class="card-body">
+                                                    <table class="table table-sm item-list" id="meta-details-opengraph-video">
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

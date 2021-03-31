@@ -298,9 +298,10 @@ var MetaInformation = (function() {
 
             //iterate through all <meta> elements with name attribute.
             $('head > meta[name]').each(function() {
+
                 var strMetaName = ($(this).attr('name') || '').toString();
 
-                if (!arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
+                if (OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === strMetaName) === -1 && OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === strMetaName) === -1 && !arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
                     info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
@@ -310,7 +311,7 @@ var MetaInformation = (function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
                 //add the unknown meta information to the object.
-                if (!OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
+                if (OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
                     info[strMetaProperty] = ($(this).attr('content') || '').toString();
                 }
             });

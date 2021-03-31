@@ -214,3 +214,7 @@ div.tab-pane table.table {
 div#view-headings table#statistics-headings {
     user-select: none;
 }
+
+div.accordion div.accordion {
+    margin: 7px 0;
+}

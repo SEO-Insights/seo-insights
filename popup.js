@@ -11,7 +11,7 @@
     }
 
     //programmatically inject the content scripts to the current tab.
-    chrome.scripting.executeScript({files: ['libs/jquery-3.5.1.min.js'], target: {tabId: tab.id}});
+    chrome.scripting.executeScript({files: ['libs/jquery-3.6.0.min.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/dublincore.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tab.id}});
@@ -228,9 +228,21 @@ function CallbackSummary(meta) {
 
 jQuery(function() {
 
+  function GroupByName(objects) {
+    let arr = [];
+    for (let obj of objects) {
 
+      arrFiltered = arr.filter(objItem => objItem.name === obj.name);
+      if (arrFiltered.length === 1)  {
+        console.log('filtered', arrFiltered[0]);
 
-
+        arrFiltered[0].value.push(obj.value);
+      } else {
+        arr.push({'name': obj.name, 'value': [obj.value]});
+      }
+    }
+    return arr;
+  }
 
     //init
     if ($('body').hasClass('not-supported') === false) {
@@ -268,7 +280,12 @@ jQuery(function() {
 
                 var objMetaFacebook = info['facebook'];
                 var objMetaOpenGraph = info['opengraph'];
-                var objMetaArticle = info['opengraph-article'];
+                let objMetaOpenGraphArticle = info['opengraph-article'];
+                let objMetaOpenGraphAudio = info['opengraph-audio'];
+                let objMetaOpenGraphBook = info['opengraph-book'];
+                let objMetaOpenGraphImage = info['opengraph-image'];
+                let objMetaOpenGraphProfile = info['opengraph-profile'];
+                let objMetaOpenGraphVideo = info['opengraph-video'];
                 var objMetaOthers = info['others'];
                 var objMetaParsely = info['parsely'];
                 var objMetaTwitter = info['twitter'];
@@ -282,9 +299,34 @@ jQuery(function() {
                     $('table#meta-details-others > tbody').append(GetInformationRow(strOthersName, EscapeHTML(strOthersValue)));
                 }
 
-                for (let infoOpenGraphArticle of objMetaArticle) {
-                    var strArticleValue = (infoOpenGraphArticle.value || '').toString().trim();
+                for (let infoOpenGraphArticle of GroupByName(objMetaOpenGraphArticle)) {
+                    var strArticleValue = (infoOpenGraphArticle.value.join('; ') || '').toString().trim();
                     $('table#meta-details-opengraph-article > tbody').append(GetInformationRow(infoOpenGraphArticle.name, EscapeHTML(strArticleValue)));
+                }
+
+                for (let tagInfoAudio of objMetaOpenGraphAudio) {
+                  const value = (tagInfoAudio.value || '').toString().trim();
+                  $('table#meta-details-opengraph-audio > tbody').append(GetInformationRow(tagInfoAudio.name, EscapeHTML(value)));
+                }
+
+                for (let tagInfoBook of objMetaOpenGraphBook) {
+                  const value = (tagInfoBook.value || '').toString().trim();
+                  $('table#meta-details-opengraph-book > tbody').append(GetInformationRow(tagInfoBook.name, EscapeHTML(value)));
+                }
+
+                for (let tagInfoImage of objMetaOpenGraphImage) {
+                  const value = (tagInfoImage.value || '').toString().trim();
+                  $('table#meta-details-opengraph-image > tbody').append(GetInformationRow(tagInfoImage.name, EscapeHTML(value)));
+                }
+
+                for (let tagInfoProfile of objMetaOpenGraphProfile) {
+                  const value = (tagInfoProfile.value || '').toString().trim();
+                  $('table#meta-details-opengraph-profile > tbody').append(GetInformationRow(tagInfoProfile.name, EscapeHTML(value)));
+                }
+
+                for (let tagInfoVideo of objMetaOpenGraphVideo) {
+                  const value = (tagInfoVideo.value || '').toString().trim();
+                  $('table#meta-details-opengraph-video > tbody').append(GetInformationRow(tagInfoVideo.name, EscapeHTML(value)));
                 }
 
                 for (let strFacebookName in objMetaFacebook) {
@@ -320,7 +362,7 @@ jQuery(function() {
                     }
 
                     //set the OpenGraph information to the table.
-                    $('table#meta-details-opengraph > tbody').append(GetInformationRow(infoOpenGraph.name + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
+                    $('table#meta-details-opengraph-basic > tbody').append(GetInformationRow(infoOpenGraph.name + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
                 }
 
                 if (Object.keys(objMetaOpenGraph).length > 0) {
@@ -340,10 +382,15 @@ jQuery(function() {
                 }
 
                 //now all lists are created so it is possible to count the items of each list.
+                SetItemsCount($('#meta-opengraph-basic-heading'), $('table#meta-details-opengraph-basic'));
+                SetItemsCount($('#meta-opengraph-article-heading'), $('table#meta-details-opengraph-article'));
+                SetItemsCount($('#meta-opengraph-audio-heading'), $('table#meta-details-opengraph-audio'));
+                SetItemsCount($('#meta-opengraph-book-heading'), $('table#meta-details-opengraph-book'));
+                SetItemsCount($('#meta-opengraph-image-heading'), $('table#meta-details-opengraph-image'));
+                SetItemsCount($('#meta-opengraph-profile-heading'), $('table#meta-details-opengraph-profile'));
+                SetItemsCount($('#meta-opengraph-video-heading'), $('table#meta-details-opengraph-video'));
                 SetItemsCount($('#meta-details-facebook-heading'), $('table#meta-details-facebook'));
                 SetItemsCount($('#meta-details-twitter-heading'), $('table#meta-details-twitter'));
-                SetItemsCount($('#meta-details-opengraph-heading'), $('table#meta-details-opengraph'));
-                SetItemsCount($('#meta-details-opengraph-article-heading'), $('table#meta-details-opengraph-article'));
                 SetItemsCount($('#meta-details-dublin-core-heading'), $('table#meta-details-dublin-core'));
                 SetItemsCount($('#meta-details-parsely-heading'), $('table#meta-details-parsely'));
                 SetItemsCount($('#meta-details-others-heading'), $('table#meta-details-others'));
@@ -379,7 +426,9 @@ function SetItemsCount(itemCardHeader, itemTable) {
     let itemCardHeaderButton = $(itemCardHeader).find('button');
     let cntTableItems = $(itemTable).find('tr').length;
     $('.info', itemCardHeaderButton).remove();
-    $(itemCardHeaderButton).append('<span class="info">' + cntTableItems + ' items</span>');
+    if (cntTableItems > 0) {
+      $(itemCardHeaderButton).append('<span class="info">' + cntTableItems + ' items</span>');
+    }
     $(itemCardHeaderButton).prop('disabled', (cntTableItems === 0));
 }
 
