@@ -53,6 +53,20 @@ function GetBaseUrl() {
     return (location.origin + location.pathname);
 }
 
+/**
+ * Returns the base url from document head.
+ * @returns {string|null} The base url of the document head.
+ */
+function GetHeadBaseUrl() {
+  const baseUrl = $('head > base').first().attr('href');
+
+  if (baseUrl) {
+    return baseUrl;
+  } else {
+    return null;
+  }
+}
+
 function EscapeHTML(str) {
     return String(str).replace(/[&<>"'\/]/g, function(s) {
         return entityMap[s];

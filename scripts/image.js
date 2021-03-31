@@ -8,7 +8,7 @@ var ImageModule = (function() {
     /**
      * function to get all images of the document.
      * @param {Document} context The context used for jQuery.
-     * @returns {Object[]} An object array with all found images. 
+     * @returns {Object[]} An object array with all found images.
      */
     function GetImagesOfDocument(context = undefined) {
         let arrImages = [];
@@ -42,8 +42,16 @@ var ImageModule = (function() {
                         strImageSource = location.protocol + strImageSource;
                     }
 
+                    //get the base url of the document head.
+                    let baseUrl = GetHeadBaseUrl();
+
+                    //if the base url is stil unknown, take the base url from website url.
+                    if (baseUrl == null) {
+                      baseUrl = GetBaseUrl();
+                    }
+
                     //get the image url (relative or absolute) as url object.
-                    let objImageUrl = new URL(strImageSource, (GetBaseUrl()));
+                    let objImageUrl = new URL(strImageSource, baseUrl);
                     let strImageUrl = (objImageUrl.href || '').toString().trim();
 
                     //set the image source to the object and add the object to the array.
@@ -70,7 +78,7 @@ var ImageModule = (function() {
 
             //iterate through the frames of the page to get the images of the available frames.
             for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
-                
+
                 //there are also blocked frames so we have to try to get the document of the frame.
                 try {
                     arrImages = arrImages.concat(GetImagesOfDocument(window.frames[frameIndex].document));
