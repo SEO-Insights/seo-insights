@@ -182,6 +182,7 @@ function GetGeneratorLink(name) {
         ['mediawiki', 'https://www.mediawiki.org/wiki/MediaWiki'],
         ['publii', 'https://getpublii.com/'],
         ['typo3', 'https://typo3.org/'],
+        ['vbulletin', 'https://www.vbulletin.com/'],
         ['wordpress', 'https://wordpress.org/'],
         ['woocommerce', 'https://woocommerce.com/']
     ];
@@ -191,8 +192,8 @@ function GetGeneratorLink(name) {
 
     //check if there is a found link to the generator website.
     //the link is only used if it is the only one found in the array.
-    if (arrFoundLinks.length == 1) {
-        return '<a href="' + arrFoundLinks[1] + '" target="_blank">' + name + '</a>';
+    if (arrFoundLinks.length === 1) {
+        return '<a href="' + arrFoundLinks[0][1] + '" target="_blank">' + name + '</a>';
     } else {
         return name;
     }
@@ -281,9 +282,9 @@ jQuery(function() {
                     $('table#meta-details-others > tbody').append(GetInformationRow(strOthersName, EscapeHTML(strOthersValue)));
                 }
 
-                for (let strArticleName in objMetaArticle) {
-                    var strArticleValue = (objMetaArticle[strArticleName] || '').toString().trim();
-                    $('table#meta-details-opengraph-article > tbody').append(GetInformationRow(strArticleName, EscapeHTML(strArticleValue)));
+                for (let infoOpenGraphArticle of objMetaArticle) {
+                    var strArticleValue = (infoOpenGraphArticle.value || '').toString().trim();
+                    $('table#meta-details-opengraph-article > tbody').append(GetInformationRow(infoOpenGraphArticle.name, EscapeHTML(strArticleValue)));
                 }
 
                 for (let strFacebookName in objMetaFacebook) {
@@ -309,17 +310,17 @@ jQuery(function() {
                     $('table#meta-details-twitter > tbody').append(GetInformationRow(strTwitterName + strAdditionalInfoHTML, EscapeHTML(strTwitterValue)));
                 }
 
-                for (let strOpenGraphName in objMetaOpenGraph) {
-                    var strOpenGraphValue = (objMetaOpenGraph[strOpenGraphName] || '').toString().trim();
+                for (let infoOpenGraph of objMetaOpenGraph) {
+                    var strOpenGraphValue = (infoOpenGraph.value || '').toString().trim();
                     var strAdditionalInfoHTML = '';
 
                     //get the additional information if needed.
-                    if (arrDetailedInfoOpenGraph.includes(strOpenGraphName)) {
+                    if (arrDetailedInfoOpenGraph.includes(infoOpenGraph.name)) {
                         strAdditionalInfoHTML = GetTextWordInformation(strOpenGraphValue, true);
                     }
 
                     //set the OpenGraph information to the table.
-                    $('table#meta-details-opengraph > tbody').append(GetInformationRow(strOpenGraphName + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
+                    $('table#meta-details-opengraph > tbody').append(GetInformationRow(infoOpenGraph.name + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
                 }
 
                 if (Object.keys(objMetaOpenGraph).length > 0) {
@@ -327,9 +328,9 @@ jQuery(function() {
                     //The four required properties for every page are: og:title, og:type, og:image, og:url
                     //https://ogp.me/
                     for (itemRequiredOpenGraph of ['og:title', 'og:type', 'og:image', 'og:url']) {
-                        if (!objMetaOpenGraph.hasOwnProperty(itemRequiredOpenGraph)) {
-                            $('table#meta-details-errors > tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
-                        }
+                      if (objMetaOpenGraph.filter(infoOpenGraph => infoOpenGraph.name === itemRequiredOpenGraph).length === 0) {
+                        $('table#meta-details-errors > tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
+                      }
                     }
                 }
 

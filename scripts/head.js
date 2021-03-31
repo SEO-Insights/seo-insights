@@ -41,21 +41,6 @@ var MetaInformation = (function() {
     ];
 
     /**
-     * The known properties for the Article meta information.
-     *
-     * sources:
-     *  - https://ogp.me/#type_article
-     */
-    var arrMetaPropertiesOpenGraphArticle = [
-        'article:author',
-        'article:expiration_time',
-        'article:modified_time',
-        'article:published_time',
-        'article:section',
-        'article:tag'
-    ];
-
-    /**
      * The known properties for the Facebook meta information.
      *
      * sources:
@@ -294,50 +279,6 @@ var MetaInformation = (function() {
             return info;
         },
 
-        /**
-         * Get the OpenGraph meta information.
-         */
-        GetOpenGraph: function() {
-            var info = new Object();
-
-            //iterate through the OpenGraph <meta> elements of the <head> element.
-            $('head > meta[property^="og:"]').each(function() {
-                var strMetaName = $(this).attr('property').trim();
-
-                //add the meta information if known.
-                if (OpenGraphTags.findIndex(objTag => objTag.name === strMetaName) > -1) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString();
-                }
-            });
-
-            //return the information.
-            return info;
-        },
-
-        /**
-         * Get the Article meta information.
-         */
-        GetOpenGraphArticle: function() {
-            var info = new Object();
-
-            //iterate through the Article <meta> elements of the <head> element.
-            $('head > meta[property^="article:"]').each(function() {
-                var strMetaName = $(this).attr('property').trim();
-
-                //add the meta information if known.
-                if (arrMetaPropertiesOpenGraphArticle.includes(strMetaName)) {
-                    if (info.hasOwnProperty(strMetaName)) {
-                        info[strMetaName] += ', ' + ($(this).attr('content') || '').toString();
-                    } else {
-                        info[strMetaName] = ($(this).attr('content') || '').toString();
-                    }
-                }
-            });
-
-            //return the information.
-            return info;
-        },
-
         GetDublinCore: function() {
             var info = new Object();
 
@@ -369,7 +310,7 @@ var MetaInformation = (function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
                 //add the unknown meta information to the object.
-                if (!arrMetaPropertiesOpenGraphArticle.includes(strMetaProperty) && OpenGraphTags.findIndex(objTag => objTag.name === strMetaProperty) === -1 && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
+                if (!OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
                     info[strMetaProperty] = ($(this).attr('content') || '').toString();
                 }
             });

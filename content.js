@@ -13,8 +13,8 @@ if (!IsInitializedContent) {
             case SUBJECT.META:
                 sendResponse({
                     'facebook': MetaInformation.GetFacebook(),
-                    'opengraph': MetaInformation.GetOpenGraph(),
-                    'opengraph-article': MetaInformation.GetOpenGraphArticle(),
+                    'opengraph': OpenGraph.GetBasicProperties(),
+                    'opengraph-article': OpenGraph.GetArticleProperties(),
                     'others': MetaInformation.GetOthers(),
                     'parsely': MetaInformation.GetParsely(),
                     'twitter': MetaInformation.GetTwitter(),
