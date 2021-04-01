@@ -60,6 +60,7 @@ function GetTextWordInformation(strValue, newLine = false) {
 }
 
 function GetHeaderInformation(url) {
+    $('table#info-headers > tbody').empty();
     fetch(url).then(function(response) {
         for (var p of response.headers.entries()) {
             $('table#info-headers > tbody').append(GetInformationRow(p[0], p[1]));
