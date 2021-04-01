@@ -1,6 +1,7 @@
 (function() {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     const tab = tabs[0];
+    tabUrl = tab.url;
 
     //check whether it is possbile to inject a content script to the current tab.
     if (!CanInjectContentScript(tab)) {
