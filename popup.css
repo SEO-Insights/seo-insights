@@ -4,6 +4,9 @@ body {
     height: 600px;
     width: 600px;
 }
+body > div.container-fluid > nav {
+    z-index: 999;
+}
 body > div.container-fluid > nav,
 body > div.container-fluid > div.tab-content {
     display: block;
