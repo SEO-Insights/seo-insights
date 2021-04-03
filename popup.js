@@ -36,6 +36,22 @@ function CanInjectContentScript(tab) {
   return (tab.url.startsWith('http://') || tab.url.startsWith('https://'));
 }
 
+/**
+ * Sets the count of table items to the card header.
+ * @param {object} cardHeader The card header to set the count of table items.
+ * @param {object} table The table container to get the count of items.
+ */
+function SetTableCountOnCardHeader(cardHeader, table) {
+	const cntItems = $(table).find('tr').length;
+	const cardHeaderButton = $(cardHeader).find('button');
+
+	//first remove the info on the HTML element.
+	$('span.info', cardHeaderButton).remove();
+
+	//set the count of items to the card header.
+	$(cardHeaderButton).append('<span class="info">' + cntItems + ' items</span>');
+	$(cardHeaderButton).prop('disabled', (cntItems === 0));
+}
 
 
 
@@ -384,19 +400,20 @@ jQuery(function() {
                 }
 
                 //now all lists are created so it is possible to count the items of each list.
-                SetItemsCount($('#meta-opengraph-basic-heading'), $('table#meta-details-opengraph-basic'));
-                SetItemsCount($('#meta-opengraph-article-heading'), $('table#meta-details-opengraph-article'));
-                SetItemsCount($('#meta-opengraph-audio-heading'), $('table#meta-details-opengraph-audio'));
-                SetItemsCount($('#meta-opengraph-book-heading'), $('table#meta-details-opengraph-book'));
-                SetItemsCount($('#meta-opengraph-image-heading'), $('table#meta-details-opengraph-image'));
-                SetItemsCount($('#meta-opengraph-profile-heading'), $('table#meta-details-opengraph-profile'));
-                SetItemsCount($('#meta-opengraph-video-heading'), $('table#meta-details-opengraph-video'));
-                SetItemsCount($('#meta-details-facebook-heading'), $('table#meta-details-facebook'));
-                SetItemsCount($('#meta-details-twitter-heading'), $('table#meta-details-twitter'));
-                SetItemsCount($('#meta-details-dublin-core-heading'), $('table#meta-details-dublin-core'));
-                SetItemsCount($('#meta-details-parsely-heading'), $('table#meta-details-parsely'));
-                SetItemsCount($('#meta-details-others-heading'), $('table#meta-details-others'));
-                SetItemsCount($('#meta-details-errors-heading'), $('table#meta-details-errors'));
+								SetTableCountOnCardHeader($('#meta-details-opengraph-heading'), $('div#meta-details-opengraph-content'));
+                SetTableCountOnCardHeader($('#meta-opengraph-basic-heading'), $('table#meta-details-opengraph-basic'));
+                SetTableCountOnCardHeader($('#meta-opengraph-article-heading'), $('table#meta-details-opengraph-article'));
+                SetTableCountOnCardHeader($('#meta-opengraph-audio-heading'), $('table#meta-details-opengraph-audio'));
+                SetTableCountOnCardHeader($('#meta-opengraph-book-heading'), $('table#meta-details-opengraph-book'));
+                SetTableCountOnCardHeader($('#meta-opengraph-image-heading'), $('table#meta-details-opengraph-image'));
+                SetTableCountOnCardHeader($('#meta-opengraph-profile-heading'), $('table#meta-details-opengraph-profile'));
+                SetTableCountOnCardHeader($('#meta-opengraph-video-heading'), $('table#meta-details-opengraph-video'));
+                SetTableCountOnCardHeader($('#meta-details-facebook-heading'), $('table#meta-details-facebook'));
+                SetTableCountOnCardHeader($('#meta-details-twitter-heading'), $('table#meta-details-twitter'));
+                SetTableCountOnCardHeader($('#meta-details-dublin-core-heading'), $('table#meta-details-dublin-core'));
+                SetTableCountOnCardHeader($('#meta-details-parsely-heading'), $('table#meta-details-parsely'));
+                SetTableCountOnCardHeader($('#meta-details-others-heading'), $('table#meta-details-others'));
+                SetTableCountOnCardHeader($('#meta-details-errors-heading'), $('table#meta-details-errors'));
             }
         });
 
@@ -419,20 +436,6 @@ jQuery(function() {
     }
 });
 
-/**
- * function to set the count of items on the card header.
- * @param {object} itemCardHeader The card header element. There is a button to show the count of items.
- * @param {object} itemTable The table element with the items to count. Each row of the table is a item.
- */
-function SetItemsCount(itemCardHeader, itemTable) {
-    let itemCardHeaderButton = $(itemCardHeader).find('button');
-    let cntTableItems = $(itemTable).find('tr').length;
-    $('.info', itemCardHeaderButton).remove();
-    if (cntTableItems > 0) {
-      $(itemCardHeaderButton).append('<span class="info">' + cntTableItems + ' items</span>');
-    }
-    $(itemCardHeaderButton).prop('disabled', (cntTableItems === 0));
-}
 
 function ViewHeader() {
     GetHeaderInformation(tabUrl);
@@ -486,6 +489,7 @@ function ViewFiles() {
     const fnResponse = objFiles => {
         var objTableStylesheet = $('div#view-files table#files-stylesheet');
         var objTableJavaScript = $('div#view-files table#files-javascript');
+        var objTableSpecialFiles = $('div#view-files table#files-special');
 
         //get the arrays with files.
         var arrStylesheet = objFiles['stylesheet'];
@@ -494,6 +498,7 @@ function ViewFiles() {
         //remove all rows of the stylesheet and javascript table.
         objTableStylesheet.children('tbody').empty();
         objTableJavaScript.children('tbody').empty();
+        objTableSpecialFiles.children('tbody').empty();
         window.scrollTo(0, 0);
 
         //iterate through the stylesheet files and add them to the table.
@@ -510,6 +515,7 @@ function ViewFiles() {
         fetch(strSitemapURL).then(function(response) {
             if (response.status == 200) {
                 $('div#view-files table#files-special tbody').append('<tr><td id="item-sitemapxml"><a href="' + strSitemapURL + '" target="_blank">sitemap.xml</a></td></tr>');
+                SetTableCountOnCardHeader($('#special-heading'), $('table#files-special'));
             }
         });
 
@@ -517,12 +523,13 @@ function ViewFiles() {
         fetch(strRobotsURL).then(function(response) {
             if (response.status == 200) {
                 $('div#view-files table#files-special tbody').append('<tr><td id="item-robotstxt"><a href="' + strRobotsURL + '" target="_blank">robots.txt</a></td></tr>');
+                SetTableCountOnCardHeader($('#special-heading'), $('table#files-special'));
             }
         });
 
         //set the count of items to the card header.
-        SetItemsCount($('#stylesheet-heading'), $('table#files-stylesheet'));
-        SetItemsCount($('#javascript-heading'), $('table#files-javascript'));
+        SetTableCountOnCardHeader($('#stylesheet-heading'), $('table#files-stylesheet'));
+        SetTableCountOnCardHeader($('#javascript-heading'), $('table#files-javascript'));
     };
 }
 
