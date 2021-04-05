@@ -123,6 +123,18 @@ var MetaInformation = (function() {
         'twitter:title'
     ];
 
+		function IsOpenGraphTag(name) {
+			const isOpenGraphArticle = OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphAudio = OpenGraph.GetAudioTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphBasic = OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphBook = OpenGraph.GetBookTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphImage = OpenGraph.GetImageTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphProfile = OpenGraph.GetProfileTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphVideo = OpenGraph.GetVideoTagsInfo().findIndex(tag => tag.name === name) > -1;
+
+			return isOpenGraphArticle || isOpenGraphAudio || isOpenGraphBasic || isOpenGraphBook || isOpenGraphImage || isOpenGraphProfile || isOpenGraphVideo;
+		};
+
     return {
 
         /**
@@ -301,7 +313,7 @@ var MetaInformation = (function() {
 
                 var strMetaName = ($(this).attr('name') || '').toString();
 
-                if (OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === strMetaName) === -1 && OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === strMetaName) === -1 && !arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
+                if (!IsOpenGraphTag(strMetaName) && !arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
                     info[strMetaName] = ($(this).attr('content') || '').toString();
                 }
             });
@@ -311,7 +323,7 @@ var MetaInformation = (function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
                 //add the unknown meta information to the object.
-                if (OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === strMetaProperty) === -1 && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
+                if (!IsOpenGraphTag(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
                     info[strMetaProperty] = ($(this).attr('content') || '').toString();
                 }
             });
