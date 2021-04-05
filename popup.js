@@ -53,6 +53,29 @@ function SetTableCountOnCardHeader(cardHeader, table) {
 	$(cardHeaderButton).prop('disabled', (cntItems === 0));
 }
 
+/**
+ * Resets all filter controls on the headings tab.
+ */
+function ResetHeadingFilter() {
+	$('tr.filter td[id^="headings-h"]').each(function() {
+		$(this).off('click');
+		$(this).css('color', '#000');
+	});
+}
+
+/**
+ * Callback function of the heading filter items.
+ * @param {object} event The event object.
+ */
+function CallbackHeadingFilter(event) {
+	if ($('tr.level-h' + event.data.level).is(':hidden')) {
+		$('tr.level-h' + event.data.level).show();
+		$(this).css('color', '#000');
+	} else {
+		$('tr.level-h' + event.data.level).hide();
+		$(this).css('color', '#ccc');
+	}
+}
 
 
 
@@ -557,31 +580,21 @@ function ViewHeadings() {
         objTableHeadings.children('tbody').empty();
         window.scrollTo(0, 0);
 
+				//reset the filter on the heading tab.
+				ResetHeadingFilter();
+
         //iterate through the different levels of headings.
         for (level = 1; level <= 6; level++) {
             objTableStatsHeadings.find('td[id="headings-h' + level + '"]').text(arrHeadings.filter(heading => heading.type === 'h' + level).length);
 
             //set events to toggle hide and show of the headings on click.
-            $('td[id="headings-h' + level + '"]').on('click', {'level': level}, function(event) {
-
-                //don't filter the headings if there is no heading.
-                if ($('tr.level-h' + event.data.level).length === 0) {
-                    return;
-                }
-
-                if ($('tr.level-h' + event.data.level).is(':hidden')) {
-                    $('tr.level-h' + event.data.level).show();
-                    $(this).css('color', '#000');
-                } else {
-                    $('tr.level-h' + event.data.level).hide();
-                    $(this).css('color', '#ccc');
-                }
-            });
+            $('td[id="headings-h' + level + '"]').on('click', {'level': level}, CallbackHeadingFilter);
         }
 
         //set the total count of headings to the table.
         objTableStatsHeadings.find('td[id="headings-all"]').text(arrHeadings.length);
 
+				//add all found headings to the table.
         for (itemHeading of arrHeadings) {
             var strTableRow = '<tr class="level-' + itemHeading.type + ' is-empty"><td><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>';
             $(objTableHeadings).children('tbody').append(strTableRow);
