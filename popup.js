@@ -1,7 +1,15 @@
+//common information about the website.
+let tabUrl = '';
+let tabHostname = '';
+
+//start the chrome extension and inject the scripts to the website.
 (function() {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     const tab = tabs[0];
-    tabUrl = tab.url;
+
+		//set the common information about the website.
+		tabUrl = tab.url;
+    tabHostname = (new URL(tab.url)).hostname;
 
     //check whether it is possbile to inject a content script to the current tab.
     if (!CanInjectContentScript(tab)) {
@@ -201,9 +209,6 @@ function GetGeneratorRow(metaName, metaValue) {
     return GetInformationRow(metaName, strMetaValue);
 }
 
-//the url of the current tab.
-var tabUrl = '';
-
 /**
  * function to get the link to the generator website.
  * @param {string} name The generator name to get the link of the generator website.
@@ -335,9 +340,9 @@ jQuery(function() {
                 var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
                 var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
 
-                for (let strOthersName in objMetaOthers) {
-                    var strOthersValue = (objMetaOthers[strOthersName] || '').toString().trim();
-                    $('table#meta-details-others > tbody').append(GetInformationRow(strOthersName, EscapeHTML(strOthersValue)));
+                for (let tagOthers of objMetaOthers) {
+                    var strOthersValue = (tagOthers.value || '').toString().trim();
+                    $('table#meta-details-others > tbody').append(GetInformationRow(tagOthers.name, EscapeHTML(strOthersValue)));
                 }
 
                 for (let infoOpenGraphArticle of GroupByName(objMetaOpenGraphArticle)) {
@@ -370,14 +375,14 @@ jQuery(function() {
                   $('table#meta-details-opengraph-video > tbody').append(GetInformationRow(tagInfoVideo.name, EscapeHTML(value)));
                 }
 
-                for (let strFacebookName in objMetaFacebook) {
-                    var strFacebookValue = (objMetaFacebook[strFacebookName] || '').toString().trim();
-                    $('table#meta-details-facebook > tbody').append(GetInformationRow(strFacebookName, EscapeHTML(strFacebookValue)));
+                for (let tagFacebook of objMetaFacebook) {
+                    var strFacebookValue = (tagFacebook.value || '').toString().trim();
+                    $('table#meta-details-facebook > tbody').append(GetInformationRow(tagFacebook.name, EscapeHTML(strFacebookValue)));
                 }
 
-                for (let strParselyName in objMetaParsely) {
-                    var strParselyValue = (objMetaParsely[strParselyName] || '').toString().trim();
-                    $('table#meta-details-parsely > tbody').append(GetInformationRow(strParselyName, EscapeHTML(strParselyValue)));
+                for (let tagParsely of objMetaParsely) {
+                    var strParselyValue = (tagParsely.value || '').toString().trim();
+                    $('table#meta-details-parsely > tbody').append(GetInformationRow(tagParsely.name, EscapeHTML(strParselyValue)));
                 }
 
                 for (let strTwitterName in objMetaTwitter) {
@@ -417,9 +422,9 @@ jQuery(function() {
                     }
                 }
 
-                for (let strDublinCoreName in objMetaDublinCore) {
-                    var strDublinCoreValue = (objMetaDublinCore[strDublinCoreName] || '').toString().trim();
-                    $('table#meta-details-dublin-core > tbody').append(GetInformationRow(strDublinCoreName, EscapeHTML(strDublinCoreValue)));
+                for (let tagDublinCore of objMetaDublinCore) {
+                    var strDublinCoreValue = (tagDublinCore.value || '').toString().trim();
+                    $('table#meta-details-dublin-core > tbody').append(GetInformationRow(tagDublinCore.name, EscapeHTML(strDublinCoreValue)));
                 }
 
                 //now all lists are created so it is possible to count the items of each list.

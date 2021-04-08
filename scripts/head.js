@@ -275,46 +275,50 @@ var MetaInformation = (function() {
          * Get the Facebook meta information.
          */
         GetFacebook: function() {
-            var info = new Object();
+					let tags = [];
 
             //iterate through the Facebook <meta> ekements of the <head> element.
             $('head > meta[property^="al:"]').each(function() {
                 var strMetaName = $(this).attr('property').trim();
 
                 //add the meta information if known.
-                if (arrMetaPropertiesFacebook.includes(strMetaName)) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString();
+                if (!arrMetaPropertiesFacebook.includes(strMetaName)) {
+                   return
                 }
+
+								tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
             });
 
             //return the information.
-            return info;
+            return tags;
         },
 
         GetDublinCore: function() {
-            var info = new Object();
+					let tags = [];
 
             $('head > meta[name^="DC."]').each(function() {
                 var strMetaName = $(this).attr('name').trim();
 
-                if (DublinCoreTermsTags.findIndex(objTag => objTag.name === strMetaName) > -1) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString();
+                if (DublinCoreTermsTags.findIndex(objTag => objTag.name === strMetaName) === -1) {
+									return;
                 }
+
+								tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
+
             });
 
-            return info;
+            return tags;
         },
 
         GetOthers: function() {
-            var info = new Object();
+					let tags = [];
 
             //iterate through all <meta> elements with name attribute.
             $('head > meta[name]').each(function() {
-
                 var strMetaName = ($(this).attr('name') || '').toString();
 
                 if (!IsOpenGraphTag(strMetaName) && !arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString();
+									tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
                 }
             });
 
@@ -324,31 +328,33 @@ var MetaInformation = (function() {
 
                 //add the unknown meta information to the object.
                 if (!IsOpenGraphTag(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
-                    info[strMetaProperty] = ($(this).attr('content') || '').toString();
+									tags.push({name: strMetaProperty, value: ($(this).attr('content') || '').toString()});
                 }
             });
 
-            return info;
+            return tags;
         },
 
         /**
          * Get the Parse.ly meta information.
          */
         GetParsely: function() {
-            var info = new Object();
+					let tags = [];
 
             //iterate through the Parse.ly <meta> elements of the <head> element.
             $('head > meta[name^="parsely-"]').each(function() {
                 var strMetaName = $(this).attr('name').trim();
 
                 //add the meta information if known.
-                if (arrMetaNamesParsely.includes(strMetaName)) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString();
+                if (!arrMetaNamesParsely.includes(strMetaName)) {
+									return;
                 }
+
+								tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
             });
 
             //return the information.
-            return info;
+            return tags;
         },
 
         /**
