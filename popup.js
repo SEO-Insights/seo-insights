@@ -41,6 +41,13 @@ let tabHostname = '';
  * @returns {boolean} The state whether a content script can be injected.
  */
 function CanInjectContentScript(tab) {
+
+	//It is not possible to inject content scripts to the chrome webstore.
+	if (tab.url.startsWith('https://chrome.google.com/webstore')) {
+		return false;
+	}
+
+	//It is possible to inject content scripts to Url's with HTTP / HTTPS.
   return (tab.url.startsWith('http://') || tab.url.startsWith('https://'));
 }
 
