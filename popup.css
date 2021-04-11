@@ -231,7 +231,7 @@ div.accordion#image-domains .card-body {
 }
 .accordion #stylesheet-content .tab-content,
 .accordion #javascript-content .tab-content {
-    padding: 1px 0 0;
+    padding: 0;
 }
 .accordion table#files-javascript,
 .accordion table#files-stylesheet {
@@ -242,5 +242,17 @@ div#image-info {
     margin-top: 7px;
 }
 div#hyperlink-info-content {
-    padding: 1px 0;
+    padding: 7px;
+}
+table#list-hyperlink-domains tr td:nth-child(1),
+table#list-files-stylesheet-domains tr td:nth-child(1),
+table#list-files-javascript-domains tr td:nth-child(1) {
+    padding-left: 15px;
+}
+table#list-image-domains tr td:nth-child(2),
+table#list-hyperlink-domains tr td:nth-child(2),
+table#list-files-stylesheet-domains tr td:nth-child(2),
+table#list-files-javascript-domains tr td:nth-child(2) {
+    padding-right: 15px;
+    text-align: right;
 }
