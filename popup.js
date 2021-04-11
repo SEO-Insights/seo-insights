@@ -228,6 +228,7 @@ function GetGeneratorLink(name) {
         ['chimpify', 'https://www.chimpify.de/'],
         ['drupal', 'https://www.drupal.de/'],
         ['ghost', 'https://ghost.org/'],
+				['hexo', 'https://hexo.io/'],
         ['hubspot', 'https://www.hubspot.de/products/cms'],
         ['hugo', 'https://gohugo.io/'],
         ['jekyll', 'https://jekyllrb.com/'],
