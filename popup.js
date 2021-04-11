@@ -518,6 +518,8 @@ function ViewFiles() {
         var objTableStylesheet = $('div#view-files table#files-stylesheet');
         var objTableJavaScript = $('div#view-files table#files-javascript');
         var objTableSpecialFiles = $('div#view-files table#files-special');
+				let objTableStylesheetDomains = $('div#view-files table#list-files-javascript-domains');
+				let objTableJavaScriptDomains = $('div#view-files table#list-files-stylesheet-domains')
 
         //get the arrays with files.
         var arrStylesheet = objFiles['stylesheet'];
@@ -527,17 +529,54 @@ function ViewFiles() {
         objTableStylesheet.children('tbody').empty();
         objTableJavaScript.children('tbody').empty();
         objTableSpecialFiles.children('tbody').empty();
+				objTableStylesheetDomains.children('tbody').empty();
+				objTableJavaScriptDomains.children('tbody').empty();
+
         window.scrollTo(0, 0);
+
+				let domainsJavaScript = [];
+				let domainsStylesheet = [];
 
         //iterate through the stylesheet files and add them to the table.
         for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
-            objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '"><a href="' + arrStylesheet[indexStylesheet].url.href + '" target="_blank">' + arrStylesheet[indexStylesheet].original + '</a></td></tr>');
+					let stylesheetDomain = new URL(arrStylesheet[indexStylesheet].url.href).host;
+
+					//just add the domain to the array if the domain doesn't exists.
+					if (stylesheetDomain.trim() !== '') {
+						domainsStylesheet.push(stylesheetDomain);
+					}
+
+					//add the stylesheet url to the list.
+					objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '"><a href="' + arrStylesheet[indexStylesheet].url.href + '" target="_blank">' + arrStylesheet[indexStylesheet].original + '</a></td></tr>');
         }
 
         //iterate through the javascript files and add them to the table.
         for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
-            objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a></td></tr>');
+					let javascriptDomain = new URL(arrJavaScript[indexJavaScript].url.href).host;
+
+					if (javascriptDomain.trim() !== '') {
+						domainsJavaScript.push(javascriptDomain);
+					}
+
+					//add the javascript url to the list.
+					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a></td></tr>');
         }
+
+				//get the unique domains of the arrays.
+				let uniqueDomainsStylesheet = domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i);
+				let uniqueDomainsJavaScript = domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i);
+
+				for (let domainStylesheet of uniqueDomainsStylesheet) {
+					if (domainStylesheet.trim() !== '') {
+						$('table#list-files-stylesheet-domains').children('tbody').append('<tr><td>' + domainStylesheet + '</td><td>' + domainsStylesheet.filter(domain => domain === domainStylesheet).length + '</td></tr>');
+					}
+				}
+
+				for (let domainJavaScript of uniqueDomainsJavaScript) {
+					if (domainJavaScript.trim() !== '') {
+						$('table#list-files-javascript-domains').children('tbody').append('<tr><td>' + domainJavaScript + '</td><td>' + domainsJavaScript.filter(domain => domain === domainJavaScript).length + '</td></tr>');
+					}
+				}
 
         var strSitemapURL = (new URL(tabUrl)).origin + '/sitemap.xml';
         fetch(strSitemapURL).then(function(response) {
@@ -648,17 +687,34 @@ function ViewImages() {
     const fnResponse = arrImages => {
         var objTableImages = $('div#view-images table#list-images');
         var objTableStatsImages = $('div#view-images table#statistics-images');
+				var objTableDomains = $('div#view-images table#list-image-domains');
+
         let indexImage = 0;
 
         //remove all rows of the images table.
         objTableImages.children('tbody').empty();
         window.scrollTo(0, 0);
 
+				let domains = [];
+
         //run through all images of the array with a source value.
         for (let itemImage of arrImages.filter(image => image.src !== '')) {
-            indexImage++;
-            objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + ((itemImage.filename) ? itemImage.filename : itemImage.src) + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
+					indexImage++;
+
+					let imageDomain = new URL(itemImage.src).host;
+
+					if (imageDomain.trim() !== '') {
+						domains.push(imageDomain);
+					}
+
+					objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + ((itemImage.filename) ? itemImage.filename : itemImage.src) + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
         }
+
+				for (let domainImage of domains.filter((v, i, a) => a.indexOf(v) === i)) {
+					objTableDomains.children('tbody').append('<tr><td>' + domainImage + '</td><td>' + domains.filter(domain => domain === domainImage).length + '</td></tr>');
+				}
+
+				SetTableCountOnCardHeader($('#image-domains .card-header'), objTableDomains);
 
         //set the statistics for the images.
         objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
@@ -696,15 +752,19 @@ function ViewHyperlinks() {
         var objTableAlternate = $('div#view-hyperlinks table#list-alternate');
         var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
         var objTableStatsProtocols = $('div#view-hyperlinks table#statistics-protocols');
+				var objTableDomains = $('div#view-hyperlinks table#list-hyperlink-domains');
 
         //remove all rows of the hyperlinks table.
         objTableHyperlinks.children('tbody').empty();
         objTableAlternate.children('tbody').empty();
+				objTableDomains.children('tbody').empty();
 
         var arrHyperlinks = objHyperlinks['links'];
         var arrAlternate = objHyperlinks['alternate'];
 
         window.scrollTo(0, 0);
+
+				let domains = [];
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
@@ -719,8 +779,20 @@ function ViewHyperlinks() {
                 strTitleInfo = '<span class="info"><strong>title:</strong> ' + (itemHyperlink.title || '').toString().trim() + '</span>';
             }
 
+						let hyperlinkDomain = new URL(itemHyperlink.url.href).host;
+
+						if (hyperlinkDomain.trim() !== '') {
+							domains.push(hyperlinkDomain);
+						}
+
             objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
-        }
+					}
+
+					for (let domainHyperlink of domains.filter((v, i, a) => a.indexOf(v) === i)) {
+						objTableDomains.children('tbody').append('<tr><td>' + domainHyperlink + '</td><td>' + domains.filter(domain => domain === domainHyperlink).length + '</td></tr>');
+					}
+
+					SetTableCountOnCardHeader($('#hyperlink-domains .card-header'), objTableDomains);
 
         for (let objAlternateItem of arrAlternate) {
             var strTitleInfo = '';

@@ -304,10 +304,22 @@
 						</tbody>
 					</table>
 
-					<!-- list of images -->
-					<table class="table table-sm item-list" id="list-images">
-						<tbody></tbody>
-					</table>
+					<div class="nav nav-pills" id="image-info" role="tablist">
+						<a class="nav-item nav-link active" id="image-tab" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="true">Images</a>
+						<a class="nav-item nav-link" id="image-domains-tab" data-toggle="tab" href="#image-domains" role="tab" aria-controls="image-domains" aria-selected="false">Domains</a>
+					</div>
+					<div class="tab-content" id="image-info-content">
+						<div class="tab-pane fade show active" id="images" role="tabpanel" aria-labelledby="hyperlinks-tab">
+							<table class="table table-sm item-list" id="list-images">
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="tab-pane fade" id="image-domains" role="tabpanel" aria-labelledby="image-domains-tab">
+							<table class="table table-sm" id="list-image-domains">
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 
 				<!-- ---------------------------------------------------------------------------------------------------- -->
@@ -367,17 +379,28 @@
 							</tr>
 						</tbody>
 					</table>
-
-					<!-- list of hyperlinks -->
-					<table class="table table-sm item-list" id="list-hyperlinks">
-						<tbody></tbody>
-					</table>
-
-					<!-- list of alternate -->
-					<table class="table table-sm item-list" id="list-alternate">
-						<thead>Alternate Links</thead>
-						<tbody></tbody>
-					</table>
+					<div class="nav nav-pills" id="hyperlink-info" role="tablist">
+						<a class="nav-item nav-link active" id="hyperlinks-tab" data-toggle="tab" href="#hyperlinks" role="tab" aria-controls="hyperlinks" aria-selected="true">Hyperlinks</a>
+						<a class="nav-item nav-link" id="hyperlink-alternate-domains-tab" data-toggle="tab" href="#hyperlink-alternate" role="tab" aria-controls="hyperlink-alternate" aria-selected="false">Alternate</a>
+						<a class="nav-item nav-link" id="hyperlink-domains-tab" data-toggle="tab" href="#hyperlink-domains" role="tab" aria-controls="hyperlink-domains" aria-selected="false">Domains</a>
+					</div>
+					<div class="tab-content" id="hyperlink-info-content">
+						<div class="tab-pane fade show active" id="hyperlinks" role="tabpanel" aria-labelledby="hyperlinks-tab">
+							<table class="table table-sm item-list" id="list-hyperlinks">
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="tab-pane fade" id="hyperlink-alternate" role="tabpanel" aria-labelledby="hyperlink-alternate-tab">
+							<table class="table table-sm item-list" id="list-hyperlink-alternate">
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="tab-pane fade" id="hyperlink-domains" role="tabpanel" aria-labelledby="hyperlink-domains-tab">
+							<table class="table table-sm" id="list-hyperlink-domains">
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 
 				<!-- ---------------------------------------------------------------------------------------------------- -->
@@ -393,9 +416,22 @@
 							</div>
 							<div id="stylesheet-content" class="collapse" aria-labelledby="stylesheet-heading" data-parent="#files-accordion">
 								<div class="card-body">
-									<table class="table table-sm item-list" id="files-stylesheet">
-										<tbody></tbody>
-									</table>
+									<div class="nav nav-pills" id="files-stylesheet" role="tablist">
+										<a class="nav-item nav-link active" id="stylesheet-tab" data-toggle="tab" href="#stylesheet" role="tab" aria-controls="stylesheet" aria-selected="true">Files</a>
+										<a class="nav-item nav-link" id="stylesheet-domains-tab" data-toggle="tab" href="#stylesheet-domains" role="tab" aria-controls="stylesheet-domains" aria-selected="false">Domains</a>
+									</div>
+									<div class="tab-content" id="files-stylesheet-content">
+										<div class="tab-pane fade show active" id="stylesheet" role="tabpanel" aria-labelledby="stylesheet-tab">
+											<table class="table table-sm item-list" id="files-stylesheet">
+												<tbody></tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="stylesheet-domains" role="tabpanel" aria-labelledby="stylesheet-domains-tab">
+											<table class="table table-sm" id="list-files-stylesheet-domains">
+												<tbody></tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -407,9 +443,22 @@
 							</div>
 							<div id="javascript-content" class="collapse" aria-labelledby="javascript-heading" data-parent="#files-accordion">
 								<div class="card-body">
-									<table class="table table-sm item-list" id="files-javascript">
-										<tbody></tbody>
-									</table>
+									<div class="nav nav-pills" id="files-javascript" role="tablist">
+										<a class="nav-item nav-link active" id="javascript-tab" data-toggle="tab" href="#javascript" role="tab" aria-controls="javascript" aria-selected="true">Files</a>
+										<a class="nav-item nav-link" id="javascript-domains-tab" data-toggle="tab" href="#javascript-domains" role="tab" aria-controls="javascript-domains" aria-selected="false">Domains</a>
+									</div>
+									<div class="tab-content" id="files-javascript-content">
+										<div class="tab-pane fade show active" id="javascript" role="tabpanel" aria-labelledby="javascript-tab">
+											<table class="table table-sm item-list" id="files-javascript">
+												<tbody></tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="javascript-domains" role="tabpanel" aria-labelledby="javascript-domains-tab">
+											<table class="table table-sm" id="list-files-javascript-domains">
+												<tbody></tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

@@ -56,7 +56,7 @@ nav {
     position: sticky;
     top: 0;
 }
-nav div.nav-pills a.nav-item {
+div.nav-pills a.nav-item {
     border-radius: 0;
 }
 
@@ -170,7 +170,7 @@ div.accordion div.card {
     border-radius: 0;
 }
 div.accordion div.card div.card-body {
-    padding: 1px 7px 0;
+    padding: 1px 6px 0;
 }
 div.accordion div.card div.card-header {
     padding: 0;
@@ -220,4 +220,27 @@ div#view-headings table#statistics-headings {
 
 div.accordion div.accordion {
     margin: 7px 0;
+}
+div.accordion#hyperlink-domains .card-body,
+div.accordion#image-domains .card-body {
+    padding:0;
+}
+.accordion #stylesheet-content .card-body,
+.accordion #javascript-content .card-body {
+    padding: 1px 0 0;
+}
+.accordion #stylesheet-content .tab-content,
+.accordion #javascript-content .tab-content {
+    padding: 1px 0 0;
+}
+.accordion table#files-javascript,
+.accordion table#files-stylesheet {
+    padding: 0 6px;
+}
+div#hyperlink-info,
+div#image-info {
+    margin-top: 7px;
+}
+div#hyperlink-info-content {
+    padding: 1px 0;
 }
