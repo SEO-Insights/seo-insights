@@ -570,17 +570,13 @@ function ViewFiles() {
 					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a></td></tr>');
         }
 
-				//get the unique domains of the arrays.
-				let uniqueDomainsStylesheet = domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i);
-				let uniqueDomainsJavaScript = domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i);
-
-				for (let domainStylesheet of uniqueDomainsStylesheet) {
+				for (let domainStylesheet of domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).sort()) {
 					if (domainStylesheet.trim() !== '') {
 						$('table#list-files-stylesheet-domains').children('tbody').append('<tr><td>' + domainStylesheet + '</td><td>' + domainsStylesheet.filter(domain => domain === domainStylesheet).length + '</td></tr>');
 					}
 				}
 
-				for (let domainJavaScript of uniqueDomainsJavaScript) {
+				for (let domainJavaScript of domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i).sort()) {
 					if (domainJavaScript.trim() !== '') {
 						$('table#list-files-javascript-domains').children('tbody').append('<tr><td>' + domainJavaScript + '</td><td>' + domainsJavaScript.filter(domain => domain === domainJavaScript).length + '</td></tr>');
 					}
@@ -718,11 +714,9 @@ function ViewImages() {
 					objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + ((itemImage.filename) ? itemImage.filename : itemImage.src) + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
         }
 
-				for (let domainImage of domains.filter((v, i, a) => a.indexOf(v) === i)) {
+				for (let domainImage of domains.filter((v, i, a) => a.indexOf(v) === i).sort()) {
 					objTableDomains.children('tbody').append('<tr><td>' + domainImage + '</td><td>' + domains.filter(domain => domain === domainImage).length + '</td></tr>');
 				}
-
-				SetTableCountOnCardHeader($('#image-domains .card-header'), objTableDomains);
 
         //set the statistics for the images.
         objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
@@ -796,11 +790,9 @@ function ViewHyperlinks() {
             objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
 					}
 
-					for (let domainHyperlink of domains.filter((v, i, a) => a.indexOf(v) === i)) {
+        for (let domainHyperlink of domains.filter((v, i, a) => a.indexOf(v) === i).sort()) {
 						objTableDomains.children('tbody').append('<tr><td>' + domainHyperlink + '</td><td>' + domains.filter(domain => domain === domainHyperlink).length + '</td></tr>');
 					}
-
-					SetTableCountOnCardHeader($('#hyperlink-domains .card-header'), objTableDomains);
 
         for (let objAlternateItem of arrAlternate) {
             var strTitleInfo = '';
