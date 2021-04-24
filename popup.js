@@ -623,9 +623,11 @@ function ViewHeadings() {
     const fnResponse = arrHeadings => {
         var objTableHeadings = $('div#view-headings table#list-headings');
         var objTableStatsHeadings = $('div#view-headings table#statistics-headings');
+				var objTableErrorsHeadings = $('table#headings-errors');
 
         //remove all rows of the headings table.
         objTableHeadings.children('tbody').empty();
+				objTableErrorsHeadings.children('tbody').empty();
         window.scrollTo(0, 0);
 
 				//reset the filter on the heading tab.
@@ -639,6 +641,11 @@ function ViewHeadings() {
             $('td[id="headings-h' + level + '"]').on('click', {'level': level}, CallbackHeadingFilter);
         }
 
+				//check whether there are multiple h1 headings.
+				if (arrHeadings.filter(heading => heading.type === 'h1').length > 1) {
+					objTableErrorsHeadings.children('tbody').append('<tr><td>Multiple H1 headings found on website.</td></tr>');
+				}
+
         //set the total count of headings to the table.
         objTableStatsHeadings.find('td[id="headings-all"]').text(arrHeadings.length);
 
@@ -647,6 +654,9 @@ function ViewHeadings() {
             var strTableRow = '<tr class="level-' + itemHeading.type + ' is-empty"><td><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>';
             $(objTableHeadings).children('tbody').append(strTableRow);
         }
+
+				//set the count of found errors and warnings.
+				SetTableCountOnCardHeader($('#headings-errors-heading'), $('table#headings-errors'));
     };
 }
 
