@@ -1,0 +1,17 @@
+{
+	"summary": {
+		"message": "Summary"
+	},
+	"headings": {
+		"message": "Headings"
+	},
+	"images": {
+		"message": "Images"
+	},
+	"files": {
+		"message": "Files"
+	},
+	"errors_warnings_hints": {
+		"message": "Errors, Warnings and Hints"
+	}
+}

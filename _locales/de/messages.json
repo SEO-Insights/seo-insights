@@ -1,0 +1,17 @@
+{
+	"summary": {
+		"message": "Übersicht"
+	},
+	"headings": {
+		"message": "Überschriften"
+	},
+	"images": {
+		"message": "Bilder"
+	},
+	"files": {
+		"message": "Dateien"
+	},
+	"errors_warnings_hints": {
+		"message": "Fehler, Warnungen und Hinweise"
+	}
+}

@@ -3,6 +3,7 @@ let tabUrl = '';
 let tabHostname = '';
 
 //start the chrome extension and inject the scripts to the website.
+//the injected scripts are used to get the needed information about the website.
 (function() {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     const tab = tabs[0];
@@ -11,7 +12,8 @@ let tabHostname = '';
 		tabUrl = tab.url;
     tabHostname = (new URL(tab.url)).hostname;
 
-    //check whether it is possbile to inject a content script to the current tab.
+    //check whether it is possible to inject a content script to the current tab.
+		//there are some protocols and sites where no content script can be injected.
     if (!CanInjectContentScript(tab)) {
       $('body').addClass('not-supported');
       return false;
@@ -42,12 +44,12 @@ let tabHostname = '';
  */
 function CanInjectContentScript(tab) {
 
-	//It is not possible to inject content scripts to the chrome webstore.
+	//it is not possible to inject content scripts to the chrome webstore.
 	if (tab.url.startsWith('https://chrome.google.com/webstore')) {
 		return false;
 	}
 
-	//It is possible to inject content scripts to Url's with HTTP / HTTPS.
+	//it is possible to inject content scripts to url's with HTTP / HTTPS.
   return (tab.url.startsWith('http://') || tab.url.startsWith('https://'));
 }
 
@@ -92,6 +94,14 @@ function CallbackHeadingFilter(event) {
 	}
 }
 
+/**
+ * Replace all placeholder for translation with translated value.
+ */
+function TranslateHTML() {
+	document.body.innerHTML = document.body.innerHTML.replace(/__MSG_(\w+)__/g, function(match, word) {
+		return word ? chrome.i18n.getMessage(word) : '';
+	});
+}
 
 
 
@@ -281,6 +291,9 @@ function CallbackSummary(meta) {
 
 
 jQuery(function() {
+
+	//translate all placeholder of the extension.
+	TranslateHTML();
 
   function GroupByName(objects) {
     let arr = [];

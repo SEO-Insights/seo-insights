@@ -3,6 +3,7 @@
   "name": "SEO Insights",
   "version": "0.0.1",
   "description": "SEO Insights is a browser extension to get insights of the current site.",
+	"default_locale": "en",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
