@@ -190,7 +190,7 @@ div.accordion div.card div.card-header button span.info {
 }
 
 /** table for the images. */
-div#view-images div.img-preview img {
+div.img-preview img {
     background-image: url('img/bg-img-pattern.png');
     border: 2px solid black;
     bottom: 10px;

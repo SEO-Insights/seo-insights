@@ -103,6 +103,30 @@ function TranslateHTML() {
 	});
 }
 
+/**
+ * Helper function to display a image preview of a HTML element.
+ * @param {string} hoverSelector The selector to the HTML element(s) to bind the hover event to.
+ * @param {string} subSelector The selector to the sub HTML element to get the image path from.
+ * @param {string} subAttribute The attribute name of the sub HTML element to get the image path from.
+ */
+function ShowImagePreview(hoverSelector, subSelector, subAttribute = null) {
+
+	//bind the mouseenter and the mouseleave event.
+	$(hoverSelector).on('mouseenter', function() {
+		$('body div.img-preview').remove();
+
+		//get the value of the given attribute name as image path.
+		//the attribute name is not required so the value of the sub HTML element can also be used as image path.
+		if (subAttribute) {
+			$('body').append('<div class="img-preview"><img src="' + $(subSelector, this).attr(subAttribute) + '"></div>');
+		} else {
+			$('body').append('<div class="img-preview"><img src="' + $(subSelector, this).text() + '"></div>');
+		}
+	}).on('mouseleave', function() {
+		$('body div.img-preview').remove();
+	});
+}
+
 
 
 
@@ -747,12 +771,8 @@ function ViewImages() {
         objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
         objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
 
-        $('table#list-images td').on('mouseenter', function() {
-            $('div.img-preview').empty();
-            $('div.img-preview').append('<img src="' + $('a', this).attr('href') + '">');
-        }).on('mouseleave', function() {
-            $('div.img-preview').empty();
-        });
+				//bind the image preview to the images.
+				ShowImagePreview('table#list-images td', 'a', 'href');
     };
 }
 
