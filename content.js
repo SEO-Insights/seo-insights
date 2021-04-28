@@ -35,7 +35,9 @@ if (!IsInitializedContent) {
             case SUBJECT.HYPERLINK:
                 sendResponse({
                     'links': LinkModule.GetLinks(),
-                    'alternate': MetaInformation.GetMetaAlternate()
+                    'alternate': MetaInformation.GetMetaAlternate(),
+										'preload': MetaInformation.GetMetaPreload(),
+										'dnsprefetch': MetaInformation.GetMetaDnsPrefetch()
                 });
                 break;
             case SUBJECT.FILE:

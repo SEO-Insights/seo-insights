@@ -806,14 +806,20 @@ function ViewHyperlinks() {
         var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
         var objTableStatsProtocols = $('div#view-hyperlinks table#statistics-protocols');
 				var objTableDomains = $('div#view-hyperlinks table#list-hyperlink-domains');
+				var objTablePreload = $('div#view-hyperlinks table#list-hyperlink-preload');
+				var objTableDnsPrefetch = $('div#view-hyperlinks table#list-hyperlink-dns-prefetch');
 
         //remove all rows of the hyperlinks table.
         objTableHyperlinks.children('tbody').empty();
         objTableAlternate.children('tbody').empty();
 				objTableDomains.children('tbody').empty();
+				objTablePreload.children('tbody').empty();
+				objTableDnsPrefetch.children('tbody').empty();
 
         var arrHyperlinks = objHyperlinks['links'];
         var arrAlternate = objHyperlinks['alternate'];
+				var arrPreload = objHyperlinks['preload'];
+				var arrDnsPrefetch = objHyperlinks['dnsprefetch'];
 
         window.scrollTo(0, 0);
 
@@ -843,6 +849,14 @@ function ViewHyperlinks() {
 
         for (let domainHyperlink of domains.filter((v, i, a) => a.indexOf(v) === i).sort()) {
 						objTableDomains.children('tbody').append('<tr><td>' + domainHyperlink + '</td><td>' + domains.filter(domain => domain === domainHyperlink).length + '</td></tr>');
+					}
+
+					for (let objPreload of arrPreload) {
+						objTablePreload.children('tbody').append('<tr><td>' + objPreload.href + '</td></tr>');
+					}
+
+					for (let objDnsPrefetch of arrDnsPrefetch) {
+						objTableDnsPrefetch.children('tbody').append('<tr><td>' + objDnsPrefetch.href + '</td></tr>');
 					}
 
         for (let objAlternateItem of arrAlternate) {

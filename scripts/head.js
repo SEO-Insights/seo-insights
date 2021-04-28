@@ -406,6 +406,32 @@ var MetaInformation = (function() {
             });
 
             return info;
-        }
+        },
+
+				GetMetaPreload: function() {
+					var info = [];
+
+					$('head > link[rel="preload"]').each(function() {
+						info.push({
+							'href': ($(this).attr('href') || '').toString().trim(),
+							'as': ($(this).attr('as') || '').toString().trim(),
+							'type': ($(this).attr('type') || '').toString().trim()
+						});
+					});
+
+					return info;
+				},
+
+				GetMetaDnsPrefetch: function() {
+					var info = [];
+
+					$('head > link[rel="dns-prefetch"]').each(function() {
+						info.push({
+							'href': ($(this).attr('href') || '').toString().trim()
+						});
+					});
+
+					return info;
+				}
     }
 })();
