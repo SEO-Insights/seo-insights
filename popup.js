@@ -802,7 +802,7 @@ function ViewHyperlinks() {
     //define and execute the callback function called by the content script.
     const fnResponse = objHyperlinks => {
         var objTableHyperlinks = $('div#view-hyperlinks table#list-hyperlinks');
-        var objTableAlternate = $('div#view-hyperlinks table#list-alternate');
+        var objTableAlternate = $('div#view-hyperlinks table#list-hyperlink-alternate');
         var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
         var objTableStatsProtocols = $('div#view-hyperlinks table#statistics-protocols');
 				var objTableDomains = $('div#view-hyperlinks table#list-hyperlink-domains');
@@ -857,7 +857,7 @@ function ViewHyperlinks() {
                 strLangInfo = '<span class="info"><strong>lang:</strong> ' + (objAlternateItem.hreflang || '').toString().trim() + '</span>';
             }
 
-            objTableAlternate.children('tbody').append('<tr><td><a href="' + objAlternateItem['href'] + '" target="_blank">' + objAlternateItem['href'] + '</a>' + strTitleInfo + strLangInfo + '</td></tr>');
+            objTableAlternate.children('tbody').append('<tr><td><a href="' + objAlternateItem.href + '" target="_blank">' + objAlternateItem.href + '</a>' + strTitleInfo + strLangInfo + '</td></tr>');
         }
 
         //set the statistics for the hyperlinks.
