@@ -140,8 +140,8 @@ function GetTextWordInformation(strValue, newLine = false) {
     }
 
     //create the tags for information about characters and words.
-    var strCharsHTML = '<span class="info">' + strValue.length + ' chars</span>';
-    var strWordsHTML = '<span class="info">' + GetWordCount(strValue) + ' words</span>';
+    var strCharsHTML = '<span class="info">' + strValue.length + ' ' + chrome.i18n.getMessage('chars') + '</span>';
+    var strWordsHTML = '<span class="info">' + GetWordCount(strValue) + ' ' + chrome.i18n.getMessage('words') + '</span>';
 
     //return the tags with information.
     return ((newLine === true) ? '<br>' : '') + strCharsHTML + strWordsHTML;
@@ -518,19 +518,19 @@ function ViewHeader() {
  * View for Tools.
  */
 function ViewTools() {
+	window.scrollTo(0, 0);
 
     //get the table of the tools list.
-    var objTableTools = $('div#view-tools table#info-tools');
-    window.scrollTo(0, 0);
+	const objTableTools = $('div#view-tools table#info-tools');
 
     //remove all available tools.
     objTableTools.children('tbody').empty();
-    objTableTools.children('tbody').append(GetToolsItem('Google PageSpeed Insights', 'PageSpeed Insights analysiert den Inhalt einer Webseite und erstellt dann Vorschläge zur Verbesserung der Geschwindigkeit dieser Seite.', 'https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(tabUrl)));
-    objTableTools.children('tbody').append(GetToolsItem('W3C CSS Validation Service', 'Der W3C CSS Validator ist freie Software des W3C, die Webdesignern und Webentwicklern dabei helfen soll, ihre Cascading Style Sheets (CSS) zu überprüfen.', 'https://jigsaw.w3.org/css-validator/validator?uri=' + encodeURIComponent(tabUrl)));
-    objTableTools.children('tbody').append(GetToolsItem('Nu Html Checker', 'The Nu Html Checker (v.Nu) is an ongoing experiment in better HTML checking, and its behavior remains subject to change.', 'https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl)));
-    objTableTools.children('tbody').append(GetToolsItem('GTmetrix | Website Speed and Performance Optimization', 'GTmetrix is a free tool that analyzes your page\'s speed performance.  Using PageSpeed and YSlow, GTmetrix generates scores for your pages and offers actionable recommendations on how to fix them.', 'https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl)));
-    objTableTools.children('tbody').append(GetToolsItem('Test für Rich-Suchergebnisse – Google Search Console', 'Teste deine öffentlich zugängliche Seite, um herauszufinden, welche Rich-Suchergebnisse über die darin enthaltenen strukturierten Daten generiert werden können.', 'https://search.google.com/test/rich-results?url=' + encodeURIComponent(tabUrl)));
-    objTableTools.children('tbody').append(GetToolsItem('Test auf Optimierung für Mobilgeräte – Google Search Console', 'Teste, wie einfach die Nutzung deiner Seite auf einem Mobilgerät für Besucher ist.', 'https://search.google.com/test/mobile-friendly?url=' + encodeURIComponent(tabUrl)));
+	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_pagespeed_insights_title'), chrome.i18n.getMessage('tools_pagespeed_insights_description'), 'https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(tabUrl)));
+	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_w3c_css_validation_title'), chrome.i18n.getMessage('tools_w3c_css_validation_description'), 'https://jigsaw.w3.org/css-validator/validator?uri=' + encodeURIComponent(tabUrl)));
+	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_nu_html_checker_title'), chrome.i18n.getMessage('tools_nu_html_checker_description'), 'https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl)));
+	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_gtmetrix_title'), chrome.i18n.getMessage('tools_gtmetrix_description'), 'https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl)));
+	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_gsc_rich_results_title'), chrome.i18n.getMessage('tools_gsc_rich_results_description'), 'https://search.google.com/test/rich-results?url=' + encodeURIComponent(tabUrl)));
+	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_gsc_mobile_friendly_title'), chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'), 'https://search.google.com/test/mobile-friendly?url=' + encodeURIComponent(tabUrl)));
 }
 
 /**

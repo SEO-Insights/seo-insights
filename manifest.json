@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SEO Insights",
   "version": "0.0.1",
-  "description": "SEO Insights is a browser extension to get insights of the current site.",
+  "description": "__MSG_manifest_description__",
 	"default_locale": "en",
   "icons": {
     "16": "icon16.png",

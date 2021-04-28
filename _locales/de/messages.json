@@ -1,4 +1,7 @@
 {
+	"manifest_description": {
+		"message": "SEO Insights ist eine Browser-Erweiterung, um SEO relevante Einblicke in die aktuelle Website zu erhalten."
+	},
 	"summary": {
 		"message": "Übersicht"
 	},
@@ -13,5 +16,50 @@
 	},
 	"errors_warnings_hints": {
 		"message": "Fehler, Warnungen und Hinweise"
+	},
+	"others": {
+		"message": "Sonstige"
+	},
+	"words": {
+		"message": "Wörter"
+	},
+	"chars": {
+		"message": "Zeichen"
+	},
+	"tools_gsc_mobile_friendly_title": {
+		"message": "Test auf Optimierung für Mobilgeräte – Google Search Console"
+	},
+	"tools_gsc_mobile_friendly_description": {
+		"message": "Teste, wie einfach die Nutzung deiner Seite auf einem Mobilgerät für Besucher ist."
+	},
+	"tools_gsc_rich_results_title": {
+		"message": "Test für Rich-Suchergebnisse – Google Search Console"
+	},
+	"tools_gsc_rich_results_description": {
+		"message": "Teste deine öffentlich zugängliche Seite, um herauszufinden, welche Rich-Suchergebnisse über die darin enthaltenen strukturierten Daten generiert werden können."
+	},
+	"tools_gtmetrix_title": {
+		"message": "GTmetrix | Website Performance Testing and Monitoring"
+	},
+	"tools_gtmetrix_description": {
+		"message": "GTmetrix ist ein kostenloses Tool zum Testen und Überwachen der Leistung Ihrer Seite. Mit Lighthouse generiert GTmetrix Ergebnisse für Ihre Seiten und bietet umsetzbare Empfehlungen zur Optimierung."
+	},
+	"tools_nu_html_checker_title": {
+		"message": "Nu Html Checker"
+	},
+	"tools_nu_html_checker_description": {
+		"message": "Mit diesem Tool kann das HTML-Markup einer Website überprüft und verbessert werden."
+	},
+	"tools_w3c_css_validation_title": {
+		"message": "W3C CSS Validation Service"
+	},
+	"tools_w3c_css_validation_description": {
+		"message": "Der W3C CSS Validator ist freie Software des W3C, die Webdesignern und Webentwicklern dabei helfen soll, ihre Cascading Style Sheets (CSS) zu überprüfen."
+	},
+	"tools_pagespeed_insights_title": {
+		"message": "PageSpeed Insights"
+	},
+	"tools_pagespeed_insights_description": {
+		"message": "PageSpeed Insights analysiert den Inhalt einer Webseite und erstellt dann Vorschläge zur Verbesserung der Geschwindigkeit dieser Seite."
 	}
 }
