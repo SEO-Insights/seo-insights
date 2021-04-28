@@ -112,9 +112,10 @@ table.item-list tr td:nth-child(2) div.theme-color {
     display: inline-block;
     height: 20px;
     line-height: 18px;
+    min-width: 100px;
+    padding: 0 10px;
     text-align: center;
     vertical-align: bottom;
-    width: 100px;
 }
 table.item-list tr td:nth-child(2) div.theme-color:not(:first-child) {
     margin-left: 10px;

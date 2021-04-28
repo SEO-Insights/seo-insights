@@ -180,7 +180,15 @@ function GetColorRow(metaName, metaValue) {
         var htmlColorValue = '';
 
         for (let colorValue of metaValue) {
-            htmlColorValue += '<div class="theme-color" style="background: ' + colorValue + '; color: ' + invertColor(colorValue, true) + '">' + colorValue + '</div>';
+					let convertColor = '';
+
+					if (colorValue.startsWith('rgba') || colorValue.startsWith('rgb')) {
+						convertColor = rgb2hex(colorValue);
+					} else {
+						convertColor = colorValue;
+					}
+
+					htmlColorValue += '<div class="theme-color" style="background: ' + colorValue + '; color: ' + invertColor(convertColor, true) + '">' + colorValue + '</div>';
         }
 
         return GetInformationRow(metaName, htmlColorValue);
