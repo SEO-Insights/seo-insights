@@ -2,7 +2,7 @@
  * Module FileInformation
  */
 var FileInformation = (function() {
-    return {    
+    return {
         GetJavaScriptFiles: function() {
             var info = [];
 
@@ -10,7 +10,6 @@ var FileInformation = (function() {
 
                 //get the hyperlink of the javascript.
                 var strJavaScriptURL = ($(this).attr('src') || '').toString().trim();
-
                 var urlObject = new URL(strJavaScriptURL, GetBaseUrl());
 
                 info.push({
@@ -18,7 +17,8 @@ var FileInformation = (function() {
                     'url': {
                         'href': urlObject.href,
                         'origin': urlObject.origin
-                    }
+                    },
+										'is_async': $(this).attr('async') ? true : false
                 });
             });
 
@@ -41,7 +41,8 @@ var FileInformation = (function() {
                     'url': {
                         'href': urlObject.href,
                         'origin': urlObject.origin
-                    }
+                    },
+										'media': ($(this).attr('media') || '').toString()
                 });
             });
 

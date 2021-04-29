@@ -333,8 +333,6 @@ jQuery(function() {
 
       arrFiltered = arr.filter(objItem => objItem.name === obj.name);
       if (arrFiltered.length === 1)  {
-        console.log('filtered', arrFiltered[0]);
-
         arrFiltered[0].value.push(obj.value);
       } else {
         arr.push({'name': obj.name, 'value': [obj.value]});
@@ -599,8 +597,14 @@ function ViewFiles() {
 						domainsStylesheet.push(stylesheetDomain);
 					}
 
+					let htmlMedia = '';
+
+					if (arrStylesheet[indexStylesheet].media.trim() !== '') {
+						htmlMedia = '<span class="info"><strong>media: </strong>' + arrStylesheet[indexStylesheet].media + '</span>';
+					}
+
 					//add the stylesheet url to the list.
-					objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '"><a href="' + arrStylesheet[indexStylesheet].url.href + '" target="_blank">' + arrStylesheet[indexStylesheet].original + '</a></td></tr>');
+					objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '"><a href="' + arrStylesheet[indexStylesheet].url.href + '" target="_blank">' + arrStylesheet[indexStylesheet].original + '</a>' + htmlMedia + '</td></tr>');
         }
 
         //iterate through the javascript files and add them to the table.
@@ -611,8 +615,14 @@ function ViewFiles() {
 						domainsJavaScript.push(javascriptDomain);
 					}
 
+					let htmlAsync = ''
+
+					if (arrJavaScript[indexJavaScript].is_async === true) {
+						htmlAsync = '<span class="info"><strong>async</strong></span>';
+					}
+
 					//add the javascript url to the list.
-					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a></td></tr>');
+					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a>' + htmlAsync + '</td></tr>');
         }
 
 				for (let domainStylesheet of domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).sort()) {
