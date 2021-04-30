@@ -18,7 +18,8 @@ var FileInformation = (function() {
                         'href': urlObject.href,
                         'origin': urlObject.origin
                     },
-										'is_async': $(this).attr('async') ? true : false
+										'is_async': $(this).attr('async') ? true : false,
+										'charset': ($(this).attr('charset') || '').toString().trim()
                 });
             });
 

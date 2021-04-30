@@ -332,6 +332,17 @@ var MetaInformation = (function() {
                 }
             });
 
+						$('head > meta[http-equiv]').each(function() {
+							var strMetaHttpEquiv = ($(this).attr('http-equiv') || '').toString();
+							tags.push({name: strMetaHttpEquiv, value: ($(this).attr('content') || '').toString()});
+						});
+
+						$('head > meta[charset]').each(function() {
+							var strMetaCharset = ($(this).attr('charset') || '').toString();
+							tags.push({name: 'charset', value: strMetaCharset});
+						});
+
+
             return tags;
         },
 
@@ -426,6 +437,18 @@ var MetaInformation = (function() {
 					var info = [];
 
 					$('head > link[rel="dns-prefetch"]').each(function() {
+						info.push({
+							'href': ($(this).attr('href') || '').toString().trim()
+						});
+					});
+
+					return info;
+				},
+
+				GetMetaPreconnect: function() {
+					var info = [];
+
+					$('head > link[rel="preconnect"]').each(function() {
 						info.push({
 							'href': ($(this).attr('href') || '').toString().trim()
 						});

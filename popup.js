@@ -615,14 +615,19 @@ function ViewFiles() {
 						domainsJavaScript.push(javascriptDomain);
 					}
 
-					let htmlAsync = ''
+					let htmlAsync = '';
+					let htmlCharset = '';
 
 					if (arrJavaScript[indexJavaScript].is_async === true) {
 						htmlAsync = '<span class="info"><strong>async</strong></span>';
 					}
 
+					if (arrJavaScript[indexJavaScript].charset) {
+						htmlCharset = '<span class="info"><strong>charset: </strong>' + arrJavaScript[indexJavaScript].charset + '</span>';
+					}
+
 					//add the javascript url to the list.
-					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a>' + htmlAsync + '</td></tr>');
+					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a>' + htmlAsync + htmlCharset + '</td></tr>');
         }
 
 				for (let domainStylesheet of domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).sort()) {
@@ -818,6 +823,7 @@ function ViewHyperlinks() {
 				var objTableDomains = $('div#view-hyperlinks table#list-hyperlink-domains');
 				var objTablePreload = $('div#view-hyperlinks table#list-hyperlink-preload');
 				var objTableDnsPrefetch = $('div#view-hyperlinks table#list-hyperlink-dns-prefetch');
+				var objTablePreconnect = $('div#view-hyperlinks table#list-preconnect');
 
         //remove all rows of the hyperlinks table.
         objTableHyperlinks.children('tbody').empty();
@@ -825,11 +831,13 @@ function ViewHyperlinks() {
 				objTableDomains.children('tbody').empty();
 				objTablePreload.children('tbody').empty();
 				objTableDnsPrefetch.children('tbody').empty();
+				objTablePreconnect.children('tbody').empty();
 
         var arrHyperlinks = objHyperlinks['links'];
         var arrAlternate = objHyperlinks['alternate'];
 				var arrPreload = objHyperlinks['preload'];
 				var arrDnsPrefetch = objHyperlinks['dnsprefetch'];
+				var arrPreconnect = objHyperlinks['preconnect'];
 
         window.scrollTo(0, 0);
 
@@ -867,6 +875,10 @@ function ViewHyperlinks() {
 
 					for (let objDnsPrefetch of arrDnsPrefetch) {
 						objTableDnsPrefetch.children('tbody').append('<tr><td>' + objDnsPrefetch.href + '</td></tr>');
+					}
+
+					for (let objPreconnect of arrPreconnect) {
+						objTablePreconnect.children('tbody').append('<tr><td>' + objPreconnect.href + '</td></tr>');
 					}
 
         for (let objAlternateItem of arrAlternate) {

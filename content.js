@@ -37,7 +37,8 @@ if (!IsInitializedContent) {
                     'links': LinkModule.GetLinks(),
                     'alternate': MetaInformation.GetMetaAlternate(),
 										'preload': MetaInformation.GetMetaPreload(),
-										'dnsprefetch': MetaInformation.GetMetaDnsPrefetch()
+										'dnsprefetch': MetaInformation.GetMetaDnsPrefetch(),
+										'preconnect': MetaInformation.GetMetaPreconnect()
                 });
                 break;
             case SUBJECT.FILE:
