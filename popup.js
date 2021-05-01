@@ -247,56 +247,18 @@ function GetGeneratorRow(metaName, metaValue) {
         if (metaValue.length > 1) {
             strMetaValue = '<ul>';
             metaValue.forEach(meta => {
-                strMetaValue += '<li>' + GetGeneratorLink(meta) + '</li>';
+                strMetaValue += '<li>' + meta + '</li>';
             });
             strMetaValue += '</ul>';
         } else {
-            strMetaValue = GetGeneratorLink(metaValue);
+            strMetaValue = metaValue;
         }
     } else {
-        strMetaValue = GetGeneratorLink((metaValue || '').toString());
+        strMetaValue = (metaValue || '').toString();
     }
 
     return GetInformationRow(metaName, strMetaValue);
 }
-
-/**
- * function to get the link to the generator website.
- * @param {string} name The generator name to get the link of the generator website.
- * @return {string} The link to the generator website or the generator name itself.
- */
-function GetGeneratorLink(name) {
-
-    //define the keywords of the generator to get the link to the generator website.
-    let arrGeneratorLinks = [
-        ['chimpify', 'https://www.chimpify.de/'],
-        ['drupal', 'https://www.drupal.de/'],
-        ['ghost', 'https://ghost.org/'],
-				['hexo', 'https://hexo.io/'],
-        ['hubspot', 'https://www.hubspot.de/products/cms'],
-        ['hugo', 'https://gohugo.io/'],
-        ['jekyll', 'https://jekyllrb.com/'],
-        ['joomla', 'https://www.joomla.org/'],
-        ['mediawiki', 'https://www.mediawiki.org/wiki/MediaWiki'],
-        ['publii', 'https://getpublii.com/'],
-        ['typo3', 'https://typo3.org/'],
-        ['vbulletin', 'https://www.vbulletin.com/'],
-        ['wordpress', 'https://wordpress.org/'],
-        ['woocommerce', 'https://woocommerce.com/']
-    ];
-
-    //get the link to the generator based on the name.
-    var arrFoundLinks = arrGeneratorLinks.filter(item => name.toLowerCase().includes(item[0]));
-
-    //check if there is a found link to the generator website.
-    //the link is only used if it is the only one found in the array.
-    if (arrFoundLinks.length === 1) {
-        return '<a href="' + arrFoundLinks[0][1] + '" target="_blank">' + name + '</a>';
-    } else {
-        return name;
-    }
-}
-
 
 function CallbackSummary(meta) {
   window.scrollTo(0, 0);
@@ -395,7 +357,15 @@ jQuery(function() {
 
 								objMetaOthers.forEach(function(tagItem, tagIndex) {
 									var strOthersValue = (tagItem.value || '').toString().trim();
-									$('table#meta-details-others > tbody').append(GetInformationRow(tagItem.name, EscapeHTML(strOthersValue), 'seo-data', 'meta-others-' + tagIndex));
+
+									switch (tagItem.name) {
+										case 'msapplication-TileColor':
+											$('table#meta-details-others > tbody').append(GetColorRow(tagItem.name, strOthersValue));
+											break;
+										default:
+											$('table#meta-details-others > tbody').append(GetInformationRow(tagItem.name, EscapeHTML(strOthersValue), 'seo-data', 'meta-others-' + tagIndex));
+											break;
+									}
 
 									if (tagItem.name.toLowerCase() === 'msapplication-tileimage') {
 										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), new URL(strOthersValue, tabHostname));

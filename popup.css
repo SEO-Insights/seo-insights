@@ -268,3 +268,7 @@ table#list-image-icons tr td strong {
 table#list-image-icons tr td:nth-child(1) span.info:not(:last-child) {
     margin-right: 5px;
 }
+div#view-summary table.item-list tr td:nth-child(1) span.info,
+div#view-meta table.item-list tr td:nth-child(1) span.info {
+    display: inline-block;
+}

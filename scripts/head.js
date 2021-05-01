@@ -242,6 +242,11 @@ var MetaInformation = (function() {
                 }
             });
 
+						$('html[lang]').each(function() {
+							const lang = ($(this).attr('lang') || '').toString().trim();
+							info['lang'] = lang;
+						});
+
             //iterate through the general elements of the <head> element.
             for (var strGeneralTag of arrTagsGeneral) {
                 var strTagValue = ($('head > ' + strGeneralTag).text() || '').toString().trim();
