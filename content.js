@@ -30,7 +30,10 @@ if (!IsInitializedContent) {
                 sendResponse(HeadingModule.GetHeadings());
                 break;
             case SUBJECT.IMAGE:
-                sendResponse(ImageModule.GetImages());
+                sendResponse({
+									'images': ImageModule.GetImages(),
+									'icons': ImageModule.GetIcons()
+								});
                 break;
             case SUBJECT.HYPERLINK:
                 sendResponse({

@@ -372,7 +372,7 @@ var MetaInformation = (function() {
          * Get the Twitter meta information.
          */
         GetTwitter: function() {
-            var info = new Object();
+					let tags = [];
 
             //iterate through the Twitter <meta> elements of the <head> element.
             $('head > meta[name^="twitter:"]').each(function() {
@@ -380,7 +380,7 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
-                    info[strMetaName] = ($(this).attr('content') || '').toString().trim();
+                    tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString().trim()});
                 }
             });
 
@@ -396,12 +396,12 @@ var MetaInformation = (function() {
 
                 //add the meta information if known.
                 if (arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
-                    info[strMetaProperty] = ($(this).attr('content') || '').toString().trim();
+									tags.push({name: strMetaProperty, value: ($(this).attr('content') || '').toString().trim()});
                 }
             });
 
             //return the information.
-            return info;
+            return tags;
         },
 
         GetMetaAlternate: function() {

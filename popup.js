@@ -104,24 +104,14 @@ function TranslateHTML() {
 }
 
 /**
- * Helper function to display a image preview of a HTML element.
- * @param {string} hoverSelector The selector to the HTML element(s) to bind the hover event to.
- * @param {string} subSelector The selector to the sub HTML element to get the image path from.
- * @param {string} subAttribute The attribute name of the sub HTML element to get the image path from.
+ * Shows a image when hover a specific HTML element.
+ * @param {object} hoverItem The HTML element to bind the hover event to.
+ * @param {string} imgUrl The image path to show on image preview.
  */
-function ShowImagePreview(hoverSelector, subSelector, subAttribute = null) {
-
-	//bind the mouseenter and the mouseleave event.
-	$(hoverSelector).on('mouseenter', function() {
+function ShowImagePreview(hoverItem, imgUrl) {
+	$(hoverItem).on('mouseenter', function() {
 		$('body div.img-preview').remove();
-
-		//get the value of the given attribute name as image path.
-		//the attribute name is not required so the value of the sub HTML element can also be used as image path.
-		if (subAttribute) {
-			$('body').append('<div class="img-preview"><img src="' + $(subSelector, this).attr(subAttribute) + '"></div>');
-		} else {
-			$('body').append('<div class="img-preview"><img src="' + $(subSelector, this).text() + '"></div>');
-		}
+		$('body').append(`<div class="img-preview"><img src="${imgUrl}"></div>`);
 	}).on('mouseleave', function() {
 		$('body div.img-preview').remove();
 	});
@@ -148,6 +138,7 @@ function GetTextWordInformation(strValue, newLine = false) {
 }
 
 function GetHeaderInformation(url) {
+	window.scrollTo(0, 0);
     $('table#info-headers > tbody').empty();
     fetch(url).then(function(response) {
         for (var p of response.headers.entries()) {
@@ -160,7 +151,11 @@ function GetHeaderInformation(url) {
 }
 
 function GetInformationRow(strValueColumn1, strValueColumn2) {
-    return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
+	return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
+}
+
+function GetInformationRow(strValueColumn1, strValueColumn2, markerName, markerValue) {
+	return '<tr ' + markerName + '="' + markerValue + '"><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
 }
 
 /**
@@ -297,10 +292,10 @@ function GetGeneratorLink(name) {
 
 
 function CallbackSummary(meta) {
+  window.scrollTo(0, 0);
+
   //clear the table because we refresh this table here with current values.
   $('table#meta-head-info > tbody').empty();
-
-  window.scrollTo(0, 0);
 
   //iterate through all the elements of the <head> element.
   for (let strMetaName in meta) {
@@ -391,10 +386,14 @@ jQuery(function() {
                 var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
                 var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
 
-                for (let tagOthers of objMetaOthers) {
-                    var strOthersValue = (tagOthers.value || '').toString().trim();
-                    $('table#meta-details-others > tbody').append(GetInformationRow(tagOthers.name, EscapeHTML(strOthersValue)));
-                }
+								objMetaOthers.forEach(function(tagItem, tagIndex) {
+									var strOthersValue = (tagItem.value || '').toString().trim();
+									$('table#meta-details-others > tbody').append(GetInformationRow(tagItem.name, EscapeHTML(strOthersValue), 'seo-data', 'meta-others-' + tagIndex));
+
+									if (tagItem.name.toLowerCase() === 'msapplication-tileimage') {
+										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), strOthersValue);
+									}
+								});
 
                 for (let infoOpenGraphArticle of GroupByName(objMetaOpenGraphArticle)) {
                     var strArticleValue = (infoOpenGraphArticle.value.join('; ') || '').toString().trim();
@@ -436,31 +435,40 @@ jQuery(function() {
                     $('table#meta-details-parsely > tbody').append(GetInformationRow(tagParsely.name, EscapeHTML(strParselyValue)));
                 }
 
-                for (let strTwitterName in objMetaTwitter) {
-                    var strTwitterValue = (objMetaTwitter[strTwitterName] || '').toString().trim();
+								objMetaTwitter.forEach(function(twitterItem, twitterIndex) {
+									console.log('twitter', twitterItem);
+									 var strTwitterValue = (twitterItem.value || '').toString().trim();
                     var strAdditionalInfoHTML = '';
 
                     //get the additional information if needed.
-                    if (arrDetailedInfoTwitter.includes(strTwitterName)) {
+                    if (arrDetailedInfoTwitter.includes(twitterItem.name)) {
                         strAdditionalInfoHTML = GetTextWordInformation(strTwitterValue, true);
                     }
 
                     //set the Twitter information to the table.
-                    $('table#meta-details-twitter > tbody').append(GetInformationRow(strTwitterName + strAdditionalInfoHTML, EscapeHTML(strTwitterValue)));
-                }
+                    $('table#meta-details-twitter > tbody').append(GetInformationRow(twitterItem.name + strAdditionalInfoHTML, EscapeHTML(strTwitterValue), 'seo-data', 'twitter-' + twitterIndex));
 
-                for (let infoOpenGraph of objMetaOpenGraph) {
-                    var strOpenGraphValue = (infoOpenGraph.value || '').toString().trim();
-                    var strAdditionalInfoHTML = '';
+										if (twitterItem.name === 'twitter:image') {
+											ShowImagePreview($('tr[seo-data="twitter-' + twitterIndex + '"] td'), strTwitterValue);
+										}
+								});
 
-                    //get the additional information if needed.
-                    if (arrDetailedInfoOpenGraph.includes(infoOpenGraph.name)) {
-                        strAdditionalInfoHTML = GetTextWordInformation(strOpenGraphValue, true);
-                    }
+								objMetaOpenGraph.forEach(function(ogItem, ogIndex) {
+									var strOpenGraphValue = (ogItem.value || '').toString().trim();
+									var strAdditionalInfoHTML = '';
 
-                    //set the OpenGraph information to the table.
-                    $('table#meta-details-opengraph-basic > tbody').append(GetInformationRow(infoOpenGraph.name + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue)));
-                }
+									//get the additional information if needed.
+									if (arrDetailedInfoOpenGraph.includes(ogItem.name)) {
+											strAdditionalInfoHTML = GetTextWordInformation(strOpenGraphValue, true);
+									}
+
+									//set the OpenGraph information to the table.
+									$('table#meta-details-opengraph-basic > tbody').append(GetInformationRow(ogItem.name + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue), 'seo-data', 'og-basic-' + ogIndex));
+
+									if (ogItem.name.toLowerCase() === 'og:image') {
+										ShowImagePreview($('tr[seo-data="og-basic-' + ogIndex + '"]'), strOpenGraphValue);
+									}
+								});
 
                 if (Object.keys(objMetaOpenGraph).length > 0) {
 
@@ -566,6 +574,8 @@ function ViewFiles() {
 
     //define and execute the callback function called by the content script.
     const fnResponse = objFiles => {
+			window.scrollTo(0, 0);
+
         var objTableStylesheet = $('div#view-files table#files-stylesheet');
         var objTableJavaScript = $('div#view-files table#files-javascript');
         var objTableSpecialFiles = $('div#view-files table#files-special');
@@ -582,8 +592,6 @@ function ViewFiles() {
         objTableSpecialFiles.children('tbody').empty();
 				objTableStylesheetDomains.children('tbody').empty();
 				objTableJavaScriptDomains.children('tbody').empty();
-
-        window.scrollTo(0, 0);
 
 				let domainsJavaScript = [];
 				let domainsStylesheet = [];
@@ -681,6 +689,8 @@ function ViewHeadings() {
 
     //define and execute the callback function called by the content script.
     const fnResponse = arrHeadings => {
+			window.scrollTo(0, 0);
+
         var objTableHeadings = $('div#view-headings table#list-headings');
         var objTableStatsHeadings = $('div#view-headings table#statistics-headings');
 				var objTableErrorsHeadings = $('table#headings-errors');
@@ -688,7 +698,6 @@ function ViewHeadings() {
         //remove all rows of the headings table.
         objTableHeadings.children('tbody').empty();
 				objTableErrorsHeadings.children('tbody').empty();
-        window.scrollTo(0, 0);
 
 				//reset the filter on the heading tab.
 				ResetHeadingFilter();
@@ -758,44 +767,52 @@ function ViewImages() {
     });
 
     //define and execute the callback function called by the content script.
-    const fnResponse = arrImages => {
+    const fnResponse = objImages => {
+			window.scrollTo(0, 0);
+
         var objTableImages = $('div#view-images table#list-images');
         var objTableStatsImages = $('div#view-images table#statistics-images');
 				var objTableDomains = $('div#view-images table#list-image-domains');
+				var objTableIcons = $('div#view-images table#list-image-icons');
+
+			var arrImages = (objImages['images'] || []);
+			var arrIcons = (objImages['icons'] || []);
+
 
         let indexImage = 0;
 
         //remove all rows of the images table.
         objTableImages.children('tbody').empty();
-        window.scrollTo(0, 0);
+				objTableIcons.children('tbody').empty();
 
-				let domains = [];
+				let arrDomains = [];
 
         //run through all images of the array with a source value.
-        for (let itemImage of arrImages.filter(image => image.src !== '')) {
-					indexImage++;
+			arrImages.filter(img => (img.src || '').toString().trim() !== '').forEach(function(imgItem, index) {
+				let imageDomain = new URL(imgItem.src).host;
 
-					let imageDomain = new URL(itemImage.src).host;
-
-					if (imageDomain.trim() !== '') {
-						domains.push(imageDomain);
-					}
-
-					objTableImages.children('tbody').append('<tr id="img' + indexImage + '"><td><a target="_blank" href="' + itemImage.src + '">' + ((itemImage.filename) ? itemImage.filename : itemImage.src) + '</a>' + GetImageInfo(itemImage, 'img' + indexImage) + '</td></tr>');
-        }
-
-				for (let domainImage of domains.filter((v, i, a) => a.indexOf(v) === i).sort()) {
-					objTableDomains.children('tbody').append('<tr><td>' + domainImage + '</td><td>' + domains.filter(domain => domain === domainImage).length + '</td></tr>');
+				if (imageDomain.trim() !== '') {
+					arrDomains.push(imageDomain);
 				}
 
-        //set the statistics for the images.
-        objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
-        objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);
-        objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
-        objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
+				objTableImages.children('tbody').append('<tr id="img-' + index + '"><td><a target="_blank" href="' + imgItem.src + '">' + ((imgItem.filename) ? imgItem.filename : imgItem.src) + '</a>' + GetImageInfo(imgItem, 'img-' + index) + '</td></tr>');
+				ShowImagePreview($('tr[id="img-' + index + '"] td', objTableImages), imgItem.src);
 
-				//bind the image preview to the images.
-				ShowImagePreview('table#list-images td', 'a', 'href');
+				//set the statistics for the images.
+				objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
+				objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);
+				objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
+				objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
+			});
+
+			arrDomains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domainItem) {
+				objTableDomains.children('tbody').append(GetInformationRow(domainItem, arrDomains.filter(domain => domain === domainItem).length));
+			});
+
+			arrIcons.forEach(function(iconValue, iconIndex) {
+				objTableIcons.children('tbody').append('<tr seo-data="icon-' + iconIndex + '"><td>' + iconValue + '</td></tr>');
+				ShowImagePreview($('tr[seo-data="icon-' + iconIndex + '"] td', objTableIcons), iconValue);
+			});
     };
 }
 
@@ -816,6 +833,8 @@ function ViewHyperlinks() {
 
     //define and execute the callback function called by the content script.
     const fnResponse = objHyperlinks => {
+			window.scrollTo(0, 0);
+
         var objTableHyperlinks = $('div#view-hyperlinks table#list-hyperlinks');
         var objTableAlternate = $('div#view-hyperlinks table#list-hyperlink-alternate');
         var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
@@ -838,8 +857,6 @@ function ViewHyperlinks() {
 				var arrPreload = objHyperlinks['preload'];
 				var arrDnsPrefetch = objHyperlinks['dnsprefetch'];
 				var arrPreconnect = objHyperlinks['preconnect'];
-
-        window.scrollTo(0, 0);
 
 				let domains = [];
 

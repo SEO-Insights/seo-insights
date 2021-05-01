@@ -90,6 +90,20 @@ var ImageModule = (function() {
 
             //return all the found images of the page.
             return arrImages;
-        }
+        },
+
+				GetIcons: function() {
+					let arrIcons = [];
+
+					$('head > link[rel="apple-touch-icon"]').each(function() {
+						arrIcons.push(($(this).attr('href') || '').toString().trim());
+					});
+
+					$('head > link[rel="icon"]').each(function() {
+						arrIcons.push(($(this).attr('href') || '').toString().trim());
+					});
+
+					return arrIcons;
+				}
     }
 })();
