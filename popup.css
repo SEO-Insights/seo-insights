@@ -258,3 +258,13 @@ table#list-files-javascript-domains tr td:nth-child(2) {
     padding-right: 15px;
     text-align: right;
 }
+table#list-image-icons tr td a,
+table#list-image-icons tr td a:link {
+    display: block;
+}
+table#list-image-icons tr td strong {
+    font-style: italic;
+}
+table#list-image-icons tr td:nth-child(1) span.info:not(:last-child) {
+    margin-right: 5px;
+}

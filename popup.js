@@ -10,7 +10,7 @@ let tabHostname = '';
 
 		//set the common information about the website.
 		tabUrl = tab.url;
-    tabHostname = (new URL(tab.url)).hostname;
+    tabHostname = (new URL(tab.url)).origin;
 
     //check whether it is possible to inject a content script to the current tab.
 		//there are some protocols and sites where no content script can be injected.
@@ -85,6 +85,13 @@ function ResetHeadingFilter() {
  * @param {object} event The event object.
  */
 function CallbackHeadingFilter(event) {
+
+	//don't use the filter on not existing elements.
+	if ($(this).text() === '0') {
+		return;
+	}
+
+	//toggle the filter depending on filter state.
 	if ($('tr.level-h' + event.data.level).is(':hidden')) {
 		$('tr.level-h' + event.data.level).show();
 		$(this).css('color', '#000');
@@ -391,7 +398,7 @@ jQuery(function() {
 									$('table#meta-details-others > tbody').append(GetInformationRow(tagItem.name, EscapeHTML(strOthersValue), 'seo-data', 'meta-others-' + tagIndex));
 
 									if (tagItem.name.toLowerCase() === 'msapplication-tileimage') {
-										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), strOthersValue);
+										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), new URL(strOthersValue, tabHostname));
 									}
 								});
 
@@ -410,10 +417,14 @@ jQuery(function() {
                   $('table#meta-details-opengraph-book > tbody').append(GetInformationRow(tagInfoBook.name, EscapeHTML(value)));
                 }
 
-                for (let tagInfoImage of objMetaOpenGraphImage) {
-                  const value = (tagInfoImage.value || '').toString().trim();
-                  $('table#meta-details-opengraph-image > tbody').append(GetInformationRow(tagInfoImage.name, EscapeHTML(value)));
-                }
+								objMetaOpenGraphImage.forEach(function(ogItem, ogIndex) {
+									const value = (ogItem.value || '').toString().trim();
+									$('table#meta-details-opengraph-image > tbody').append(GetInformationRow(ogItem.name, EscapeHTML(value), 'seo-data', 'og-image-' + ogIndex));
+
+									if (ogItem.name === 'og:image:url') {
+										ShowImagePreview($('table#meta-details-opengraph-image > tbody tr[seo-data="og-image-' + ogIndex + '"]'), value);
+									}
+								});
 
                 for (let tagInfoProfile of objMetaOpenGraphProfile) {
                   const value = (tagInfoProfile.value || '').toString().trim();
@@ -436,7 +447,6 @@ jQuery(function() {
                 }
 
 								objMetaTwitter.forEach(function(twitterItem, twitterIndex) {
-									console.log('twitter', twitterItem);
 									 var strTwitterValue = (twitterItem.value || '').toString().trim();
                     var strAdditionalInfoHTML = '';
 
@@ -809,9 +819,20 @@ function ViewImages() {
 				objTableDomains.children('tbody').append(GetInformationRow(domainItem, arrDomains.filter(domain => domain === domainItem).length));
 			});
 
-			arrIcons.forEach(function(iconValue, iconIndex) {
-				objTableIcons.children('tbody').append('<tr seo-data="icon-' + iconIndex + '"><td>' + iconValue + '</td></tr>');
-				ShowImagePreview($('tr[seo-data="icon-' + iconIndex + '"] td', objTableIcons), iconValue);
+			arrIcons.forEach(function(iconItem, iconIndex) {
+				let strTypeHTML = '';
+				let strSizesHTML = '';
+
+				if (iconItem.type !== '') {
+					strTypeHTML = '<span class="info"><strong>type: </strong>' + iconItem.type + '</span>';
+				}
+
+				if (iconItem.sizes !== '') {
+					strSizesHTML = '<span class="info"><strong>sizes: </strong>' + iconItem.sizes + '</span>';
+				}
+
+				objTableIcons.children('tbody').append('<tr seo-data="icon-' + iconIndex + '"><td><a target="_blank" href="' + new URL(iconItem.url, tabHostname) + '">' + iconItem.url + '</a>' + strTypeHTML + strSizesHTML + '</td></tr>');
+				ShowImagePreview($('tr[seo-data="icon-' + iconIndex + '"] td', objTableIcons), new URL(iconItem.url, tabHostname));
 			});
     };
 }

@@ -96,11 +96,11 @@ var ImageModule = (function() {
 					let arrIcons = [];
 
 					$('head > link[rel="apple-touch-icon"]').each(function() {
-						arrIcons.push(($(this).attr('href') || '').toString().trim());
+						arrIcons.push({'url': ($(this).attr('href') || '').toString().trim(), 'type': ($(this).attr('type') || '').toString().trim(), 'sizes': ($(this).attr('sizes') || '').toString().trim()});
 					});
 
 					$('head > link[rel="icon"]').each(function() {
-						arrIcons.push(($(this).attr('href') || '').toString().trim());
+						arrIcons.push({'url': ($(this).attr('href') || '').toString().trim(), 'type': ($(this).attr('type') || '').toString().trim(), 'sizes': ($(this).attr('sizes') || '').toString().trim()});
 					});
 
 					return arrIcons;
