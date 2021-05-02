@@ -1,6 +1,6 @@
 //common information about the website.
 let tabUrl = '';
-let tabHostname = '';
+let tabUrlOrigin = '';
 
 //start the chrome extension and inject the scripts to the website.
 //the injected scripts are used to get the needed information about the website.
@@ -10,7 +10,7 @@ let tabHostname = '';
 
 		//set the common information about the website.
 		tabUrl = tab.url;
-    tabHostname = (new URL(tab.url)).origin;
+    tabUrlOrigin = (new URL(tab.url)).origin;
 
     //check whether it is possible to inject a content script to the current tab.
 		//there are some protocols and sites where no content script can be injected.
@@ -368,7 +368,7 @@ jQuery(function() {
 									}
 
 									if (tagItem.name.toLowerCase() === 'msapplication-tileimage') {
-										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), new URL(strOthersValue, tabHostname));
+										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), new URL(strOthersValue, tabUrlOrigin));
 									}
 								});
 
@@ -712,20 +712,20 @@ function ViewHeadings() {
 function GetImageInfo(objImageInfo, strID) {
     let strImageInfo = '';
 
-    if (objImageInfo.alt !== '') {
-        strImageInfo = strImageInfo + '<span class="info"><strong>alt:</strong> ' + objImageInfo.alt + '</span>';
+    if (objImageInfo.alternative !== '') {
+        strImageInfo = strImageInfo + '<span class="info"><strong>alt:</strong> ' + objImageInfo.alternative + '</span>';
     }
 
     if (objImageInfo.title !== '') {
         strImageInfo = strImageInfo + '<span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>';
     }
 
-    if (objImageInfo.src) {
+    if (objImageInfo.source) {
         let img = new Image;
         img.onload = function() {
             $('tr#' + strID + ' td').append('<span class="info"><strong>size:</strong> ' + img.width + ' x ' + img.height + '</span>');
         };
-        img.src = objImageInfo.src;
+        img.src = objImageInfo.source;
     }
 
     return strImageInfo;
@@ -768,20 +768,20 @@ function ViewImages() {
 				let arrDomains = [];
 
         //run through all images of the array with a source value.
-			arrImages.filter(img => (img.src || '').toString().trim() !== '').forEach(function(imgItem, index) {
-				let imageDomain = new URL(imgItem.src).host;
+			arrImages.filter(img => (img.source || '').toString().trim() !== '').forEach(function(imgItem, index) {
+				let imageDomain = new URL(imgItem.source).host;
 
 				if (imageDomain.trim() !== '') {
 					arrDomains.push(imageDomain);
 				}
 
-				objTableImages.children('tbody').append('<tr id="img-' + index + '"><td><a target="_blank" href="' + imgItem.src + '">' + ((imgItem.filename) ? imgItem.filename : imgItem.src) + '</a>' + GetImageInfo(imgItem, 'img-' + index) + '</td></tr>');
-				ShowImagePreview($('tr[id="img-' + index + '"] td', objTableImages), imgItem.src);
+				objTableImages.children('tbody').append('<tr id="img-' + index + '"><td><a target="_blank" href="' + imgItem.source + '">' + ((imgItem.filename) ? imgItem.filename : imgItem.source) + '</a>' + GetImageInfo(imgItem, 'img-' + index) + '</td></tr>');
+				ShowImagePreview($('tr[id="img-' + index + '"] td', objTableImages), imgItem.source);
 
 				//set the statistics for the images.
 				objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
-				objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alt === '').length);
-				objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.src === '').length);
+				objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alternative === '').length);
+				objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.source === '').length);
 				objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
 			});
 
@@ -801,8 +801,8 @@ function ViewImages() {
 					strSizesHTML = '<span class="info"><strong>sizes: </strong>' + iconItem.sizes + '</span>';
 				}
 
-				objTableIcons.children('tbody').append('<tr seo-data="icon-' + iconIndex + '"><td><a target="_blank" href="' + new URL(iconItem.url, tabHostname) + '">' + iconItem.url + '</a>' + strTypeHTML + strSizesHTML + '</td></tr>');
-				ShowImagePreview($('tr[seo-data="icon-' + iconIndex + '"] td', objTableIcons), new URL(iconItem.url, tabHostname));
+				objTableIcons.children('tbody').append('<tr seo-data="icon-' + iconIndex + '"><td><a target="_blank" href="' + new URL(iconItem.source, tabUrlOrigin) + '">' + iconItem.source + '</a>' + strTypeHTML + strSizesHTML + '</td></tr>');
+				ShowImagePreview($('tr[seo-data="icon-' + iconIndex + '"] td', objTableIcons), new URL(iconItem.source, tabUrlOrigin));
 			});
     };
 }

@@ -1,109 +1,114 @@
 /**
- * Module for Images.
+ * Module to get all the images of the current website.
  */
 var ImageModule = (function() {
 
-    //private functions of the module.
+	/**
+	 * Returns all images of the given context.
+	 * @param {object} context The context used to get the images.
+	 * @returns An array with all found images.
+	 */
+	function GetImagesOfDocument(context = null) {
+		let images = [];
 
-    /**
-     * function to get all images of the document.
-     * @param {Document} context The context used for jQuery.
-     * @returns {Object[]} An object array with all found images.
-     */
-    function GetImagesOfDocument(context = undefined) {
-        let arrImages = [];
+		//iterate through all images of the current context.
+		$('img', context).each(function() {
+			let imgSource = GetImageSource(($(this).attr('src') || '').toString().trim());
 
-        //iterate through all image elements of the site.
-        $('img', context).each(function() {
-            let strImageSource = ($(this).attr('src') || '').toString().trim();
+			//the image is not added to the array if the source is unknown.
+			if (imgSource === null) {
+				return;
+			}
 
-            //initialize the object with the information of the image.
-            let objImageInfo = {
-                'alt': ($(this).attr('alt') || '').toString().trim(),
-                'filename': '',
-                'title': ($(this).attr('title') || '').toString().trim()
-            };
+			//add the current image to the array.
+			images.push({
+				'alternative': ($(this).attr('alt') || '').toString().trim(),
+				'filename': imgSource.filename,
+				'source': imgSource.source,
+				'title': ($(this).attr('title') || '').toString().trim()
+			});
+		});
 
-            //check if the image is a image without source or specified as data.
-            //in any case the image source is not a absolute or relative url.
-            if (strImageSource === '' || strImageSource.startsWith('data:')) {
+		//return the array with all found images.
+		return images;
+	}
 
-                //set the image source to the object and add the object to the array.
-                objImageInfo.src = strImageSource;
-                arrImages.push(objImageInfo);
-            } else {
+	/**
+	 * Returns detailed information (source and filename) of the image source.
+	 * @param {string} imgSource The source of the image to get detailed information.
+	 * @returns An object with the source and the filename (if available).
+	 */
+	function GetImageSource(imgSource) {
 
-                //the image source should be an url to a image file.
-                //try to get the full url of the image file (absolute or relative url, protocol relative url).
-                try {
+		//if there is no image source or a data source the value can be returned.
+		if (imgSource === '' || imgSource.startsWith('data:')) {
+			return {
+				'filename': '',
+				'source': imgSource
+			};
+		}
 
-                    //check if the url is a protocol relative url.
-                    if (strImageSource.startsWith('//')) {
-                        strImageSource = location.protocol + strImageSource;
-                    }
+		try {
 
-                    //get the base url of the document head.
-                    let baseUrl = GetHeadBaseUrl();
+			//check whether the image source starts with a protocol.
+			//if there is no protocol, the current protocol of the website is used (relative protocol).
+			if (imgSource.startsWith('//')) {
+				imgSource = location.protocol + imgSource;
+			}
 
-                    //if the base url is stil unknown, take the base url from website url.
-                    if (baseUrl == null) {
-                      baseUrl = GetBaseUrl();
-                    }
+			//get the image source as url object.
+			let imgSourceUrl = new URL(imgSource, GetWebsiteBaseUrl());
 
-                    //get the image url (relative or absolute) as url object.
-                    let objImageUrl = new URL(strImageSource, baseUrl);
-                    let strImageUrl = (objImageUrl.href || '').toString().trim();
+			//return the image url and filename.
+			return {
+				'filename': imgSourceUrl.href.substring(imgSourceUrl.href.lastIndexOf('/') + 1),
+				'source': imgSourceUrl.href
+			};
+		} catch(_) {
+			return null;
+		}
+	}
 
-                    //set the image source to the object and add the object to the array.
-                    objImageInfo.filename = strImageUrl.substring(strImageUrl.lastIndexOf('/') + 1);
-                    objImageInfo.src = strImageUrl;
-                    arrImages.push(objImageInfo);
-                } catch(_) { }
-            }
-        });
+	return {
 
-        //return all found image elements of the site.
-        return arrImages;
-    }
+		/**
+		 * Returns all images of the current website.
+		 * @returns An array with all found images of the website.
+		 */
+		GetImages: function() {
+			let images = GetImagesOfDocument();
 
-    //public functions of the module.
-    return {
+			//iterate through the frames of the page to get the images of the available frames.
+			for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 
-        /**
-         * function to get all images of the current site.
-         * @returns {Object[]} An object array with all found images.
-         */
-        GetImages: function() {
-            let arrImages = [];
+				//there are also blocked frames so we have to try to get the document of the frame.
+				try {
+					images = images.concat(GetImagesOfDocument(window.frames[frameIndex].document));
+				} catch(_) {}
+			}
 
-            //iterate through the frames of the page to get the images of the available frames.
-            for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
+			//return all found images of the website.
+			return images;
+		},
 
-                //there are also blocked frames so we have to try to get the document of the frame.
-                try {
-                    arrImages = arrImages.concat(GetImagesOfDocument(window.frames[frameIndex].document));
-                } catch(_) { }
-            }
+		/**
+		 * Returns all icons of the website header.
+		 * @returns An array with all found icons of the website.
+		 */
+		GetIcons: function() {
+			let icons = [];
 
-            //get all images outside of frames.
-            arrImages = arrImages.concat(GetImagesOfDocument());
+			//get the icons of the website header.
+			$('head > link[rel="apple-touch-icon"], head > link[rel="icon"]').each(function() {
+				icons.push({
+					'sizes': ($(this).attr('sizes') || '').toString().trim(),
+					'source': ($(this).attr('href') || '').toString().trim(),
+					'type': ($(this).attr('type') || '').toString().trim()
+				});
+			});
 
-            //return all the found images of the page.
-            return arrImages;
-        },
-
-				GetIcons: function() {
-					let arrIcons = [];
-
-					$('head > link[rel="apple-touch-icon"]').each(function() {
-						arrIcons.push({'url': ($(this).attr('href') || '').toString().trim(), 'type': ($(this).attr('type') || '').toString().trim(), 'sizes': ($(this).attr('sizes') || '').toString().trim()});
-					});
-
-					$('head > link[rel="icon"]').each(function() {
-						arrIcons.push({'url': ($(this).attr('href') || '').toString().trim(), 'type': ($(this).attr('type') || '').toString().trim(), 'sizes': ($(this).attr('sizes') || '').toString().trim()});
-					});
-
-					return arrIcons;
-				}
-    }
+			//return all the found icons of the website.
+			return icons;
+		}
+	}
 })();

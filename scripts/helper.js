@@ -74,6 +74,16 @@ function GetHeadBaseUrl() {
   }
 }
 
+function GetWebsiteBaseUrl() {
+	let baseUrlHead = GetHeadBaseUrl();
+
+	if (baseUrlHead === null) {
+		return GetBaseUrl();
+	}
+
+	return baseUrlHead;
+}
+
 function EscapeHTML(str) {
     return String(str).replace(/[&<>"'\/]/g, function(s) {
         return entityMap[s];
