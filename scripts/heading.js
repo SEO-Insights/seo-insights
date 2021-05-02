@@ -1,56 +1,49 @@
 /**
- * Module for Headings.
+ * Module to get all the headings of the current website.
  */
 var HeadingModule = (function() {
 
-    //private functions of the module.
+	/**
+	 * Returns all headings of the given context.
+	 * @param {object} context The context used to get the headings.
+	 * @returns An array with all found headings.
+	 */
+	function GetHeadingsOfDocument(context = null) {
+		let headings = [];
 
-    /**
-     * function to get all headings of the document.
-     * @param {Document} context The context used for jQuery.
-     * @returns {Object[]} An object array with basic information of the headings. 
-     */
-    function GetHeadingsOfDocument(context = undefined) {
-        let arrHeadings = [];
+		//iterate through all heading elements of the context.
+		$('h1, h2, h3, h4, h5, h6', context).each(function() {
+			headings.push({
+				'text': ($(this).text() || '').toString().trim(),
+				'type': ($(this).prop('tagName') || '').toString().trim().toLowerCase()
+			});
+		});
 
-        //iterate through all heading elements of the site.
-        $('h1, h2, h3, h4, h5, h6', context).each(function() {
+		//return all the found headings.
+		return headings;
+	}
 
-            //add the basic information of the heading to the array.
-            arrHeadings.push({
-                'text': ($(this).text() || '').toString().trim(),
-                'type': ($(this).prop('tagName') || '').toString().trim().toLowerCase(),
-            });
-        });
+	return {
 
-         //return all found heading elements of the site.
-         return arrHeadings;
-    }
+		/**
+		 * Returns all headings of the current website.
+		 * @returns An array with all found headings of the current website.
+		 */
+		GetHeadings: function() {
+			let headings = GetHeadingsOfDocument();
 
-    //public functions of the module.
-    return {
+			//there can be multiple documents (frames) on a website.
+			//iterate through all frames of the website to get the headings of the available frames.
+			for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 
-        /**
-         * function to get all headings of the current site.
-         * @returns {Object[]} An object array with basic information of the headings.
-         */
-        GetHeadings: function() {
-            let arrHeadings = [];
+				//there are also blocked frames so we have to try to get the document of the frame.
+				try {
+					headings = headings.concat(GetHeadingsOfDocument(window.frames[frameIndex].document));
+				} catch(_) {}
+			}
 
-            //iterate through the frames of the site to get the headings of the available frames.
-            for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
-
-                //there are also blocked frames so we have to try to get the document of the frame.
-                try {
-                    arrHeadings = arrHeadings.concat(GetHeadingsOfDocument(window.frames[frameIndex].document));
-                } catch(_) { }
-            }
-
-            //get all headings outside of frames.
-            arrHeadings = arrHeadings.concat(GetHeadingsOfDocument());
-
-            //return all the found headings of the site.
-            return arrHeadings;
-        }
-    }
+			//return all found headings of the website.
+			return headings;
+		}
+	}
 })();
