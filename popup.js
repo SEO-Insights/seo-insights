@@ -157,12 +157,12 @@ function GetHeaderInformation(url) {
     });
 }
 
-function GetInformationRow(strValueColumn1, strValueColumn2) {
-	return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
-}
-
 function GetInformationRow(strValueColumn1, strValueColumn2, markerName, markerValue) {
-	return '<tr ' + markerName + '="' + markerValue + '"><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
+	if (markerName && markerValue) {
+		return '<tr ' + markerName + '="' + markerValue + '"><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
+	} else {
+		return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
+	}
 }
 
 /**
@@ -731,81 +731,111 @@ function GetImageInfo(objImageInfo, strID) {
     return strImageInfo;
 }
 
+function GetIconInfo(icon, id) {
+	let strIconInfo = '';
+
+	if (icon.type !== '') {
+		strIconInfo = strIconInfo + '<span class="info"><strong>type: </strong>' + icon.type + '</span>';
+	}
+
+	if (icon.sizes !== '') {
+		strIconInfo = strIconInfo + '<span class="info"><strong>sizes: </strong>' + icon.sizes + '</span>';
+	}
+
+	if (icon.source) {
+		let img = new Image;
+		img.onload = function() {
+			$('tr#' + id + ' td').append('<span class="info"><strong>size:</strong> ' + img.width + ' x ' + img.height + '</span>');
+		};
+		img.src = icon.source;
+	}
+
+	return strIconInfo;
+
+}
+
+function GetDomains(items, property) {
+	let domains = [];
+
+	items.filter(item => (item[property] || '').toString().trim() !== '').forEach(function(item) {
+		const domain = (new URL(item[property], tabUrlOrigin).host || '').toString().trim();
+
+		if (domain !== '') {
+			domains.push(domain);
+		}
+	});
+
+	return domains;
+}
+
 /**
  * View for Images.
  */
 function ViewImages() {
 
-    //get the current / active tab of the current window and send a message
-    //to the content script to get the information from website.
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.tabs.sendMessage(
-            tabs[0].id,
-            {source: SOURCE.POPUP, subject: SUBJECT.IMAGE},
-            fnResponse
-        );
-    });
+	//get the current / active tab of the current window and send a message
+	//to the content script to get the information of the website.
+	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{source: SOURCE.POPUP, subject: SUBJECT.IMAGE},
+			LoadImages
+		);
+	});
 
-    //define and execute the callback function called by the content script.
-    const fnResponse = objImages => {
-			window.scrollTo(0, 0);
+	//the callback function executed by the content script to show image information.
+	const LoadImages = info => {
+		window.scrollTo(0, 0);
 
-        var objTableImages = $('div#view-images table#list-images');
-        var objTableStatsImages = $('div#view-images table#statistics-images');
-				var objTableDomains = $('div#view-images table#list-image-domains');
-				var objTableIcons = $('div#view-images table#list-image-icons');
+		//get the HTML container of the images tab.
+		const tabImages = $('div#view-images');
 
-			var arrImages = (objImages['images'] || []);
-			var arrIcons = (objImages['icons'] || []);
+		//get the tables to show the images information.
+		const tableImages = $('table#list-images', tabImages);
+		const tableImagesStatistics = $('table#statistics-images', tabImages);
+		const tableImagesDomains = $('table#list-image-domains', tabImages);
+		const tableImagesIcons = $('table#list-image-icons', tabImages);
 
+		//get the images and icons from the content script.
+		const images = (info.images || []);
+		const icons = (info.icons || []);
+		const domains = GetDomains(images, 'source');
 
-        let indexImage = 0;
+		//remove all rows of the images, icons and domains table.
+		tableImages.children('tbody').empty();
+		tableImagesIcons.children('tbody').empty();
+		tableImagesDomains.children('tbody').empty();
 
-        //remove all rows of the images table.
-        objTableImages.children('tbody').empty();
-				objTableIcons.children('tbody').empty();
+		//set all the images to the table.
+		images.filter(image => (image.source || '').toString().trim() !== '').forEach(function(image, index) {
+			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${((image.filename) ? image.filename : image.source)}</a>${GetImageInfo(image, 'img-' + index)}</td></tr>`);
+			ShowImagePreview($(`tr[id="img-${index}"] td`, tableImages), image.source);
+		});
 
-				let arrDomains = [];
+		//set all the domains to the table.
+		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
+			tableImagesDomains.children('tbody').append(GetInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
+		});
 
-        //run through all images of the array with a source value.
-			arrImages.filter(img => (img.source || '').toString().trim() !== '').forEach(function(imgItem, index) {
-				let imageDomain = new URL(imgItem.source).host;
+		//set all the icons to the table.
+		icons.filter(icon => (icon.source || '').toString().trim() !== '').forEach(function(icon, index) {
+			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${((icon.filename) ? icon.filename : icon.source)}</a>${GetIconInfo(icon, 'icon-' + index)}</td></tr>`);
+			ShowImagePreview($(`tr[id="icon-${index}"] td`, tableImagesIcons), icon.source);
+		});
 
-				if (imageDomain.trim() !== '') {
-					arrDomains.push(imageDomain);
-				}
-
-				objTableImages.children('tbody').append('<tr id="img-' + index + '"><td><a target="_blank" href="' + imgItem.source + '">' + ((imgItem.filename) ? imgItem.filename : imgItem.source) + '</a>' + GetImageInfo(imgItem, 'img-' + index) + '</td></tr>');
-				ShowImagePreview($('tr[id="img-' + index + '"] td', objTableImages), imgItem.source);
-
-				//set the statistics for the images.
-				objTableStatsImages.find('td[data-seo-info="images-all"]').text(arrImages.length);
-				objTableStatsImages.find('td[data-seo-info="images-without-alt"]').text(arrImages.filter(image => image.alternative === '').length);
-				objTableStatsImages.find('td[data-seo-info="images-without-src"]').text(arrImages.filter(image => image.source === '').length);
-				objTableStatsImages.find('td[data-seo-info="images-without-title"]').text(arrImages.filter(image => image.title === '').length);
-			});
-
-			arrDomains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domainItem) {
-				objTableDomains.children('tbody').append(GetInformationRow(domainItem, arrDomains.filter(domain => domain === domainItem).length));
-			});
-
-			arrIcons.forEach(function(iconItem, iconIndex) {
-				let strTypeHTML = '';
-				let strSizesHTML = '';
-
-				if (iconItem.type !== '') {
-					strTypeHTML = '<span class="info"><strong>type: </strong>' + iconItem.type + '</span>';
-				}
-
-				if (iconItem.sizes !== '') {
-					strSizesHTML = '<span class="info"><strong>sizes: </strong>' + iconItem.sizes + '</span>';
-				}
-
-				objTableIcons.children('tbody').append('<tr seo-data="icon-' + iconIndex + '"><td><a target="_blank" href="' + new URL(iconItem.source, tabUrlOrigin) + '">' + iconItem.source + '</a>' + strTypeHTML + strSizesHTML + '</td></tr>');
-				ShowImagePreview($('tr[seo-data="icon-' + iconIndex + '"] td', objTableIcons), new URL(iconItem.source, tabUrlOrigin));
-			});
-    };
+		//set the image statistics to the table.
+		tableImagesStatistics.find('td[data-seo-info="images-all"]').text(images.length);
+		tableImagesStatistics.find('td[data-seo-info="images-without-alt"]').text(images.filter(image => image.alternative === '').length);
+		tableImagesStatistics.find('td[data-seo-info="images-without-src"]').text(images.filter(image => image.source === '').length);
+		tableImagesStatistics.find('td[data-seo-info="images-without-title"]').text(images.filter(image => image.title === '').length);
+	};
 }
+
+
+
+
+
+
 
 /**
  * View for Hyperlinks.

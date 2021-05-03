@@ -100,9 +100,18 @@ var ImageModule = (function() {
 
 			//get the icons of the website header.
 			$('head > link[rel="apple-touch-icon"], head > link[rel="icon"]').each(function() {
+				let iconSource = GetImageSource(($(this).attr('href') || '').toString().trim());
+
+				//the icon is not added to the array if the source is unknown.
+				if (iconSource === null) {
+					return;
+				}
+
+				//add the icon to the array.
 				icons.push({
+					'filename': iconSource.filename,
 					'sizes': ($(this).attr('sizes') || '').toString().trim(),
-					'source': ($(this).attr('href') || '').toString().trim(),
+					'source': iconSource.source,
 					'type': ($(this).attr('type') || '').toString().trim()
 				});
 			});

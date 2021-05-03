@@ -272,3 +272,6 @@ div#view-summary table.item-list tr td:nth-child(1) span.info,
 div#view-meta table.item-list tr td:nth-child(1) span.info {
     display: inline-block;
 }
+div#image-info-content div#image-domains table#list-image-domains td {
+    font-weight: normal;
+}
