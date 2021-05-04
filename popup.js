@@ -717,6 +717,34 @@ function ViewHeadings() {
     };
 }
 
+function GetHyperlinkInfo(link) {
+	let strLinkInfo = '';
+
+	if ((link.rel || '').toString().trim() !== '') {
+		strLinkInfo = strLinkInfo + '<span class="info"><strong>rel:</strong> ' + link.rel + '</span>';
+	}
+
+	if ((link.title || '').toString().trim() !== '') {
+		strLinkInfo = strLinkInfo + '<span class="info"><strong>title:</strong> ' + link.title + '</span>';
+	}
+
+	return strLinkInfo;
+}
+
+function GetAlternateInfo(alternate) {
+	let strAlternateInfo = '';
+
+	if ((alternate.title || '').toString().trim() !== '') {
+		strAlternateInfo = strAlternateInfo + '<span class="info"><strong>title: </strong>' + alternate.title + '</span>';
+	}
+
+	if ((alternate.hreflang || '').toString().trim() !== '') {
+		strAlternateInfo = strAlternateInfo + '<span class="info"><strong>hreflang: </strong> ' + alternate.hreflang + '</span>';
+	}
+
+	return strAlternateInfo;
+}
+
 function GetImageInfo(objImageInfo, strID) {
     let strImageInfo = '';
 
@@ -825,117 +853,98 @@ function ViewImages() {
 	};
 }
 
-
-
-
-
-
-
 /**
  * View for Hyperlinks.
  */
 function ViewHyperlinks() {
 
-    //get the current / active tab of the current window and send a message
-    //to the content script to get the information from website.
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.tabs.sendMessage(
-            tabs[0].id,
-            {source: SOURCE.POPUP, subject: SUBJECT.HYPERLINK},
-            fnResponse
-        );
-    });
+	//get the current / active tab of the current window and send a message
+	//to the content script to get the information of the website.
+	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{source: SOURCE.POPUP, subject: SUBJECT.HYPERLINK},
+			LoadHyperlinks
+		);
+	});
 
-    //define and execute the callback function called by the content script.
-    const fnResponse = objHyperlinks => {
-			window.scrollTo(0, 0);
+	//the callback function executed by the content script to show hyperlink information.
+	const LoadHyperlinks = info => {
+		window.scrollTo(0, 0);
 
-        var objTableHyperlinks = $('div#view-hyperlinks table#list-hyperlinks');
-        var objTableAlternate = $('div#view-hyperlinks table#list-hyperlink-alternate');
-        var objTableStatsHyperlinks = $('div#view-hyperlinks table#statistics-hyperlinks');
-        var objTableStatsProtocols = $('div#view-hyperlinks table#statistics-protocols');
-				var objTableDomains = $('div#view-hyperlinks table#list-hyperlink-domains');
-				var objTablePreload = $('div#view-hyperlinks table#list-hyperlink-preload');
-				var objTableDnsPrefetch = $('div#view-hyperlinks table#list-hyperlink-dns-prefetch');
-				var objTablePreconnect = $('div#view-hyperlinks table#list-preconnect');
+		//get the HTML container of the hyperlinks tab.
+		const tabHyperlinks = $('div#view-hyperlinks');
 
-        //remove all rows of the hyperlinks table.
-        objTableHyperlinks.children('tbody').empty();
-        objTableAlternate.children('tbody').empty();
-				objTableDomains.children('tbody').empty();
-				objTablePreload.children('tbody').empty();
-				objTableDnsPrefetch.children('tbody').empty();
-				objTablePreconnect.children('tbody').empty();
+		//get the tables to show the hyperlinks information.
+		const tableHyperlinks = $('table#list-hyperlinks', tabHyperlinks);
+		const tableAlternate = $('table#list-hyperlink-alternate', tabHyperlinks);
+		const tableHyperlinksStatistics = $('table#statistics-hyperlinks', tabHyperlinks);
+		const tableProtocolsStatistics = $('table#statistics-protocols', tabHyperlinks);
+		const tableDomains = $('table#list-hyperlink-domains', tabHyperlinks);
+		const tablePreload = $('table#list-hyperlink-preload', tabHyperlinks);
+		const tableDnsPrefetch = $('table#list-hyperlink-dns-prefetch', tabHyperlinks);
+		const tablePreconnect = $('table#list-preconnect', tabHyperlinks);
 
-        var arrHyperlinks = objHyperlinks['links'];
-        var arrAlternate = objHyperlinks['alternate'];
-				var arrPreload = objHyperlinks['preload'];
-				var arrDnsPrefetch = objHyperlinks['dnsprefetch'];
-				var arrPreconnect = objHyperlinks['preconnect'];
+		//remove all rows of the hyperlinks, preload, preconnect and domains table.
+		tableHyperlinks.children('tbody').empty();
+		tableAlternate.children('tbody').empty();
+		tableDomains.children('tbody').empty();
+		tablePreload.children('tbody').empty();
+		tableDnsPrefetch.children('tbody').empty();
+		tablePreload.children('tbody').empty();
 
-				let domains = GetDomains(arrHyperlinks.map(a => a.url).map(a => a.href));
+		//get the hyperlinks, alternates and other hyperlink related information from the content script.
+		const hyperlinks = (info.links || []);
+		const alternates = (info.alternate || []);
+		const preloads = (info.preload || []);
+		const prefetches = (info.dnsprefetch || []);
+		const preconnects = (info.preconnect || []);
+		const domains = GetDomains(hyperlinks.map(link => link.url).map(link => link.href));
 
-        //iterate through the hyperlinks and add them to the table.
-        for (let itemHyperlink of arrHyperlinks) {
-            var strRelativeInfo = '';
-            var strTitleInfo = '';
+		//set all the hyperlinks to the table.
+		hyperlinks.forEach(function(link, index) {
+			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${link.url.href}">${link.url.href}</a>${GetHyperlinkInfo(link)}</td></tr>`);
+		});
 
-            if ((itemHyperlink.rel || '').toString().trim() !== '') {
-                strRelativeInfo = '<span class="info"><strong>rel:</strong> ' + (itemHyperlink.rel || '').toString().trim() + '</span>';
-            }
+		//set all the domains to the table.
+		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
+			tableDomains.children('tbody').append(GetInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
+		});
 
-            if ((itemHyperlink.title || '').toString().trim() !== '') {
-                strTitleInfo = '<span class="info"><strong>title:</strong> ' + (itemHyperlink.title || '').toString().trim() + '</span>';
-            }
+		//set all the preloads to the table.
+		preloads.forEach(function(preload) {
+			tablePreload.children('tbody').append(`<tr><td>${preload.href}</td></tr>`);
+		});
 
-            objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
-					}
+		//set all the DNS prefetches to the table.
+		prefetches.forEach(function(prefetch) {
+			tableDnsPrefetch.children('tbody').append(`<tr><td>${prefetch.href}</td></tr>`);
+		});
 
-        for (let domainHyperlink of domains.filter((v, i, a) => a.indexOf(v) === i).sort()) {
-						objTableDomains.children('tbody').append('<tr><td>' + domainHyperlink + '</td><td>' + domains.filter(domain => domain === domainHyperlink).length + '</td></tr>');
-					}
+		//set all the preconnects to the table.
+		preconnects.forEach(function(preconnect) {
+			tablePreconnect.children('tbody').append(`<tr><td>${preconnect.href}</td></tr>`);
+		});
 
-					for (let objPreload of arrPreload) {
-						objTablePreload.children('tbody').append('<tr><td>' + objPreload.href + '</td></tr>');
-					}
+		//set all the alternates to the table.
+		alternates.forEach(function(alternate) {
+			tableAlternate.children('tbody').append(`<tr><td><a href="${alternate.href}" target="_blank">${alternate.href}</a>${GetAlternateInfo(alternate)}</td></tr>`);
+		});
 
-					for (let objDnsPrefetch of arrDnsPrefetch) {
-						objTableDnsPrefetch.children('tbody').append('<tr><td>' + objDnsPrefetch.href + '</td></tr>');
-					}
+		//set the statistics for the hyperlinks.
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all"]').text(hyperlinks.map(link => link.count).reduce((a, b) => a + b, 0));
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all-unique"]').text(hyperlinks.length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-internal"]').text(hyperlinks.filter(link => link.internal === true).map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-internal-unique"]').text(hyperlinks.filter(link => link.internal === true).length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-external"]').text(hyperlinks.filter(link => link.internal === false).map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-external-unique"]').text(hyperlinks.filter(link => link.internal === false).length);
 
-					for (let objPreconnect of arrPreconnect) {
-						objTablePreconnect.children('tbody').append('<tr><td>' + objPreconnect.href + '</td></tr>');
-					}
-
-        for (let objAlternateItem of arrAlternate) {
-            var strTitleInfo = '';
-            var strLangInfo = '';
-
-            if ((objAlternateItem.title || '').toString().trim() !== '') {
-                strTitleInfo = '<span class="info"><strong>title:</strong> ' + (objAlternateItem.title || '').toString().trim() + '</span>';
-            }
-
-            if ((objAlternateItem.hreflang || '').toString().trim() !== '') {
-                strLangInfo = '<span class="info"><strong>lang:</strong> ' + (objAlternateItem.hreflang || '').toString().trim() + '</span>';
-            }
-
-            objTableAlternate.children('tbody').append('<tr><td><a href="' + objAlternateItem.href + '" target="_blank">' + objAlternateItem.href + '</a>' + strTitleInfo + strLangInfo + '</td></tr>');
-        }
-
-        //set the statistics for the hyperlinks.
-        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-all"]').text(arrHyperlinks.map(link => link.count).reduce((a, b) => a + b, 0));
-        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-all-unique"]').text(arrHyperlinks.length);
-        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-internal"]').text(arrHyperlinks.filter(link => link.internal === true).map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-internal-unique"]').text(arrHyperlinks.filter(link => link.internal === true).length);
-        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-external"]').text(arrHyperlinks.filter(link => link.internal === false).map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsHyperlinks.find('td[data-seo-info="hyperlinks-external-unique"]').text(arrHyperlinks.filter(link => link.internal === false).length);
-
-        //set the statistics for the protocols of the hyperlinks.
-        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-http"]').text(arrHyperlinks.filter(link => link.url.protocol === 'http').map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-https"]').text(arrHyperlinks.filter(link => link.url.protocol === 'https').map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-mailto"]').text(arrHyperlinks.filter(link => link.url.protocol === 'mailto').map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-javascript"]').text(arrHyperlinks.filter(link => link.url.protocol === 'javascript').map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-whatsapp"]').text(arrHyperlinks.filter(link => link.url.protocol === 'whatsapp').map(link => link.count).reduce((a, b)=> a + b, 0));
-        objTableStatsProtocols.find('td[data-seo-info="hyperlinks-protocol-tel"]').text(arrHyperlinks.filter(link => link.url.protocol === 'tel').map(link => link.count).reduce((a, b) => a + b, 0));
-    };
+		//set the statistics for the protocols of the hyperlinks.
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-http"]').text(hyperlinks.filter(link => link.url.protocol === 'http').map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-https"]').text(hyperlinks.filter(link => link.url.protocol === 'https').map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-mailto"]').text(hyperlinks.filter(link => link.url.protocol === 'mailto').map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-javascript"]').text(hyperlinks.filter(link => link.url.protocol === 'javascript').map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-whatsapp"]').text(hyperlinks.filter(link => link.url.protocol === 'whatsapp').map(link => link.count).reduce((a, b)=> a + b, 0));
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-tel"]').text(hyperlinks.filter(link => link.url.protocol === 'tel').map(link => link.count).reduce((a, b) => a + b, 0));
+	};
 }
