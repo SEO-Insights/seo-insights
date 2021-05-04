@@ -272,6 +272,13 @@ div#view-summary table.item-list tr td:nth-child(1) span.info,
 div#view-meta table.item-list tr td:nth-child(1) span.info {
     display: inline-block;
 }
-div#image-info-content div#image-domains table#list-image-domains td {
+div#image-info-content div#image-domains table#list-image-domains td,
+div#hyperlink-info-content div#hyperlink-domains table#list-hyperlink-domains td,
+div#javascript-content div#javascript-domains table#list-files-javascript-domains td,
+div#stylesheet-content div#stylesheet-domains table#list-files-stylesheet-domains td {
     font-weight: normal;
+}
+table#list-files-stylesheet-domains,
+table#list-files-javascript-domains {
+    padding: 0 5px;
 }

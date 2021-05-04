@@ -124,6 +124,27 @@ function ShowImagePreview(hoverItem, imgUrl) {
 	});
 }
 
+/**
+ * Returns all domains of the given urls.
+ * @param {string[]} urls An array with all urls to get the domains from.
+ * @returns An array with all domains of the given urls.
+ */
+ function GetDomains(urls) {
+	let domains = [];
+
+	//run through all urls to get the domain from.
+	urls.filter(url => (url || '').toString().trim() !== '').forEach(function(url) {
+		const domain = (new URL(url, tabUrlOrigin).host || '').toString().trim();
+
+		//only add existing domains. don't add empty domains..
+		if (domain !== '') {
+			domains.push(domain);
+		}
+	});
+
+	//return all found domains of the urls.
+	return domains;
+}
 
 
 
@@ -573,18 +594,11 @@ function ViewFiles() {
 				objTableStylesheetDomains.children('tbody').empty();
 				objTableJavaScriptDomains.children('tbody').empty();
 
-				let domainsJavaScript = [];
-				let domainsStylesheet = [];
+				let domainsJavaScript = GetDomains(arrJavaScript.map(file => file.url).map(file => file.href));
+				let domainsStylesheet = GetDomains(arrStylesheet.map(file => file.url).map(file => file.href));
 
         //iterate through the stylesheet files and add them to the table.
         for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
-					let stylesheetDomain = new URL(arrStylesheet[indexStylesheet].url.href).host;
-
-					//just add the domain to the array if the domain doesn't exists.
-					if (stylesheetDomain.trim() !== '') {
-						domainsStylesheet.push(stylesheetDomain);
-					}
-
 					let htmlMedia = '';
 
 					if (arrStylesheet[indexStylesheet].media.trim() !== '') {
@@ -597,12 +611,6 @@ function ViewFiles() {
 
         //iterate through the javascript files and add them to the table.
         for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
-					let javascriptDomain = new URL(arrJavaScript[indexJavaScript].url.href).host;
-
-					if (javascriptDomain.trim() !== '') {
-						domainsJavaScript.push(javascriptDomain);
-					}
-
 					let htmlAsync = '';
 					let htmlCharset = '';
 
@@ -754,20 +762,6 @@ function GetIconInfo(icon, id) {
 
 }
 
-function GetDomains(items, property) {
-	let domains = [];
-
-	items.filter(item => (item[property] || '').toString().trim() !== '').forEach(function(item) {
-		const domain = (new URL(item[property], tabUrlOrigin).host || '').toString().trim();
-
-		if (domain !== '') {
-			domains.push(domain);
-		}
-	});
-
-	return domains;
-}
-
 /**
  * View for Images.
  */
@@ -799,7 +793,7 @@ function ViewImages() {
 		//get the images and icons from the content script.
 		const images = (info.images || []);
 		const icons = (info.icons || []);
-		const domains = GetDomains(images, 'source');
+		const domains = GetDomains(images.map(image => image.source));
 
 		//remove all rows of the images, icons and domains table.
 		tableImages.children('tbody').empty();
@@ -879,7 +873,7 @@ function ViewHyperlinks() {
 				var arrDnsPrefetch = objHyperlinks['dnsprefetch'];
 				var arrPreconnect = objHyperlinks['preconnect'];
 
-				let domains = [];
+				let domains = GetDomains(arrHyperlinks.map(a => a.url).map(a => a.href));
 
         //iterate through the hyperlinks and add them to the table.
         for (let itemHyperlink of arrHyperlinks) {
@@ -893,12 +887,6 @@ function ViewHyperlinks() {
             if ((itemHyperlink.title || '').toString().trim() !== '') {
                 strTitleInfo = '<span class="info"><strong>title:</strong> ' + (itemHyperlink.title || '').toString().trim() + '</span>';
             }
-
-						let hyperlinkDomain = new URL(itemHyperlink.url.href).host;
-
-						if (hyperlinkDomain.trim() !== '') {
-							domains.push(hyperlinkDomain);
-						}
 
             objTableHyperlinks.children('tbody').append('<tr><td><a target="_blank" href="' + itemHyperlink.url.href + '">' + itemHyperlink.url.href + '</a>' + strRelativeInfo + strTitleInfo + '</td></tr>');
 					}
