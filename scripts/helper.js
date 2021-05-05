@@ -67,11 +67,11 @@ function GetBaseUrl() {
 function GetHeadBaseUrl() {
   const baseUrl = $('head > base').first().attr('href');
 
-  if (baseUrl) {
-    return baseUrl;
-  } else {
-    return null;
-  }
+	try {
+		return (new URL(baseUrl)).href;
+	} catch(_) {
+		return null;
+	}
 }
 
 function GetWebsiteBaseUrl() {
