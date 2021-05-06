@@ -146,6 +146,17 @@ function ShowImagePreview(hoverItem, imgUrl) {
 	return domains;
 }
 
+/**
+ * Sets a hint to a empty table as placeholder / additional information.
+ * @param {object} table The HTML object of the table.
+ * @param {string} hint The hint to be shown on the empty table.
+ */
+function SetEmptyHint(table, hint) {
+	if (table.children('tbody').children().length === 0) {
+		table.children('tbody').append(`<tr class="alert"><td><div class="alert alert-primary" role="alert">${hint}</div></td></tr>`);
+	}
+}
+
 
 
 
@@ -660,62 +671,7 @@ function ViewFiles() {
     };
 }
 
-/**
- * View for Headings.
- */
-function ViewHeadings() {
 
-    //get the current / active tab of the current window and send a message
-    //to the content script to get the information from website.
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.tabs.sendMessage(
-            tabs[0].id,
-            {source: SOURCE.POPUP, subject: SUBJECT.HEADING},
-            fnResponse
-        );
-    });
-
-    //define and execute the callback function called by the content script.
-    const fnResponse = arrHeadings => {
-			window.scrollTo(0, 0);
-
-        var objTableHeadings = $('div#view-headings table#list-headings');
-        var objTableStatsHeadings = $('div#view-headings table#statistics-headings');
-				var objTableErrorsHeadings = $('table#headings-errors');
-
-        //remove all rows of the headings table.
-        objTableHeadings.children('tbody').empty();
-				objTableErrorsHeadings.children('tbody').empty();
-
-				//reset the filter on the heading tab.
-				ResetHeadingFilter();
-
-        //iterate through the different levels of headings.
-        for (level = 1; level <= 6; level++) {
-            objTableStatsHeadings.find('td[id="headings-h' + level + '"]').text(arrHeadings.filter(heading => heading.type === 'h' + level).length);
-
-            //set events to toggle hide and show of the headings on click.
-            $('td[id="headings-h' + level + '"]').on('click', {'level': level}, CallbackHeadingFilter);
-        }
-
-				//check whether there are multiple h1 headings.
-				if (arrHeadings.filter(heading => heading.type === 'h1').length > 1) {
-					objTableErrorsHeadings.children('tbody').append('<tr><td>Multiple H1 headings found on website.</td></tr>');
-				}
-
-        //set the total count of headings to the table.
-        objTableStatsHeadings.find('td[id="headings-all"]').text(arrHeadings.length);
-
-				//add all found headings to the table.
-        for (itemHeading of arrHeadings) {
-            var strTableRow = '<tr class="level-' + itemHeading.type + ' is-empty"><td><span>' + itemHeading.type + '</span>' + itemHeading.text + GetTextWordInformation(itemHeading.text, true) + '</td></tr>';
-            $(objTableHeadings).children('tbody').append(strTableRow);
-        }
-
-				//set the count of found errors and warnings.
-				SetTableCountOnCardHeader($('#headings-errors-heading'), $('table#headings-errors'));
-    };
-}
 
 function GetHyperlinkInfo(link) {
 	let strLinkInfo = '';
@@ -790,6 +746,75 @@ function GetIconInfo(icon, id) {
 
 }
 
+
+
+
+/**
+ * View for Headings.
+ */
+ function ViewHeadings() {
+
+	//get the current / active tab of the current window and send a message
+	//to the content script to get the information of the website.
+	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{source: SOURCE.POPUP, subject: SUBJECT.HEADING},
+			LoadHeadings
+		);
+	});
+
+	//the callback function executed by the content script to show heading information.
+	const LoadHeadings = info => {
+		window.scrollTo(0, 0);
+
+		//get the HTML container of the headings tab.
+		const tabHeadings = $('div#view-headings');
+
+		//get the tables to show the headings information.
+		const tableHeadings = $('table#list-headings', tabHeadings);
+		const tableHeadingsStatistics = $('table#statistics-headings', tabHeadings);
+		const tableHeadingsErrors = $('table#headings-errors', tabHeadings);
+
+		//get the headings from the content script.
+		const headings = (info.headings || []);
+
+		//remove all rows of the headings table.
+		tableHeadings.children('tbody').empty();
+		tableHeadingsErrors.children('tbody').empty();
+
+		//reset the filter on the heading tab.
+		ResetHeadingFilter();
+
+		//iterate through the different levels of the headings and set the stats.
+		for (level = 1; level <= 6; level++) {
+			tableHeadingsStatistics.find('td[id="headings-h' + level + '"]').text(headings.filter(heading => heading.type === 'h' + level).length);
+			$('td[id="headings-h' + level + '"]').on('click', {'level': level}, CallbackHeadingFilter);
+		}
+
+		//set the total count of headings to the table.
+		tableHeadingsStatistics.find('td[id="headings-all"]').text(headings.length);
+
+		//add all found headings to the table.
+		headings.forEach(function(heading) {
+			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${heading.text}${GetTextWordInformation(heading.text, true)}</td></tr>`);
+		});
+
+		//get the count of heading level 1.
+		const cntH1 = headings.filter(heading => heading.type === 'h1').length;
+
+		//check whether there are multiple h1 headings.
+		if (cntH1 === 0) {
+			tableHeadingsErrors.children('tbody').append('<td><td>There is no H1 heading on this website.</td></tr>');
+		} else if (cntH1 > 1) {
+			tableHeadingsErrors.children('tbody').append('<tr><td>Multiple H1 headings found on the website.</td></tr>');
+		}
+
+		//set the count of found errors and warnings.
+		SetTableCountOnCardHeader($('#headings-errors-heading'), tableHeadingsErrors);
+	};
+}
+
 /**
  * View for Images.
  */
@@ -845,6 +870,11 @@ function ViewImages() {
 			ShowImagePreview($(`tr[id="icon-${index}"] td`, tableImagesIcons), icon.source);
 		});
 
+		//set hints on empty tables.
+		SetEmptyHint(tableImages, 'This website doesn\'t have images.');
+		SetEmptyHint(tableImagesDomains, 'This website doesn\'t have images with domains.');
+		SetEmptyHint(tableImagesIcons, 'This website doesn\'t have icons.');
+
 		//set the image statistics to the table.
 		tableImagesStatistics.find('td[data-seo-info="images-all"]').text(images.length);
 		tableImagesStatistics.find('td[data-seo-info="images-without-alt"]').text(images.filter(image => image.alternative === '').length);
@@ -891,7 +921,7 @@ function ViewHyperlinks() {
 		tableDomains.children('tbody').empty();
 		tablePreload.children('tbody').empty();
 		tableDnsPrefetch.children('tbody').empty();
-		tablePreload.children('tbody').empty();
+		tablePreconnect.children('tbody').empty();
 
 		//get the hyperlinks, alternates and other hyperlink related information from the content script.
 		const hyperlinks = (info.links || []);
@@ -930,6 +960,14 @@ function ViewHyperlinks() {
 		alternates.forEach(function(alternate) {
 			tableAlternate.children('tbody').append(`<tr><td><a href="${alternate.href}" target="_blank">${alternate.href}</a>${GetAlternateInfo(alternate)}</td></tr>`);
 		});
+
+		//set hints on empty tables.
+		SetEmptyHint(tableHyperlinks, 'This website doesn\'t have hyperlinks.');
+		SetEmptyHint(tableAlternate, 'This website doesn\'t have alternate links.');
+		SetEmptyHint(tableDomains, 'This website doesn\'t have hyperlinks with domains.');
+		SetEmptyHint(tablePreconnect, 'This website doesn\'t have preconnect items.');
+		SetEmptyHint(tableDnsPrefetch, 'This website doesn\'t have DNS prefetch items.');
+		SetEmptyHint(tablePreload, 'This website doesn\'t have preload items.');
 
 		//set the statistics for the hyperlinks.
 		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all"]').text(hyperlinks.map(link => link.count).reduce((a, b) => a + b, 0));

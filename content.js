@@ -27,7 +27,9 @@ if (!IsInitializedContent) {
                 });
                 break;
             case SUBJECT.HEADING:
-                sendResponse(HeadingModule.GetHeadings());
+                sendResponse({
+									'headings': HeadingModule.GetHeadings()
+								});
                 break;
             case SUBJECT.IMAGE:
                 sendResponse({

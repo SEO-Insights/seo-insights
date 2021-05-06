@@ -282,3 +282,12 @@ table#list-files-stylesheet-domains,
 table#list-files-javascript-domains {
     padding: 0 5px;
 }
+table.item-list tr.alert td {
+    border: 0;
+    background: none;
+}
+table.item-list tr.alert div.alert {
+    margin: 0;
+    font-weight: bold;
+    border-radius: 0;
+}
