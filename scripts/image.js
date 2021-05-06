@@ -57,7 +57,7 @@ var ImageModule = (function() {
 			}
 
 			//get the image source as url object.
-			let imgSourceUrl = new URL(imgSource, GetWebsiteBaseUrl());
+			let imgSourceUrl = new URL(imgSource, GetBaseUrl());
 
 			//return the image url and filename.
 			return {

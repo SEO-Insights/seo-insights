@@ -52,36 +52,14 @@ var entityMap = {
     "/": '&#x2F;'
 };
 
-/**
- * function to get the base url of the current site.
- * @returns {string} The base url of the current site.
- */
 function GetBaseUrl() {
-    return (location.origin + location.pathname);
-}
+	const baseUrl = $('head > base').first().attr('href');
 
-/**
- * Returns the base url from document head.
- * @returns {string|null} The base url of the document head.
- */
-function GetHeadBaseUrl() {
-  const baseUrl = $('head > base').first().attr('href');
-
-	try {
-		return (new URL(baseUrl)).href;
-	} catch(_) {
-		return null;
+	if (baseUrl) {
+		return (new URL(baseUrl, (location.origin + location.pathname))).href;
+	} else {
+		return (new URL(location.origin + location.pathname)).href;
 	}
-}
-
-function GetWebsiteBaseUrl() {
-	let baseUrlHead = GetHeadBaseUrl();
-
-	if (baseUrlHead === null) {
-		return GetBaseUrl();
-	}
-
-	return baseUrlHead;
 }
 
 function EscapeHTML(str) {
