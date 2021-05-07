@@ -540,24 +540,6 @@ function ViewHeader() {
     GetHeaderInformation(tabUrl);
 }
 
-/**
- * View for Tools.
- */
-function ViewTools() {
-	window.scrollTo(0, 0);
-
-    //get the table of the tools list.
-	const objTableTools = $('div#view-tools table#info-tools');
-
-    //remove all available tools.
-    objTableTools.children('tbody').empty();
-	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_pagespeed_insights_title'), chrome.i18n.getMessage('tools_pagespeed_insights_description'), 'https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(tabUrl)));
-	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_w3c_css_validation_title'), chrome.i18n.getMessage('tools_w3c_css_validation_description'), 'https://jigsaw.w3.org/css-validator/validator?uri=' + encodeURIComponent(tabUrl)));
-	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_nu_html_checker_title'), chrome.i18n.getMessage('tools_nu_html_checker_description'), 'https://validator.w3.org/nu/?doc=' + encodeURIComponent(tabUrl)));
-	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_gtmetrix_title'), chrome.i18n.getMessage('tools_gtmetrix_description'), 'https://gtmetrix.com/?url=' + encodeURIComponent(tabUrl)));
-	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_gsc_rich_results_title'), chrome.i18n.getMessage('tools_gsc_rich_results_description'), 'https://search.google.com/test/rich-results?url=' + encodeURIComponent(tabUrl)));
-	objTableTools.children('tbody').append(GetToolsItem(chrome.i18n.getMessage('tools_gsc_mobile_friendly_title'), chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'), 'https://search.google.com/test/mobile-friendly?url=' + encodeURIComponent(tabUrl)));
-}
 
 /**
  * function to get the tool item to display on the list of the tool view.
@@ -748,6 +730,65 @@ function GetIconInfo(icon, id) {
 
 
 
+
+/**
+ * View for Tools.
+ */
+function ViewTools() {
+	window.scrollTo(0, 0);
+
+	//get the tab and table of the tools list.
+	const tabTools = $('div#view-tools');
+  const tableTools = $('table#info-tools', tabTools);
+
+	//remove all available tools.
+	tableTools.children('tbody').empty();
+
+	//get the encoded url to set on a url as parameter.
+	const encodedUrl = encodeURIComponent(tabUrl);
+
+	//add the tool "Page Speed Insights" to the table.
+	tableTools.children('tbody').append(GetToolsItem(
+		chrome.i18n.getMessage('tools_pagespeed_insights_title'),
+		chrome.i18n.getMessage('tools_pagespeed_insights_description'),
+		'https://developers.google.com/speed/pagespeed/insights/?url=' + encodedUrl
+	));
+
+	//add the tool "W3C CSS Validation" to the table.
+	tableTools.children('tbody').append(GetToolsItem(
+		chrome.i18n.getMessage('tools_w3c_css_validation_title'),
+		chrome.i18n.getMessage('tools_w3c_css_validation_description'),
+		'https://jigsaw.w3.org/css-validator/validator?uri=' + encodedUrl
+	));
+
+	//add the tool "Nu HTML checker" to the table.
+	tableTools.children('tbody').append(GetToolsItem(
+		chrome.i18n.getMessage('tools_nu_html_checker_title'),
+		chrome.i18n.getMessage('tools_nu_html_checker_description'),
+		'https://validator.w3.org/nu/?doc=' + encodedUrl
+	));
+
+	//add the tool "GTmetrix" to the table.
+	tableTools.children('tbody').append(GetToolsItem(
+		chrome.i18n.getMessage('tools_gtmetrix_title'),
+		chrome.i18n.getMessage('tools_gtmetrix_description'),
+		'https://gtmetrix.com/?url=' + encodedUrl
+	));
+
+	//add the tool "Google Search Console Rich Result Test" to the table.
+	tableTools.children('tbody').append(GetToolsItem(
+		chrome.i18n.getMessage('tools_gsc_rich_results_title'),
+		chrome.i18n.getMessage('tools_gsc_rich_results_description'),
+		'https://search.google.com/test/rich-results?url=' + encodedUrl
+	));
+
+	//add the tool "Google Search Console Mobile Friendly Test" to the table.
+	tableTools.children('tbody').append(GetToolsItem(
+		chrome.i18n.getMessage('tools_gsc_mobile_friendly_title'),
+		chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'),
+		'https://search.google.com/test/mobile-friendly?url=' + encodedUrl
+	));
+}
 
 /**
  * View for Headings.
