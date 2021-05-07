@@ -1,93 +1,66 @@
 /**
- * Module for Links / Hyperlinks.
+ * Module for Hyperlinks.
  */
 var LinkModule = (function() {
-    
-    //private functions of the module.
-    
-    /**
-     * function to get all links of a document / site.
-     * @param {Document} context The optional document used as context for jQuery. 
-     * @returns {Object[]} An object array with the basic information of the links.
-     */
-    function GetLinksOfDocument(context = undefined) {
-        let arrLinks = [];
 
-        //iterate through all link elements of the site.
-        $('a', context).each(function() {
-            try {
+	/**
+	 * Returns all hyperlinks of the given context.
+	 * @param {object} context The context used to get the hyperlinks.
+	 * @returns An array with all found hyperlinks.
+	 */
+	function GetLinksOfDocument(context = null) {
+		let links = [];
 
-                //get the url of the link element.
-                let strUrl = ($(this).attr('href') || '').toString().trim();
-                
-                //get the url object of the link.
-                //this can also be used to make sure the link is a valid url.
-                let objLinkUrl = new URL(strUrl, GetBaseUrl());
+		//iterate through all hyperlinks of the current context.
+		$('a', context).each(function() {
+			try {
 
-                //all links are collected in an array once.
-                //so try to find the current link in the array to update the count.
-                let linkUrlAvailable = arrLinks.find(itemUrl => itemUrl.url.href === objLinkUrl.href);
+				//get the url of the hyperlink element.
+				let strLinkUrl = ($(this).attr('href') || '').toString().trim();
 
-                //check if the link is available on the array.
-                if (linkUrlAvailable) {
-                    linkUrlAvailable.count++;
-                    return;
-                }
+				//get the url object of the current hyperlink.
+				//this can also be used to make sure the link is a valid url.
+				let linkUrl = new URL(strLinkUrl, GetBaseUrl());
 
-                //add the information of the link as object to the array.
-                arrLinks.push({
-                    'count': 1,
-                    'internal': IsInternal(objLinkUrl.href),
-                    'rel': ($(this).attr('rel') || '').toString().trim(),
-                    'title': ($(this).attr('title') || '').toString().trim(),
-                    'url': {
-                        'hash': (objLinkUrl.hash || '').toString().trim(),
-                        'href': (objLinkUrl.href || '').toString().trim(),
-                        'origin': (objLinkUrl.origin || '').toString().trim(),
-                        'path': (objLinkUrl.pathname || '').toString().trim(),
-                        'protocol': (objLinkUrl.protocol || '').toString().trim().replace(':', '')
-                    }
-                });
-            } catch(_) { }      
-        });
+				//add the information of the hyperlink as object to the array.
+				links.push({
+					'rel': ($(this).attr('rel') || '').toString().trim(),
+					'title': ($(this).attr('title') || '').toString().trim(),
+					'url': {
+						'hash': (linkUrl.hash || '').toString().trim(),
+						'href': (linkUrl.href || '').toString().trim(),
+						'origin': (linkUrl.origin || '').toString().trim(),
+						'path': (linkUrl.pathname || '').toString().trim(),
+						'protocol': (linkUrl.protocol || '').toString().trim().replace(':', '')
+					}
+				});
+			} catch(_) { }
+		});
 
-        //return the found links.
-        return arrLinks;
-    }
+		//return all the found hyperlinks.
+		return links;
+	}
 
-    /**
-     * function to check if a url is an internal url.
-     * @param {string} url The url to be checked.
-     * @returns {boolean} The state if the url is an internal url.
-     */
-    function IsInternal(url) {
-        return url.startsWith(location.origin);
-    }
+	return {
 
-    //public functions of the module.
-    return {
+		/**
+		 * Returns all hyperlinks of the current website.
+		 * @returns An array with all found hyperlinks of the website.
+		 */
+		GetLinks: function() {
+			let links = GetLinksOfDocument();
 
-        /**
-         * function to get all links of the current site.
-         * @returns {Object[]} An object array with basic information of the links.
-         */
-        GetLinks: function() {
-            let arrLinks = [];
+			//iterate through the frames of the page to get the hyperlinks of the available frames.
+			for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 
-            //iterate through the frames of the site to get the links of the available frames.
-            for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
-                
-                //there are also blocked frames so we have to try to get the document of the frame.
-                try {
-                    arrLinks = arrLinks.concat(GetLinksOfDocument(window.frames[frameIndex].document));
-                } catch(_) { }
-            }
+				//there are also blocked frames so we have to try to get the document of the frame.
+				try {
+					links = links.concat(GetLinksOfDocument(window.frames[frameIndex].document));
+				} catch(_) {}
+			}
 
-            //get all links outside of frames.
-            arrLinks = arrLinks.concat(GetLinksOfDocument());
-
-            //return all the found links of the site.
-            return arrLinks;
-        }
-    }
-  })();
+			//return all the found hyperlinks.
+			return links;
+		}
+	}
+})();

@@ -970,19 +970,19 @@ function ViewHyperlinks() {
 		SetEmptyHint(tablePreload, 'This website doesn\'t have preload items.');
 
 		//set the statistics for the hyperlinks.
-		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all"]').text(hyperlinks.map(link => link.count).reduce((a, b) => a + b, 0));
-		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all-unique"]').text(hyperlinks.length);
-		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-internal"]').text(hyperlinks.filter(link => link.internal === true).map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-internal-unique"]').text(hyperlinks.filter(link => link.internal === true).length);
-		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-external"]').text(hyperlinks.filter(link => link.internal === false).map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-external-unique"]').text(hyperlinks.filter(link => link.internal === false).length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all"]').text(hyperlinks.length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all-unique"]').text(hyperlinks.map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-internal"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === true).length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-internal-unique"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === true).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-external"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === false).length);
+		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-external-unique"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
 
 		//set the statistics for the protocols of the hyperlinks.
-		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-http"]').text(hyperlinks.filter(link => link.url.protocol === 'http').map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-https"]').text(hyperlinks.filter(link => link.url.protocol === 'https').map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-mailto"]').text(hyperlinks.filter(link => link.url.protocol === 'mailto').map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-javascript"]').text(hyperlinks.filter(link => link.url.protocol === 'javascript').map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-whatsapp"]').text(hyperlinks.filter(link => link.url.protocol === 'whatsapp').map(link => link.count).reduce((a, b)=> a + b, 0));
-		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-tel"]').text(hyperlinks.filter(link => link.url.protocol === 'tel').map(link => link.count).reduce((a, b) => a + b, 0));
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-http"]').text(hyperlinks.filter(link => link.url.protocol === 'http').length);
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-https"]').text(hyperlinks.filter(link => link.url.protocol === 'https').length);
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-mailto"]').text(hyperlinks.filter(link => link.url.protocol === 'mailto').length);
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-javascript"]').text(hyperlinks.filter(link => link.url.protocol === 'javascript').length);
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-whatsapp"]').text(hyperlinks.filter(link => link.url.protocol === 'whatsapp').length);
+		tableProtocolsStatistics.find('td[data-seo-info="hyperlinks-protocol-tel"]').text(hyperlinks.filter(link => link.url.protocol === 'tel').length);
 	};
 }
