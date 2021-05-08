@@ -1,6 +1,6 @@
 ![](img/seo-insights-header.png)
 
-SEO Insights ist eine Google Chrome Extension um auf einen Blick die wichtigsten Informationen einer Website anzeigen zu können.
+SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Informationen einer Website anzeigen zu können.
 
 *Read this in other languages: [English](README.md), [Deutsch](README.de.md)*
 
