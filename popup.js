@@ -157,6 +157,42 @@ function SetEmptyHint(table, hint) {
 	}
 }
 
+/**
+ * Sets the image information as additional information.
+ * @param {object} html The HTML object to append the image information.
+ * @param {string} source The url of the image to get the information from.
+ */
+function SetImageInfo(html, source) {
+	let image = new Image;
+	image.onload = function() {
+		html.append(GetInformation('size', (image.width + ' x ' + image.height)));
+	};
+	image.src = source;
+}
+
+/**
+ * Returns the HTML element with the additional information.
+ * @param {string} label The label value (displayed in bold letters) used on the additional information.
+ * @param {string} value The value used on the additional information.
+ * @returns The HTML element with the additional information.
+ */
+function GetInformation(label, value) {
+
+	//normalize the label and value.
+	const strLabel = (label || '').toString().trim();
+	const strValue = (value || '').toString().trim();
+
+	//the format of the additional information depends on the available label and / or value.
+	if (strLabel !== '' && strValue !== '') {
+		return `<span class="info"><strong>${strLabel}:</strong>${strValue}</span>`;
+	} else if (strLabel !== '') {
+		return `<span class="info"><strong>${strLabel}</strong></span>`;
+	} else if (strValue !== '') {
+		return `<span class="info">${strValue}</span>`;
+	} else {
+		return '';
+	}
+}
 
 
 
@@ -168,12 +204,8 @@ function GetTextWordInformation(strValue, newLine = false) {
         return '';
     }
 
-    //create the tags for information about characters and words.
-    var strCharsHTML = '<span class="info">' + strValue.length + ' ' + chrome.i18n.getMessage('chars') + '</span>';
-    var strWordsHTML = '<span class="info">' + GetWordCount(strValue) + ' ' + chrome.i18n.getMessage('words') + '</span>';
-
     //return the tags with information.
-    return ((newLine === true) ? '<br>' : '') + strCharsHTML + strWordsHTML;
+    return ((newLine === true) ? '<br>' : '') + GetInformation('', strValue.length + ' ' + chrome.i18n.getMessage('chars')) + GetInformation('', GetWordCount(strValue) + ' ' + chrome.i18n.getMessage('words'));
 }
 
 
@@ -250,7 +282,7 @@ function GetDefaultRow(metaName, metaValue) {
 }
 function GetCanonicalRow(metaName, metaValue) {
     if (metaValue.selfref === true) {
-        return GetInformationRow(metaName + '<br><span class="info">self-referential</span>', EscapeHTML(metaValue.value));
+        return GetInformationRow(metaName + '<br>' + GetInformation('', 'self-referential'), EscapeHTML(metaValue.value));
     } else {
         return GetInformationRow(metaName, EscapeHTML(metaValue.value));
     }
@@ -534,78 +566,6 @@ function GetToolsItem(title, description, link) {
 }
 
 
-function GetHyperlinkInfo(link) {
-	let strLinkInfo = '';
-
-	if ((link.rel || '').toString().trim() !== '') {
-		strLinkInfo = strLinkInfo + '<span class="info"><strong>rel:</strong> ' + link.rel + '</span>';
-	}
-
-	if ((link.title || '').toString().trim() !== '') {
-		strLinkInfo = strLinkInfo + '<span class="info"><strong>title:</strong> ' + link.title + '</span>';
-	}
-
-	return strLinkInfo;
-}
-
-function GetAlternateInfo(alternate) {
-	let strAlternateInfo = '';
-
-	if ((alternate.title || '').toString().trim() !== '') {
-		strAlternateInfo = strAlternateInfo + '<span class="info"><strong>title: </strong>' + alternate.title + '</span>';
-	}
-
-	if ((alternate.hreflang || '').toString().trim() !== '') {
-		strAlternateInfo = strAlternateInfo + '<span class="info"><strong>hreflang: </strong> ' + alternate.hreflang + '</span>';
-	}
-
-	return strAlternateInfo;
-}
-
-function GetImageInfo(objImageInfo, strID) {
-    let strImageInfo = '';
-
-    if (objImageInfo.alternative !== '') {
-        strImageInfo = strImageInfo + '<span class="info"><strong>alt:</strong> ' + objImageInfo.alternative + '</span>';
-    }
-
-    if (objImageInfo.title !== '') {
-        strImageInfo = strImageInfo + '<span class="info"><strong>title:</strong> ' + objImageInfo.title + '</span>';
-    }
-
-    if (objImageInfo.source) {
-        let img = new Image;
-        img.onload = function() {
-            $('tr#' + strID + ' td').append('<span class="info"><strong>size:</strong> ' + img.width + ' x ' + img.height + '</span>');
-        };
-        img.src = objImageInfo.source;
-    }
-
-    return strImageInfo;
-}
-
-function GetIconInfo(icon, id) {
-	let strIconInfo = '';
-
-	if (icon.type !== '') {
-		strIconInfo = strIconInfo + '<span class="info"><strong>type: </strong>' + icon.type + '</span>';
-	}
-
-	if (icon.sizes !== '') {
-		strIconInfo = strIconInfo + '<span class="info"><strong>sizes: </strong>' + icon.sizes + '</span>';
-	}
-
-	if (icon.source) {
-		let img = new Image;
-		img.onload = function() {
-			$('tr#' + id + ' td').append('<span class="info"><strong>size:</strong> ' + img.width + ' x ' + img.height + '</span>');
-		};
-		img.src = icon.source;
-	}
-
-	return strIconInfo;
-
-}
 
 
 
@@ -657,7 +617,7 @@ function ViewFiles() {
 
 			//check whether the media property exists and add the additional information.
 			if (file.media.trim() !== '') {
-				tableFilesStylesheet.find('tbody > tr#stylesheet-' + index + ' td').append('<span class="info"><strong>media:</strong>' + file.media.trim() + '</span>');
+				tableFilesStylesheet.find('tbody > tr#stylesheet-' + index + ' td').append(GetInformation('media', file.media.trim()));
 			}
 		});
 
@@ -667,12 +627,12 @@ function ViewFiles() {
 
 			//check whether the async property exists and add the additional information.
 			if (file.async === true) {
-				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append('<span class="info"><strong>async</strong></span>');
+				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('async'));
 			}
 
 			//check whether the charset property exists and add the additional information.
 			if (file.charset) {
-				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append('<span class="info"><strong>charset:</strong>' + file.charset + '</span>');
+				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('charset', file.charset.trim()));
 			}
 		});
 
@@ -899,8 +859,21 @@ function ViewImages() {
 
 		//set all the images to the table.
 		images.filter(image => (image.source || '').toString().trim() !== '').forEach(function(image, index) {
-			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${((image.filename) ? image.filename : image.source)}</a>${GetImageInfo(image, 'img-' + index)}</td></tr>`);
+			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${((image.filename) ? image.filename : image.source)}</a></td></tr>`);
 			ShowImagePreview($(`tr[id="img-${index}"] td`, tableImages), image.source);
+
+			//check whether the alt property exists and add the additional information.
+			if ((image.alternative || '').toString().trim() !== '') {
+				tableImages.find('tbody tr#img-' + index + ' td').append(GetInformation('alt', (image.alternative || '').toString().trim()));
+			}
+
+			//check whether the title property exists and add the additional information.
+			if ((image.title || '').toString().trim() !== '') {
+				tableImages.find('tbody tr#img-' + index + ' td').append(GetInformation('title', (image.title || '').toString().trim()));
+    	}
+
+			//set the image information of the image itself.
+			SetImageInfo(tableImages.find('tbody tr#img-' + index + ' td'), image.source);
 		});
 
 		//set all the domains to the table.
@@ -910,8 +883,21 @@ function ViewImages() {
 
 		//set all the icons to the table.
 		icons.filter(icon => (icon.source || '').toString().trim() !== '').forEach(function(icon, index) {
-			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${((icon.filename) ? icon.filename : icon.source)}</a>${GetIconInfo(icon, 'icon-' + index)}</td></tr>`);
+			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${((icon.filename) ? icon.filename : icon.source)}</a></td></tr>`);
 			ShowImagePreview($(`tr[id="icon-${index}"] td`, tableImagesIcons), icon.source);
+
+			//check whether the type property exists and add the additional information.
+			if ((icon.type || '').toString().trim() !== '') {
+				tableImagesIcons.find('tbody tr#icon-' + index + ' td').append(GetInformation('type', (icon.type || '').toString().trim()));
+			}
+
+			//check whether the type property exists and add the additional information.
+			if ((icon.sizes || '').toString().trim() !== '') {
+				tableImagesIcons.find('tbody tr#icon-' + index + ' td').append(GetInformation('sizes', (icon.sizes || '').toString().trim()));
+			}
+
+			//set the image information of the icon itself.
+			SetImageInfo(tableImagesIcons.find('tbody tr#icon-' + index + ' td'), icon.source)
 		});
 
 		//set hints on empty tables.
@@ -977,7 +963,17 @@ function ViewHyperlinks() {
 
 		//set all the hyperlinks to the table.
 		hyperlinks.forEach(function(link, index) {
-			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${link.url.href}">${link.url.href}</a>${GetHyperlinkInfo(link)}</td></tr>`);
+			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${link.url.href}">${link.url.href}</a></td></tr>`);
+
+			//check whether the rel property exists and add the additional information.
+			if ((link.rel || '').toString().trim() !== '') {
+				tableHyperlinks.find('tbody tr#link-' + index + ' td').append(GetInformation('rel', (link.rel || '').toString().trim()));
+			}
+
+			//check whether the title property exists and add the additional information.
+			if ((link.title || '').toString().trim() !== '') {
+				tableHyperlinks.find('tbody tr#link-' + index + ' td').append(GetInformation('title', (link.title || '').toString().trim()));
+			}
 		});
 
 		//set all the domains to the table.
@@ -1001,8 +997,18 @@ function ViewHyperlinks() {
 		});
 
 		//set all the alternates to the table.
-		alternates.forEach(function(alternate) {
-			tableAlternate.children('tbody').append(`<tr><td><a href="${alternate.href}" target="_blank">${alternate.href}</a>${GetAlternateInfo(alternate)}</td></tr>`);
+		alternates.forEach(function(alternate, index) {
+			tableAlternate.children('tbody').append(`<tr id="alternate-${index}"><td><a href="${alternate.href}" target="_blank">${alternate.href}</a></td></tr>`);
+
+			//check whether the title property exists and add the additional information.
+			if ((alternate.title || '').toString().trim() !== '') {
+				tableAlternate.find('tbody tr#alternate-' + index + ' td').append(GetInformation('title', (alternate.title || '').toString().trim()));
+			}
+
+			//check whether the hreflang property exists and add the addtional information.
+			if ((alternate.hreflang || '').toString().trim() !== '') {
+				tableAlternate.find('tbody tr#alternate-' + index + ' td').append(GetInformation('hreflang', (alternate.hreflang || '').toString().trim()));
+			}
 		});
 
 		//set hints on empty tables.

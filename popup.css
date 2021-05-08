@@ -77,19 +77,6 @@ table.item-list tr td:nth-child(1) {
     min-width: 135px;
     vertical-align: top;
 }
-table.item-list tr td:nth-child(1) span.info {
-    color: grey;
-    font-size: 0.9em;
-    font-style: italic;
-    font-weight: normal;
-    word-break: keep-all;
-}
-table.item-list tr td:nth-child(1) span.info strong {
-    font-weight: bolder;
-}
-table.item-list tr td:nth-child(1) span.info:not(:last-child) {
-    margin-right: 5px;
-}
 table.item-list tr td:nth-child(1) a,
 table.item-list tr td:nth-child(1) a:link {
     display: block;
@@ -262,16 +249,6 @@ table#list-image-icons tr td a,
 table#list-image-icons tr td a:link {
     display: block;
 }
-table#list-image-icons tr td strong {
-    font-style: italic;
-}
-table#list-image-icons tr td:nth-child(1) span.info:not(:last-child) {
-    margin-right: 5px;
-}
-div#view-summary table.item-list tr td:nth-child(1) span.info,
-div#view-meta table.item-list tr td:nth-child(1) span.info {
-    display: inline-block;
-}
 div#image-info-content div#image-domains table#list-image-domains td,
 div#hyperlink-info-content div#hyperlink-domains table#list-hyperlink-domains td,
 div#javascript-content div#javascript-domains table#list-files-javascript-domains td,
@@ -290,4 +267,22 @@ table.item-list tr.alert div.alert {
     margin: 0;
     font-weight: bold;
     border-radius: 0;
+}
+
+/** formatting for the additional information. */
+td span.info strong {
+    font-style: italic;
+    font-weight: bolder;
+    margin-right: 4px;
+}
+td span.info {
+    color: grey;
+    display: inline-block;
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: normal;
+    word-break: keep-all;
+}
+td span.info:not(:last-child) {
+    margin-right: 5px;
 }
