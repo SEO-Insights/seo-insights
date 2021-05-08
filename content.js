@@ -15,17 +15,19 @@ if (!IsInitializedContent) {
             case SUBJECT.META:
                 sendResponse({
                     'facebook': MetaInformation.GetFacebook(),
-                    'opengraph': OpenGraph.GetBasicProperties(),
-                    'opengraph-article': OpenGraph.GetArticleProperties(),
-                    'opengraph-audio': OpenGraph.GetAudioProperties(),
-                    'opengraph-book': OpenGraph.GetBookProperties(),
-                    'opengraph-image': OpenGraph.GetImageProperties(),
-                    'opengraph-profile': OpenGraph.GetProfileProperties(),
-                    'opengraph-video': OpenGraph.GetVideoProperties(),
+                    'opengraph': {
+											'basic': OpenGraph.GetBasicProperties(),
+											'article': OpenGraph.GetArticleProperties(),
+											'audio': OpenGraph.GetAudioProperties(),
+											'book': OpenGraph.GetBookProperties(),
+											'image': OpenGraph.GetImageProperties(),
+											'profile': OpenGraph.GetProfileProperties(),
+											'video': OpenGraph.GetVideoProperties()
+										},
                     'others': MetaInformation.GetOthers(),
                     'parsely': MetaInformation.GetParsely(),
                     'twitter': MetaInformation.GetTwitter(),
-                    'dublin-core': MetaInformation.GetDublinCore()
+                    'dublincore': MetaInformation.GetDublinCore()
                 });
                 break;
             case SUBJECT.HEADING:

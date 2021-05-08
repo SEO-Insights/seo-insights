@@ -194,6 +194,16 @@ function GetInformation(label, value) {
 	}
 }
 
+/**
+ * Returns a tool item to display on the list of the tool view.
+ * @param {string} title The title of the tool.
+ * @param {string} description The description of the tool.
+ * @param {string} link The link to the tool website with website specific parameter.
+ */
+function GetToolsItem(title, description, link) {
+	return `<tr><td><a class="full-link" href="${link}" target="_blank"><div class="heading">${title}</div><span class="info">${description}</span></a></td></tr>`;
+}
+
 
 
 function GetTextWordInformation(strValue, newLine = false) {
@@ -288,231 +298,219 @@ function GetCanonicalRow(metaName, metaValue) {
     }
 }
 
-
-
+/**
+ * Initialize the extension on load (register events, translate extension).
+ */
 jQuery(function() {
 
 	//translate all placeholder of the extension.
 	TranslateHTML();
 
-  function GroupByName(objects) {
-    let arr = [];
-    for (let obj of objects) {
-
-      arrFiltered = arr.filter(objItem => objItem.name === obj.name);
-      if (arrFiltered.length === 1)  {
-        arrFiltered[0].value.push(obj.value);
-      } else {
-        arr.push({'name': obj.name, 'value': [obj.value]});
-      }
-    }
-    return arr;
-  }
-
-    //init
-    if ($('body').hasClass('not-supported') === false) {
-
-
-
-        $('a[href="#view-meta"]').on('click', function() {
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, tabs => {
-                chrome.tabs.sendMessage(
-                    tabs[0].id,
-                    {source: SOURCE.POPUP, subject: SUBJECT.META},
-                    data
-                );
-            });
-
-            const data = info => {
-                window.scrollTo(0, 0);
-
-                //clear all meta tables.
-                $('table[id^=meta-details-] > tbody').empty();
-
-                var objMetaFacebook = info['facebook'];
-                var objMetaOpenGraph = info['opengraph'];
-                let objMetaOpenGraphArticle = info['opengraph-article'];
-                let objMetaOpenGraphAudio = info['opengraph-audio'];
-                let objMetaOpenGraphBook = info['opengraph-book'];
-                let objMetaOpenGraphImage = info['opengraph-image'];
-                let objMetaOpenGraphProfile = info['opengraph-profile'];
-                let objMetaOpenGraphVideo = info['opengraph-video'];
-                var objMetaOthers = info['others'];
-                var objMetaParsely = info['parsely'];
-                var objMetaTwitter = info['twitter'];
-                var objMetaDublinCore = info['dublin-core'];
-
-                var arrDetailedInfoOpenGraph = ['og:title', 'og:description'];
-                var arrDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
-
-								objMetaOthers.forEach(function(tagItem, tagIndex) {
-									var strOthersValue = (tagItem.value || '').toString().trim();
-
-									switch (tagItem.name) {
-										case 'msapplication-TileColor':
-											$('table#meta-details-others > tbody').append(GetColorRow(tagItem.name, strOthersValue));
-											break;
-										default:
-											$('table#meta-details-others > tbody').append(GetInformationRow(tagItem.name, EscapeHTML(strOthersValue), 'seo-data', 'meta-others-' + tagIndex));
-											break;
-									}
-
-									if (tagItem.name.toLowerCase() === 'msapplication-tileimage') {
-										ShowImagePreview($('tr[seo-data="meta-others-' + tagIndex + '"] td'), new URL(strOthersValue, tabUrlOrigin));
-									}
-								});
-
-                for (let infoOpenGraphArticle of GroupByName(objMetaOpenGraphArticle)) {
-                    var strArticleValue = (infoOpenGraphArticle.value.join('; ') || '').toString().trim();
-                    $('table#meta-details-opengraph-article > tbody').append(GetInformationRow(infoOpenGraphArticle.name, EscapeHTML(strArticleValue)));
-                }
-
-                for (let tagInfoAudio of objMetaOpenGraphAudio) {
-                  const value = (tagInfoAudio.value || '').toString().trim();
-                  $('table#meta-details-opengraph-audio > tbody').append(GetInformationRow(tagInfoAudio.name, EscapeHTML(value)));
-                }
-
-                for (let tagInfoBook of objMetaOpenGraphBook) {
-                  const value = (tagInfoBook.value || '').toString().trim();
-                  $('table#meta-details-opengraph-book > tbody').append(GetInformationRow(tagInfoBook.name, EscapeHTML(value)));
-                }
-
-								objMetaOpenGraphImage.forEach(function(ogItem, ogIndex) {
-									const value = (ogItem.value || '').toString().trim();
-									$('table#meta-details-opengraph-image > tbody').append(GetInformationRow(ogItem.name, EscapeHTML(value), 'seo-data', 'og-image-' + ogIndex));
-
-									if (ogItem.name === 'og:image:url') {
-										ShowImagePreview($('table#meta-details-opengraph-image > tbody tr[seo-data="og-image-' + ogIndex + '"]'), value);
-									}
-								});
-
-                for (let tagInfoProfile of objMetaOpenGraphProfile) {
-                  const value = (tagInfoProfile.value || '').toString().trim();
-                  $('table#meta-details-opengraph-profile > tbody').append(GetInformationRow(tagInfoProfile.name, EscapeHTML(value)));
-                }
-
-                for (let tagInfoVideo of objMetaOpenGraphVideo) {
-                  const value = (tagInfoVideo.value || '').toString().trim();
-                  $('table#meta-details-opengraph-video > tbody').append(GetInformationRow(tagInfoVideo.name, EscapeHTML(value)));
-                }
-
-                for (let tagFacebook of objMetaFacebook) {
-                    var strFacebookValue = (tagFacebook.value || '').toString().trim();
-                    $('table#meta-details-facebook > tbody').append(GetInformationRow(tagFacebook.name, EscapeHTML(strFacebookValue)));
-                }
-
-                for (let tagParsely of objMetaParsely) {
-                    var strParselyValue = (tagParsely.value || '').toString().trim();
-                    $('table#meta-details-parsely > tbody').append(GetInformationRow(tagParsely.name, EscapeHTML(strParselyValue)));
-                }
-
-								objMetaTwitter.forEach(function(twitterItem, twitterIndex) {
-									 var strTwitterValue = (twitterItem.value || '').toString().trim();
-                    var strAdditionalInfoHTML = '';
-
-                    //get the additional information if needed.
-                    if (arrDetailedInfoTwitter.includes(twitterItem.name)) {
-                        strAdditionalInfoHTML = GetTextWordInformation(strTwitterValue, true);
-                    }
-
-                    //set the Twitter information to the table.
-                    $('table#meta-details-twitter > tbody').append(GetInformationRow(twitterItem.name + strAdditionalInfoHTML, EscapeHTML(strTwitterValue), 'seo-data', 'twitter-' + twitterIndex));
-
-										if (twitterItem.name === 'twitter:image') {
-											ShowImagePreview($('tr[seo-data="twitter-' + twitterIndex + '"] td'), strTwitterValue);
-										}
-								});
-
-								objMetaOpenGraph.forEach(function(ogItem, ogIndex) {
-									var strOpenGraphValue = (ogItem.value || '').toString().trim();
-									var strAdditionalInfoHTML = '';
-
-									//get the additional information if needed.
-									if (arrDetailedInfoOpenGraph.includes(ogItem.name)) {
-											strAdditionalInfoHTML = GetTextWordInformation(strOpenGraphValue, true);
-									}
-
-									//set the OpenGraph information to the table.
-									$('table#meta-details-opengraph-basic > tbody').append(GetInformationRow(ogItem.name + strAdditionalInfoHTML, EscapeHTML(strOpenGraphValue), 'seo-data', 'og-basic-' + ogIndex));
-
-									if (ogItem.name.toLowerCase() === 'og:image') {
-										ShowImagePreview($('tr[seo-data="og-basic-' + ogIndex + '"]'), strOpenGraphValue);
-									}
-								});
-
-                if (Object.keys(objMetaOpenGraph).length > 0) {
-
-                    //The four required properties for every page are: og:title, og:type, og:image, og:url
-                    //https://ogp.me/
-                    for (itemRequiredOpenGraph of ['og:title', 'og:type', 'og:image', 'og:url']) {
-                      if (objMetaOpenGraph.filter(infoOpenGraph => infoOpenGraph.name === itemRequiredOpenGraph).length === 0) {
-                        $('table#meta-details-errors > tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
-                      }
-                    }
-                }
-
-                for (let tagDublinCore of objMetaDublinCore) {
-                    var strDublinCoreValue = (tagDublinCore.value || '').toString().trim();
-                    $('table#meta-details-dublin-core > tbody').append(GetInformationRow(tagDublinCore.name, EscapeHTML(strDublinCoreValue)));
-                }
-
-                //now all lists are created so it is possible to count the items of each list.
-								SetTableCountOnCardHeader($('#meta-details-opengraph-heading'), $('div#meta-details-opengraph-content'));
-                SetTableCountOnCardHeader($('#meta-opengraph-basic-heading'), $('table#meta-details-opengraph-basic'));
-                SetTableCountOnCardHeader($('#meta-opengraph-article-heading'), $('table#meta-details-opengraph-article'));
-                SetTableCountOnCardHeader($('#meta-opengraph-audio-heading'), $('table#meta-details-opengraph-audio'));
-                SetTableCountOnCardHeader($('#meta-opengraph-book-heading'), $('table#meta-details-opengraph-book'));
-                SetTableCountOnCardHeader($('#meta-opengraph-image-heading'), $('table#meta-details-opengraph-image'));
-                SetTableCountOnCardHeader($('#meta-opengraph-profile-heading'), $('table#meta-details-opengraph-profile'));
-                SetTableCountOnCardHeader($('#meta-opengraph-video-heading'), $('table#meta-details-opengraph-video'));
-                SetTableCountOnCardHeader($('#meta-details-facebook-heading'), $('table#meta-details-facebook'));
-                SetTableCountOnCardHeader($('#meta-details-twitter-heading'), $('table#meta-details-twitter'));
-                SetTableCountOnCardHeader($('#meta-details-dublin-core-heading'), $('table#meta-details-dublin-core'));
-                SetTableCountOnCardHeader($('#meta-details-parsely-heading'), $('table#meta-details-parsely'));
-                SetTableCountOnCardHeader($('#meta-details-others-heading'), $('table#meta-details-others'));
-                SetTableCountOnCardHeader($('#meta-details-errors-heading'), $('table#meta-details-errors'));
-            }
-        });
-
-				//Summary
-				$('a[href="#view-summary"]').on('click', ViewSummary);
-
-        //Headings
-        $('a[href="#view-headings"]').on('click', ViewHeadings);
-
-        //Images
-        $('a[href="#view-images"]').on('click', ViewImages);
-
-        //Hyperlinks
-        $('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks);
-
-        //Files
-        $('a[href="#view-files"]').on('click', ViewFiles);
-
-        //Headers
-        $('a[href="#view-headers"]').on('click', ViewHeader);
-
-				//Tools
-        $('a[href="#view-tools"]').on('click', ViewTools);
-    }
+	//only register the events if the extension can be used.
+	if ($('body').hasClass('not-supported') === false) {
+		$('a[href="#view-summary"]').on('click', ViewSummary);
+		$('a[href="#view-meta-details"]').on('click', ViewMetaDetails);
+		$('a[href="#view-headings"]').on('click', ViewHeadings);
+    $('a[href="#view-images"]').on('click', ViewImages);
+		$('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks);
+		$('a[href="#view-files"]').on('click', ViewFiles);
+		$('a[href="#view-headers"]').on('click', ViewHeader);
+		$('a[href="#view-tools"]').on('click', ViewTools);
+	}
 });
 
 /**
- * function to get the tool item to display on the list of the tool view.
- * @param {string} title The title of the tool.
- * @param {string} description The description of the tool.
- * @param {string} link The link to the tool website with website specific parameter.
+ * View for Meta.
  */
-function GetToolsItem(title, description, link) {
-    return '<tr><td><a class="full-link" href="' + link + '" target="_blank"><div class="heading">' + title + '</div><span class="info">' + description + '</span></a></td></tr>';
+function ViewMetaDetails() {
+
+	//get the current / active tab of the current window and send a message
+	//to the content script to get the information from website.
+	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{source: SOURCE.POPUP, subject: SUBJECT.META},
+			LoadMetaDetails
+		);
+	});
+
+	//the callback function executed by the content script to show meta information.
+	const LoadMetaDetails = info => {
+		window.scrollTo(0, 0);
+
+		//get the HTML container of the meta tab.
+		const tabMetaDetails = $('div#view-meta-details');
+
+		//get the table to show the meta information.
+		const tableOthers = $('table#meta-details-others', tabMetaDetails);
+		const tableOpenGraphBasic = $('table#meta-details-opengraph-basic', tabMetaDetails);
+		const tableOpenGraphArticle = $('table#meta-details-opengraph-article', tabMetaDetails);
+		const tableOpenGraphAudio = $('table#meta-details-opengraph-audio', tabMetaDetails);
+		const tableOpenGraphBook = $('table#meta-details-opengraph-book', tabMetaDetails);
+		const tableOpenGraphImage = $('table#meta-details-opengraph-image', tabMetaDetails);
+		const tableOpenGraphProfile = $('table#meta-details-opengraph-profile', tabMetaDetails);
+		const tableOpenGraphVideo = $('table#meta-details-opengraph-video', tabMetaDetails);
+		const tableFacebook = $('table#meta-details-facebook', tabMetaDetails);
+		const tableParsely = $('table#meta-details-parsely', tabMetaDetails);
+		const tableTwitter = $('table#meta-details-twitter', tabMetaDetails);
+		const tableDublinCore = $('table#meta-details-dublin-core', tabMetaDetails);
+		const tableErrorDetails = $('table#meta-details-errors', tabMetaDetails);
+
+		//remove all rows of all meta tables.
+		$('table[id^=meta-details-]').children('tbody').empty();
+
+		//get all the meta information from the content script.
+		const itemsFacebook = (info.facebook || []);
+		const itemsOpenGraphBasic = (info.opengraph.basic || []);
+		const itemsOpenGraphArticle = (info.opengraph.article || []);
+		const itemsOpenGraphAudio = (info.opengraph.audio || []);
+		const itemsOpenGraphBook = (info.opengraph.book || []);
+		const itemsOpenGraphImage = (info.opengraph.image || []);
+		const itemsOpenGraphProfile = (info.opengraph.profile || []);
+		const itemsOpenGraphVideo = (info.opengraph.video || []);
+		const itemsOthers = (info.others || []);
+		const itemsParsely = (info.parsely || []);
+		const itemsTwitter = (info.twitter || []);
+		const itemsDublinCore = (info.dublinecore || []);
+
+		//set the arrays with the meta elements to show additional information.
+		const itemsDetailedInfoOpenGraph = ['og:title', 'og:description'];
+		const itemsDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
+
+		//set OpenGraph basic information to the table.
+		itemsOpenGraphBasic.forEach(function(item, index) {
+			const value = (item.value || '').toString().trim();
+
+			//some information can be displayed with additional information.
+			if (itemsDetailedInfoOpenGraph.includes(item.name)) {
+				tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name + GetTextWordInformation(value, true), EscapeHTML(value), 'id', 'og-basic-' + index));
+			} else {
+				tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-basic-' + index));
+			}
+
+			//on image information, a image preview is possible.
+			if (item.name === 'og:image') {
+				ShowImagePreview(tableOpenGraphBasic.find('tbody tr#og-basic-' + index), new URL(value, tabUrlOrigin));
+			}
+		});
+
+		//set OpenGraph article information to the table.
+		itemsOpenGraphArticle.forEach(function(item) {
+			tableOpenGraphArticle.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set OpenGraph audio information to the table.
+		itemsOpenGraphAudio.forEach(function(item) {
+			tableOpenGraphAudio.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set OpenGraph book information to the table.
+		itemsOpenGraphBook.forEach(function(item) {
+			tableOpenGraphBook.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set OpenGraph image information to the table.
+		itemsOpenGraphImage.forEach(function(item, index) {
+			const value = (item.value || '').toString().trim();
+			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-image-' + index));
+
+			//on image information, a image preview is possible.
+			if (item.name === 'og:image:url') {
+				ShowImagePreview(tableOpenGraphImage.find('tbody tr#og-image-' + index + ' td'), new URL(value, tabUrlOrigin));
+			}
+		});
+
+		//set OpenGraph profile information to the table.
+		itemsOpenGraphProfile.forEach(function(item) {
+			tableOpenGraphProfile.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set OpenGraph video information to the table.
+		itemsOpenGraphVideo.forEach(function(item) {
+			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set Facebook information to the table.
+		itemsFacebook.forEach(function(item) {
+			tableFacebook.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set Parsely information to the table.
+		itemsParsely.forEach(function(item) {
+			tableParsely.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+		});
+
+		//set Dublin Core information to the table.
+		itemsDublinCore.forEach(function(item) {
+			tableDublinCore.children('tbody').append(GetInformationRow(item.name,((item.value || '').toString().trim())));
+		});
+
+		//set Twitter information to the table.
+		itemsTwitter.forEach(function(item, index) {
+			const value = (item.value || '').toString().trim();
+
+			//some information can be displayed with additional information.
+			if (itemsDetailedInfoTwitter.includes(item.name)) {
+				tableTwitter.children('tbody').append(GetInformationRow(item.name + GetTextWordInformation(value, true),EscapeHTML(value), 'id', 'twitter-' + index));
+			} else {
+				tableTwitter.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'twitter-' + index));
+			}
+
+			//on image information, a image preview is possible.
+			if (item.name === 'twitter:image') {
+				ShowImagePreview(tableTwitter.find('tbody tr#twitter-' + index + ' td'), new URL(value, tabUrlOrigin));
+			}
+		});
+
+		//set other meta tags (not found above) to the table.
+		itemsOthers.forEach(function(item, index) {
+			const value = (item.value || '').toString().trim();
+
+			//depending on the name of the meta property display the value.
+			switch (item.name.toLowerCase()) {
+				case 'msapplication-tilecolor':
+					tableOthers.children('tbody').append(GetColorRow(item.name, value));
+					break;
+				default:
+					tableOthers.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'others-' + index));
+					break;
+			}
+
+			//on image information, a image preview is possible.
+			if (item.name.toLowerCase() === 'msapplication-tileimage') {
+				ShowImagePreview(tableOthers.find('tbody tr#others-' + index + ' td'), new URL(value, tabUrlOrigin));
+			}
+		});
+
+		//check for errors (missing meta tags) on the meta information.
+		if (Object.keys(itemsOpenGraphBasic).length > 0) {
+
+			//The four required properties for every page are: og:title, og:type, og:image, og:url
+			//https://ogp.me/
+			for (itemRequiredOpenGraph of ['og:title', 'og:type', 'og:image', 'og:url']) {
+				if (itemsOpenGraphBasic.filter(infoOpenGraph => infoOpenGraph.name === itemRequiredOpenGraph).length === 0) {
+					tableErrorDetails.children('tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
+				}
+			}
+		}
+
+		//now all lists are created so it is possible to count the items of each list.
+		SetTableCountOnCardHeader($('#meta-details-opengraph-heading'), $('div#meta-details-opengraph-content'));
+		SetTableCountOnCardHeader($('#meta-opengraph-basic-heading'), tableOpenGraphBasic);
+		SetTableCountOnCardHeader($('#meta-opengraph-article-heading'), tableOpenGraphArticle);
+		SetTableCountOnCardHeader($('#meta-opengraph-audio-heading'), tableOpenGraphAudio);
+		SetTableCountOnCardHeader($('#meta-opengraph-book-heading'), tableOpenGraphBook);
+		SetTableCountOnCardHeader($('#meta-opengraph-image-heading'), tableOpenGraphImage);
+		SetTableCountOnCardHeader($('#meta-opengraph-profile-heading'), tableOpenGraphProfile);
+		SetTableCountOnCardHeader($('#meta-opengraph-video-heading'), tableOpenGraphVideo);
+		SetTableCountOnCardHeader($('#meta-details-facebook-heading'), tableFacebook);
+		SetTableCountOnCardHeader($('#meta-details-twitter-heading'), tableTwitter);
+		SetTableCountOnCardHeader($('#meta-details-dublin-core-heading'), tableDublinCore);
+		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
+		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
+		SetTableCountOnCardHeader($('#meta-details-errors-heading'), tableErrorDetails);
+	}
 }
-
-
-
-
 
 /**
  * View for Summary.
@@ -662,6 +660,7 @@ function ViewFiles() {
 		//set the count of rows / items to the card header.
 		SetTableCountOnCardHeader($('#stylesheet-heading'), tableFilesStylesheet);
 		SetTableCountOnCardHeader($('#javascript-heading'), tableFilesJavaScript);
+		SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
 	};
 }
 
