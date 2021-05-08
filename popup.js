@@ -329,7 +329,7 @@ function ViewMetaDetails() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{source: SOURCE.POPUP, subject: SUBJECT.META},
+			{subject: SUBJECT.META},
 			LoadMetaDetails
 		);
 	});
@@ -522,7 +522,7 @@ function ViewSummary() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
+			{subject: SUBJECT.SUMMARY},
 			LoadSummary
 		);
 	});
@@ -575,7 +575,7 @@ function ViewFiles() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{source: SOURCE.POPUP, subject: SUBJECT.FILE},
+			{subject: SUBJECT.FILE},
 			LoadFiles
 		);
 	});
@@ -760,7 +760,7 @@ function ViewTools() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{source: SOURCE.POPUP, subject: SUBJECT.HEADING},
+			{subject: SUBJECT.HEADING},
 			LoadHeadings
 		);
 	});
@@ -826,7 +826,7 @@ function ViewImages() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{source: SOURCE.POPUP, subject: SUBJECT.IMAGE},
+			{subject: SUBJECT.IMAGE},
 			LoadImages
 		);
 	});
@@ -920,7 +920,7 @@ function ViewHyperlinks() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{source: SOURCE.POPUP, subject: SUBJECT.HYPERLINK},
+			{subject: SUBJECT.HYPERLINK},
 			LoadHyperlinks
 		);
 	});
