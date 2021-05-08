@@ -32,7 +32,7 @@ let tabUrlOrigin = '';
     chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
-      chrome.tabs.sendMessage(tab.id, {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY}, CallbackSummary);
+			ViewSummary();
     });
   });
 })();
@@ -281,61 +281,13 @@ function GetDefaultRow(metaName, metaValue) {
     }
 }
 function GetCanonicalRow(metaName, metaValue) {
-    if (metaValue.selfref === true) {
-        return GetInformationRow(metaName + '<br>' + GetInformation('', 'self-referential'), EscapeHTML(metaValue.value));
+    if (metaValue === tabUrl) {
+        return GetInformationRow(metaName + '<br>' + GetInformation('', 'self-referential'), EscapeHTML(metaValue));
     } else {
-        return GetInformationRow(metaName, EscapeHTML(metaValue.value));
+        return GetInformationRow(metaName, EscapeHTML(metaValue));
     }
 }
-function GetGeneratorRow(metaName, metaValue) {
-    if (Array.isArray(metaValue)) {
 
-        //escape the HTML of the meta value so HTML tags are visible.
-        for (indexValue = 0; indexValue < metaValue.length; indexValue++) {
-            metaValue[indexValue] = EscapeHTML(metaValue[indexValue]);
-        }
-
-        //format multiple values as list.
-        if (metaValue.length > 1) {
-            strMetaValue = '<ul>';
-            metaValue.forEach(meta => {
-                strMetaValue += '<li>' + meta + '</li>';
-            });
-            strMetaValue += '</ul>';
-        } else {
-            strMetaValue = metaValue;
-        }
-    } else {
-        strMetaValue = (metaValue || '').toString();
-    }
-
-    return GetInformationRow(metaName, strMetaValue);
-}
-
-function CallbackSummary(meta) {
-  window.scrollTo(0, 0);
-
-  //clear the table because we refresh this table here with current values.
-  $('table#meta-head-info > tbody').empty();
-
-  //iterate through all the elements of the <head> element.
-  for (let strMetaName in meta) {
-      switch (strMetaName) {
-          case 'canonical':
-              $('table#meta-head-info > tbody').append(GetCanonicalRow(strMetaName, meta[strMetaName]));
-              break;
-          case 'generator':
-              $('table#meta-head-info > tbody').append(GetGeneratorRow(strMetaName, meta[strMetaName]));
-              break;
-          case 'theme-color':
-              $('table#meta-head-info > tbody').append(GetColorRow(strMetaName, meta[strMetaName]));
-              break;
-          default:
-              $('table#meta-head-info > tbody').append(GetDefaultRow(strMetaName, meta[strMetaName]));
-              break;
-      }
-  }
-}
 
 
 jQuery(function() {
@@ -360,18 +312,7 @@ jQuery(function() {
     //init
     if ($('body').hasClass('not-supported') === false) {
 
-      $('a[href="#view-summary"]').on('click', function() {
-        chrome.tabs.query({
-          active: true,
-          currentWindow: true
-      }, tabs => {
-          chrome.tabs.sendMessage(
-              tabs[0].id,
-              {source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
-              CallbackSummary
-          );
-      });
-      });
+
 
         $('a[href="#view-meta"]').on('click', function() {
             chrome.tabs.query({
@@ -536,6 +477,9 @@ jQuery(function() {
             }
         });
 
+				//Summary
+				$('a[href="#view-summary"]').on('click', ViewSummary);
+
         //Headings
         $('a[href="#view-headings"]').on('click', ViewHeadings);
 
@@ -551,6 +495,7 @@ jQuery(function() {
         //Headers
         $('a[href="#view-headers"]').on('click', ViewHeader);
 
+				//Tools
         $('a[href="#view-tools"]').on('click', ViewTools);
     }
 });
@@ -568,6 +513,59 @@ function GetToolsItem(title, description, link) {
 
 
 
+
+/**
+ * View for Summary.
+ */
+function ViewSummary() {
+
+	//get the current / active tab of the current window and send a message
+	//to the content script to get the information from website.
+	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{source: SOURCE.POPUP, subject: SUBJECT.SUMMARY},
+			LoadSummary
+		);
+	});
+
+	//the callback function executed by the content script to show summary information.
+	const LoadSummary = info => {
+		window.scrollTo(0, 0);
+
+		//get the HTML container of the summary tab.
+		const tabSummary = $('div#view-summary');
+
+		//get the table to show the summary information.
+		const tableSummary = $('table#meta-head-info', tabSummary);
+
+		//remove all rows of the summary table.
+		tableSummary.children('tbody').empty();
+
+		//get the meta information from the content script.
+		const metas = (info.meta || []);
+
+		//get a specific order of the meta information.
+		//the important information have to be visible on top of the list.
+		const metaOrder = ['title', 'description', 'robots'];
+		const metasDisplay = (metas.filter(meta => metaOrder.indexOf(meta.name) > -1).sort((a, b) => metaOrder.indexOf(a.name) - metaOrder.indexOf(b.name)) || []).concat((metas.filter(meta => metaOrder.indexOf(meta.name) === -1) || []));
+
+		//set all the meta information to the table.
+		metasDisplay.forEach(function(meta) {
+			switch (meta.name) {
+				case 'canonical':
+					tableSummary.children('tbody').append(GetCanonicalRow(meta.name, meta.value));
+					break;
+				case 'theme-color':
+					tableSummary.children('tbody').append(GetColorRow(meta.name, meta.value));
+					break;
+				default:
+					tableSummary.children('tbody').append(GetDefaultRow(meta.name, meta.value));
+					break;
+			}
+		});
+	};
+}
 
 /**
  * View for Files.

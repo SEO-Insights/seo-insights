@@ -210,41 +210,35 @@ var MetaInformation = (function() {
          * Get the general meta information.
          */
         GetGeneral: function() {
-            var info = new Object();
+					let items = [];
 
             //iterate through all the <meta> elements with name attribute.
             $('head > meta[name]').each(function() {
-                var strMetaName = $(this).attr('name').trim().toLocaleLowerCase();
+							var strMetaName = $(this).attr('name').trim().toLocaleLowerCase();
 
-                //add the information of this <meta> element if known.
-                if (arrMetaNamesGeneral.includes(strMetaName)) {
-                    var strMetaValue = EscapeHTML(($(this).attr('content') || '').toString().trim());
+							//add the information of this <meta> element if known.
+							if (arrMetaNamesGeneral.includes(strMetaName)) {
+								var strMetaValue = EscapeHTML(($(this).attr('content') || '').toString().trim());
 
-                    //check if the value of the <meta> element is empty.
-                    //in this case we don't have to add the value to the object.
-                    if (strMetaValue === '') {
-                        return;
-                    }
+								//check if the value of the <meta> element is empty.
+								//in this case we don't have to add the value to the object.
+								if (strMetaValue === '') {
+										return;
+								}
 
-                    //check if the property is already available.
-                    //so it looks like a seconds <meta> element with same name already exists.
-                    if (info.hasOwnProperty(strMetaName)) {
-
-                        //decide to convert the property value to an array or add the value to the existing array.
-                        if (Array.isArray(info[strMetaName])) {
-                            info[strMetaName].push(strMetaValue);
-                        } else {
-                            info[strMetaName] = [info[strMetaName], strMetaValue];
-                        }
-                    } else {
-                        info[strMetaName] = strMetaValue;
-                    }
+								items.push({
+									'name': strMetaName,
+									'value': strMetaValue
+								});
                 }
             });
 
 						$('html[lang]').each(function() {
 							const lang = ($(this).attr('lang') || '').toString().trim();
-							info['lang'] = lang;
+							items.push({
+								'name': 'lang',
+								'value': lang
+							});
 						});
 
             //iterate through the general elements of the <head> element.
@@ -257,8 +251,10 @@ var MetaInformation = (function() {
                     continue;
                 }
 
-                //add the value to the object.
-                info[strGeneralTag] = strTagValue;
+								items.push({
+									'name': strGeneralTag,
+									'value': strTagValue
+								});
             }
 
             //get the canonical link of the site.
@@ -266,14 +262,14 @@ var MetaInformation = (function() {
                 let objCanonicalUrl = new URL(MetaInformation.GetCanonical().trim());
                 let objCurrentSiteUrl = new URL(GetBaseUrl());
 
-                info['canonical'] = {
-                    'selfref': (objCanonicalUrl.href === objCurrentSiteUrl.href),
-                    'value': objCanonicalUrl.href
-                };
+								items.push({
+									'name': 'canonical',
+									'value': objCanonicalUrl.href
+								});
             } catch(_) { }
 
             //return the general meta information.
-            return info;
+            return items;
         },
 
         /**

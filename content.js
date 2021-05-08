@@ -8,7 +8,9 @@ if (!IsInitializedContent) {
     if (message.source === SOURCE.POPUP) {
         switch (message.subject) {
             case SUBJECT.SUMMARY:
-                sendResponse(MetaInformation.GetGeneral());
+                sendResponse({
+									'meta': MetaInformation.GetGeneral()
+								});
                 break;
             case SUBJECT.META:
                 sendResponse({
