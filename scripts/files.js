@@ -1,53 +1,66 @@
 /**
- * Module FileInformation
+ * Module for Files
  */
-var FileInformation = (function() {
-    return {
-        GetJavaScriptFiles: function() {
-            var info = [];
+var FileModule = (function() {
+	return {
 
-            $('script[src]').each(function() {
+		/**
+		 * Returns all JavaScript files of the current website.
+		 * @returns An array with all found JavaScript files of the website.
+		 */
+		GetJavaScriptFiles: function() {
+			let files = [];
 
-                //get the hyperlink of the javascript.
-                var strJavaScriptURL = ($(this).attr('src') || '').toString().trim();
-                var urlObject = new URL(strJavaScriptURL, GetBaseUrl());
+			//get all JavaScript files of the website.
+			$('script[src]').each(function() {
 
-                info.push({
-                    'original': strJavaScriptURL,
-                    'url': {
-                        'href': urlObject.href,
-                        'origin': urlObject.origin
-                    },
-										'is_async': $(this).attr('async') ? true : false,
-										'charset': ($(this).attr('charset') || '').toString().trim()
-                });
-            });
+				//get the source of the file and the url object.
+				let sourceJavaScript = ($(this).attr('src') || '').toString().trim();
+				let urlJavaScript = new URL(sourceJavaScript, GetBaseUrl());
 
-            return info;
-        },
-        GetStylesheetFiles: function() {
-            var info = [];
+				//add the JavaScript file to the file array.
+				files.push({
+					'original': sourceJavaScript,
+					'async': $(this).attr('async') ? true : false,
+					'charset': ($(this).attr('charset') || '').toString().trim(),
+					'url': {
+						'href': urlJavaScript.href,
+						'origin': urlJavaScript.origin
+					}
+				});
+			});
 
-            $('link[rel="stylesheet"]').each(function() {
+			//return all found JavaScript files.
+			return files;
+		},
 
-                //get the hyperlink of the stylesheet.
-                var strStylesheetURL = ($(this).attr('href') || '').toString().trim();
+		/**
+		 * Returns all Stylesheet files of the current website.
+		 * @returns An array with all found Stylesheet files of the website.
+		 */
+		GetStylesheetFiles: function() {
+			let files = [];
 
-                //get the url object of the link.
-                //this can also be used to make sure the link is a valid url.
-                var urlObject = new URL(strStylesheetURL, GetBaseUrl());
+			//get all Stylesheet files of the website.
+			$('link[rel="stylesheet"]').each(function() {
 
-                info.push({
-                    'original': strStylesheetURL,
-                    'url': {
-                        'href': urlObject.href,
-                        'origin': urlObject.origin
-                    },
-										'media': ($(this).attr('media') || '').toString()
-                });
-            });
+				//get the source of the file and the url object.
+				let sourceStylesheet = ($(this).attr('href') || '').toString().trim();
+				let urlStylesheet = new URL(sourceStylesheet, GetBaseUrl());
 
-            return info;
-        }
-    };
+				//add the Stylesheet file to the file array.
+				files.push({
+					'original': sourceStylesheet,
+					'media': ($(this).attr('media') || '').toString().trim(),
+					'url': {
+						'href': urlStylesheet.href,
+						'origin': urlStylesheet.origin
+					}
+				});
+			});
+
+			//return all found Stylesheet files.
+			return files;
+		}
+	};
 })();

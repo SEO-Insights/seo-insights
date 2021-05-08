@@ -533,109 +533,6 @@ function GetToolsItem(title, description, link) {
     return '<tr><td><a class="full-link" href="' + link + '" target="_blank"><div class="heading">' + title + '</div><span class="info">' + description + '</span></a></td></tr>';
 }
 
-/**
- * View for Files.
- */
-function ViewFiles() {
-
-    //get the current / active tab of the current window and send a message
-    //to the content script to get the information from website.
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.tabs.sendMessage(
-            tabs[0].id,
-            {source: SOURCE.POPUP, subject: SUBJECT.FILE},
-            fnResponse
-        );
-    });
-
-    //define and execute the callback function called by the content script.
-    const fnResponse = objFiles => {
-			window.scrollTo(0, 0);
-
-        var objTableStylesheet = $('div#view-files table#files-stylesheet');
-        var objTableJavaScript = $('div#view-files table#files-javascript');
-        var objTableSpecialFiles = $('div#view-files table#files-special');
-				let objTableStylesheetDomains = $('div#view-files table#list-files-javascript-domains');
-				let objTableJavaScriptDomains = $('div#view-files table#list-files-stylesheet-domains')
-
-        //get the arrays with files.
-        var arrStylesheet = objFiles['stylesheet'];
-        var arrJavaScript = objFiles['javascript'];
-
-        //remove all rows of the stylesheet and javascript table.
-        objTableStylesheet.children('tbody').empty();
-        objTableJavaScript.children('tbody').empty();
-        objTableSpecialFiles.children('tbody').empty();
-				objTableStylesheetDomains.children('tbody').empty();
-				objTableJavaScriptDomains.children('tbody').empty();
-
-				let domainsJavaScript = GetDomains(arrJavaScript.map(file => file.url).map(file => file.href));
-				let domainsStylesheet = GetDomains(arrStylesheet.map(file => file.url).map(file => file.href));
-
-        //iterate through the stylesheet files and add them to the table.
-        for (let indexStylesheet = 0; indexStylesheet < arrStylesheet.length; indexStylesheet++) {
-					let htmlMedia = '';
-
-					if (arrStylesheet[indexStylesheet].media.trim() !== '') {
-						htmlMedia = '<span class="info"><strong>media: </strong>' + arrStylesheet[indexStylesheet].media + '</span>';
-					}
-
-					//add the stylesheet url to the list.
-					objTableStylesheet.children('tbody').append('<tr><td id="item-' + indexStylesheet + '"><a href="' + arrStylesheet[indexStylesheet].url.href + '" target="_blank">' + arrStylesheet[indexStylesheet].original + '</a>' + htmlMedia + '</td></tr>');
-        }
-
-        //iterate through the javascript files and add them to the table.
-        for (let indexJavaScript = 0; indexJavaScript < arrJavaScript.length; indexJavaScript++) {
-					let htmlAsync = '';
-					let htmlCharset = '';
-
-					if (arrJavaScript[indexJavaScript].async === true) {
-						htmlAsync = '<span class="info"><strong>async</strong></span>';
-					}
-
-					if (arrJavaScript[indexJavaScript].charset) {
-						htmlCharset = '<span class="info"><strong>charset: </strong>' + arrJavaScript[indexJavaScript].charset + '</span>';
-					}
-
-					//add the javascript url to the list.
-					objTableJavaScript.children('tbody').append('<tr><td id="item-' + indexJavaScript + '"><a href="' + arrJavaScript[indexJavaScript].url.href + '" target="_blank">' + arrJavaScript[indexJavaScript].original + '</a>' + htmlAsync + htmlCharset + '</td></tr>');
-        }
-
-				for (let domainStylesheet of domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).sort()) {
-					if (domainStylesheet.trim() !== '') {
-						$('table#list-files-stylesheet-domains').children('tbody').append('<tr><td>' + domainStylesheet + '</td><td>' + domainsStylesheet.filter(domain => domain === domainStylesheet).length + '</td></tr>');
-					}
-				}
-
-				for (let domainJavaScript of domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i).sort()) {
-					if (domainJavaScript.trim() !== '') {
-						$('table#list-files-javascript-domains').children('tbody').append('<tr><td>' + domainJavaScript + '</td><td>' + domainsJavaScript.filter(domain => domain === domainJavaScript).length + '</td></tr>');
-					}
-				}
-
-        var strSitemapURL = (new URL(tabUrl)).origin + '/sitemap.xml';
-        fetch(strSitemapURL).then(function(response) {
-            if (response.status == 200) {
-                $('div#view-files table#files-special tbody').append('<tr><td id="item-sitemapxml"><a href="' + strSitemapURL + '" target="_blank">sitemap.xml</a></td></tr>');
-                SetTableCountOnCardHeader($('#special-heading'), $('table#files-special'));
-            }
-        });
-
-        var strRobotsURL = (new URL(tabUrl)).origin + '/robots.txt';
-        fetch(strRobotsURL).then(function(response) {
-            if (response.status == 200) {
-                $('div#view-files table#files-special tbody').append('<tr><td id="item-robotstxt"><a href="' + strRobotsURL + '" target="_blank">robots.txt</a></td></tr>');
-                SetTableCountOnCardHeader($('#special-heading'), $('table#files-special'));
-            }
-        });
-
-        //set the count of items to the card header.
-        SetTableCountOnCardHeader($('#stylesheet-heading'), $('table#files-stylesheet'));
-        SetTableCountOnCardHeader($('#javascript-heading'), $('table#files-javascript'));
-    };
-}
-
-
 
 function GetHyperlinkInfo(link) {
 	let strLinkInfo = '';
@@ -711,6 +608,104 @@ function GetIconInfo(icon, id) {
 }
 
 
+
+/**
+ * View for Files.
+ */
+function ViewFiles() {
+
+	//get the current / active tab of the current window and send a message
+	//to the content script to get the information from website.
+	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{source: SOURCE.POPUP, subject: SUBJECT.FILE},
+			LoadFiles
+		);
+	});
+
+	//the callback function executed by the content script to show files information.
+	const LoadFiles = info => {
+		window.scrollTo(0, 0);
+
+		//get the HTML container of the files tab.
+		const tabFiles = $('div#view-files');
+
+		//get the tables to show the files information.
+		const tableFilesStylesheet = $('table#files-stylesheet', tabFiles);
+		const tableFilesJavaScript = $('table#files-javascript', tabFiles);
+		const tableFilesSpecial = $('table#files-special', tabFiles);
+		const tableStylesheetDomains = $('table#list-files-stylesheet-domains', tabFiles);
+		const tableJavaScriptDomains = $('table#list-files-javascript-domains', tabFiles);
+
+		//get the files from the content script.
+		const filesStylesheet = (info.stylesheet || []);
+		const filesJavaScript = (info.javascript || []);
+		const domainsStylesheet = GetDomains(filesStylesheet.map(file => file.url.href));
+		const domainsJavaScript = GetDomains(filesJavaScript.map(file => file.url.href));
+
+		//remove all rows of the files tables.
+		tableFilesStylesheet.children('tbody').empty();
+		tableFilesJavaScript.children('tbody').empty();
+		tableFilesSpecial.children('tbody').empty();
+		tableStylesheetDomains.children('tbody').empty();
+		tableJavaScriptDomains.children('tbody').empty();
+
+		//set all stylesheets to the table.
+		filesStylesheet.forEach(function(file, index) {
+			tableFilesStylesheet.children('tbody').append(`<tr id="stylesheet-${index}"><td><a href="${file.url.href}" target="_blank">${file.original}</a></td></tr>`);
+
+			//check whether the media property exists and add the additional information.
+			if (file.media.trim() !== '') {
+				tableFilesStylesheet.find('tbody > tr#stylesheet-' + index + ' td').append('<span class="info"><strong>media:</strong>' + file.media.trim() + '</span>');
+			}
+		});
+
+		//set all JavaScript files to the table.
+		filesJavaScript.forEach(function(file, index) {
+			tableFilesJavaScript.children('tbody').append(`<tr id="javascript-${index}"><td><a href="${file.url.href}" target="_blank">${file.original}</a></td></tr>`);
+
+			//check whether the async property exists and add the additional information.
+			if (file.async === true) {
+				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append('<span class="info"><strong>async</strong></span>');
+			}
+
+			//check whether the charset property exists and add the additional information.
+			if (file.charset) {
+				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append('<span class="info"><strong>charset:</strong>' + file.charset + '</span>');
+			}
+		});
+
+		//set all the stylesheet domains to the table.
+		domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
+			tableStylesheetDomains.children('tbody').append(GetInformationRow(domain, domainsStylesheet.filter(domainItem => domainItem === domain).length));
+		});
+
+		//set all the JavaScript domains to the table.
+		domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
+			tableJavaScriptDomains.children('tbody').append(GetInformationRow(domain, domainsJavaScript.filter(domainItem => domainItem === domain).length));
+		});
+
+		//create an array with all special files.
+		let filesSpecial = [];
+		filesSpecial.push((new URL(tabUrl)).origin + '/sitemap.xml');
+		filesSpecial.push((new URL(tabUrl)).origin + '/robots.txt');
+
+		//check for the special files and add to the table if available.
+		filesSpecial.forEach(function(file, index) {
+			fetch(file).then(function(response) {
+				if (response.status == 200) {
+					tableFilesSpecial.children('tbody').append(`<tr id="special-${index}"><td><a href="${file}" target="_blank">${file}</a></td></tr>`);
+					SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
+				}
+			});
+		});
+
+		//set the count of rows / items to the card header.
+		SetTableCountOnCardHeader($('#stylesheet-heading'), tableFilesStylesheet);
+		SetTableCountOnCardHeader($('#javascript-heading'), tableFilesJavaScript);
+	};
+}
 
 /**
  * View for Header.

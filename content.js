@@ -48,8 +48,8 @@ if (!IsInitializedContent) {
                 break;
             case SUBJECT.FILE:
                 sendResponse({
-                    'stylesheet': FileInformation.GetStylesheetFiles(),
-                    'javascript': FileInformation.GetJavaScriptFiles()
+                    'stylesheet': FileModule.GetStylesheetFiles(),
+                    'javascript': FileModule.GetJavaScriptFiles()
                 });
                 break;
         }
