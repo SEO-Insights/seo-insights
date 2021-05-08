@@ -176,18 +176,6 @@ function GetTextWordInformation(strValue, newLine = false) {
     return ((newLine === true) ? '<br>' : '') + strCharsHTML + strWordsHTML;
 }
 
-function GetHeaderInformation(url) {
-	window.scrollTo(0, 0);
-    $('table#info-headers > tbody').empty();
-    fetch(url).then(function(response) {
-        for (var p of response.headers.entries()) {
-            $('table#info-headers > tbody').append(GetInformationRow(p[0], p[1]));
-        }
-
-        $('table#info-headers > tbody').append(GetInformationRow('HTTP Status', response.status));
-        $('table#info-headers > tbody').append(GetInformationRow('HTTP Version', response.statusText.trim() === '' ? 'HTTP/2' : 'HTTP/1'));
-    });
-}
 
 function GetInformationRow(strValueColumn1, strValueColumn2, markerName, markerValue) {
 	if (markerName && markerValue) {
@@ -535,12 +523,6 @@ jQuery(function() {
     }
 });
 
-
-function ViewHeader() {
-    GetHeaderInformation(tabUrl);
-}
-
-
 /**
  * function to get the tool item to display on the list of the tool view.
  * @param {string} title The title of the tool.
@@ -607,7 +589,7 @@ function ViewFiles() {
 					let htmlAsync = '';
 					let htmlCharset = '';
 
-					if (arrJavaScript[indexJavaScript].is_async === true) {
+					if (arrJavaScript[indexJavaScript].async === true) {
 						htmlAsync = '<span class="info"><strong>async</strong></span>';
 					}
 
@@ -730,6 +712,32 @@ function GetIconInfo(icon, id) {
 
 
 
+/**
+ * View for Header.
+ */
+function ViewHeader() {
+	window.scrollTo(0, 0);
+
+	//get the tab and table of the headers list.
+	const tabHeaders = $('div#view-headers');
+	const tableHeaders = $('table#info-headers', tabHeaders);
+
+	//remove all available header information.
+	tableHeaders.children('tbody').empty();
+
+	//fetch the header information of the current url.
+	fetch(tabUrl).then(function(response) {
+
+		//set every information of the header to the table.
+		for (let header of response.headers.entries()) {
+			tableHeaders.children('tbody').append(GetInformationRow(header[0], header[1]));
+		}
+
+		//set the status of the response to the table.
+		tableHeaders.children('tbody').append(GetInformationRow('HTTP Status', response.status));
+		tableHeaders.children('tbody').append(GetInformationRow('HTTP Version', response.statusText.trim() === '' ? 'HTTP/2' : 'HTTP/1'));
+	});
+}
 
 /**
  * View for Tools.
