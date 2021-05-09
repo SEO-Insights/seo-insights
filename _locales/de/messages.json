@@ -26,6 +26,9 @@
 	"chars": {
 		"message": "Zeichen"
 	},
+	"items": {
+		"message": "Elemente"
+	},
 	"tools_gsc_mobile_friendly_title": {
 		"message": "Test auf Optimierung für Mobilgeräte – Google Search Console"
 	},

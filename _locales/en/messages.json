@@ -26,6 +26,9 @@
 	"chars": {
 		"message": "chars"
 	},
+	"items": {
+		"message": "items"
+	},
 	"tools_gsc_mobile_friendly_title": {
 		"message": "Mobile-Friendly Test"
 	},

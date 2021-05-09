@@ -59,15 +59,15 @@ function CanInjectContentScript(tab) {
  * @param {object} table The table container to get the count of items.
  */
 function SetTableCountOnCardHeader(cardHeader, table) {
-	const cntItems = $(table).find('tr').length;
+	const count = $(table).find('tr').length;
 	const cardHeaderButton = $(cardHeader).find('button');
 
 	//first remove the info on the HTML element.
-	$('span.info', cardHeaderButton).remove();
+	$('span.badge', cardHeaderButton).remove();
 
 	//set the count of items to the card header.
-	$(cardHeaderButton).append('<span class="info">' + cntItems + ' items</span>');
-	$(cardHeaderButton).prop('disabled', (cntItems === 0));
+	$(cardHeaderButton).append(`<span class="badge ${count > 0 ? 'bg-info' : 'bg-secondary'} ms-auto me-3 rounded-0">${count} ${chrome.i18n.getMessage('items')}</span>`);
+	$(cardHeaderButton).prop('disabled', (count === 0));
 }
 
 /**
@@ -165,7 +165,7 @@ function SetEmptyHint(table, hint) {
 function SetImageInfo(html, source) {
 	let image = new Image;
 	image.onload = function() {
-		html.append(GetInformation('size', (image.width + ' x ' + image.height)));
+		html.append(GetInformation('size', (image.width + 'x' + image.height)));
 	};
 	image.src = source;
 }
@@ -308,14 +308,14 @@ jQuery(function() {
 
 	//only register the events if the extension can be used.
 	if ($('body').hasClass('not-supported') === false) {
-		$('a[href="#view-summary"]').on('click', ViewSummary);
-		$('a[href="#view-meta-details"]').on('click', ViewMetaDetails);
-		$('a[href="#view-headings"]').on('click', ViewHeadings);
-    $('a[href="#view-images"]').on('click', ViewImages);
-		$('a[href="#view-hyperlinks"]').on('click', ViewHyperlinks);
-		$('a[href="#view-files"]').on('click', ViewFiles);
-		$('a[href="#view-headers"]').on('click', ViewHeader);
-		$('a[href="#view-tools"]').on('click', ViewTools);
+		$('button#view-summary-tab').on('click', ViewSummary);
+		$('button#view-meta-details-tab').on('click', ViewMetaDetails);
+		$('button#view-headings-tab').on('click', ViewHeadings);
+    $('button#view-images-tab').on('click', ViewImages);
+		$('button#view-hyperlinks-tab').on('click', ViewHyperlinks);
+		$('button#view-files-tab').on('click', ViewFiles);
+		$('button#view-headers-tab').on('click', ViewHeader);
+		$('button#view-tools-tab').on('click', ViewTools);
 	}
 });
 
@@ -496,16 +496,16 @@ function ViewMetaDetails() {
 
 		//now all lists are created so it is possible to count the items of each list.
 		SetTableCountOnCardHeader($('#meta-details-opengraph-heading'), $('div#meta-details-opengraph-content'));
-		SetTableCountOnCardHeader($('#meta-opengraph-basic-heading'), tableOpenGraphBasic);
-		SetTableCountOnCardHeader($('#meta-opengraph-article-heading'), tableOpenGraphArticle);
-		SetTableCountOnCardHeader($('#meta-opengraph-audio-heading'), tableOpenGraphAudio);
-		SetTableCountOnCardHeader($('#meta-opengraph-book-heading'), tableOpenGraphBook);
-		SetTableCountOnCardHeader($('#meta-opengraph-image-heading'), tableOpenGraphImage);
-		SetTableCountOnCardHeader($('#meta-opengraph-profile-heading'), tableOpenGraphProfile);
-		SetTableCountOnCardHeader($('#meta-opengraph-video-heading'), tableOpenGraphVideo);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-basic-heading'), tableOpenGraphBasic);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-article-heading'), tableOpenGraphArticle);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-audio-heading'), tableOpenGraphAudio);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-book-heading'), tableOpenGraphBook);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-image-heading'), tableOpenGraphImage);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-profile-heading'), tableOpenGraphProfile);
+		SetTableCountOnCardHeader($('#meta-details-opengraph-video-heading'), tableOpenGraphVideo);
 		SetTableCountOnCardHeader($('#meta-details-facebook-heading'), tableFacebook);
 		SetTableCountOnCardHeader($('#meta-details-twitter-heading'), tableTwitter);
-		SetTableCountOnCardHeader($('#meta-details-dublin-core-heading'), tableDublinCore);
+		SetTableCountOnCardHeader($('#meta-details-dublincore-heading'), tableDublinCore);
 		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
 		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
 		SetTableCountOnCardHeader($('#meta-details-errors-heading'), tableErrorDetails);
@@ -775,7 +775,7 @@ function ViewTools() {
 		//get the tables to show the headings information.
 		const tableHeadings = $('table#list-headings', tabHeadings);
 		const tableHeadingsStatistics = $('table#statistics-headings', tabHeadings);
-		const tableHeadingsErrors = $('table#headings-errors', tabHeadings);
+		const tableHeadingsErrors = $('table#list-headings-errors', tabHeadings);
 
 		//get the headings from the content script.
 		const headings = (info.headings || []);

@@ -27,7 +27,7 @@ SEO Insights is a Chrome extension to display the most important information of 
 ### Used libraries
 
 * [jQuery 3.6.0](https://jquery.com/)
-* [Bootstrap 4.6](https://getbootstrap.com/docs/4.6/getting-started/introduction/)
+* [Bootstrap 5.0](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
 ### Installation
 

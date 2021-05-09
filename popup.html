@@ -14,17 +14,16 @@
 	<body>
 		<div class="container-fluid">
 
-			<!-- navigation controls -->
 			<nav>
-				<div class="nav nav-pills flex-nowrap">
-					<a class="nav-item nav-link active" id="view-summary-tab" data-toggle="tab" href="#view-summary" role="tab" aria-controls="view-summary" aria-selected="true">__MSG_summary__</a>
-					<a class="nav-item nav-link" id="view-meta-tab" data-toggle="tab" href="#view-meta-details" role="tab" aria-controls="view-meta" aria-selected="false">Meta</a>
-					<a class="nav-item nav-link" id="view-headings-tab" data-toggle="tab" href="#view-headings" role="tab" aria-controls="view-headings" aria-selected="false">__MSG_headings__</a>
-					<a class="nav-item nav-link" id="view-images-tab" data-toggle="tab" href="#view-images" role="tab" aria-controls="view-images" aria-selected="false">__MSG_images__</a>
-					<a class="nav-item nav-link" id="view-hyperlinks-tab" data-toggle="tab" href="#view-hyperlinks" role="tab" aria-controls="view-hyperlinks" aria-selected="false">Links</a>
-					<a class="nav-item nav-link" id="view-files-tab" data-toggle="tab" href="#view-files" role="tab" aria-controls="view-files" aria-selected="false">__MSG_files__</a>
-					<a class="nav-item nav-link" id="view-headers-tab" data-toggle="tab" href="#view-headers" role="tab" aria-controls="view-headers" aria-selected="false">Headers</a>
-					<a class="nav-item nav-link" id="view-tools-tab" data-toggle="tab" href="#view-tools" role="tab" aria-controls="view-tools" aria-selected="false">Tools</a>
+				<div class="nav nav-pills flex-nowrap" role="tablist">
+					<button class="nav-link active" id="view-summary-tab" data-bs-toggle="pill" data-bs-target="#view-summary" type="button" role="tab" aria-controls="view-summary" aria-selected="true">__MSG_summary__</button>
+					<button class="nav-link" id="view-meta-details-tab" data-bs-toggle="pill" data-bs-target="#view-meta-details" type="button" role="tab" aria-controls="view-meta-details" aria-selected="true">Meta</button>
+					<button class="nav-link" id="view-headings-tab" data-bs-toggle="pill" data-bs-target="#view-headings" type="button" role="tab" aria-controls="view-headings" aria-selected="true">__MSG_headings__</button>
+					<button class="nav-link" id="view-images-tab" data-bs-toggle="pill" data-bs-target="#view-images" type="button" role="tab" aria-controls="view-images" aria-selected="true">__MSG_images__</button>
+					<button class="nav-link" id="view-hyperlinks-tab" data-bs-toggle="pill" data-bs-target="#view-hyperlinks" type="button" role="tab" aria-controls="view-hyperlinks" aria-selected="true">Links</button>
+					<button class="nav-link" id="view-files-tab" data-bs-toggle="pill" data-bs-target="#view-files" type="button" role="tab" aria-controls="view-files" aria-selected="true">__MSG_files__</button>
+					<button class="nav-link" id="view-headers-tab" data-bs-toggle="pill" data-bs-target="#view-headers" type="button" role="tab" aria-controls="view-header" aria-selected="true">Headers</button>
+					<button class="nav-link" id="view-tools-tab" data-bs-toggle="pill" data-bs-target="#view-tools" type="button" role="tab" aria-controls="view-tools" aria-selected="true">Tools</button>
 				</div>
 			</nav>
 
@@ -41,197 +40,184 @@
 				</div>
 
 				<!-- content of the meta tab page -->
-				<div class="tab-pane fade" id="view-meta-details" role="tabpanel" aria-labelledby="view-meta-tab">
-					<div class="accordion" id="meta">
-						<div class="card">
-							<div class="card-header" id="meta-details-facebook-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-details-facebook-content" aria-expanded="true" aria-controls="meta-details-facebook-content">Facebook</button>
-								</h2>
-							</div>
-							<div id="meta-details-facebook-content" class="collapse" aria-labelledby="meta-details-facebook-heading" data-parent="#meta">
-								<div class="card-body">
+				<div class="tab-pane fade" id="view-meta-details" role="tabpanel" aria-labelledby="view-meta-details-tab">
+					<div class="accordion accordion-flush" id="meta-details">
+
+						<!-- Meta Details - Facebook -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-facebook-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-facebook-content" aria-expanded="false" aria-controls="meta-details-facebook-content">Facebook</button>
+							</h2>
+							<div id="meta-details-facebook-content" class="accordion-collapse collapse" aria-labelledby="meta-details-facebook-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="meta-details-facebook">
 										<tbody></tbody>
 									</table>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="meta-details-opengraph-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-details-opengraph-content" aria-expanded="false" aria-controls="meta-details-opengraph-content">OpenGraph</button>
-								</h2>
-							</div>
-							<div id="meta-details-opengraph-content" class="collapse" aria-labelledby="meta-details-opengraph-heading" data-parent="#meta">
-								<div class="card-body">
-									<div class="accordion" id="meta-opengraph">
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-basic-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-opengraph-basic-content" aria-expanded="false" aria-controls="meta-opengraph-basic-content">Basic</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-basic-content" class="collapse" aria-labelledby="meta-opengraph-basic-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-basic">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-article-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-article-collapse" aria-expanded="true" aria-controls="meta-opengraph-article-collapse">Article</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-article-collapse" class="collapse" aria-labelledby="meta-opengraph-article-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-article">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-audio-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-audio-collapse" aria-expanded="true" aria-controls="meta-opengraph-audio-collapse">Audio</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-audio-collapse" class="collapse" aria-labelledby="meta-opengraph-audio-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-audio">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-book-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-book-collapse" aria-expanded="true" aria-controls="meta-opengraph-book-collapse">Book</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-book-collapse" class="collapse" aria-labelledby="meta-opengraph-book-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-book">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-image-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-image-collapse" aria-expanded="true" aria-controls="meta-opengraph-image-collapse">Image</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-image-collapse" class="collapse" aria-labelledby="meta-opengraph-image-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-image">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-profile-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-profile-collapse" aria-expanded="true" aria-controls="meta-opengraph-profile-collapse">Profile</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-profile-collapse" class="collapse" aria-labelledby="meta-opengraph-profile-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-profile">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-header" id="meta-opengraph-video-heading">
-												<h2 class="mb-0">
-													<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#meta-opengraph-video-collapse" aria-expanded="true" aria-controls="meta-opengraph-video-collapse">Video</button>
-												</h2>
-											</div>
-											<div id="meta-opengraph-video-collapse" class="collapse" aria-labelledby="meta-opengraph-video-heading" data-parent="#meta-opengraph">
-												<div class="card-body">
-													<table class="table table-sm item-list" id="meta-details-opengraph-video">
-														<tbody></tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
+
+						<!-- Meta Details - Open Graph - Basic -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-basic-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-basic-content" aria-expanded="false" aria-controls="meta-details-opengraph-basic-content">Open Graph - Basic</button>
+							</h2>
+							<div id="meta-details-opengraph-basic-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-basic-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-basic">
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="meta-details-twitter-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-details-twitter-content" aria-expanded="false" aria-controls="meta-details-twitter-content">Twitter</button>
-								</h2>
+
+						<!-- Meta Details - Open Graph - Article -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-article-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-article-content" aria-expanded="false" aria-controls="meta-details-opengraph-article-content">Open Graph - Article</button>
+							</h2>
+							<div id="meta-details-opengraph-article-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-article-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-article">
+										<tbody></tbody>
+									</table>
+								</div>
 							</div>
-							<div id="meta-details-twitter-content" class="collapse" aria-labelledby="meta-details-twitter-heading" data-parent="#meta">
-								<div class="card-body">
+						</div>
+
+						<!-- Meta Details - Open Graph - Audio -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-audio-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-audio-content" aria-expanded="false" aria-controls="meta-details-opengraph-audio-content">Open Graph - Audio</button>
+							</h2>
+							<div id="meta-details-opengraph-audio-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-audio-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-audio">
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Meta Details - Open Graph - Book -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-book-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-book-content" aria-expanded="false" aria-controls="meta-details-opengraph-book-content">Open Graph - Book</button>
+							</h2>
+							<div id="meta-details-opengraph-book-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-book-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-book">
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Meta Details - Open Graph - Image -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-image-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-image-content" aria-expanded="false" aria-controls="meta-details-opengraph-image-content">Open Graph - Image</button>
+							</h2>
+							<div id="meta-details-opengraph-image-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-image-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-image">
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Meta Details - Open Graph - Profile -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-profile-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-profile-content" aria-expanded="false" aria-controls="meta-details-opengraph-profile-content">Open Graph - Profile</button>
+							</h2>
+							<div id="meta-details-opengraph-profile-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-profile-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-profile">
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Meta Details - Open Graph - Video -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-opengraph-video-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-opengraph-video-content" aria-expanded="false" aria-controls="meta-details-opengraph-video-content">Open Graph - Video</button>
+							</h2>
+							<div id="meta-details-opengraph-video-content" class="accordion-collapse collapse" aria-labelledby="meta-details-opengraph-video-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="meta-details-opengraph-video">
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Meta Details - Twitter -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-twitter-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-twitter-content" aria-expanded="false" aria-controls="meta-details-twitter-content">Twitter</button>
+							</h2>
+							<div id="meta-details-twitter-content" class="accordion-collapse collapse" aria-labelledby="meta-details-twitter-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="meta-details-twitter">
 										<tbody></tbody>
 									</table>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="meta-details-parsely-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-details-parsely-content" aria-expanded="false" aria-controls="meta-details-parsely-content">Parse.ly</button>
-								</h2>
-							</div>
-							<div id="meta-details-parsely-content" class="collapse" aria-labelledby="meta-details-parsely-heading" data-parent="#meta">
-								<div class="card-body">
+
+						<!-- Meta Details - Parse.ly -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-parsely-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-parsely-content" aria-expanded="false" aria-controls="meta-details-parsely-content">Parse.ly</button>
+							</h2>
+							<div id="meta-details-parsely-content" class="accordion-collapse collapse" aria-labelledby="meta-details-parsely-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="meta-details-parsely">
 										<tbody></tbody>
 									</table>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="meta-details-dublin-core-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-details-dublin-core-content" aria-expanded="false" aria-controls="meta-details-dublin-core-content">Dublin Core</button>
-								</h2>
-							</div>
-							<div id="meta-details-dublin-core-content" class="collapse" aria-labelledby="meta-details-dublin-core-heading" data-parent="#meta">
-								<div class="card-body">
+
+						<!-- Meta Details - Dublin Core -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-dublincore-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-dublincore-content" aria-expanded="false" aria-controls="meta-details-dublincore-content">Dublin Core</button>
+							</h2>
+							<div id="meta-details-dublincore-content" class="accordion-collapse collapse" aria-labelledby="meta-details-dublincore-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="meta-details-dublin-core">
 										<tbody></tbody>
 									</table>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="meta-details-others-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-details-others-content" aria-expanded="false" aria-controls="meta-details-others-content">__MSG_others__</button>
-								</h2>
-							</div>
-							<div id="meta-details-others-content" class="collapse" aria-labelledby="meta-details-others-heading" data-parent="#meta">
-								<div class="card-body">
+
+						<!-- Meta Details - Others -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-others-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-others-content" aria-expanded="false" aria-controls="meta-details-others-content">__MSG_others__</button>
+							</h2>
+							<div id="meta-details-others-content" class="accordion-collapse collapse" aria-labelledby="meta-details-others-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="meta-details-others">
 										<tbody></tbody>
 									</table>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="meta-details-errors-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#meta-details-errors-content" aria-expanded="false" aria-controls="meta-details-errors-content">__MSG_errors_warnings_hints__</button>
-								</h2>
-							</div>
-							<div id="meta-details-errors-content" class="collapse" aria-labelledby="meta-details-errors-heading" data-parent="#meta">
-								<div class="card-body">
+
+						<!-- Meta Details - Errors and Warnings -->
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="meta-details-errors-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#meta-details-errors-content" aria-expanded="false" aria-controls="meta-details-errors-content">__MSG_errors_warnings_hints__</button>
+							</h2>
+							<div id="meta-details-errors-content" class="accordion-collapse collapse" aria-labelledby="meta-details-errors-heading" data-bs-parent="#meta-details">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="meta-details-errors">
 										<tbody></tbody>
 									</table>
@@ -248,7 +234,7 @@
 
 					<!-- statistics for headings -->
 					<table class="table table-sm table-bordered" id="statistics-headings">
-						<thead class="thead-dark">
+						<thead class="table-dark">
 							<tr>
 								<th>h1</th>
 								<th>h2</th>
@@ -278,16 +264,14 @@
 					</table>
 
 					<!-- list of errors and warnings -->
-					<div class="accordion" id="heading">
-						<div class="card">
-							<div class="card-header" id="headings-errors-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#headings-errors-content" aria-expanded="false" aria-controls="headings-errors-content">__MSG_errors_warnings_hints__</button>
-								</h2>
-							</div>
-							<div id="headings-errors-content" class="collapse" aria-labelledby="headings-errors-heading" data-parent="#heading">
-								<div class="card-body">
-									<table class="table table-sm item-list" id="headings-errors">
+					<div class="accordion accordion-flush" id="heading-errors">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="headings-errors-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#headings-errors-content" aria-expanded="false" aria-controls="headings-errors-content">__MSG_errors_warnings_hints__</button>
+							</h2>
+							<div id="headings-errors-content" class="accordion-collapse collapse" aria-labelledby="headings-errors-heading" data-bs-parent="#headings-errors">
+								<div class="accordion-body">
+									<table class="table table-sm item-list" id="list-headings-errors">
 										<tbody></tbody>
 									</table>
 								</div>
@@ -303,7 +287,7 @@
 
 					<!-- statistics for images -->
 					<table class="table table-sm table-bordered" id="statistics-images">
-						<thead class="thead-dark">
+						<thead class="table-dark">
 							<tr>
 								<th>all</th>
 								<th>w/o alt</th>
@@ -321,23 +305,25 @@
 						</tbody>
 					</table>
 
-					<div class="nav nav-pills" id="image-info" role="tablist">
-						<a class="nav-item nav-link active" id="image-tab" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="true">__MSG_images__</a>
-						<a class="nav-item nav-link" id="image-domains-tab" data-toggle="tab" href="#image-domains" role="tab" aria-controls="image-domains" aria-selected="false">Domains</a>
-						<a class="nav-item nav-link" id="image-icons-tab" data-toggle="tab" href="#image-icons" role="tab" aria-controls="image-icons" aria-selected="false">Icons</a>
-					</div>
-					<div class="tab-content" id="image-info-content">
-						<div class="tab-pane fade show active" id="images" role="tabpanel" aria-labelledby="hyperlinks-tab">
+					<nav>
+						<div class="nav nav-pills flex-nowrap" role="tablist">
+							<button class="nav-link active" id="nav-images-tab" data-bs-toggle="tab" data-bs-target="#nav-images" type="button" role="tab" aria-controls="nav-images" aria-selected="true">__MSG_images__</button>
+							<button class="nav-link" id="nav-images-domains-tab" data-bs-toggle="tab" data-bs-target="#nav-images-domains" type="button" role="tab" aria-controls="nav-images-domains" aria-selected="false">Domains</button>
+							<button class="nav-link" id="nav-images-icons-tab" data-bs-toggle="tab" data-bs-target="#nav-images-icons" type="button" role="tab" aria-controls="nav-images-icons" aria-selected="false">Icons</button>
+						</div>
+					</nav>
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="nav-images" role="tabpanel" aria-labelledby="nav-images-tab">
 							<table class="table table-sm item-list" id="list-images">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="image-domains" role="tabpanel" aria-labelledby="image-domains-tab">
+						<div class="tab-pane fade" id="nav-images-domains" role="tabpanel" aria-labelledby="nav-images-domains-tab">
 							<table class="table table-sm item-list" id="list-image-domains">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="image-icons" role="tabpanel" aria-labelledby="image-icons-tab">
+						<div class="tab-pane fade" id="nav-images-icons" role="tabpanel" aria-labelledby="nav-images-icons-tab">
 							<table class="table table-sm item-list" id="list-image-icons">
 								<tbody></tbody>
 							</table>
@@ -352,7 +338,7 @@
 
 					<!-- statistics for hyperlinks -->
 					<table class="table table-sm table-bordered" id="statistics-hyperlinks">
-						<thead class="thead-dark">
+						<thead class="table-dark">
 							<tr>
 								<th colspan="2">links</th>
 								<th colspan="2">internal</th>
@@ -381,7 +367,7 @@
 
 					<!-- statistics for protocols -->
 					<table class="table table-sm table-bordered" id="statistics-protocols">
-						<thead class="thead-dark">
+						<thead class="table-dark">
 							<tr>
 								<th>http</th>
 								<th>https</th>
@@ -402,41 +388,43 @@
 							</tr>
 						</tbody>
 					</table>
-					<div class="nav nav-pills" id="hyperlink-info" role="tablist">
-						<a class="nav-item nav-link active" id="hyperlinks-tab" data-toggle="tab" href="#hyperlinks" role="tab" aria-controls="hyperlinks" aria-selected="true">Hyperlinks</a>
-						<a class="nav-item nav-link" id="hyperlink-alternate-domains-tab" data-toggle="tab" href="#hyperlink-alternate" role="tab" aria-controls="hyperlink-alternate" aria-selected="false">Alternate</a>
-						<a class="nav-item nav-link" id="hyperlink-domains-tab" data-toggle="tab" href="#hyperlink-domains" role="tab" aria-controls="hyperlink-domains" aria-selected="false">Domains</a>
-						<a class="nav-item nav-link" id="hyperlink-preload-tab" data-toggle="tab" href="#hyperlink-preload" role="tab" aria-controls="hyperlink-preload" aria-selected="false">Preload</a>
-						<a class="nav-item nav-link" id="hyperlink-dns-prefetch-tab" data-toggle="tab" href="#hyperlink-dns-prefetch" role="tab" aria-controls="hyperlink-dns-prefetch" aria-selected="false">DNS Prefetch</a>
-						<a class="nav-item nav-link" id="hyperlink-preconnect-tab" data-toggle="tab" href="#hyperlink-preconnect" role="tab" aria-controls="hyperlink-preconnect" aria-selected="false">Preconnect</a>
-					</div>
-					<div class="tab-content" id="hyperlink-info-content">
-						<div class="tab-pane fade show active" id="hyperlinks" role="tabpanel" aria-labelledby="hyperlinks-tab">
+					<nav>
+						<div class="nav nav-pills flex-nowrap" role="tablist">
+							<button class="nav-link active" id="links-tab" data-bs-toggle="tab" data-bs-target="#links" type="button" role="tab" aria-controls="links" aria-selected="true">Links</button>
+							<button class="nav-link" id="links-alternate-tab" data-bs-toggle="tab" data-bs-target="#links-alternate" type="button" role="tab" aria-controls="links-alternate" aria-selected="false">Alternate</button>
+							<button class="nav-link" id="links-domains-tab" data-bs-toggle="tab" data-bs-target="#links-domains" type="button" role="tab" aria-controls="links-domains" aria-selected="false">Domains</button>
+							<button class="nav-link" id="links-preload-tab" data-bs-toggle="tab" data-bs-target="#links-preload" type="button" role="tab" aria-controls="links-preload" aria-selected="false">Preload</button>
+							<button class="nav-link" id="links-dns-prefetch-tab" data-bs-toggle="tab" data-bs-target="#links-dns-prefetch" type="button" role="tab" aria-controls="links-dns-prefetch" aria-selected="false">DNS Prefetch</button>
+							<button class="nav-link" id="links-preconnect-tab" data-bs-toggle="tab" data-bs-target="#links-preconnect" type="button" role="tab" aria-controls="links-preconnect" aria-selected="false">Preconnect</button>
+						</div>
+					</nav>
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="links" role="tabpanel" aria-labelledby="links-tab">
 							<table class="table table-sm item-list" id="list-hyperlinks">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="hyperlink-alternate" role="tabpanel" aria-labelledby="hyperlink-alternate-tab">
+						<div class="tab-pane fade" id="links-alternate" role="tabpanel" aria-labelledby="links-alternate-tab">
 							<table class="table table-sm item-list" id="list-hyperlink-alternate">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="hyperlink-domains" role="tabpanel" aria-labelledby="hyperlink-domains-tab">
+						<div class="tab-pane fade" id="links-domains" role="tabpanel" aria-labelledby="links-domains-tab">
 							<table class="table table-sm item-list" id="list-hyperlink-domains">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="hyperlink-preload" role="tabpanel" aria-labelledby="hyperlink-preload-tab">
+						<div class="tab-pane fade" id="links-preload" role="tabpanel" aria-labelledby="links-preload-tab">
 							<table class="table table-sm item-list" id="list-hyperlink-preload">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="hyperlink-dns-prefetch" role="tabpanel" aria-labelledby="hyperlink-dns-prefetch-tab">
+						<div class="tab-pane fade" id="links-dns-prefetch" role="tabpanel" aria-labelledby="links-dns-prefetch-tab">
 							<table class="table table-sm item-list" id="list-hyperlink-dns-prefetch">
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="hyperlink-preconnect" role="tabpanel" aria-labelledby="hyperlink-preconnect-tab">
+						<div class="tab-pane fade" id="links-preconnect" role="tabpanel" aria-labelledby="links-preconnect-tab">
 							<table class="table table-sm item-list" id="list-preconnect">
 								<tbody></tbody>
 							</table>
@@ -448,26 +436,26 @@
 				<!-- ------------------------------------------ View for Files ------------------------------------------ -->
 				<!-- ---------------------------------------------------------------------------------------------------- -->
 				<div class="tab-pane fade" id="view-files" role="tabpanel" aria-labelledby="view-files-tab">
-					<div class="accordion" id="files-accordion">
-						<div class="card">
-							<div class="card-header" id="stylesheet-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#stylesheet-content" aria-expanded="true" aria-controls="stylesheet-content">Stylesheets</button>
-								</h2>
-							</div>
-							<div id="stylesheet-content" class="collapse" aria-labelledby="stylesheet-heading" data-parent="#files-accordion">
-								<div class="card-body">
-									<div class="nav nav-pills" id="files-stylesheet" role="tablist">
-										<a class="nav-item nav-link active" id="stylesheet-tab" data-toggle="tab" href="#stylesheet" role="tab" aria-controls="stylesheet" aria-selected="true">__MSG_files__</a>
-										<a class="nav-item nav-link" id="stylesheet-domains-tab" data-toggle="tab" href="#stylesheet-domains" role="tab" aria-controls="stylesheet-domains" aria-selected="false">Domains</a>
-									</div>
-									<div class="tab-content" id="files-stylesheet-content">
-										<div class="tab-pane fade show active" id="stylesheet" role="tabpanel" aria-labelledby="stylesheet-tab">
+					<div class="accordion accordion-flush" id="files-accordion">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="stylesheet-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#stylesheet-content" aria-expanded="false" aria-controls="stylesheet-content">Stylesheets</button>
+							</h2>
+							<div id="stylesheet-content" class="accordion-collapse collapse" aria-labelledby="stylesheet-heading" data-bs-parent="#files-accordion">
+								<div class="accordion-body">
+									<nav>
+										<div class="nav nav-pills flex-nowrap" role="tablist">
+											<button class="nav-link active" id="files-stylesheet-tab" data-bs-toggle="pill" data-bs-target="#files-stylesheet" type="button" role="tab" aria-controls="files-stylesheet" aria-selected="true">__MSG_files__</button>
+											<button class="nav-link" id="files-stylesheet-domain-tab" data-bs-toggle="pill" data-bs-target="#files-stylesheet-domain" type="button" role="tab" aria-controls="files-stylesheet-domain" aria-selected="true">Domains</button>
+										</div>
+									</nav>
+									<div class="tab-content">
+										<div class="tab-pane fade show active" id="files-stylesheet" role="tabpanel" aria-labelledby="files-stylesheet-tab">
 											<table class="table table-sm item-list" id="files-stylesheet">
 												<tbody></tbody>
 											</table>
 										</div>
-										<div class="tab-pane fade" id="stylesheet-domains" role="tabpanel" aria-labelledby="stylesheet-domains-tab">
+										<div class="tab-pane fade show" id="files-stylesheet-domain" role="tabpanel" aria-labelledby="files-stylesheet-domain-tab">
 											<table class="table table-sm item-list" id="list-files-stylesheet-domains">
 												<tbody></tbody>
 											</table>
@@ -476,25 +464,25 @@
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="javascript-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#javascript-content" aria-expanded="false" aria-controls="javascript-content">JavaScript</button>
-								</h2>
-							</div>
-							<div id="javascript-content" class="collapse" aria-labelledby="javascript-heading" data-parent="#files-accordion">
-								<div class="card-body">
-									<div class="nav nav-pills" id="files-javascript" role="tablist">
-										<a class="nav-item nav-link active" id="javascript-tab" data-toggle="tab" href="#javascript" role="tab" aria-controls="javascript" aria-selected="true">__MSG_files__</a>
-										<a class="nav-item nav-link" id="javascript-domains-tab" data-toggle="tab" href="#javascript-domains" role="tab" aria-controls="javascript-domains" aria-selected="false">Domains</a>
-									</div>
-									<div class="tab-content" id="files-javascript-content">
-										<div class="tab-pane fade show active" id="javascript" role="tabpanel" aria-labelledby="javascript-tab">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="javascript-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#javascript-content" aria-expanded="false" aria-controls="javascript-content">JavaScript</button>
+							</h2>
+							<div id="javascript-content" class="accordion-collapse collapse" aria-labelledby="javascript-heading" data-bs-parent="#files-accordion">
+								<div class="accordion-body">
+									<nav>
+										<div class="nav nav-pills flex-nowrap" role="tablist">
+											<button class="nav-link active" id="files-javascript-tab" data-bs-toggle="tab" data-bs-target="#files-javascript" type="button" role="tab" aria-controls="files-javascript" aria-selected="true">__MSG_files__</button>
+											<button class="nav-link" id="files-javascript-domains-tab" data-bs-toggle="tab" data-bs-target="#files-javascript-domains" type="button" role="tab" aria-controls="files-javascript-domains" aria-selected="false">Domains</button>
+										</div>
+									</nav>
+									<div class="tab-content">
+										<div class="tab-pane fade show active" id="files-javascript" role="tabpanel" aria-labelledby="files-javascript-tab">
 											<table class="table table-sm item-list" id="files-javascript">
 												<tbody></tbody>
 											</table>
 										</div>
-										<div class="tab-pane fade" id="javascript-domains" role="tabpanel" aria-labelledby="javascript-domains-tab">
+										<div class="tab-pane fade" id="files-javascript-domains" role="tabpanel" aria-labelledby="files-javascript-domains-tab">
 											<table class="table table-sm item-list" id="list-files-javascript-domains">
 												<tbody></tbody>
 											</table>
@@ -503,14 +491,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header" id="special-heading">
-								<h2 class="mb-0">
-									<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#special-content" aria-expanded="false" aria-controls="special-content">Special</button>
-								</h2>
-							</div>
-							<div id="special-content" class="collapse" aria-labelledby="special-heading" data-parent="#files-accordion">
-								<div class="card-body">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="special-heading">
+								<button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#special-content" aria-expanded="false" aria-controls="special-content">Special</button>
+							</h2>
+							<div id="special-content" class="accordion-collapse collapse" aria-labelledby="special-heading" data-bs-parent="#files-accordion">
+								<div class="accordion-body">
 									<table class="table table-sm item-list" id="files-special">
 										<tbody></tbody>
 									</table>
@@ -538,7 +524,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="alert alert-warning" role="alert"><strong>Hinweis:</strong> Erweiterung konnte nicht geladen werden. Ungültige URL!</div>
 		</div>
+		<div class="alert alert-warning alert-not-supported" role="alert"><strong>Hinweis:</strong> Erweiterung konnte nicht geladen werden. Ungültige URL!</div>
 	</body>
 </html>
