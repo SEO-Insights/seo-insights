@@ -148,6 +148,9 @@ table#list-image-icons tr td a,
 table#list-image-icons tr td a:link {
     display: block;
 }
+html, body {
+	overflow-y: scroll;
+}
 
 /** navigation / tabs of the extension. */
 nav {
