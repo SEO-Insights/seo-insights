@@ -204,49 +204,159 @@ function GetToolsItem(title, description, link) {
 	return `<tr><td><a class="full-link" href="${link}" target="_blank"><div class="heading">${title}</div><span class="info">${description}</span></a></td></tr>`;
 }
 
-
-
-function GetTextWordInformation(strValue, newLine = false) {
-    strValue = (strValue || '').toString().trim();
-
-    //don't create information for empty string values.
-    if (strValue.length === 0) {
-        return '';
-    }
-
-    //return the tags with information.
-    return ((newLine === true) ? '<br>' : '') + GetInformation('', strValue.length + ' ' + chrome.i18n.getMessage('chars')) + GetInformation('', GetWordCount(strValue) + ' ' + chrome.i18n.getMessage('words'));
+/**
+ * Returns a string value with leadings zeros and the expected length.
+ * @param {string} str The string value padded with zeros.
+ * @param {integer} length The resulting string length after padding.
+ * @returns The string value padded with zeros to the expected length.
+ */
+ function PadZero(str, length) {
+	length = length || 2;
+	const zeros = new Array(length).join('0');
+	return (zeros + str).slice(-length);
 }
 
+/**
+ * Returns the inverted value of a given HEX value.
+ * @param {string} hexValue The HEX value to be inverted.
+ * @param {*} useBlackWhite State whether the HEX value should be inverted to black or white.
+ * @returns The color value of the inverted HEX value.
+ * @see https://stackoverflow.com/a/35970186/3840840
+ */
+function InvertColor(hexValue, useBlackWhite) {
 
-function GetInformationRow(strValueColumn1, strValueColumn2, markerName, markerValue) {
+	//remove the hash of the hex value.
+	if (hexValue.indexOf('#') === 0) {
+		hexValue = hexValue.slice(1);
+	}
 
-	var arrDetailedInfo = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title'];
+	//convert the 3-digit hex value to 6-digits.
+	if (hexValue.length === 3) {
+		hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+	}
+
+	//check whether the hex value is valid.
+	if (hexValue.length !== 6) {
+		return null;
+	}
+
+	//get the red, green and blue part of the color.
+	let r = parseInt(hexValue.slice(0, 2), 16);
+	let g = parseInt(hexValue.slice(2, 4), 16);
+	let b = parseInt(hexValue.slice(4, 6), 16);
+
+	//it is possible to invert to black or white.
+	//https://stackoverflow.com/a/3943023/3840840
+	if (useBlackWhite) {
+		return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+	}
+
+	//invert the red, green and blue value.
+	r = (255 - r).toString(16);
+	g = (255 - g).toString(16);
+	b = (255 - b).toString(16);
+
+	//pad each color component with zeros and return the hex value.
+	return "#" + PadZero(r) + PadZero(g) + PadZero(b);
+}
+
+/**
+ * Returns the HEX value of the given RGB or RGBA value.
+ * @param {string} rgb The RGB / RGBA value to convert.
+ * @returns The HEX value of the given RGB / RGBA value.
+ */
+function RGBtoHEX(rgb) {
+	rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+	return (rgb && rgb.length === 4) ? "#" +
+		("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+	 	("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+	 	("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+}
+
+/**
+ * Returns the count of words in a given string value.
+ * @param {string} str The string value to get the count of words from.
+ * @returns The count of words in the given string value.
+ * @see https://stackoverflow.com/a/30335883/3840840
+ */
+function GetWordCount(str) {
+	str = str.replace(/(^\s*)|(\s*$)/gi, '');  // remove starting and ending spaces.
+	str = str.replace(/-\s/gi, ''); // replace word-break with empty string to get one word.
+	str = str.replace(/\s/gi, ' ');  // replace all spaces, tabs and new lines with a space.
+	str = str.replace(/\s{2,}/gi, ' '); // replace two ore more spaces with a single space.
+	return str.split(' ').filter(str => str.match(/[0-9a-z\u00C0-\u017F]/gi)).length;
+}
+
+/**
+ * Returns a escaped string of the given string to also display HTML specific chars on HTML.
+ * @param {string} str The string value to be escaped.
+ * @returns The escaped string value to display HTML specific chars on HTML.
+ */
+function EscapeHTML(str) {
+	return String(str).replace(/[&<>"'\/]/g, function(s) {
+		return {
+			"&": "&amp;",
+			"<": "&lt;",
+			">": "&gt;",
+			'"': '&quot;',
+			"'": '&#39;',
+			"/": '&#x2F;'
+		}[s];
+	});
+}
+
+/**
+ * Returns a color value as HTML element.
+ * @param {string} value The color value to format.
+ * @returns The formatted color value as HTML element.
+ */
+function GetFormattedColorValue(value) {
+	const textColor = (value.toLocaleLowerCase().startsWith('rgb')) ? RGBtoHEX(value) : value;
+	return `<div class="theme-color" style="background: ${value}; color: ${InvertColor(textColor, true)}">${value}</div>`;
+}
+
+/**
+ * Returns the chars and words count as HTML element.
+ * @param {string} value The value to count the chars and words.
+ * @param {*} newLine State whether the tags should be displayed on a new line.
+ * @returns The chars and words count of the given value formatted in a HTML element.
+ */
+function GetTextWordInformation(value, newLine = false) {
+	value = (value || '').toString().trim();
+
+	//don't create information for empty string values.
+	if (value.length === 0) {
+		return '';
+	}
+
+	//return the count of chars and word as additional information.
+	return ((newLine === true) ? '<br>' : '') + GetInformation('', value.length + ' ' + chrome.i18n.getMessage('chars')) + GetInformation('', GetWordCount(value) + ' ' + chrome.i18n.getMessage('words'));
+}
+
+/**
+ * Returns the row to add in a table. It is possible to add a marker.
+ * @param {string} name The name to be displayed on the first column of the row.
+ * @param {string} value The value to be displayed on the second column of the row.
+ * @param {*} markerName The property name to mark the row (used to access the exactly same row later).
+ * @param {*} markerValue The property value to mark the row (used to access the exactly same row later).
+ * @returns The row containing the information in two column. There is also a marker for later access if given.
+ */
+function GetInformationRow(name, value, markerName, markerValue) {
+	const namesInfoDetailed = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title', 'twitter:image:alt'];
 	let info = '';
 
-	if (arrDetailedInfo.includes(strValueColumn1)) {
-		info = GetTextWordInformation(strValueColumn2, true);
-    }
+	//get the additional information on specific information.
+	if (namesInfoDetailed.includes(name)) {
+		info = GetTextWordInformation(value, true);
+	}
 
+	//return a new information row with or without the row marker.
 	if (markerName && markerValue) {
-		return '<tr ' + markerName + '="' + markerValue + '"><td>' + strValueColumn1 + info + '</td><td>' + strValueColumn2 + '</td></tr>';
-					} else {
-		return '<tr><td>' + strValueColumn1 + info + '</td><td>' + strValueColumn2 + '</td></tr>';
-					}
-        }
-
-function GetFormattedColorValue(value) {
-	let convertColor = '';
-
-	if (value.startsWith('rgba') || value.startsWith('rgb')) {
-		convertColor = rgb2hex(value);
+		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${value}</td></tr>`;
 	} else {
-		convertColor = value;
-        }
-
-	return '<div class="theme-color" style="background: ' + value + '; color: ' + invertColor(convertColor, true) + '">' + value + '</div>';
-    }
-
+		return `<tr><td>${name} ${info}</td><td>${value}</td></tr>`;
+	}
+}
 
 /**
  * Initialize the extension on load (register events, translate extension).
@@ -279,7 +389,7 @@ function ViewMetaDetails() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{subject: SUBJECT.META},
+			{info: INFO.META},
 			LoadMetaDetails
 		);
 	});
@@ -323,20 +433,12 @@ function ViewMetaDetails() {
 		const itemsTwitter = (info.twitter || []);
 		const itemsDublinCore = (info.dublinecore || []);
 
-		//set the arrays with the meta elements to show additional information.
-		const itemsDetailedInfoOpenGraph = ['og:title', 'og:description'];
-		const itemsDetailedInfoTwitter = ['twitter:title', 'twitter:description', 'twitter:image:alt'];
-
 		//set OpenGraph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
 
 			//some information can be displayed with additional information.
-			if (itemsDetailedInfoOpenGraph.includes(item.name)) {
-				tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name + GetTextWordInformation(value, true), EscapeHTML(value), 'id', 'og-basic-' + index));
-			} else {
-				tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-basic-' + index));
-			}
+			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-basic-' + index));
 
 			//on image information, a image preview is possible.
 			if (item.name === 'og:image') {
@@ -400,11 +502,7 @@ function ViewMetaDetails() {
 			const value = (item.value || '').toString().trim();
 
 			//some information can be displayed with additional information.
-			if (itemsDetailedInfoTwitter.includes(item.name)) {
-				tableTwitter.children('tbody').append(GetInformationRow(item.name + GetTextWordInformation(value, true),EscapeHTML(value), 'id', 'twitter-' + index));
-			} else {
-				tableTwitter.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'twitter-' + index));
-			}
+			tableTwitter.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'twitter-' + index));
 
 			//on image information, a image preview is possible.
 			if (item.name === 'twitter:image') {
@@ -445,7 +543,6 @@ function ViewMetaDetails() {
 		}
 
 		//now all lists are created so it is possible to count the items of each list.
-		SetTableCountOnCardHeader($('#meta-details-opengraph-heading'), $('div#meta-details-opengraph-content'));
 		SetTableCountOnCardHeader($('#meta-details-opengraph-basic-heading'), tableOpenGraphBasic);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-article-heading'), tableOpenGraphArticle);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-audio-heading'), tableOpenGraphAudio);
@@ -472,7 +569,7 @@ function ViewSummary() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{subject: SUBJECT.SUMMARY},
+			{info: INFO.SUMMARY},
 			LoadSummary
 		);
 	});
@@ -532,7 +629,7 @@ function ViewFiles() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{subject: SUBJECT.FILE},
+			{info: INFO.FILES},
 			LoadFiles
 		);
 	});
@@ -717,7 +814,7 @@ function ViewTools() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{subject: SUBJECT.HEADING},
+			{info: INFO.HEADINGS},
 			LoadHeadings
 		);
 	});
@@ -783,7 +880,7 @@ function ViewImages() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{subject: SUBJECT.IMAGE},
+			{info: INFO.IMAGES},
 			LoadImages
 		);
 	});
@@ -877,7 +974,7 @@ function ViewHyperlinks() {
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
-			{subject: SUBJECT.HYPERLINK},
+			{info: INFO.LINKS},
 			LoadHyperlinks
 		);
 	});

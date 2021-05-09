@@ -218,7 +218,7 @@ var MetaInformation = (function() {
 
 							//add the information of this <meta> element if known.
 							if (arrMetaNamesGeneral.includes(strMetaName)) {
-								var strMetaValue = EscapeHTML(($(this).attr('content') || '').toString().trim());
+								var strMetaValue = ($(this).attr('content') || '').toString().trim();
 
 								//check if the value of the <meta> element is empty.
 								//in this case we don't have to add the value to the object.

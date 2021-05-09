@@ -7,13 +7,13 @@ if (!IsInitializedContent) {
 	//listen to message from the popup script.
 	//every tab of the extension send a message to this script to get the information.
 	chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-		switch (message.subject) {
-			case SUBJECT.SUMMARY:
+		switch (message.info) {
+			case INFO.SUMMARY:
 				sendResponse({
 					'meta': MetaInformation.GetGeneral()
 				});
 				break;
-			case SUBJECT.META:
+			case INFO.META:
 				sendResponse({
 					'dublincore': MetaInformation.GetDublinCore(),
 					'facebook': MetaInformation.GetFacebook(),
@@ -31,18 +31,18 @@ if (!IsInitializedContent) {
 					'twitter': MetaInformation.GetTwitter(),
 				});
 				break;
-			case SUBJECT.HEADING:
+			case INFO.HEADINGS:
 				sendResponse({
 					'headings': HeadingModule.GetHeadings()
 				});
 				break;
-			case SUBJECT.IMAGE:
+			case INFO.IMAGES:
 				sendResponse({
 					'images': ImageModule.GetImages(),
 					'icons': ImageModule.GetIcons()
 				});
 				break;
-			case SUBJECT.HYPERLINK:
+			case INFO.LINKS:
 				sendResponse({
 					'alternate': MetaInformation.GetMetaAlternate(),
 					'dnsprefetch': MetaInformation.GetMetaDnsPrefetch(),
@@ -51,7 +51,7 @@ if (!IsInitializedContent) {
 					'preload': MetaInformation.GetMetaPreload()
 				});
 				break;
-			case SUBJECT.FILE:
+			case INFO.FILES:
 				sendResponse({
 					'javascript': FileModule.GetJavaScriptFiles(),
 					'stylesheet': FileModule.GetStylesheetFiles()
