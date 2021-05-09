@@ -23,7 +23,7 @@ table.item-list {
     margin: 0;
     width: 100%;
 }
-table.item-list tr td:nth-child(1) {
+table.item-list tr:not(.empty-alert) td:nth-child(1) {
     background: #f7f7f7;
     border-color: #f0f0f0;
     border-style: solid;
@@ -148,15 +148,6 @@ table#list-image-icons tr td a,
 table#list-image-icons tr td a:link {
     display: block;
 }
-table.item-list tr.alert td {
-    border: 0;
-    background: none;
-}
-table.item-list tr.alert div.alert {
-    margin: 0;
-    font-weight: bold;
-    border-radius: 0;
-}
 
 /** navigation / tabs of the extension. */
 nav {
@@ -166,6 +157,17 @@ nav {
 }
 div.nav-pills button.nav-link {
 	border-radius: 0;
+}
+
+/** changes for tables. */
+table tr.empty-alert td {
+	background: none;
+	border: 0;
+	padding: 0;
+}
+table tr.empty-alert td div.alert {
+	font-weight: bold;
+	margin: 0;
 }
 
 /** formatting for the additional information. */
@@ -202,16 +204,13 @@ button.accordion-button::after {
 
 /** changes to the tabs. */
 div.container-fluid div.tab-content {
-	padding: 7px;
+	padding: 0 7px 7px;
 }
 div.container-fluid div.tab-pane div.tab-content {
 	padding: 0;
 }
 div.container-fluid div.tab-pane div.tab-content table td {
 	font-weight: normal;
-}
-div.container-fluid div.tab-pane table {
-	margin-bottom: 7px;
 }
 
 /** hint for not supported sites. */

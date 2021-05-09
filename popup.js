@@ -153,7 +153,7 @@ function ShowImagePreview(hoverItem, imgUrl) {
  */
 function SetEmptyHint(table, hint) {
 	if (table.children('tbody').children().length === 0) {
-		table.children('tbody').append(`<tr class="alert"><td><div class="alert alert-primary" role="alert">${hint}</div></td></tr>`);
+		table.children('tbody').append(`<tr class="empty-alert"><td><div class="alert alert-primary rounded-0" role="alert">${hint}</div></td></tr>`);
 	}
 }
 
@@ -220,83 +220,33 @@ function GetTextWordInformation(strValue, newLine = false) {
 
 
 function GetInformationRow(strValueColumn1, strValueColumn2, markerName, markerValue) {
+
+	var arrDetailedInfo = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title'];
+	let info = '';
+
+	if (arrDetailedInfo.includes(strValueColumn1)) {
+		info = GetTextWordInformation(strValueColumn2, true);
+    }
+
 	if (markerName && markerValue) {
-		return '<tr ' + markerName + '="' + markerValue + '"><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
-	} else {
-		return '<tr><td>' + strValueColumn1 + '</td><td>' + strValueColumn2 + '</td></tr>';
-	}
-}
-
-/**
- * function to get a row with formatted color value(s).
- *
- * @param {string} metaName The name of the meta element.
- * @param {string|string[]} metaValue The value of the meta element or an array of values.
- * @returns {string} The row with information of the meta element (value formatted as color).
- */
-function GetColorRow(metaName, metaValue) {
-
-    if (typeof metaValue === 'string') {
-        metaValue = [metaValue];
-    }
-
-    if (Array.isArray(metaValue) && metaValue.length > 0) {
-        var htmlColorValue = '';
-
-        for (let colorValue of metaValue) {
-					let convertColor = '';
-
-					if (colorValue.startsWith('rgba') || colorValue.startsWith('rgb')) {
-						convertColor = rgb2hex(colorValue);
+		return '<tr ' + markerName + '="' + markerValue + '"><td>' + strValueColumn1 + info + '</td><td>' + strValueColumn2 + '</td></tr>';
 					} else {
-						convertColor = colorValue;
+		return '<tr><td>' + strValueColumn1 + info + '</td><td>' + strValueColumn2 + '</td></tr>';
 					}
-
-					htmlColorValue += '<div class="theme-color" style="background: ' + colorValue + '; color: ' + invertColor(convertColor, true) + '">' + colorValue + '</div>';
         }
 
-        return GetInformationRow(metaName, htmlColorValue);
-    }
-}
+function GetFormattedColorValue(value) {
+	let convertColor = '';
 
-
-
-
-
-function GetDefaultRow(metaName, metaValue) {
-    var arrDetailedInfo = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title'];
-    var strMetaValueHTML = '';
-
-    if (Array.isArray(metaValue) && metaValue.length > 0) {
-
-        //escape the HTML of the meta value so HTML tags are visible.
-        for (indexValue = 0; indexValue < metaValue.length; indexValue++) {
-            metaValue[indexValue] = EscapeHTML(metaValue[indexValue]);
+	if (value.startsWith('rgba') || value.startsWith('rgb')) {
+		convertColor = rgb2hex(value);
+	} else {
+		convertColor = value;
         }
 
-        //format multiple values as list.
-        if (metaValue.length > 1) {
-            strMetaValueHTML = '<ul><li>' + metaValue.join('</li><li>') + '</li></ul>';
-        } else {
-            strMetaValueHTML = metaValue;
-        }
-    } else {
-        strMetaValueHTML = metaValue;
+	return '<div class="theme-color" style="background: ' + value + '; color: ' + invertColor(convertColor, true) + '">' + value + '</div>';
     }
 
-    if (arrDetailedInfo.includes(metaName)) {
-        return GetInformationRow(metaName + GetTextWordInformation(metaValue, true), strMetaValueHTML);
-    } else {
-        return GetInformationRow(metaName, strMetaValueHTML);
-    }
-}
-function GetCanonicalRow(metaName, metaValue) {
-    if (metaValue === tabUrl) {
-        return GetInformationRow(metaName + '<br>' + GetInformation('', 'self-referential'), EscapeHTML(metaValue));
-    } else {
-        return GetInformationRow(metaName, EscapeHTML(metaValue));
-    }
-}
 
 /**
  * Initialize the extension on load (register events, translate extension).
@@ -469,7 +419,7 @@ function ViewMetaDetails() {
 			//depending on the name of the meta property display the value.
 			switch (item.name.toLowerCase()) {
 				case 'msapplication-tilecolor':
-					tableOthers.children('tbody').append(GetColorRow(item.name, value));
+					tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value)));
 					break;
 				default:
 					tableOthers.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'others-' + index));
@@ -548,18 +498,25 @@ function ViewSummary() {
 		const metaOrder = ['title', 'description', 'robots'];
 		const metasDisplay = (metas.filter(meta => metaOrder.indexOf(meta.name) > -1).sort((a, b) => metaOrder.indexOf(a.name) - metaOrder.indexOf(b.name)) || []).concat((metas.filter(meta => metaOrder.indexOf(meta.name) === -1) || []));
 
-		//set all the meta information to the table.
-		metasDisplay.forEach(function(meta) {
-			switch (meta.name) {
-				case 'canonical':
-					tableSummary.children('tbody').append(GetCanonicalRow(meta.name, meta.value));
-					break;
-				case 'theme-color':
-					tableSummary.children('tbody').append(GetColorRow(meta.name, meta.value));
-					break;
-				default:
-					tableSummary.children('tbody').append(GetDefaultRow(meta.name, meta.value));
-					break;
+		//iterate through all meta items to set on table with specific formatting and information if needed.
+		metasDisplay.map(meta => meta.name).filter((v, i, a) => a.indexOf(v) === i).forEach(function(name) {
+			const items = metasDisplay.filter(meta => meta.name === name);
+
+			//check how many items are available. on multiple values display the values as list.
+			if (items.length === 1) {
+				if (name === 'theme-color') {
+					tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value)));
+				} else if (name === 'canonical') {
+					tableSummary.children('tbody').append(GetInformationRow(name + (items[0].value === tabUrl ? '<span class="info d-block">self-referential</span>' : ''), items[0].value));
+				} else {
+					tableSummary.children('tbody').append(GetInformationRow(name, items[0].value));
+				}
+			} else if (items.length > 1) {
+				if (name === 'theme-color') {
+					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td>' + items.map(metaItem => GetFormattedColorValue(metaItem.value)).join('') + '</td></tr>');
+				} else {
+					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td><ul><li>' + items.map(metaItem => metaItem.value).join('</li><li>') + '</li></ul></td></tr>');
+				}
 			}
 		});
 	};
