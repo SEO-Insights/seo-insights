@@ -68,6 +68,13 @@ function SetTableCountOnCardHeader(cardHeader, table) {
 	//set the count of items to the card header.
 	$(cardHeaderButton).append(`<span class="badge ${count > 0 ? 'bg-info' : 'bg-secondary'} ms-auto me-3 rounded-0">${count} ${chrome.i18n.getMessage('items')}</span>`);
 	$(cardHeaderButton).prop('disabled', (count === 0));
+
+	//hide all accordion items if there are no items.
+	if (count === 0) {
+		$(cardHeaderButton).parent().parent().hide();
+	} else {
+		$(cardHeaderButton).parent().parent().show();
+	}
 }
 
 /**
