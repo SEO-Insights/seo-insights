@@ -150,6 +150,7 @@ table#list-image-icons tr td a:link {
 }
 html, body {
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 /** navigation / tabs of the extension. */
