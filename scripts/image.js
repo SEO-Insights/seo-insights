@@ -59,6 +59,12 @@ var ImageModule = (function() {
 			//get the image source as url object.
 			let imgSourceUrl = new URL(imgSource, GetBaseUrl());
 
+			//ignore images of other extensions.
+			//chrome and edge use the same protocol.
+			if (imgSourceUrl.protocol === 'chrome-extension:') {
+				return null;
+			}
+
 			//return the image url and filename.
 			return {
 				'filename': imgSourceUrl.href.substring(imgSourceUrl.href.lastIndexOf('/') + 1),
