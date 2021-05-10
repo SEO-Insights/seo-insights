@@ -202,6 +202,33 @@ function GetInformation(label, value) {
 }
 
 /**
+ * Returns the state whether the given value is a HEX color.
+ * @param {string} value The value to check for a HEX color.
+ * @returns State if the given value is a HEX color.
+ */
+function IsColorHEX(value) {
+	return (value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i) !== null);
+}
+
+/**
+ * Returns the state whether the given value is a RGB / RGBA color.
+ * @param {string} value The value to check for a RGB / RGBA color.
+ * @returns State if the given value is a RGB / RGBA color.
+ */
+function IsColorRGB(value) {
+	return (value.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?(,[\s+]?\d?\.?\d)?[\s+]?\)$/i) !== null);
+}
+
+/**
+ * Returns the state whether the given value is a color value.
+ * @param {string} value The value to check for a color value.
+ * @returns State if the given value is a color value.
+ */
+function IsColor(value) {
+	return (IsColorHEX(value) || IsColorRGB(value));
+}
+
+/**
  * Returns a tool item to display on the list of the tool view.
  * @param {string} title The title of the tool.
  * @param {string} description The description of the tool.
@@ -521,14 +548,11 @@ function ViewMetaDetails() {
 		itemsOthers.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
 
-			//depending on the name of the meta property display the value.
-			switch (item.name.toLowerCase()) {
-				case 'msapplication-tilecolor':
-					tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value)));
-					break;
-				default:
-					tableOthers.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'others-' + index));
-					break;
+			//depending on the value of the meta property format the value.
+			if (IsColor(value)) {
+				tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value)));
+			} else {
+				tableOthers.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'others-' + index));
 			}
 
 			//on image information, a image preview is possible.
@@ -608,12 +632,14 @@ function ViewSummary() {
 
 			//check how many items are available. on multiple values display the values as list.
 			if (items.length === 1) {
-				if (name === 'theme-color') {
-					tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value)));
-				} else if (name === 'canonical') {
+				if (name === 'canonical') {
 					tableSummary.children('tbody').append(GetInformationRow(name + (items[0].value === tabUrl ? '<span class="info d-block">self-referential</span>' : ''), items[0].value));
 				} else {
-					tableSummary.children('tbody').append(GetInformationRow(name, items[0].value));
+					if (IsColor(items[0].value)) {
+						tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value)));
+					} else {
+						tableSummary.children('tbody').append(GetInformationRow(name, items[0].value));
+					}
 				}
 			} else if (items.length > 1) {
 				if (name === 'theme-color') {
