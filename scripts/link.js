@@ -21,6 +21,11 @@ var LinkModule = (function() {
 				//this can also be used to make sure the link is a valid url.
 				const urlObject = new URL(href, GetBaseUrl());
 
+				//ignore links of extensions.
+				if (urlObject.protocol === 'chrome-extension:') {
+					return;
+				}
+
 				//add the information of the current link as object to the array.
 				links.push({
 					'original': href,
