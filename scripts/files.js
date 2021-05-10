@@ -18,6 +18,11 @@ var FileModule = (function() {
 				let sourceJavaScript = ($(this).attr('src') || '').toString().trim();
 				let urlJavaScript = new URL(sourceJavaScript, GetBaseUrl());
 
+				//don't add JavaScript without file path.
+				if (sourceJavaScript === '') {
+					return;
+				}
+
 				//add the JavaScript file to the file array.
 				files.push({
 					'original': sourceJavaScript,
@@ -47,6 +52,11 @@ var FileModule = (function() {
 				//get the source of the file and the url object.
 				let sourceStylesheet = ($(this).attr('href') || '').toString().trim();
 				let urlStylesheet = new URL(sourceStylesheet, GetBaseUrl());
+
+				//don't add Stylesheets without file path.
+				if (sourceStylesheet === '') {
+					return;
+				}
 
 				//add the Stylesheet file to the file array.
 				files.push({
