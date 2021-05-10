@@ -1021,11 +1021,16 @@ function ViewHyperlinks() {
 
 		//set all the hyperlinks to the table.
 		hyperlinks.forEach(function(link, index) {
-			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${link.url.href}">${link.url.href}</a></td></tr>`);
+			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${link.url.href}">${link.original}</a></td></tr>`);
 
 			//check whether the rel property exists and add the additional information.
 			if ((link.rel || '').toString().trim() !== '') {
 				tableHyperlinks.find('tbody tr#link-' + index + ' td').append(GetInformation('rel', (link.rel || '').toString().trim()));
+			}
+
+			//check whether the target property exists and add the additional information.
+			if ((link.target || '').toString().trim() !== '') {
+				tableHyperlinks.find('tbody tr#link-' + index + ' td').append(GetInformation('target', (link.target || '').toString().trim()));
 			}
 
 			//check whether the title property exists and add the additional information.
