@@ -11,6 +11,15 @@
 	"images": {
 		"message": "Bilder"
 	},
+	"images_lc": {
+		"message": "Bilder"
+	},
+	"icons_lc": {
+		"message": "Icons"
+	},
+	"links_lc": {
+		"message": "Links"
+	},
 	"files": {
 		"message": "Dateien"
 	},
@@ -28,6 +37,52 @@
 	},
 	"items": {
 		"message": "Elemente"
+	},
+	"all": {
+		"message": "alle"
+	},
+	"without": {
+		"message": "ohne"
+	},
+	"internal": {
+		"message": "Intern"
+	},
+	"external": {
+		"message": "Extern"
+	},
+	"unique": {
+		"message": "eindeutig"
+	},
+	"no_meta_items": {
+		"message": "Diese Website hat keine Meta Elemente."
+	},
+	"no_items": {
+		"message": "Diese Website hat keine $type$.",
+		"placeholders": {
+			"type": {
+				"content": "$1"
+			}
+		}
+	},
+	"no_alternate_items": {
+		"message": "Diese Website hat keine alternate Elemente."
+	},
+	"no_domain_items": {
+		"message": "Diese Website hat keine $type$ mit Domains.",
+		"placeholders": {
+			"type": {
+				"content": "$1"
+			}
+		}
+	},
+	"no_preconnect_items": {
+		"message": "Diese Website hat keine preconnect Elemente."
+	},
+	"no_dns_prefetch_items": {
+		"message": "Diese Website hat keine DNS prefetch Elemente."
+	},
+	"no_preload_items": {
+		"message": "Diese Website hat keine preload Elemente."
 	},
 	"tools_gsc_mobile_friendly_title": {
 		"message": "Test auf Optimierung für Mobilgeräte – Google Search Console"

@@ -216,7 +216,7 @@ function IsColorHEX(value) {
  * @returns State if the given value is a RGB / RGBA color.
  */
 function IsColorRGB(value) {
-	return (value.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?(,[\s+]?\d?\.?\d)?[\s+]?\)$/i) !== null);
+	return (value.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?(,[\s+]?\d?\.?\d+)?[\s+]?\)$/i) !== null);
 }
 
 /**
@@ -473,11 +473,6 @@ function ViewMetaDetails() {
 
 			//some information can be displayed with additional information.
 			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-basic-' + index));
-
-			//on image information, a image preview is possible.
-			if (item.name === 'og:image') {
-				ShowImagePreview(tableOpenGraphBasic.find('tbody tr#og-basic-' + index), new URL(value, tabUrlOrigin));
-			}
 		});
 
 		//set OpenGraph article information to the table.
@@ -501,7 +496,7 @@ function ViewMetaDetails() {
 			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-image-' + index));
 
 			//on image information, a image preview is possible.
-			if (item.name === 'og:image:url') {
+			if (['og:image', 'og:image:url', 'og:image:secure_url'].includes(item.name.toLowerCase())) {
 				ShowImagePreview(tableOpenGraphImage.find('tbody tr#og-image-' + index + ' td'), new URL(value, tabUrlOrigin));
 			}
 		});
@@ -587,6 +582,12 @@ function ViewMetaDetails() {
 		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
 		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
 		SetTableCountOnCardHeader($('#meta-details-errors-heading'), tableErrorDetails);
+
+		//display a hint if there are no meta elements (no accordions).
+		if ($('div.accordion div.accordion-item:visible').length === 0) {
+			$('div#view-meta-details div.alert').remove();
+			$('div#view-meta-details').append('<div class="alert alert-primary empty-alert rounded-0" role="alert">' + chrome.i18n.getMessage('no_meta_items') + '</div>');
+		}
 	}
 }
 
@@ -888,16 +889,6 @@ function ViewTools() {
 			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${heading.text}${GetTextWordInformation(heading.text, true)}</td></tr>`);
 		});
 
-		//get the count of heading level 1.
-		const cntH1 = headings.filter(heading => heading.type === 'h1').length;
-
-		//check whether there are multiple h1 headings.
-		if (cntH1 === 0) {
-			tableHeadingsErrors.children('tbody').append('<td><td>There is no H1 heading on this website.</td></tr>');
-		} else if (cntH1 > 1) {
-			tableHeadingsErrors.children('tbody').append('<tr><td>Multiple H1 headings found on the website.</td></tr>');
-		}
-
 		//set the count of found errors and warnings.
 		SetTableCountOnCardHeader($('#headings-errors-heading'), tableHeadingsErrors);
 	};
@@ -943,8 +934,8 @@ function ViewImages() {
 
 		//set all the images to the table.
 		images.filter(image => (image.source || '').toString().trim() !== '').forEach(function(image, index) {
-			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${((image.filename) ? image.filename : image.source)}</a></td></tr>`);
-			ShowImagePreview($(`tr[id="img-${index}"] td`, tableImages), image.source);
+			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${image.original}</a></td></tr>`);
+			ShowImagePreview($(`tbody tr#img-${index} td`, tableImages), image.source);
 
 			//check whether the alt property exists and add the additional information.
 			if ((image.alternative || '').toString().trim() !== '') {
@@ -967,7 +958,7 @@ function ViewImages() {
 
 		//set all the icons to the table.
 		icons.filter(icon => (icon.source || '').toString().trim() !== '').forEach(function(icon, index) {
-			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${((icon.filename) ? icon.filename : icon.source)}</a></td></tr>`);
+			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${icon.original}</a></td></tr>`);
 			ShowImagePreview($(`tr[id="icon-${index}"] td`, tableImagesIcons), icon.source);
 
 			//check whether the type property exists and add the additional information.
@@ -985,9 +976,9 @@ function ViewImages() {
 		});
 
 		//set hints on empty tables.
-		SetEmptyHint(tableImages, 'This website doesn\'t have images.');
-		SetEmptyHint(tableImagesDomains, 'This website doesn\'t have images with domains.');
-		SetEmptyHint(tableImagesIcons, 'This website doesn\'t have icons.');
+		SetEmptyHint(tableImages, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('images_lc')));
+		SetEmptyHint(tableImagesDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('images_lc')));
+		SetEmptyHint(tableImagesIcons, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('icons_lc')));
 
 		//set the image statistics to the table.
 		tableImagesStatistics.find('td[data-seo-info="images-all"]').text(images.length);
@@ -1043,7 +1034,7 @@ function ViewHyperlinks() {
 		const preloads = (info.preload || []);
 		const prefetches = (info.dnsprefetch || []);
 		const preconnects = (info.preconnect || []);
-		const domains = GetDomains(hyperlinks.map(link => link.url).map(link => link.href));
+		const domains = GetDomains(hyperlinks.map(link => link.url.href));
 
 		//set all the hyperlinks to the table.
 		hyperlinks.forEach(function(link, index) {
@@ -1101,12 +1092,12 @@ function ViewHyperlinks() {
 		});
 
 		//set hints on empty tables.
-		SetEmptyHint(tableHyperlinks, 'This website doesn\'t have hyperlinks.');
-		SetEmptyHint(tableAlternate, 'This website doesn\'t have alternate links.');
-		SetEmptyHint(tableDomains, 'This website doesn\'t have hyperlinks with domains.');
-		SetEmptyHint(tablePreconnect, 'This website doesn\'t have preconnect items.');
-		SetEmptyHint(tableDnsPrefetch, 'This website doesn\'t have DNS prefetch items.');
-		SetEmptyHint(tablePreload, 'This website doesn\'t have preload items.');
+		SetEmptyHint(tableHyperlinks, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('links_lc')));
+		SetEmptyHint(tableAlternate, chrome.i18n.getMessage('no_alternate_items'));
+		SetEmptyHint(tableDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('links_lc')));
+		SetEmptyHint(tablePreconnect, chrome.i18n.getMessage('no_preconnect_items'));
+		SetEmptyHint(tableDnsPrefetch, chrome.i18n.getMessage('no_dns_prefetch_items'));
+		SetEmptyHint(tablePreload, chrome.i18n.getMessage('no_preload_items'));
 
 		//set the statistics for the hyperlinks.
 		tableHyperlinksStatistics.find('td[data-seo-info="hyperlinks-all"]').text(hyperlinks.length);

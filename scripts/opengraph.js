@@ -71,15 +71,14 @@ var OpenGraph = (function() {
     { name: 'og:title', description: 'The title of the object as it should appear within the graph.', group: 'basic' },
     { name: 'og:type', description: 'The type of your object, e.g., "movie".  Depending on the type you specify, other properties may also be required.', group: 'basic' },
     { name: 'og:url', description: 'The canonical URL of your object that will be used as its permanent ID in the graph.', group: 'basic' },
-    { name: 'og:image', description: 'An image URL which should represent your object within the graph.', group: 'basic' },
-    { name: 'og:audio', description: 'A relevant audio URL for your object.', group: 'basic' },
-    { name: 'og:video', description: 'A relevant video URL for your object.', group: 'basic' },
 
     //Open Graph audio properties.
+    { name: 'og:audio', description: 'A relevant audio URL for your object.', group: 'audio' },
     { name: 'og:audio:secure_url', description: 'A relevant, secure audio URL for your object.', group: 'audio' },
     { name: 'og:audio:type', description: 'The mime type of an audio file.', group: 'audio' },
 
     //Open Graph image properties.
+    { name: 'og:image', description: 'An image URL which should represent your object within the graph.', group: 'image' },
     { name: 'og:image:alt', description: 'A description of what is in the image (not a caption).', group: 'image' },
     { name: 'og:image:height', description: 'The height of an image.', group: 'image' },
     { name: 'og:image:secure_url', description: 'A secure image URL which should represent your object within the graph.', group: 'image' },
@@ -88,6 +87,7 @@ var OpenGraph = (function() {
     { name: 'og:image:width', description: 'The width of an image.', group: 'image' },
 
     //Open Graph video properties.
+    { name: 'og:video', description: 'A relevant video URL for your object.', group: 'video' },
     { name: 'og:video:height', description: 'The height of a video.', group: 'video' },
     { name: 'og:video:secure_url', description: 'A relevant, secure video URL for your object.', group: 'video' },
     { name: 'og:video:type', description: 'The mime type of a video.', group: 'video' },

@@ -22,6 +22,7 @@ var ImageModule = (function() {
 
 			//add the current image to the array.
 			images.push({
+				'original': ($(this).attr('src') || '').toString().trim(),
 				'alternative': ($(this).attr('alt') || '').toString().trim(),
 				'filename': imgSource.filename,
 				'source': imgSource.source,
@@ -115,6 +116,7 @@ var ImageModule = (function() {
 
 				//add the icon to the array.
 				icons.push({
+					'original': ($(this).attr('href') || '').toString().trim(),
 					'filename': iconSource.filename,
 					'sizes': ($(this).attr('sizes') || '').toString().trim(),
 					'source': iconSource.source,

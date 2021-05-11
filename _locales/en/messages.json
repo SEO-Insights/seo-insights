@@ -11,6 +11,15 @@
 	"images": {
 		"message": "Images"
 	},
+	"images_lc": {
+		"message": "images"
+	},
+	"icons_lc": {
+		"message": "icons"
+	},
+	"links_lc": {
+		"message": "links"
+	},
 	"files": {
 		"message": "Files"
 	},
@@ -28,6 +37,52 @@
 	},
 	"items": {
 		"message": "items"
+	},
+	"all": {
+		"message": "all"
+	},
+	"without": {
+		"message": "without"
+	},
+	"internal": {
+		"message": "internal"
+	},
+	"external": {
+		"message": "external"
+	},
+	"unique": {
+		"message": "unique"
+	},
+	"no_meta_items": {
+		"message": "This website has no meta elements."
+	},
+	"no_items": {
+		"message": "This website has no $type$.",
+		"placeholders": {
+			"type": {
+				"content": "$1"
+			}
+		}
+	},
+	"no_alternate_items": {
+		"message": "This website has no alternate links."
+	},
+	"no_domain_items": {
+		"message": "This website has no $type$ with domains.",
+		"placeholders": {
+			"type": {
+				"content": "$1"
+			}
+		}
+	},
+	"no_preconnect_items": {
+		"message": "This website has no preconnect elements."
+	},
+	"no_dns_prefetch_items": {
+		"message": "This website has no DNS prefetch elements."
+	},
+	"no_preload_items": {
+		"message": "This website has no preload elements."
 	},
 	"tools_gsc_mobile_friendly_title": {
 		"message": "Mobile-Friendly Test"

@@ -132,7 +132,6 @@ table#info-tools .full-link {
 table#info-tools .full-link:hover {
     text-decoration: none;
 }
-table#list-hyperlink-domains tr td:nth-child(1),
 table#list-files-stylesheet-domains tr td:nth-child(1),
 table#list-files-javascript-domains tr td:nth-child(1) {
     padding-left: 15px;
@@ -151,6 +150,16 @@ table#list-image-icons tr td a:link {
 html, body {
 	overflow-y: scroll;
 	overflow-x: hidden;
+}
+
+/** alerts */
+div.alert.empty-alert {
+	font-weight: bold;
+}
+
+/** tables */
+table#list-headings tr td {
+	word-break: break-word;
 }
 
 /** navigation / tabs of the extension. */
@@ -220,6 +229,7 @@ div.container-fluid div.tab-pane div.tab-content table td {
 /** hint for not supported sites. */
 body.not-supported {
 	height: 100%;
+	overflow-y: hidden;
 	width: 600px;
 }
 body.not-supported div.container-fluid,
