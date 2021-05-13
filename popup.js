@@ -867,7 +867,7 @@ function ViewTools() {
 
 		//get the tables to show the headings information.
 		const tableHeadings = $('table#list-headings', tabHeadings);
-		const tableHeadingsStatistics = $('table#statistics-headings', tabHeadings);
+		const tableHeadingsStatistics = $('table#heading-stats', tabHeadings);
 		const tableHeadingsErrors = $('table#list-headings-errors', tabHeadings);
 
 		//get the headings from the content script.
@@ -923,7 +923,7 @@ function ViewImages() {
 
 		//get the tables to show the images information.
 		const tableImages = $('table#list-images', tabImages);
-		const tableImagesStatistics = $('table#statistics-images', tabImages);
+		const tableImagesStatistics = $('table#image-stats', tabImages);
 		const tableImagesDomains = $('table#list-image-domains', tabImages);
 		const tableImagesIcons = $('table#list-image-icons', tabImages);
 
@@ -939,21 +939,18 @@ function ViewImages() {
 
 		//set all the images to the table.
 		images.filter(image => (image.source || '').toString().trim() !== '').forEach(function(image, index) {
-			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${image.original}</a></td></tr>`);
+			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${image.src}</a></td></tr>`);
 			ShowImagePreview($(`tbody tr#img-${index} td`, tableImages), image.source);
 
-			//check whether the alt property exists and add the additional information.
-			if ((image.alternative || '').toString().trim() !== '') {
-				tableImages.find('tbody tr#img-' + index + ' td').append(GetInformation('alt', (image.alternative || '').toString().trim()));
+			//set the attribute information to the row.
+			for (let attribute of ['alt', 'title']) {
+				if ((image[attribute] || '').toString().trim() !== '') {
+					tableImages.find(`tbody tr#img-${index} td`).append(GetInformation('alt', (image[attribute] || '').toString().trim()));
+				}
 			}
 
-			//check whether the title property exists and add the additional information.
-			if ((image.title || '').toString().trim() !== '') {
-				tableImages.find('tbody tr#img-' + index + ' td').append(GetInformation('title', (image.title || '').toString().trim()));
-    	}
-
 			//set the image information of the image itself.
-			SetImageInfo(tableImages.find('tbody tr#img-' + index + ' td'), image.source);
+			SetImageInfo(tableImages.find(`tbody tr#img-${index} td`), image.source);
 		});
 
 		//set all the domains to the table.
@@ -962,22 +959,19 @@ function ViewImages() {
 		});
 
 		//set all the icons to the table.
-		icons.filter(icon => (icon.source || '').toString().trim() !== '').forEach(function(icon, index) {
-			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${icon.original}</a></td></tr>`);
-			ShowImagePreview($(`tr[id="icon-${index}"] td`, tableImagesIcons), icon.source);
+		icons.filter(icon => (icon.href || '').toString().trim() !== '').forEach(function(icon, index) {
+			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${icon.href}</a></td></tr>`);
+			ShowImagePreview($(`tr#icon-${index} td`, tableImagesIcons), icon.source);
 
-			//check whether the type property exists and add the additional information.
-			if ((icon.type || '').toString().trim() !== '') {
-				tableImagesIcons.find('tbody tr#icon-' + index + ' td').append(GetInformation('type', (icon.type || '').toString().trim()));
-			}
-
-			//check whether the type property exists and add the additional information.
-			if ((icon.sizes || '').toString().trim() !== '') {
-				tableImagesIcons.find('tbody tr#icon-' + index + ' td').append(GetInformation('sizes', (icon.sizes || '').toString().trim()));
+			//set the attribute information to the row.
+			for (let attribute of ['type', 'sizes']) {
+				if ((icon[attribute] || '').toString().trim() !== '') {
+					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(GetInformation('type', (icon[attribute] || '').toString().trim()));
+				}
 			}
 
 			//set the image information of the icon itself.
-			SetImageInfo(tableImagesIcons.find('tbody tr#icon-' + index + ' td'), icon.source)
+			SetImageInfo(tableImagesIcons.find(`tbody tr#icon-${index} td`), icon.source)
 		});
 
 		//set hints on empty tables.
@@ -986,10 +980,22 @@ function ViewImages() {
 		SetEmptyHint(tableImagesIcons, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('icons_lc')));
 
 		//set the image statistics to the table.
-		tableImagesStatistics.find('td[data-seo-info="images-all"]').text(images.length);
-		tableImagesStatistics.find('td[data-seo-info="images-without-alt"]').text(images.filter(image => image.alternative === '').length);
-		tableImagesStatistics.find('td[data-seo-info="images-without-src"]').text(images.filter(image => image.source === '').length);
-		tableImagesStatistics.find('td[data-seo-info="images-without-title"]').text(images.filter(image => image.title === '').length);
+		tableImagesStatistics.find('td[id="image-stats-all"]').text(images.length);
+
+		//get the count of the attributes to check.
+		const cntWithoutAlt = images.filter(image => image.alt === '').length;
+		const cntWithoutSrc = images.filter(image => image.src === '').length;
+		const cntWithoutTitle = images.filter(image => image.title === '').length;
+
+		//get the fields of the attributes to check.
+		const fieldWithoutAlt = tableImagesStatistics.find('td[id="image-stats-without-alt"]');
+		const fieldWithoutSrc = tableImagesStatistics.find('td[id="image-stats-without-src"]');
+		const fieldWithoutTitle = tableImagesStatistics.find('td[id="image-stats-without-title"]');
+
+		//set the count of the attributes to the fields and format the value based on the count.
+		fieldWithoutAlt.text(cntWithoutAlt).removeClass('text-danger fw-bold').addClass(cntWithoutAlt > 0 ? 'text-danger fw-bold' : '');
+		fieldWithoutSrc.text(cntWithoutSrc).removeClass('text-danger fw-bold').addClass(cntWithoutSrc > 0 ? 'text-danger fw-bold' : '');
+		fieldWithoutTitle.text(cntWithoutTitle).removeClass('text-danger fw-bold').addClass(cntWithoutTitle > 0 ? 'text-danger fw-bold' : '');
 	};
 }
 
@@ -1104,8 +1110,17 @@ function ViewHyperlinks() {
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external-unique"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
 
 		//set the statistics for the attributes.
-		tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-title"]').text(hyperlinks.filter(link => link.title === '').length);
-		tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-href"]').text(hyperlinks.filter(link => link.href === '').length);
+		//get the count of the attributes to check.
+		const cntWithoutTitle = hyperlinks.filter(link => link.title === '').length;
+		const cntWithoutHref = hyperlinks.filter(link => link.href === '').length;
+
+		//get the fields of the attributes to check.
+		const fieldHyperlinkTitle = tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-title"]');
+		const fieldHyperlinkHref = tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-href"]');
+
+		//set the count to the fields and format the count based on the value.
+		fieldHyperlinkTitle.text(cntWithoutTitle).removeClass('text-danger fw-bold').addClass(cntWithoutTitle > 0 ? 'text-danger fw-bold' : '');
+		fieldHyperlinkHref.text(cntWithoutHref).removeClass('text-danger fw-bold').addClass(cntWithoutHref > 0 ? 'text-danger fw-bold' : '');
 
 		//set the statistics for the protocols of the hyperlinks.
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-http"]').text(hyperlinks.filter(link => link.url.protocol === 'http').length);

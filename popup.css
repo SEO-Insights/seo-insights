@@ -67,9 +67,6 @@ table.item-list tr td:nth-child(1):last-child {
     font-weight: normal;
     word-break: break-all;
 }
-table[id^="statistics-"] {
-    text-align: center;
-}
 
 /** design for the headings information. */
 table#list-headings tr[class^="level-"] td span:nth-of-type(1) {
