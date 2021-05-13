@@ -16,14 +16,14 @@
 
 			<nav>
 				<div class="nav nav-pills flex-nowrap" role="tablist">
-					<button class="nav-link active" id="view-summary-tab" data-bs-toggle="pill" data-bs-target="#view-summary" type="button" role="tab" aria-controls="view-summary" aria-selected="true">__MSG_summary__</button>
-					<button class="nav-link" id="view-meta-details-tab" data-bs-toggle="pill" data-bs-target="#view-meta-details" type="button" role="tab" aria-controls="view-meta-details" aria-selected="true">Meta</button>
-					<button class="nav-link" id="view-headings-tab" data-bs-toggle="pill" data-bs-target="#view-headings" type="button" role="tab" aria-controls="view-headings" aria-selected="true">__MSG_headings__</button>
-					<button class="nav-link" id="view-images-tab" data-bs-toggle="pill" data-bs-target="#view-images" type="button" role="tab" aria-controls="view-images" aria-selected="true">__MSG_images__</button>
-					<button class="nav-link" id="view-hyperlinks-tab" data-bs-toggle="pill" data-bs-target="#view-hyperlinks" type="button" role="tab" aria-controls="view-hyperlinks" aria-selected="true">Links</button>
-					<button class="nav-link" id="view-files-tab" data-bs-toggle="pill" data-bs-target="#view-files" type="button" role="tab" aria-controls="view-files" aria-selected="true">__MSG_files__</button>
-					<button class="nav-link" id="view-headers-tab" data-bs-toggle="pill" data-bs-target="#view-headers" type="button" role="tab" aria-controls="view-header" aria-selected="true">Headers</button>
-					<button class="nav-link" id="view-tools-tab" data-bs-toggle="pill" data-bs-target="#view-tools" type="button" role="tab" aria-controls="view-tools" aria-selected="true">Tools</button>
+					<button class="nav-link active" id="view-summary-tab" data-bs-toggle="tab" data-bs-target="#view-summary" type="button" role="tab" aria-controls="view-summary" aria-selected="true">__MSG_summary__</button>
+					<button class="nav-link" id="view-meta-details-tab" data-bs-toggle="tab" data-bs-target="#view-meta-details" type="button" role="tab" aria-controls="view-meta-details" aria-selected="true">Meta</button>
+					<button class="nav-link" id="view-headings-tab" data-bs-toggle="tab" data-bs-target="#view-headings" type="button" role="tab" aria-controls="view-headings" aria-selected="true">__MSG_headings__</button>
+					<button class="nav-link" id="view-images-tab" data-bs-toggle="tab" data-bs-target="#view-images" type="button" role="tab" aria-controls="view-images" aria-selected="true">__MSG_images__</button>
+					<button class="nav-link" id="view-hyperlinks-tab" data-bs-toggle="tab" data-bs-target="#view-hyperlinks" type="button" role="tab" aria-controls="view-hyperlinks" aria-selected="true">Links</button>
+					<button class="nav-link" id="view-files-tab" data-bs-toggle="tab" data-bs-target="#view-files" type="button" role="tab" aria-controls="view-files" aria-selected="true">__MSG_files__</button>
+					<button class="nav-link" id="view-headers-tab" data-bs-toggle="tab" data-bs-target="#view-headers" type="button" role="tab" aria-controls="view-header" aria-selected="true">Headers</button>
+					<button class="nav-link" id="view-tools-tab" data-bs-toggle="tab" data-bs-target="#view-tools" type="button" role="tab" aria-controls="view-tools" aria-selected="true">Tools</button>
 				</div>
 			</nav>
 
@@ -337,7 +337,7 @@
 				<div class="tab-pane fade" id="view-hyperlinks" role="tabpanel" aria-labelledby="view-hyperlinks-tab">
 
 					<!-- statistics for hyperlinks -->
-					<table class="table table-sm table-bordered mt-2 mb-0" id="statistics-hyperlinks">
+					<table class="table table-sm table-bordered mt-2 mb-0" id="hyperlink-stats">
 						<thead class="table-dark">
 							<tr>
 								<th colspan="2">__MSG_links_lc__</th>
@@ -355,18 +355,34 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td data-seo-info="hyperlinks-all"></td>
-								<td data-seo-info="hyperlinks-all-unique"></td>
-								<td data-seo-info="hyperlinks-internal"></td>
-								<td data-seo-info="hyperlinks-internal-unique"></td>
-								<td data-seo-info="hyperlinks-external"></td>
-								<td data-seo-info="hyperlinks-external-unique"></td>
+								<td id="hyperlink-stats-all"></td>
+								<td id="hyperlink-stats-all-unique"></td>
+								<td id="hyperlink-stats-internal"></td>
+								<td id="hyperlink-stats-internal-unique"></td>
+								<td id="hyperlink-stats-external"></td>
+								<td id="hyperlink-stats-external-unique"></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<!-- statistics for attributes -->
+					<table class="table table-sm table-bordered mt-2 mb-2" id="hyperlink-attribute-stats">
+						<thead class="table-dark">
+							<tr>
+								<th>__MSG_without__ href</th>
+								<th>__MSG_without__ title</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td id="hyperlink-attribute-stats-without-href"></td>
+								<td id="hyperlink-attribute-stats-without-title"></td>
 							</tr>
 						</tbody>
 					</table>
 
 					<!-- statistics for protocols -->
-					<table class="table table-sm table-bordered mt-2 mb-2" id="statistics-protocols">
+					<table class="table table-sm table-bordered mt-2 mb-2" id="hyperlink-protocol-stats">
 						<thead class="table-dark">
 							<tr>
 								<th>http</th>
@@ -375,16 +391,18 @@
 								<th>javascript</th>
 								<th>whatsapp</th>
 								<th>tel</th>
+								<th>others</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td data-seo-info="hyperlinks-protocol-http"></td>
-								<td data-seo-info="hyperlinks-protocol-https"></td>
-								<td data-seo-info="hyperlinks-protocol-mailto"></td>
-								<td data-seo-info="hyperlinks-protocol-javascript"></td>
-								<td data-seo-info="hyperlinks-protocol-whatsapp"></td>
-								<td data-seo-info="hyperlinks-protocol-tel"></td>
+								<td id="hyperlink-protocol-stats-http"></td>
+								<td id="hyperlink-protocol-stats-https"></td>
+								<td id="hyperlink-protocol-stats-mailto"></td>
+								<td id="hyperlink-protocol-stats-javascript"></td>
+								<td id="hyperlink-protocol-stats-whatsapp"></td>
+								<td id="hyperlink-protocol-stats-tel"></td>
+								<td id="hyperlink-protocol-stats-others"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -400,27 +418,27 @@
 					</nav>
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="links" role="tabpanel" aria-labelledby="links-tab">
-							<table class="table table-sm item-list" id="list-hyperlinks">
+							<table class="table table-sm item-list" id="list-hyperlink">
 								<tbody></tbody>
 							</table>
 						</div>
 						<div class="tab-pane fade" id="links-alternate" role="tabpanel" aria-labelledby="links-alternate-tab">
-							<table class="table table-sm item-list" id="list-hyperlink-alternate">
+							<table class="table table-sm item-list" id="list-alternate">
 								<tbody></tbody>
 							</table>
 						</div>
 						<div class="tab-pane fade" id="links-domains" role="tabpanel" aria-labelledby="links-domains-tab">
-							<table class="table table-sm item-list" id="list-hyperlink-domains">
+							<table class="table table-sm item-list" id="list-hyperlink-domain">
 								<tbody></tbody>
 							</table>
 						</div>
 						<div class="tab-pane fade" id="links-preload" role="tabpanel" aria-labelledby="links-preload-tab">
-							<table class="table table-sm item-list" id="list-hyperlink-preload">
+							<table class="table table-sm item-list" id="list-preload">
 								<tbody></tbody>
 							</table>
 						</div>
 						<div class="tab-pane fade" id="links-dns-prefetch" role="tabpanel" aria-labelledby="links-dns-prefetch-tab">
-							<table class="table table-sm item-list" id="list-hyperlink-dns-prefetch">
+							<table class="table table-sm item-list" id="list-dns-prefetch">
 								<tbody></tbody>
 							</table>
 						</div>
