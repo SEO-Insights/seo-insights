@@ -165,6 +165,20 @@ function SetEmptyHint(table, hint) {
 }
 
 /**
+ * Sets a hint to a empty tab as placeholder / additional information.
+ * @param {object} tab The HTML object of the tab.
+ * @param {string} hint The hint to be shown on the empty tab.
+ */
+function SetEmptyHintOnTabAccordion(tab, hint) {
+	if ($('div.accordion-item table tbody', tab).children().length === 0) {
+		$('div.alert.empty-alert', tab).remove();
+		$(tab).append('<div class="alert alert-primary empty-alert rounded-0" role="alert">' + chrome.i18n.getMessage('no_file_items') + '</div>');
+	} else {
+		$('div.alert.empty-alert', tab).remove();
+	}
+}
+
+/**
  * Sets the image information as additional information.
  * @param {object} html The HTML object to append the image information.
  * @param {string} source The url of the image to get the information from.
@@ -449,7 +463,6 @@ function ViewMetaDetails() {
 		const tableParsely = $('table#meta-details-parsely', tabMetaDetails);
 		const tableTwitter = $('table#meta-details-twitter', tabMetaDetails);
 		const tableDublinCore = $('table#meta-details-dublin-core', tabMetaDetails);
-		const tableErrorDetails = $('table#meta-details-errors', tabMetaDetails);
 
 		//remove all rows of all meta tables.
 		$('table[id^=meta-details-]').children('tbody').empty();
@@ -557,18 +570,6 @@ function ViewMetaDetails() {
 			}
 		});
 
-		//check for errors (missing meta tags) on the meta information.
-		if (Object.keys(itemsOpenGraphBasic).length > 0) {
-
-			//The four required properties for every page are: og:title, og:type, og:image, og:url
-			//https://ogp.me/
-			for (itemRequiredOpenGraph of ['og:title', 'og:type', 'og:image', 'og:url']) {
-				if (itemsOpenGraphBasic.filter(infoOpenGraph => infoOpenGraph.name === itemRequiredOpenGraph).length === 0) {
-					tableErrorDetails.children('tbody').append('<tr><td>Missing required Open Graph information: ' + itemRequiredOpenGraph + '.</td></tr>');
-				}
-			}
-		}
-
 		//now all lists are created so it is possible to count the items of each list.
 		SetTableCountOnCardHeader($('#meta-details-opengraph-basic-heading'), tableOpenGraphBasic);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-article-heading'), tableOpenGraphArticle);
@@ -582,17 +583,9 @@ function ViewMetaDetails() {
 		SetTableCountOnCardHeader($('#meta-details-dublincore-heading'), tableDublinCore);
 		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
 		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
-		SetTableCountOnCardHeader($('#meta-details-errors-heading'), tableErrorDetails);
 
 		//display a hint if there are no meta elements (no accordions).
-		setTimeout(function() {
-			if ($('div#view-meta-details div.accordion-item:visible').length === 0) {
-				$('div#view-meta-details div.alert.empty-alert').remove();
-			$('div#view-meta-details').append('<div class="alert alert-primary empty-alert rounded-0" role="alert">' + chrome.i18n.getMessage('no_meta_items') + '</div>');
-			} else {
-				$('div#view-meta-details div.alert.empty-alert').remove();
-		}
-		}, 1000);
+		SetEmptyHintOnTabAccordion($('div#view-meta-details'), chrome.i18n.getMessage('no_meta_items'));
 	}
 }
 
@@ -655,6 +648,9 @@ function ViewSummary() {
 				}
 			}
 		});
+
+		//if there are no items display a hint.
+		SetEmptyHint(tableSummary, chrome.i18n.getMessage('no_summary_items'));
 	};
 }
 
@@ -746,6 +742,9 @@ function ViewFiles() {
 				if (response.status == 200) {
 					tableFilesSpecial.children('tbody').append(`<tr id="special-${index}"><td><a href="${file}" target="_blank">${file}</a></td></tr>`);
 					SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
+
+					//display a hint if there are no meta elements (no accordions).
+					SetEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
 				}
 			});
 		});
@@ -754,6 +753,9 @@ function ViewFiles() {
 		SetTableCountOnCardHeader($('#stylesheet-heading'), tableFilesStylesheet);
 		SetTableCountOnCardHeader($('#javascript-heading'), tableFilesJavaScript);
 		SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
+
+		//display a hint if there are no meta elements (no accordions).
+		SetEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
 	};
 }
 
@@ -893,6 +895,9 @@ function ViewTools() {
 		headings.forEach(function(heading) {
 			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${heading.text}${GetTextWordInformation(heading.text, true)}</td></tr>`);
 		});
+
+		//set a hint if there are no headings on the website.
+		SetEmptyHint(tableHeadings, chrome.i18n.getMessage('no_heading_items'));
 
 		//set the count of found errors and warnings.
 		SetTableCountOnCardHeader($('#headings-errors-heading'), tableHeadingsErrors);

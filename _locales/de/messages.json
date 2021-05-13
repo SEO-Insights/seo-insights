@@ -53,6 +53,15 @@
 	"unique": {
 		"message": "eindeutig"
 	},
+	"no_heading_items": {
+		"message": "Diese Website hat keine Überschriften."
+	},
+	"no_file_items": {
+		"message": "Diese Website hat keine Dateien."
+	},
+	"no_summary_items": {
+		"message": "Diese Website hat keine Meta Elemente um in der Übersicht anzuzeigen."
+	},
 	"no_meta_items": {
 		"message": "Diese Website hat keine Meta Elemente."
 	},

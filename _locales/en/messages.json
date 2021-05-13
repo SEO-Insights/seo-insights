@@ -53,6 +53,15 @@
 	"unique": {
 		"message": "unique"
 	},
+	"no_heading_items": {
+		"message": "This website has no heading elements."
+	},
+	"no_summary_items": {
+		"message": "This website has no meta elements to display on summary."
+	},
+	"no_file_items": {
+		"message": "This website has no file elements."
+	},
 	"no_meta_items": {
 		"message": "This website has no meta elements."
 	},
