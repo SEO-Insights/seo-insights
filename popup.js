@@ -45,7 +45,7 @@ let tabUrlOrigin = '';
 function CanInjectContentScript(tab) {
 
 	//it is not possible to inject content scripts to the chrome webstore.
-	if (tab.url.startsWith('https://chrome.google.com/webstore')) {
+	if (tab.url.startsWith('https://chrome.google.com')) {
 		return false;
 	}
 
