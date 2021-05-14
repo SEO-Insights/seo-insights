@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message": "SEO Insights is a browser extension to get SEO relevant insights into the current website."
+		"message": "SEO Insights is a extension to get SEO relevant information of the current website."
 	},
 	"summary": {
 		"message": "Summary"
@@ -27,7 +27,10 @@
 		"message": "Errors, Warnings and Hints"
 	},
 	"others": {
-		"message": "Others"
+		"message": "Other"
+	},
+	"others_lc": {
+		"message": "other"
 	},
 	"words": {
 		"message": "words"
