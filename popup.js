@@ -172,7 +172,7 @@ function SetEmptyHint(table, hint) {
 function SetEmptyHintOnTabAccordion(tab, hint) {
 	if ($('div.accordion-item table tbody', tab).children().length === 0) {
 		$('div.alert.empty-alert', tab).remove();
-		$(tab).append('<div class="alert alert-primary empty-alert rounded-0" role="alert">' + chrome.i18n.getMessage('no_file_items') + '</div>');
+		$(tab).append('<div class="alert alert-primary empty-alert rounded-0" role="alert">' + hint + '</div>');
 	} else {
 		$('div.alert.empty-alert', tab).remove();
 	}
@@ -186,7 +186,7 @@ function SetEmptyHintOnTabAccordion(tab, hint) {
 function SetImageInfo(html, source) {
 	let image = new Image;
 	image.onload = function() {
-		html.append(GetInformation('size', (image.width + 'x' + image.height)));
+		html.append(GetInformation('size', (image.width + ' x ' + image.height)));
 	};
 	image.src = source;
 }
