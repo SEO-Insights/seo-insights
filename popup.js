@@ -458,7 +458,6 @@ function ViewMetaDetails() {
 		const tableOpenGraphImage = $('table#meta-details-opengraph-image', tabMetaDetails);
 		const tableOpenGraphProfile = $('table#meta-details-opengraph-profile', tabMetaDetails);
 		const tableOpenGraphVideo = $('table#meta-details-opengraph-video', tabMetaDetails);
-		const tableFacebook = $('table#meta-details-facebook', tabMetaDetails);
 		const tableParsely = $('table#meta-details-parsely', tabMetaDetails);
 		const tableTwitter = $('table#meta-details-twitter', tabMetaDetails);
 		const tableDublinCore = $('table#meta-details-dublin-core', tabMetaDetails);
@@ -467,7 +466,6 @@ function ViewMetaDetails() {
 		$('table[id^=meta-details-]').children('tbody').empty();
 
 		//get all the meta information from the content script.
-		const itemsFacebook = (info.facebook || []);
 		const itemsOpenGraphBasic = (info.opengraph.basic || []);
 		const itemsOpenGraphArticle = (info.opengraph.article || []);
 		const itemsOpenGraphAudio = (info.opengraph.audio || []);
@@ -524,11 +522,6 @@ function ViewMetaDetails() {
 			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
 		});
 
-		//set Facebook information to the table.
-		itemsFacebook.forEach(function(item) {
-			tableFacebook.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
-		});
-
 		//set Parsely information to the table.
 		itemsParsely.forEach(function(item) {
 			tableParsely.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
@@ -577,7 +570,6 @@ function ViewMetaDetails() {
 		SetTableCountOnCardHeader($('#meta-details-opengraph-image-heading'), tableOpenGraphImage);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-profile-heading'), tableOpenGraphProfile);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-video-heading'), tableOpenGraphVideo);
-		SetTableCountOnCardHeader($('#meta-details-facebook-heading'), tableFacebook);
 		SetTableCountOnCardHeader($('#meta-details-twitter-heading'), tableTwitter);
 		SetTableCountOnCardHeader($('#meta-details-dublincore-heading'), tableDublinCore);
 		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);

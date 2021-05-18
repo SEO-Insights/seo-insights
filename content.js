@@ -16,7 +16,6 @@ if (!IsInitializedContent) {
 			case INFO.META:
 				sendResponse({
 					'dublincore': MetaInformation.GetDublinCore(),
-					'facebook': MetaInformation.GetFacebook(),
 					'opengraph': {
 						'article': OpenGraph.GetArticleProperties(),
 						'audio': OpenGraph.GetAudioProperties(),
@@ -28,7 +27,7 @@ if (!IsInitializedContent) {
 					},
 					'others': MetaInformation.GetOthers(),
 					'parsely': MetaInformation.GetParsely(),
-					'twitter': MetaInformation.GetTwitter(),
+					'twitter': MetaInformation.GetTwitter()
 				});
 				break;
 			case INFO.HEADINGS:

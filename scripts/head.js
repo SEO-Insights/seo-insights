@@ -40,39 +40,6 @@ var MetaInformation = (function() {
         'viewport'
     ];
 
-    /**
-     * The known properties for the Facebook meta information.
-     *
-     * sources:
-     *  - https://developers.facebook.com/docs/applinks/metadata-reference/
-     */
-    var arrMetaPropertiesFacebook = [
-        'al:ios:url',
-        'al:ios:app_store_id',
-        'al:ios:app_name',
-        'al:iphone:url',
-        'al:iphone:app_store_id',
-        'al:iphone:app_name',
-        'al:ipad:url',
-        'al:ipad:app_store_id',
-        'al:ipad:app_name',
-        'al:android:url',
-        'al:android:package',
-        'al:android:class',
-        'al:android:app_name',
-        'al:windows_phone:url',
-        'al:windows_phone:app_id',
-        'al:windows_phone:app_name',
-        'al:windows:url',
-        'al:windows:app_id',
-        'al:windows:app_name',
-        'al:windows_universal:url',
-        'al:windows_universal:app_id',
-        'al:windows_universal:app_name',
-        'al:web:url',
-        'al:web:should_fallback'
-    ];
-
 		function IsOpenGraphTag(name) {
 			const isOpenGraphArticle = OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === name) > -1;
 			const isOpenGraphAudio = OpenGraph.GetAudioTagsInfo().findIndex(tag => tag.name === name) > -1;
@@ -222,28 +189,6 @@ var MetaInformation = (function() {
             return items;
         },
 
-        /**
-         * Get the Facebook meta information.
-         */
-        GetFacebook: function() {
-					let tags = [];
-
-            //iterate through the Facebook <meta> ekements of the <head> element.
-            $('head > meta[property^="al:"]').each(function() {
-                var strMetaName = $(this).attr('property').trim();
-
-                //add the meta information if known.
-                if (!arrMetaPropertiesFacebook.includes(strMetaName)) {
-                   return
-                }
-
-								tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
-            });
-
-            //return the information.
-            return tags;
-        },
-
         GetDublinCore: function() {
 					let tags = [];
 
@@ -293,7 +238,7 @@ var MetaInformation = (function() {
 								}
 
                 //add the unknown meta information to the object.
-                if (!IsOpenGraphTag(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty)) {
+                if (!IsOpenGraphTag(strMetaProperty)) {
 									tags.push({name: strMetaProperty, value: ($(this).attr('content') || '').toString()});
                 }
             });
