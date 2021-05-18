@@ -297,18 +297,16 @@ var MetaInformation = (function() {
         GetDublinCore: function() {
 					let tags = [];
 
-            $('head > meta[name^="DC."]').each(function() {
-                var strMetaName = $(this).attr('name').trim();
+					$('head > meta[name]').filter(function() {
+						return ($(this).attr('name').toUpperCase().startsWith('DC.') || $(this).attr('name').toUpperCase().startsWith('DCTERMS.'));
+					}).each(function() {
+						tags.push({
+							'name': ($(this).attr('name') || '').toString().trim(),
+							'value': ($(this).attr('content') || '').toString().trim()
+						});
+					});
 
-                if (DublinCoreTermsTags.findIndex(objTag => objTag.name === strMetaName) === -1) {
-									return;
-                }
-
-								tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
-
-            });
-
-            return tags;
+          return tags;
         },
 
         GetOthers: function() {
@@ -317,6 +315,10 @@ var MetaInformation = (function() {
             //iterate through all <meta> elements with name attribute.
             $('head > meta[name]').each(function() {
                 var strMetaName = ($(this).attr('name') || '').toString();
+
+								if (strMetaName.trim().toUpperCase().startsWith('DC.') || strMetaName.trim().toUpperCase().startsWith('DCTERMS.')) {
+									return;
+								}
 
                 if (!IsOpenGraphTag(strMetaName) && !arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
 									tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});

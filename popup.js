@@ -24,7 +24,6 @@ let tabUrlOrigin = '';
     //programmatically inject the content scripts to the current tab.
     chrome.scripting.executeScript({files: ['libs/jquery-3.6.0.min.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/dublincore.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
@@ -479,7 +478,7 @@ function ViewMetaDetails() {
 		const itemsOthers = (info.others || []);
 		const itemsParsely = (info.parsely || []);
 		const itemsTwitter = (info.twitter || []);
-		const itemsDublinCore = (info.dublinecore || []);
+		const itemsDublinCore = (info.dublincore || []);
 
 		//set OpenGraph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
