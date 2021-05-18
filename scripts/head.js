@@ -73,56 +73,6 @@ var MetaInformation = (function() {
         'al:web:should_fallback'
     ];
 
-    /**
-     * The known names for the Parse.ly meta information.
-     *
-     * sources:
-     *  - https://www.parse.ly/help/integration/metatags
-     */
-    var arrMetaNamesParsely = [
-        'parsely-author',
-        'parsely-image-url',
-        'parsely-link',
-        'parsely-metadata',
-        'parsely-post-id',
-        'parsely-pub-date',
-        'parsely-section',
-        'parsely-tags',
-        'parsely-type',
-        'parsely-title'
-    ];
-
-    /**
-     * The known names for the Twitter meta information.
-     *
-     * sources:
-     *  - https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/markup
-     */
-    var arrMetaNamesPropertiesTwitter = [
-        'twitter:app:id:googleplay',
-        'twitter:app:id:ipad',
-        'twitter:app:id:iphone',
-        'twitter:app:name:googleplay',
-        'twitter:app:name:ipad',
-        'twitter:app:name:iphone',
-        'twitter:app:url:googleplay',
-        'twitter:app:url:ipad',
-        'twitter:app:url:iphone',
-        'twitter:card',
-        'twitter:creator',
-        'twitter:creator:id',
-        'twitter:description',
-        'twitter:image',
-        'twitter:image:alt',
-        'twitter:player',
-        'twitter:player:height',
-        'twitter:player:stream',
-        'twitter:player:width',
-        'twitter:site',
-        'twitter:site:id',
-        'twitter:title'
-    ];
-
 		function IsOpenGraphTag(name) {
 			const isOpenGraphArticle = OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === name) > -1;
 			const isOpenGraphAudio = OpenGraph.GetAudioTagsInfo().findIndex(tag => tag.name === name) > -1;
@@ -315,12 +265,21 @@ var MetaInformation = (function() {
             //iterate through all <meta> elements with name attribute.
             $('head > meta[name]').each(function() {
                 var strMetaName = ($(this).attr('name') || '').toString();
+								var strMetaProperty = ($(this).attr('property') || '').toString();
 
 								if (strMetaName.trim().toUpperCase().startsWith('DC.') || strMetaName.trim().toUpperCase().startsWith('DCTERMS.')) {
 									return;
 								}
 
-                if (!IsOpenGraphTag(strMetaName) && !arrMetaNamesGeneral.includes(strMetaName) && !arrMetaNamesParsely.includes(strMetaName) && !arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
+								if (strMetaName.trim().toLowerCase().startsWith('twitter:')) {
+									return;
+								}
+
+								if (strMetaName.trim().toLowerCase().startsWith('parsely-')) {
+									return;
+								}
+
+                if (!IsOpenGraphTag(strMetaName) && !arrMetaNamesGeneral.includes(strMetaName)) {
 									tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
                 }
             });
@@ -329,8 +288,12 @@ var MetaInformation = (function() {
             $('head > meta[property]').each(function() {
                 var strMetaProperty = ($(this).attr('property') || '').toString();
 
+								if (strMetaProperty.trim().toLowerCase().startsWith('twitter:')) {
+									return;
+								}
+
                 //add the unknown meta information to the object.
-                if (!IsOpenGraphTag(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty) && !arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
+                if (!IsOpenGraphTag(strMetaProperty) && !arrMetaPropertiesFacebook.includes(strMetaProperty)) {
 									tags.push({name: strMetaProperty, value: ($(this).attr('content') || '').toString()});
                 }
             });
@@ -355,17 +318,14 @@ var MetaInformation = (function() {
         GetParsely: function() {
 					let tags = [];
 
-            //iterate through the Parse.ly <meta> elements of the <head> element.
-            $('head > meta[name^="parsely-"]').each(function() {
-                var strMetaName = $(this).attr('name').trim();
-
-                //add the meta information if known.
-                if (!arrMetaNamesParsely.includes(strMetaName)) {
-									return;
-                }
-
-								tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
-            });
+					$('head > meta[name]').filter(function() {
+						return $(this).attr('name').toLowerCase().trim().startsWith('parsely-');
+					}).each(function() {
+						tags.push({
+							'name': ($(this).attr('name') || '').toString().trim(),
+							'value': ($(this).attr('content') || '').toString().trim()
+						});
+					});
 
             //return the information.
             return tags;
@@ -377,31 +337,23 @@ var MetaInformation = (function() {
         GetTwitter: function() {
 					let tags = [];
 
-            //iterate through the Twitter <meta> elements of the <head> element.
-            $('head > meta[name^="twitter:"]').each(function() {
-                var strMetaName = ($(this).attr('name') || '').toString().trim();
+					$('head > meta[name]').filter(function() {
+						return $(this).attr('name').toLowerCase().trim().startsWith('twitter:');
+					}).each(function() {
+						tags.push({
+							'name': ($(this).attr('name') || '').toString().trim(),
+							'value': ($(this).attr('content') || '').toString().trim()
+						});
+					});
 
-                //add the meta information if known.
-                if (arrMetaNamesPropertiesTwitter.includes(strMetaName)) {
-                    tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString().trim()});
-                }
-            });
-
-            /**
-             * Open Graph protocol also specifies the use of property and content attributes for markup while Twitter cards use name and content.
-             * Twitter's parser will fall back to using property and content, so there is no need to modify existing Open Graph protocol markup if it already exists.
-             * source: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started
-             */
-
-            //iterate through the Twitter <meta> elements of the <head> element.
-            $('head > meta[property^="twitter:"]').each(function() {
-                var strMetaProperty = ($(this).attr('property') || '').toString().trim();
-
-                //add the meta information if known.
-                if (arrMetaNamesPropertiesTwitter.includes(strMetaProperty)) {
-									tags.push({name: strMetaProperty, value: ($(this).attr('content') || '').toString().trim()});
-                }
-            });
+					$('head > meta[property]').filter(function() {
+						return $(this).attr('property').toLowerCase().trim().startsWith('twitter:');
+					}).each(function() {
+						tags.push({
+							'name': ($(this).attr('property') || '').toString().trim(),
+							'value': ($(this).attr('content') || '').toString().trim()
+						});
+					});
 
             //return the information.
             return tags;
