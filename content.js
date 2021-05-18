@@ -10,12 +10,12 @@ if (!IsInitializedContent) {
 		switch (message.info) {
 			case INFO.SUMMARY:
 				sendResponse({
-					'meta': MetaInformation.GetGeneral()
+					'meta': Meta.GetGeneral()
 				});
 				break;
 			case INFO.META:
 				sendResponse({
-					'dublincore': MetaInformation.GetDublinCore(),
+					'dublincore': Meta.GetDublinCore(),
 					'opengraph': {
 						'article': OpenGraph.GetArticleProperties(),
 						'audio': OpenGraph.GetAudioProperties(),
@@ -25,9 +25,9 @@ if (!IsInitializedContent) {
 						'profile': OpenGraph.GetProfileProperties(),
 						'video': OpenGraph.GetVideoProperties()
 					},
-					'others': MetaInformation.GetOthers(),
-					'parsely': MetaInformation.GetParsely(),
-					'twitter': MetaInformation.GetTwitter()
+					'others': Meta.GetOthers(),
+					'parsely': Meta.GetParsely(),
+					'twitter': Meta.GetTwitter()
 				});
 				break;
 			case INFO.HEADINGS:
@@ -43,11 +43,11 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.LINKS:
 				sendResponse({
-					'alternate': MetaInformation.GetMetaAlternate(),
-					'dnsprefetch': MetaInformation.GetMetaDnsPrefetch(),
+					'alternate': Meta.GetAlternateLinks(),
+					'dnsprefetch': Meta.GetDnsPrefetch(),
 					'links': LinkModule.GetLinks(),
-					'preconnect': MetaInformation.GetMetaPreconnect(),
-					'preload': MetaInformation.GetMetaPreload()
+					'preconnect': Meta.GetPreconnect(),
+					'preload': Meta.GetPreload()
 				});
 				break;
 			case INFO.FILES:

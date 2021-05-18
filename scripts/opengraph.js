@@ -97,6 +97,7 @@ var OpenGraph = (function() {
     { name: 'article:author', description: 'Writers of the article.', group: 'article' },
     { name: 'article:expiration_time', description: 'When the article is out of date after.', group: 'article' },
     { name: 'article:modified_time', description: 'When the article was last changed.', group: 'article' },
+		{ name: 'article:publisher', description: '', group: 'article' },
     { name: 'article:published_time', description: 'When the article was first published.', group: 'article' },
     { name: 'article:section', description: 'A high-level section name.', group: 'article' },
     { name: 'article:tag', description: 'Tag words associated with this article.', group: 'article' },
@@ -226,6 +227,22 @@ var OpenGraph = (function() {
      */
     GetVideoTagsInfo: function() {
       return OpenGraphTags.filter(tag => tag.group === 'video');
-    }
+    },
+
+		/**
+		 * Returns the state whether a meta name is a Open Graph meta tag.
+		 * @param {string} name The meta name to check for Open Graph meta tag.
+		 * @returns {boolean} The state if the meta name is a Open Graph meta tag.
+		 */
+		IsOpenGraphTag: function(name) {
+			const isOpenGraphArticle = OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphAudio = OpenGraph.GetAudioTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphBasic = OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphBook = OpenGraph.GetBookTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphImage = OpenGraph.GetImageTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphProfile = OpenGraph.GetProfileTagsInfo().findIndex(tag => tag.name === name) > -1;
+			const isOpenGraphVideo = OpenGraph.GetVideoTagsInfo().findIndex(tag => tag.name === name) > -1;
+			return isOpenGraphArticle || isOpenGraphAudio || isOpenGraphBasic || isOpenGraphBook || isOpenGraphImage || isOpenGraphProfile || isOpenGraphVideo;
+		}
   };
 })();

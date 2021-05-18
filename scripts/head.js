@@ -1,360 +1,325 @@
-
 /**
- * Module for Meta Information.
+ * Module for common meta information.
  */
-var MetaInformation = (function() {
+var Meta = (function() {
 
-    /**
-     * The known tags for the general meta information.
-     *
-     * sources:
-     *  - https://html.spec.whatwg.org/#the-title-element
-     */
-    var arrTagsGeneral = [
-        'title'
-    ];
+	/**
+	 * common tags to get information from.
+	 */
+	const tagsCommon = [
+		'title'
+	];
 
-    /**
-     * The known names for the general meta information.
-     *
-     * sources:
-     *  - https://support.google.com/webmasters/answer/79812
-     *  - https://html.spec.whatwg.org/#standard-metadata-names
-     *  - https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240
-     */
-    var arrMetaNamesGeneral = [
-        'application-name',
-        'author',
-        'bingbot',
-        'description',
-        'generator',
-        'google',
-        'googlebot',
-        'google-site-verification',
-        'keywords',
-        'msnbot',
-        'rating',
-        'referrer',
-        'robots',
-        'theme-color',
-        'viewport'
-    ];
+	/**
+	 * common name attribute values to get information from.
+	 */
+	const namesCommon = [
+		'application-name',
+		'author',
+		'bingbot',
+		'description',
+		'generator',
+		'google',
+		'googlebot',
+		'google-site-verification',
+		'keywords',
+		'msnbot',
+		'rating',
+		'referrer',
+		'robots',
+		'theme-color',
+		'viewport'
+	];
 
-		function IsOpenGraphTag(name) {
-			const isOpenGraphArticle = OpenGraph.GetArticleTagsInfo().findIndex(tag => tag.name === name) > -1;
-			const isOpenGraphAudio = OpenGraph.GetAudioTagsInfo().findIndex(tag => tag.name === name) > -1;
-			const isOpenGraphBasic = OpenGraph.GetBasicTagsInfo().findIndex(tag => tag.name === name) > -1;
-			const isOpenGraphBook = OpenGraph.GetBookTagsInfo().findIndex(tag => tag.name === name) > -1;
-			const isOpenGraphImage = OpenGraph.GetImageTagsInfo().findIndex(tag => tag.name === name) > -1;
-			const isOpenGraphProfile = OpenGraph.GetProfileTagsInfo().findIndex(tag => tag.name === name) > -1;
-			const isOpenGraphVideo = OpenGraph.GetVideoTagsInfo().findIndex(tag => tag.name === name) > -1;
+	return {
 
-			return isOpenGraphArticle || isOpenGraphAudio || isOpenGraphBasic || isOpenGraphBook || isOpenGraphImage || isOpenGraphProfile || isOpenGraphVideo;
-		};
+		/**
+		 * Returns the canonical information of the meta information.
+		 * @returns {string} The canonical information of the meta information.
+		 */
+		GetCanonical: function() {
+			return ($('head > link[rel="canonical"]').attr('href') || '').toString().trim();
+		},
 
-    return {
+		/**
+		 * Returns all meta information of the current website.
+		 * @returns {object[]} All the found meta tags as objects.
+		 */
+		GetGeneral: function() {
+			let tags = [];
 
-        /**
-         * Get the canonical url from meta information.
-         */
-        GetCanonical: function() {
-            return ($('head > link[rel="canonical"]').attr('href') || '').toString();
-        },
+			//iterate through all the meta elements with available name attribute.
+			$('head > meta[name]').each(function() {
+				const name = ($(this).attr('name') || '').toString().trim().toLowerCase();
 
-        GetHeadings: function() {
-
-            let itemsHeading = [];
-
-            $('body h1, body h2, body h3, body h4, body h5, body h6').each(function() {
-                itemsHeading.push({
-                    'type': $(this).prop('tagName').toLocaleLowerCase(),
-                    'title': $(this).text()
-                });
-            });
-        },
-
-        GetMetaCharacterEncoding: function() {
-
-            let itemsCharacterEncoding = [];
-
-            $('head > meta[charset]').each(function() {
-                itemsCharacterEncoding.push({
-                    'name': 'charset',
-                    'value': $(this).attr('charset')
-                });
-            });
-        },
-
-        GetPragmaDirectives: function() {
-
-            let itemsPragmaDirective = [];
-
-            $('head > meta[http-equiv]').each(function() {
-                itemsPragmaDirective.push({
-                    'name': $(this).attr('http-equiv').trim().toLocaleLowerCase(),
-                    'value': $(this).attr('content')
-                });
-            });
-        },
-
-        GetMetaElements: function() {
-
-            //array to store the information of the <meta> elements.
-            let itemsMetaElement = [];
-
-            //iterate through all the <meta> elements with name or property attribute.
-            $('head > meta[name], head > meta[property]').each(function() {
-
-                //add the <meta> element with name attribute to the array.
-                if ($(this).is('[name]')) {
-                    itemsMetaElement.push({
-                        'name': $(this).attr('name').trim().toLocaleLowerCase(),
-                        'value': $(this).attr('content')
-                    });
-                }
-
-                //add the <meta> element with property attribute to the array.
-                if ($(this).is('[property]')) {
-                    itemsMetaElement.push({
-                        'name': $(this).attr('property').trim().toLocaleLowerCase(),
-                        'value': $(this).attr('content')
-                    });
-                }
-            });
-        },
-
-        /**
-         * Get the general meta information.
-         */
-        GetGeneral: function() {
-					let items = [];
-
-            //iterate through all the <meta> elements with name attribute.
-            $('head > meta[name]').each(function() {
-							var strMetaName = $(this).attr('name').trim().toLocaleLowerCase();
-
-							//add the information of this <meta> element if known.
-							if (arrMetaNamesGeneral.includes(strMetaName)) {
-								var strMetaValue = ($(this).attr('content') || '').toString().trim();
-
-								//check if the value of the <meta> element is empty.
-								//in this case we don't have to add the value to the object.
-								if (strMetaValue === '') {
-										return;
-								}
-
-								items.push({
-									'name': strMetaName,
-									'value': strMetaValue
-								});
-                }
-            });
-
-						$('html[lang]').each(function() {
-							const lang = ($(this).attr('lang') || '').toString().trim();
-							items.push({
-								'name': 'lang',
-								'value': lang
-							});
-						});
-
-            //iterate through the general elements of the <head> element.
-            for (var strGeneralTag of arrTagsGeneral) {
-                var strTagValue = ($('head > ' + strGeneralTag).text() || '').toString().trim();
-
-                //check if the value of the general tag is empty.
-                //in this case we don't have to add the value to the object.
-                if (strTagValue === '') {
-                    continue;
-                }
-
-								items.push({
-									'name': strGeneralTag,
-									'value': strTagValue
-								});
-            }
-
-            //get the canonical link of the site.
-            try {
-                let objCanonicalUrl = new URL(MetaInformation.GetCanonical().trim());
-                let objCurrentSiteUrl = new URL(GetBaseUrl());
-
-								items.push({
-									'name': 'canonical',
-									'value': objCanonicalUrl.href
-								});
-            } catch(_) { }
-
-            //return the general meta information.
-            return items;
-        },
-
-        GetDublinCore: function() {
-					let tags = [];
-
-					$('head > meta[name]').filter(function() {
-						return ($(this).attr('name').toUpperCase().startsWith('DC.') || $(this).attr('name').toUpperCase().startsWith('DCTERMS.'));
-					}).each(function() {
-						tags.push({
-							'name': ($(this).attr('name') || '').toString().trim(),
-							'value': ($(this).attr('content') || '').toString().trim()
-						});
+				//only add known meta information to the array.
+				if (namesCommon.includes(name)) {
+					tags.push({
+						'name': name,
+						'value': ($(this).attr('content') || '').toString().trim()
 					});
-
-          return tags;
-        },
-
-        GetOthers: function() {
-					let tags = [];
-
-            //iterate through all <meta> elements with name attribute.
-            $('head > meta[name]').each(function() {
-                var strMetaName = ($(this).attr('name') || '').toString();
-								var strMetaProperty = ($(this).attr('property') || '').toString();
-
-								if (strMetaName.trim().toUpperCase().startsWith('DC.') || strMetaName.trim().toUpperCase().startsWith('DCTERMS.')) {
-									return;
-								}
-
-								if (strMetaName.trim().toLowerCase().startsWith('twitter:')) {
-									return;
-								}
-
-								if (strMetaName.trim().toLowerCase().startsWith('parsely-')) {
-									return;
-								}
-
-                if (!IsOpenGraphTag(strMetaName) && !arrMetaNamesGeneral.includes(strMetaName)) {
-									tags.push({name: strMetaName, value: ($(this).attr('content') || '').toString()});
-                }
-            });
-
-            //iterate through all <meta> elements with property attribute.
-            $('head > meta[property]').each(function() {
-                var strMetaProperty = ($(this).attr('property') || '').toString();
-
-								if (strMetaProperty.trim().toLowerCase().startsWith('twitter:')) {
-									return;
-								}
-
-                //add the unknown meta information to the object.
-                if (!IsOpenGraphTag(strMetaProperty)) {
-									tags.push({name: strMetaProperty, value: ($(this).attr('content') || '').toString()});
-                }
-            });
-
-						$('head > meta[http-equiv]').each(function() {
-							var strMetaHttpEquiv = ($(this).attr('http-equiv') || '').toString();
-							tags.push({name: strMetaHttpEquiv, value: ($(this).attr('content') || '').toString()});
-						});
-
-						$('head > meta[charset]').each(function() {
-							var strMetaCharset = ($(this).attr('charset') || '').toString();
-							tags.push({name: 'charset', value: strMetaCharset});
-						});
-
-
-            return tags;
-        },
-
-        /**
-         * Get the Parse.ly meta information.
-         */
-        GetParsely: function() {
-					let tags = [];
-
-					$('head > meta[name]').filter(function() {
-						return $(this).attr('name').toLowerCase().trim().startsWith('parsely-');
-					}).each(function() {
-						tags.push({
-							'name': ($(this).attr('name') || '').toString().trim(),
-							'value': ($(this).attr('content') || '').toString().trim()
-						});
-					});
-
-            //return the information.
-            return tags;
-        },
-
-        /**
-         * Get the Twitter meta information.
-         */
-        GetTwitter: function() {
-					let tags = [];
-
-					$('head > meta[name]').filter(function() {
-						return $(this).attr('name').toLowerCase().trim().startsWith('twitter:');
-					}).each(function() {
-						tags.push({
-							'name': ($(this).attr('name') || '').toString().trim(),
-							'value': ($(this).attr('content') || '').toString().trim()
-						});
-					});
-
-					$('head > meta[property]').filter(function() {
-						return $(this).attr('property').toLowerCase().trim().startsWith('twitter:');
-					}).each(function() {
-						tags.push({
-							'name': ($(this).attr('property') || '').toString().trim(),
-							'value': ($(this).attr('content') || '').toString().trim()
-						});
-					});
-
-            //return the information.
-            return tags;
-        },
-
-        GetMetaAlternate: function() {
-            var info = [];
-
-            //iterate through the <meta> elements of the <head> element with alternate.
-            $('head > link[rel="alternate"]').each(function() {
-                info.push({
-                    'title': ($(this).attr('title') || '').toString().trim(),
-                    'href': ($(this).attr('href') || '').toString().trim(),
-                    'hreflang': ($(this).attr('hreflang') || '').toString().trim()
-                });
-            });
-
-            return info;
-        },
-
-				GetMetaPreload: function() {
-					var info = [];
-
-					$('head > link[rel="preload"]').each(function() {
-						info.push({
-							'href': ($(this).attr('href') || '').toString().trim(),
-							'as': ($(this).attr('as') || '').toString().trim(),
-							'type': ($(this).attr('type') || '').toString().trim()
-						});
-					});
-
-					return info;
-				},
-
-				GetMetaDnsPrefetch: function() {
-					var info = [];
-
-					$('head > link[rel="dns-prefetch"]').each(function() {
-						info.push({
-							'href': ($(this).attr('href') || '').toString().trim()
-						});
-					});
-
-					return info;
-				},
-
-				GetMetaPreconnect: function() {
-					var info = [];
-
-					$('head > link[rel="preconnect"]').each(function() {
-						info.push({
-							'href': ($(this).attr('href') || '').toString().trim()
-						});
-					});
-
-					return info;
 				}
-    }
+			});
+
+			//get the language information of the website.
+			$('html[lang]').each(function() {
+				tags.push({
+					'name': 'lang',
+					'value': ($(this).attr('lang') || '').toString().trim()
+				});
+			});
+
+			//iterate through all the tags to get information from.
+			for (let tagCommon of tagsCommon) {
+				let itemTagCommon = $('head > ' + tagCommon).first();
+
+				//add the tag information to the array if available.
+				if (itemTagCommon) {
+					tags.push({
+						'name': tagCommon,
+						'value': (itemTagCommon.text() || '').toString().trim()
+					});
+				}
+			}
+
+			//try to the get canonical link of the website.
+			try {
+				const canonical = Meta.GetCanonical();
+
+				//add the canonical link to the tag array if available.
+				if (canonical !== '') {
+					tags.push({
+						'name': 'canonical',
+						'value': (new URL(canonical)).href
+					});
+				}
+			} catch(_) {}
+
+			//return all the found tags.
+			return tags;
+		},
+
+		/**
+		 * Returns all found Dublin Core information of the website.
+		 * @returns {object[]} All the found Dublin Core information of the website.
+		 */
+		GetDublinCore: function() {
+			let tags = [];
+
+			//iterate through all the meta information with available name attribute.
+			$('head > meta[name]').filter(function() {
+				return ($(this).attr('name').toUpperCase().startsWith('DC.') || $(this).attr('name').toUpperCase().startsWith('DCTERMS.'));
+			}).each(function() {
+				tags.push({
+					'name': ($(this).attr('name') || '').toString().trim(),
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//return all the found Dublin Core tags of the website.
+			return tags;
+		},
+
+		/**
+		 * Returns all found Parse.ly information of the website.
+		 * @returns {object[]} All the found Parse.ly information of the website.
+		 */
+		GetParsely: function() {
+			let tags = [];
+
+			//iterate through all the meta information with available name attribute.
+			$('head > meta[name]').filter(function() {
+				return $(this).attr('name').toLowerCase().trim().startsWith('parsely-');
+			}).each(function() {
+				tags.push({
+					'name': ($(this).attr('name') || '').toString().trim(),
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//return all the found Parse.ly tags of the website.
+			return tags;
+		},
+
+		/**
+		 * Returns all found Twitter information of the website.
+		 * @returns {object[]} All the found Twitter information of the website.
+		 */
+		GetTwitter: function() {
+			let tags = [];
+
+			//iterate through all the meta information with available name attribute.
+			$('head > meta[name]').filter(function() {
+				return $(this).attr('name').toLowerCase().trim().startsWith('twitter:');
+			}).each(function() {
+				tags.push({
+					'name': ($(this).attr('name') || '').toString().trim(),
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//iterate through all the meta information with available property attribute.
+			$('head > meta[property]').filter(function() {
+				return $(this).attr('property').toLowerCase().trim().startsWith('twitter:');
+			}).each(function() {
+				tags.push({
+					'name': ($(this).attr('property') || '').toString().trim(),
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//return all the found Twitter information of the website.
+			return tags;
+		},
+
+
+		/**
+		 * Returns all found alternate links of the website.
+		 * @returns {object[]} All the found alternate links of the website.
+		 */
+		GetAlternateLinks: function() {
+			let tags = [];
+
+			//iterate through all the meta information with alternate link information.
+			$('head > link[rel="alternate"]').each(function() {
+				tags.push({
+					'title': ($(this).attr('title') || '').toString().trim(),
+					'href': ($(this).attr('href') || '').toString().trim(),
+					'hreflang': ($(this).attr('hreflang') || '').toString().trim()
+				});
+			});
+
+			//return all the found alternate link information of the website.
+			return tags;
+		},
+
+		/**
+		 * Returns all found preload information of the website.
+		 * @returns {object[]} All the found preload information of the website.
+		 */
+		GetPreload: function() {
+			let tags = [];
+
+			//iterate through all the meta information with preload information.
+			$('head > link[rel="preload"]').each(function() {
+				tags.push({
+					'href': ($(this).attr('href') || '').toString().trim(),
+					'as': ($(this).attr('as') || '').toString().trim(),
+					'type': ($(this).attr('type') || '').toString().trim()
+				});
+			});
+
+			//return all the found preload information of the website.
+			return tags;
+		},
+
+		/**
+		 * Returns all found DNS prefetch information of the website.
+		 * @returns {object[]} All the found DNS prefetch information of the website.
+		 */
+		GetDnsPrefetch: function() {
+			let tags = [];
+
+			//iterate through all the meta information with DNS prefetch information.
+			$('head > link[rel="dns-prefetch"]').each(function() {
+				tags.push({
+					'href': ($(this).attr('href') || '').toString().trim()
+				});
+			});
+
+			//returns all the found DNS prefetch information of the website.
+			return tags;
+		},
+
+		/**
+		 * Returns all found preconnect information of the website.
+		 * @returns {object[]} All the found preconnect information of the website.
+		 */
+		GetPreconnect: function() {
+			let tags = [];
+
+			//iterate through all the meta information with preconnect information.
+			$('head > link[rel="preconnect"]').each(function() {
+				tags.push({
+					'href': ($(this).attr('href') || '').toString().trim()
+				});
+			});
+
+			//returns all the found preconnect information of the website.
+			return tags;
+		},
+
+		/**
+		 * Returns all found meta information not covered in specific groups.
+		 * @returns {object[]} All the found meta information not covered in specific groups.
+		 */
+		GetOthers: function() {
+			let tags = [];
+
+			//iterate through all meta elements with available name attribute.
+			$('head > meta[name]').each(function() {
+				const name = ($(this).attr('name') || '').toString().trim();
+
+				//don't add the meta information if Dublin Core.
+				if (name.toUpperCase().startsWith('DC.') || name.toUpperCase().startsWith('DCTERMS.')) {
+					return;
+				}
+
+				//don't add the meta information if Twitter.
+				if (name.toLowerCase().startsWith('twitter:')) {
+					return;
+				}
+
+				//don't add the meta information if Parse.ly.
+				if (name.toLowerCase().startsWith('parsely-')) {
+					return;
+				}
+
+				//don't add the meta information if Open Graph or available as common tag.
+				if (!OpenGraph.IsOpenGraphTag(name) && !namesCommon.includes(name)) {
+					tags.push({
+						'name': name,
+						'value': ($(this).attr('content') || '').toString().trim()
+					});
+				}
+			});
+
+			//iterate through all meta elements with available property attribute.
+			$('head > meta[property]').each(function() {
+				const property = ($(this).attr('property') || '').toString().trim();
+
+				//don't add the meta information if Twitter.
+				if (property.toLowerCase().startsWith('twitter:')) {
+					return;
+				}
+
+				//don't add the meta information if Open Graph.
+				if (!OpenGraph.IsOpenGraphTag(property)) {
+					tags.push({
+						'name': property,
+						'value': ($(this).attr('content') || '').toString().trim()
+					});
+				}
+			});
+
+			//iterate through all HTTP equivalent information of the website.
+			$('head > meta[http-equiv]').each(function() {
+				tags.push({
+					'name': ($(this).attr('http-equiv') || '').toString().trim(),
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//iterate through all charset information of the website.
+			$('head > meta[charset]').each(function() {
+				tags.push({
+					'name': 'charset',
+					'value': ($(this).attr('charset') || '').toString().trim()
+				});
+			});
+
+			//return all found tags.
+			return tags;
+		}
+	}
 })();
