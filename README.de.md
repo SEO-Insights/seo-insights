@@ -8,7 +8,7 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
 
 * Übersicht (Meta-Beschreibung, Titel, Canonical, usw.)
 * Überschriften (inkl. Anzahl der Buchstaben und Wörter)
-* Meta-Informationen (Open Graph, Facebook, Twitter, Dublin Core, Parse.ly, usw.)
+* Meta-Informationen (Open Graph, Twitter, Dublin Core, Parse.ly, usw.)
 * Bilder (Bildgröße, Alternativtext, Titel, Domains)
 * Links (Protokolle, externe und interne Links, Preload und DNS Prefetch)
 * Dateien (Stylesheets, JavaScript, spezielle Dateien)
@@ -27,7 +27,7 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
 ### Verwendete Bibliotheken
 
 * [jQuery 3.6.0](https://jquery.com/)
-* [Bootstrap 5.0](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* [Bootstrap 5.0.1](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
 ### Installation
 
