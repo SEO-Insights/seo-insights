@@ -358,7 +358,7 @@ function EscapeHTML(str) {
  * @returns The formatted color value as HTML element.
  */
 function GetFormattedColorValue(value) {
-	const textColor = (value.toLocaleLowerCase().startsWith('rgb')) ? RGBtoHEX(value) : value;
+	const textColor = (value.toLowerCase().startsWith('rgb')) ? RGBtoHEX(value) : value;
 	return `<div class="theme-color" style="background: ${value}; color: ${InvertColor(textColor, true)}">${value}</div>`;
 }
 
@@ -444,7 +444,7 @@ function ViewMetaDetails() {
 
 	//the callback function executed by the content script to show meta information.
 	const LoadMetaDetails = info => {
-		window.scrollTo(0, 0);
+		$('html, body').animate({scrollTop: '0px'}, 0);
 
 		//get the HTML container of the meta tab.
 		const tabMetaDetails = $('div#view-meta-details');
@@ -540,7 +540,7 @@ function ViewMetaDetails() {
 			tableTwitter.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'twitter-' + index));
 
 			//on image information, a image preview is possible.
-			if (item.name === 'twitter:image') {
+			if (['twitter:image:src', 'twitter:image'].includes(item.name.toLowerCase())) {
 				ShowImagePreview(tableTwitter.find('tbody tr#twitter-' + index + ' td'), new URL(value, tabUrlOrigin));
 			}
 		});
@@ -557,7 +557,7 @@ function ViewMetaDetails() {
 			}
 
 			//on image information, a image preview is possible.
-			if (['twitter:image:src', 'msapplication-tileimage'].includes(item.name.toLowerCase())) {
+			if (['msapplication-tileimage'].includes(item.name.toLowerCase())) {
 				ShowImagePreview(tableOthers.find('tbody tr#others-' + index + ' td'), new URL(value, tabUrlOrigin));
 			}
 		});
@@ -597,7 +597,7 @@ function ViewSummary() {
 
 	//the callback function executed by the content script to show summary information.
 	const LoadSummary = info => {
-		window.scrollTo(0, 0);
+		$('html, body').animate({scrollTop: '0px'}, 0);
 
 		//get the HTML container of the summary tab.
 		const tabSummary = $('div#view-summary');
@@ -662,7 +662,7 @@ function ViewFiles() {
 
 	//the callback function executed by the content script to show files information.
 	const LoadFiles = info => {
-		window.scrollTo(0, 0);
+		$('html, body').animate({scrollTop: '0px'}, 0);
 
 		//get the HTML container of the files tab.
 		const tabFiles = $('div#view-files');
@@ -754,7 +754,7 @@ function ViewFiles() {
  * View for Header.
  */
 function ViewHeader() {
-	window.scrollTo(0, 0);
+	$('html, body').animate({scrollTop: '0px'}, 0);
 
 	//get the tab and table of the headers list.
 	const tabHeaders = $('div#view-headers');
@@ -781,7 +781,7 @@ function ViewHeader() {
  * View for Tools.
  */
 function ViewTools() {
-	window.scrollTo(0, 0);
+	$('html, body').animate({scrollTop: '0px'}, 0);
 
 	//get the tab and table of the tools list.
 	const tabTools = $('div#view-tools');
@@ -853,7 +853,7 @@ function ViewTools() {
 
 	//the callback function executed by the content script to show heading information.
 	const LoadHeadings = info => {
-		window.scrollTo(0, 0);
+		$('html, body').animate({scrollTop: '0px'}, 0);
 
 		//get the HTML container of the headings tab.
 		const tabHeadings = $('div#view-headings');
@@ -912,7 +912,7 @@ function ViewImages() {
 
 	//the callback function executed by the content script to show image information.
 	const LoadImages = info => {
-		window.scrollTo(0, 0);
+		$('html, body').animate({scrollTop: '0px'}, 0);
 
 		//get the HTML container of the images tab.
 		const tabImages = $('div#view-images');
@@ -1012,7 +1012,7 @@ function ViewHyperlinks() {
 
 	//the callback function executed by the content script to show hyperlink information.
 	const LoadHyperlinks = info => {
-		window.scrollTo(0, 0);
+		$('html, body').animate({scrollTop: '0px'}, 0);
 
 		//get the HTML container of the hyperlinks tab.
 		const tabHyperlinks = $('div#view-hyperlinks');
