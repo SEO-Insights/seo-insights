@@ -941,7 +941,7 @@ function ViewImages() {
 			//set the attribute information to the row.
 			for (let attribute of ['alt', 'title']) {
 				if ((image[attribute] || '').toString().trim() !== '') {
-					tableImages.find(`tbody tr#img-${index} td`).append(GetInformation('alt', (image[attribute] || '').toString().trim()));
+					tableImages.find(`tbody tr#img-${index} td`).append(GetInformation(attribute, (image[attribute] || '').toString().trim()));
 				}
 			}
 
@@ -962,7 +962,7 @@ function ViewImages() {
 			//set the attribute information to the row.
 			for (let attribute of ['type', 'sizes']) {
 				if ((icon[attribute] || '').toString().trim() !== '') {
-					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(GetInformation('type', (icon[attribute] || '').toString().trim()));
+					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(GetInformation(attribute, (icon[attribute] || '').toString().trim()));
 				}
 			}
 
