@@ -557,7 +557,7 @@ function ViewMetaDetails() {
 			}
 
 			//on image information, a image preview is possible.
-			if (['msapplication-tileimage'].includes(item.name.toLowerCase())) {
+			if (['msapplication-tileimage', 'forem:logo', 'aiturec:image', 'vk:image'].includes(item.name.toLowerCase())) {
 				ShowImagePreview(tableOthers.find('tbody tr#others-' + index + ' td'), new URL(value, tabUrlOrigin));
 			}
 		});
