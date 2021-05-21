@@ -68,6 +68,7 @@ var OpenGraph = (function() {
     { name: 'og:determiner', description: 'The word to precede the object\'s title in a sentence.', group: 'basic' },
 		{ name: 'og:ignore_canonical', description: '', group: 'basic'},
     { name: 'og:locale', description: 'A Unix locale in which this markup is rendered.', group: 'basic' },
+		{ name: 'og:locate:alternate', description: '', group: 'basic' },
     { name: 'og:site_name', description: 'If your object is part of a larger web site, the name which should be displayed for the overall site.', group: 'basic' },
     { name: 'og:title', description: 'The title of the object as it should appear within the graph.', group: 'basic' },
     { name: 'og:type', description: 'The type of your object, e.g., "movie".  Depending on the type you specify, other properties may also be required.', group: 'basic' },

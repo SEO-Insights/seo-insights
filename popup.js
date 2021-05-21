@@ -478,7 +478,7 @@ function ViewMetaDetails() {
 		const itemsTwitter = (info.twitter || []);
 		const itemsDublinCore = (info.dublincore || []);
 
-		//set OpenGraph basic information to the table.
+		//set Open Graph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
 
@@ -486,22 +486,22 @@ function ViewMetaDetails() {
 			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-basic-' + index));
 		});
 
-		//set OpenGraph article information to the table.
+		//set Open Graph article information to the table.
 		itemsOpenGraphArticle.forEach(function(item) {
 			tableOpenGraphArticle.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
 		});
 
-		//set OpenGraph audio information to the table.
+		//set Open Graph audio information to the table.
 		itemsOpenGraphAudio.forEach(function(item) {
 			tableOpenGraphAudio.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
 		});
 
-		//set OpenGraph book information to the table.
+		//set Open Graph book information to the table.
 		itemsOpenGraphBook.forEach(function(item) {
 			tableOpenGraphBook.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
 		});
 
-		//set OpenGraph image information to the table.
+		//set Open Graph image information to the table.
 		itemsOpenGraphImage.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
 			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-image-' + index));
@@ -512,12 +512,12 @@ function ViewMetaDetails() {
 			}
 		});
 
-		//set OpenGraph profile information to the table.
+		//set Open Graph profile information to the table.
 		itemsOpenGraphProfile.forEach(function(item) {
 			tableOpenGraphProfile.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
 		});
 
-		//set OpenGraph video information to the table.
+		//set Open Graph video information to the table.
 		itemsOpenGraphVideo.forEach(function(item) {
 			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
 		});
@@ -557,7 +557,7 @@ function ViewMetaDetails() {
 			}
 
 			//on image information, a image preview is possible.
-			if (['msapplication-tileimage', 'forem:logo', 'aiturec:image', 'vk:image'].includes(item.name.toLowerCase())) {
+			if (['msapplication-tileimage', 'forem:logo', 'aiturec:image', 'vk:image', 'shareaholic:image'].includes(item.name.toLowerCase())) {
 				ShowImagePreview(tableOthers.find('tbody tr#others-' + index + ' td'), new URL(value, tabUrlOrigin));
 			}
 		});
