@@ -1,5 +1,7 @@
 ![](img/seo-insights-header.png)
 
+![Chrome Web Store](https://img.shields.io/chrome-web-store/v/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)
+
 SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Informationen einer Website anzeigen zu können.
 
 *Read this in other languages: [English](README.md), [Deutsch](README.de.md)*
@@ -20,23 +22,15 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
   - [GTmetrix](https://gtmetrix.com/)
   - [Test für Rich-Suchergebnisse](https://search.google.com/test/rich-results)
   - [Test auf Optimierung für Mobilgeräte](https://search.google.com/test/mobile-friendly)
-* Mehrsprachigkeit: Englisch und Deutsch
-
-![](img/seo-insights-summary.png)
+* Verfügbar in Englisch und Deutsch
 
 ### Verwendete Bibliotheken
 
 * [jQuery 3.6.0](https://jquery.com/)
 * [Bootstrap 5.0.1](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
-### Installation
+### Chrome Web Store
 
-#### Google Chrome / Microsoft  Edge
+Diese Erweiterung steht im [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de) zur Verfügung und kann darüber in Google Chrome sowie dem Microsoft Edge installiert werden. Um die aktuelle Entwicklungsversion testen zu können, steht [hier eine Anleitung](https://github.com/SEO-Insights/seo-insights/wiki/Entwicklung) zur Verfügung.
 
- 1. Dieses Repository als [ZIP-Archiv bei GitHub herunterladen](https://github.com/SEO-Insights/seo-insights/archive/main.zip).
- 2. Das ZIP-Archiv entpacken. Das Verzeichnis `seo-insights-main` sollte zur Verfügung stehen.
- 3. Erweiterungen des Browsers öffnen:
-    - Google Chrome: `chrome://extensions`
-    - Microsoft Edge: `edge://extensions`
-  4. Entwicklungsmodus aktivieren.
-  5. Verzeichnis `seo-insights-main` als entpackte Erweiterung auswählen.
+[![](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
