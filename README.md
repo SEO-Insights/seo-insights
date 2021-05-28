@@ -31,6 +31,10 @@ SEO Insights is a Chrome extension to display the most important information of 
 
 ### :rocket: Chrome Web Store
 
-This extension is available in the [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en) and can be installed in Google Chrome and Microsoft Edge. To test the current development version, instructions are [available here](https://github.com/SEO-Insights/seo-insights/wiki/Development).
+SEO Insights is available in the [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en) and can be installed in Google Chrome and Microsoft Edge. To test the current development version, instructions are [available here](https://github.com/SEO-Insights/seo-insights/wiki/Development).
 
 [![](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
+
+### :tada: Upcoming Features
+
+SEO Insights is in active development and gets improvements and new features over time. You can see upcoming features on [the current milestone](https://github.com/SEO-Insights/seo-insights/milestone/1) or the [issue overview](https://github.com/SEO-Insights/seo-insights/issues).
