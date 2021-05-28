@@ -24,16 +24,16 @@ SEO Insights is a Chrome extension to display the most important information of 
   - [Mobile-Friendly Test](https://search.google.com/test/mobile-friendly)
 * Available in English and German
 
-### :hammer_and_wrench: Used libraries
-
-* [jQuery 3.6.0](https://jquery.com/)
-* [Bootstrap 5.0.1](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
-
 ### :rocket: Chrome Web Store
 
 SEO Insights is available in the [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en) and can be installed in Google Chrome and Microsoft Edge. To test the current development version, instructions are [available here](https://github.com/SEO-Insights/seo-insights/wiki/Development).
 
 [![](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
+
+### :hammer_and_wrench: Used libraries
+
+* [jQuery 3.6.0](https://jquery.com/)
+* [Bootstrap 5.0.1](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
 ### :tada: Upcoming Features
 
