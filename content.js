@@ -27,6 +27,7 @@ if (!IsInitializedContent) {
 					},
 					'others': Meta.GetOthers(),
 					'parsely': Meta.GetParsely(),
+					'shareaholic': MetaInfo.GetShareaholicTags(),
 					'twitter': Meta.GetTwitter()
 				});
 				break;

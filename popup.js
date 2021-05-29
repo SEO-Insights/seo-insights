@@ -24,6 +24,7 @@ let tabUrlOrigin = '';
     //programmatically inject the content scripts to the current tab.
     chrome.scripting.executeScript({files: ['libs/jquery-3.6.0.min.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['scripts/meta.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
@@ -493,6 +494,8 @@ function ViewMetaDetails() {
 		const tableParsely = $('table#meta-details-parsely', tabMetaDetails);
 		const tableTwitter = $('table#meta-details-twitter', tabMetaDetails);
 		const tableDublinCore = $('table#meta-details-dublin-core', tabMetaDetails);
+		const tableShareaholicContent = $('table#meta-details-shareaholic-content', tabMetaDetails);
+		const tableShareaholicFeature = $('table#meta-details-shareaholic-feature', tabMetaDetails);
 
 		//remove all rows of all meta tables.
 		$('table[id^=meta-details-]').children('tbody').empty();
@@ -509,6 +512,8 @@ function ViewMetaDetails() {
 		const itemsParsely = (info.parsely || []);
 		const itemsTwitter = (info.twitter || []);
 		const itemsDublinCore = (info.dublincore || []);
+		const itemsShareaholicContent = (info.shareaholic.content || []);
+		const itemsShareaholicFeature = (info.shareaholic.feature || []);
 
 		//set Open Graph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
@@ -577,6 +582,30 @@ function ViewMetaDetails() {
 			}
 		});
 
+		//set Shareaholic content information to the table.
+		itemsShareaholicContent.forEach(function(item, index) {
+			const value = (item.value || '').toString().trim();
+
+			tableShareaholicContent.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'shareaholic-' + index));
+
+			//on image information, a image preview is possible.
+			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
+				ShowImagePreview(tableShareaholicContent.find('tbody tr#shareaholic-' + index + ' td'), new URL(value, tabUrlOrigin));
+			}
+		});
+
+		//set Shareaholic content information to the table.
+		itemsShareaholicFeature.forEach(function(item, index) {
+			const value = (item.value || '').toString().trim();
+
+			tableShareaholicFeature.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'shareaholic-' + index));
+
+			//on image information, a image preview is possible.
+			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
+				ShowImagePreview(tableShareaholicFeature.find('tbody tr#shareaholic-' + index + ' td'), new URL(value, tabUrlOrigin));
+			}
+		});
+
 		//set other meta tags (not found above) to the table.
 		itemsOthers.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
@@ -605,6 +634,8 @@ function ViewMetaDetails() {
 		SetTableCountOnCardHeader($('#meta-details-twitter-heading'), tableTwitter);
 		SetTableCountOnCardHeader($('#meta-details-dublincore-heading'), tableDublinCore);
 		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
+		SetTableCountOnCardHeader($('#meta-details-shareaholic-content-heading'), tableShareaholicContent);
+		SetTableCountOnCardHeader($('#meta-details-shareaholic-feature-heading'), tableShareaholicFeature);
 		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
 
 		//display a hint if there are no meta elements (no accordions).

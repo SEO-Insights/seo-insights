@@ -275,6 +275,11 @@ var Meta = (function() {
 					return;
 				}
 
+				//don't add the meta information if Shareaholic.
+				if (MetaInfo.IsShareaholicTag(name)) {
+					return;
+				}
+
 				//don't add the meta information if Open Graph or available as common tag.
 				if (!OpenGraph.IsOpenGraphTag(name) && !namesCommon.includes(name)) {
 					tags.push({
