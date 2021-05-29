@@ -33,6 +33,12 @@ let tabUrlOrigin = '';
     chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
 			ViewSummary();
     });
+
+		if (chrome.runtime.id !== 'nlkopdpfkbifcibdoecnfabipofhnoom') {
+			$('body').addClass('dev');
+		} else {
+			$('body').removeClass('dev');
+		}
   });
 })();
 
@@ -322,16 +328,41 @@ function RGBtoHEX(rgb) {
 
 /**
  * Returns the count of words in a given string value.
- * @param {string} str The string value to get the count of words from.
+ * @param {string} text The string value to get the count of words from.
  * @returns The count of words in the given string value.
- * @see https://stackoverflow.com/a/30335883/3840840
+ * @see https://stackoverflow.com/a/18679657/3840840
  */
-function GetWordCount(str) {
-	str = str.replace(/(^\s*)|(\s*$)/gi, '');  // remove starting and ending spaces.
-	str = str.replace(/-\s/gi, ''); // replace word-break with empty string to get one word.
-	str = str.replace(/\s/gi, ' ');  // replace all spaces, tabs and new lines with a space.
-	str = str.replace(/\s{2,}/gi, ' '); // replace two ore more spaces with a single space.
-	return str.split(' ').filter(str => str.match(/[0-9a-z\u00C0-\u017F]/gi)).length;
+function GetWordCount(text) {
+	text = text.replace(/(^\s*)|(\s*$)/gi, ''); //remove all starting and ending spaces.
+	text = text.replace(/-\s/gi, ''); //remove dash with empty string to detect the two parts as single word.
+	text = text.replace(/\s/gi, ' '); //replace all space characters with a single space char.
+	text = text.replace(/\s{2,}/gi, ' '); //replace multiple space characters with a single char.
+
+	//now split the text by space and get only the items without special chars.
+	return text.split(' ').filter(word => word.match(/[0-9a-z\u00C0-\u017F]/gi)).length;
+}
+
+/**
+ * Returns the count of emojis in a given string value.
+ * @param {string} text The string value to get the count of emojis from.
+ * @returns The count of emojis in the given string value.
+ * @see https://mathiasbynens.be/notes/es-unicode-property-escapes#emoji
+ */
+function GetEmojiCount(text) {
+	return (text.match(/\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}|\p{So}|\p{Emoji}\uFE0F/gu) || []).length;
+}
+
+/**
+ * Returns the information of the text of a given string value.
+ * @param {string} text The string value to get the text information from.
+ * @returns The object with information of the given string info.
+ */
+function GetTextInformation(text) {
+	return {
+		'chars': text.length,
+		'words': GetWordCount(text),
+		'emojis': GetEmojiCount(text)
+	};
 }
 
 /**
@@ -363,21 +394,28 @@ function GetFormattedColorValue(value) {
 }
 
 /**
- * Returns the chars and words count as HTML element.
- * @param {string} value The value to count the chars and words.
- * @param {*} newLine State whether the tags should be displayed on a new line.
- * @returns The chars and words count of the given value formatted in a HTML element.
+ * Returns the formatted text information of a given text.
+ * @param {string} text The text to get the formatted text information from.
+ * @param {boolean} newline State whether the tags should be displayed on a new line.
+ * @returns The formatted text information of the given text.
  */
-function GetTextWordInformation(value, newLine = false) {
-	value = (value || '').toString().trim();
+function GetTextWordInformation(text, newline = false) {
+	text = (text || '').toString().trim();
 
-	//don't create information for empty string values.
-	if (value.length === 0) {
+	//don't get the text information of a empty string value.
+	if (text.length === 0) {
 		return '';
 	}
 
-	//return the count of chars and word as additional information.
-	return ((newLine === true) ? '<br>' : '') + GetInformation('', value.length + ' ' + chrome.i18n.getMessage('chars')) + GetInformation('', GetWordCount(value) + ' ' + chrome.i18n.getMessage('words'));
+	//get the text information of the given text.
+	const info = GetTextInformation(text);
+
+	//return the formatted text information.
+	//display the count of emojis only if there are emojis.
+	return ((newline === true) ? '<br>' : '')
+		+ GetInformation('', info.chars + ' ' + chrome.i18n.getMessage('chars'))
+		+ GetInformation('', info.words + ' ' + chrome.i18n.getMessage('words'))
+		+ ((info.emojis > 0) ? GetInformation('', info.emojis + ' ' + 'emojis') : '');
 }
 
 /**
