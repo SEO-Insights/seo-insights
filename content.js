@@ -18,7 +18,7 @@ if (!IsInitializedContent) {
 					'dublincore': MetaInfo.GetDublineCoreTags(),
 					'opengraph': MetaInfo.GetOpenGraphTags(),
 					'others': Meta.GetOthers(),
-					'parsely': Meta.GetParsely(),
+					'parsely': MetaInfo.GetParselyTags(),
 					'shareaholic': MetaInfo.GetShareaholicTags(),
 					'twitter': MetaInfo.GetTwitterTags()
 				});

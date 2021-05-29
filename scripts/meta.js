@@ -193,6 +193,15 @@ var MetaInfo = (function() {
 		},
 
 		/**
+		 * Returns the state whether the given tag name is a Parse.ly tag.
+		 * @param {string} tagName The tag name to check whether it is a Parse.ly tag.
+		 * @returns State whether the given tag name is a Parse.ly tag.
+		 */
+		IsParselyTag: function(tagName) {
+			return (tagName || '').toString().trim().toLowerCase().startsWith('parsely-');
+		},
+
+		/**
 		 * Returns the state whether the given tag name is a known Shareaholic Content tag.
 		 * @param {string} tagName The tag name to check whether it is a known Shareaholic Content tag.
 		 * @returns State whether the given tag name is a known Shareaholic Content tag.
@@ -314,6 +323,28 @@ var MetaInfo = (function() {
 				profile: tagsProfile,
 				video: tagsVideo
 			};
+		},
+
+		/**
+		 * Returns all found Parse.ly tags of the website.
+		 * @returns Returns an array with all found Parse.ly tags of the website.
+		 */
+		GetParselyTags: function() {
+			let tagsParsely = [];
+
+			//get all the Parse.ly tags of the website (starting with Parsely-).
+			$('head meta[name^="Parsely-"], head meta[property^="Parsely-"]').each(function() {
+				const tagName = (GetName(this) || '').toString().trim();
+
+				//add the current tag to the array.
+				tagsParsely.push({
+					name: tagName,
+					value: ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//return all found Parse.ly tags.
+			return tagsParsely;
 		},
 
 		/**

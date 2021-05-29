@@ -100,27 +100,6 @@ var Meta = (function() {
 		},
 
 		/**
-		 * Returns all found Parse.ly information of the website.
-		 * @returns {object[]} All the found Parse.ly information of the website.
-		 */
-		GetParsely: function() {
-			let tags = [];
-
-			//iterate through all the meta information with available name attribute.
-			$('head > meta[name]').filter(function() {
-				return $(this).attr('name').toLowerCase().trim().startsWith('parsely-');
-			}).each(function() {
-				tags.push({
-					'name': ($(this).attr('name') || '').toString().trim(),
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//return all the found Parse.ly tags of the website.
-			return tags;
-		},
-
-		/**
 		 * Returns all found alternate links of the website.
 		 * @returns {object[]} All the found alternate links of the website.
 		 */
@@ -218,7 +197,7 @@ var Meta = (function() {
 				}
 
 				//don't add the meta information if Parse.ly.
-				if (name.toLowerCase().startsWith('parsely-')) {
+				if (MetaInfo.IsParselyTag(name)) {
 					return;
 				}
 
@@ -250,6 +229,11 @@ var Meta = (function() {
 
 				//don't add the meta information if Twitter.
 				if (MetaInfo.IsTwitterTag(property)) {
+					return;
+				}
+
+				//don't add the meta information if Parse.ly.
+				if (MetaInfo.IsParselyTag(property)) {
 					return;
 				}
 
