@@ -25,7 +25,6 @@ let tabUrlOrigin = '';
     chrome.scripting.executeScript({files: ['libs/jquery-3.6.0.min.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
 		chrome.scripting.executeScript({files: ['scripts/meta.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/opengraph.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
     chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tab.id}});

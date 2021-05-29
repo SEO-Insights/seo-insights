@@ -281,12 +281,15 @@ var Meta = (function() {
 				}
 
 				//don't add the meta information if Open Graph or available as common tag.
-				if (!OpenGraph.IsOpenGraphTag(name) && !namesCommon.includes(name)) {
-					tags.push({
-						'name': name,
-						'value': ($(this).attr('content') || '').toString().trim()
-					});
+				if (MetaInfo.IsOpenGraphTag(name) || namesCommon.includes(name)) {
+					return;
 				}
+
+				//add the tag to the array.
+				tags.push({
+					'name': name,
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
 			});
 
 			//iterate through all meta elements with available property attribute.
@@ -299,12 +302,15 @@ var Meta = (function() {
 				}
 
 				//don't add the meta information if Open Graph.
-				if (!OpenGraph.IsOpenGraphTag(property)) {
-					tags.push({
-						'name': property,
-						'value': ($(this).attr('content') || '').toString().trim()
-					});
+				if (MetaInfo.IsOpenGraphTag(property)) {
+					return;
 				}
+
+				//add the tag to the array.
+				tags.push({
+					'name': property,
+					'value': ($(this).attr('content') || '').toString().trim()
+				});
 			});
 
 			//iterate through all HTTP equivalent information of the website.

@@ -16,15 +16,7 @@ if (!IsInitializedContent) {
 			case INFO.META:
 				sendResponse({
 					'dublincore': Meta.GetDublinCore(),
-					'opengraph': {
-						'article': OpenGraph.GetArticleProperties(),
-						'audio': OpenGraph.GetAudioProperties(),
-						'basic': OpenGraph.GetBasicProperties(),
-						'book': OpenGraph.GetBookProperties(),
-						'image': OpenGraph.GetImageProperties(),
-						'profile': OpenGraph.GetProfileProperties(),
-						'video': OpenGraph.GetVideoProperties()
-					},
+					'opengraph': MetaInfo.GetOpenGraphTags(),
 					'others': Meta.GetOthers(),
 					'parsely': Meta.GetParsely(),
 					'shareaholic': MetaInfo.GetShareaholicTags(),
