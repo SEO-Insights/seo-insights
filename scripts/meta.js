@@ -111,6 +111,16 @@ var MetaInfo = (function() {
 	return {
 
 		/**
+		 * Returns the state whether the given tag name is a Dublin Core tag.
+		 * @param {string} tagName The tag name to check whether it is a Dublin Core tag.
+		 * @returns State whether the given tag name is a Dublin Core tag.
+		 */
+		IsDublinCoreTag: function(tagName) {
+			tagName = (tagName || '').toString().trim().toUpperCase();
+			return (tagName.startsWith('DC.') || tagName.startsWith('DCTERMS.'));
+		},
+
+		/**
 		 * Returns the state whether the given tag name is a known Open Graph Article tag.
 		 * @param {string} tagName The tag name to check whether it is a known Open Graph Article tag.
 		 * @returns State whether the given tag name is a known Open Graph Article tag.
@@ -216,6 +226,27 @@ var MetaInfo = (function() {
 		 */
 		IsTwitterTag: function(tagName) {
 			return (tagName || '').toString().trim().toLowerCase().startsWith('twitter:');
+		},
+
+		/**
+		 * Returns all found Dublin Core tags of the website.
+		 * @returns Returns an array with all found Dublin Core tags of the website.
+		 */
+		GetDublineCoreTags: function() {
+			let tagsDublinCore = [];
+
+			$('head meta[name^="DC."], head meta[name^="DCTERMS."], head meta[property^="DC."], head meta[property^="DCTERMS."]').each(function() {
+				const tagName = (GetName(this) || '').toString().trim();
+
+				//add the current tag to the array.
+				tagsDublinCore.push({
+					name: tagName,
+					value: ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//return all found Dublin Core tags.
+			return tagsDublinCore;
 		},
 
 		/**

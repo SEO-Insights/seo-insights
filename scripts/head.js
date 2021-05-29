@@ -100,27 +100,6 @@ var Meta = (function() {
 		},
 
 		/**
-		 * Returns all found Dublin Core information of the website.
-		 * @returns {object[]} All the found Dublin Core information of the website.
-		 */
-		GetDublinCore: function() {
-			let tags = [];
-
-			//iterate through all the meta information with available name attribute.
-			$('head > meta[name]').filter(function() {
-				return ($(this).attr('name').toUpperCase().startsWith('DC.') || $(this).attr('name').toUpperCase().startsWith('DCTERMS.'));
-			}).each(function() {
-				tags.push({
-					'name': ($(this).attr('name') || '').toString().trim(),
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//return all the found Dublin Core tags of the website.
-			return tags;
-		},
-
-		/**
 		 * Returns all found Parse.ly information of the website.
 		 * @returns {object[]} All the found Parse.ly information of the website.
 		 */
@@ -229,7 +208,7 @@ var Meta = (function() {
 				const name = ($(this).attr('name') || '').toString().trim();
 
 				//don't add the meta information if Dublin Core.
-				if (name.toUpperCase().startsWith('DC.') || name.toUpperCase().startsWith('DCTERMS.')) {
+				if (MetaInfo.IsDublinCoreTag(name)) {
 					return;
 				}
 
@@ -263,6 +242,11 @@ var Meta = (function() {
 			//iterate through all meta elements with available property attribute.
 			$('head > meta[property]').each(function() {
 				const property = ($(this).attr('property') || '').toString().trim();
+
+				//don't add the meta information if Dublin Core.
+				if (MetaInfo.IsDublinCoreTag(property)) {
+					return;
+				}
 
 				//don't add the meta information if Twitter.
 				if (MetaInfo.IsTwitterTag(property)) {

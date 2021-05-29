@@ -15,7 +15,7 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.META:
 				sendResponse({
-					'dublincore': Meta.GetDublinCore(),
+					'dublincore': MetaInfo.GetDublineCoreTags(),
 					'opengraph': MetaInfo.GetOpenGraphTags(),
 					'others': Meta.GetOthers(),
 					'parsely': Meta.GetParsely(),
