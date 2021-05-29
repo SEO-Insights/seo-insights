@@ -210,6 +210,15 @@ var MetaInfo = (function() {
 		},
 
 		/**
+		 * Returns the state whether the given tag name is a Twitter tag.
+		 * @param {string} tagName The tag name to check whether it is a Twitter tag.
+		 * @returns State whether the given tag name is a Twitter tag.
+		 */
+		IsTwitterTag: function(tagName) {
+			return (tagName || '').toString().trim().toLowerCase().startsWith('twitter:');
+		},
+
+		/**
 		 * Returns all found Open Graph tags of the website.
 		 * @returns Returns an object with all found Open Graph tags of the website.
 		 */
@@ -307,6 +316,28 @@ var MetaInfo = (function() {
 				content: tagsContent,
 				feature: tagsFeature
 			};
+		},
+
+		/**
+		 * Returns all found Twitter tags of the website.
+		 * @returns Returns an array with all found Twitter tags of the website.
+		 */
+		GetTwitterTags: function() {
+			let tagsTwitter = [];
+
+			//get all the Twitter tags of the website (starting with twitter:).
+			$('head meta[name^="twitter:"], head meta[property^="twitter:"]').each(function() {
+				const tagName = (GetName(this) || '').toString().trim();
+
+				//add the current tag to the array.
+				tagsTwitter.push({
+					name: tagName,
+					value: ($(this).attr('content') || '').toString().trim()
+				});
+			});
+
+			//return all found Twitter tags.
+			return tagsTwitter;
 		}
 	}
 })();

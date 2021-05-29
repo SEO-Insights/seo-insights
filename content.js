@@ -20,7 +20,7 @@ if (!IsInitializedContent) {
 					'others': Meta.GetOthers(),
 					'parsely': Meta.GetParsely(),
 					'shareaholic': MetaInfo.GetShareaholicTags(),
-					'twitter': Meta.GetTwitter()
+					'twitter': MetaInfo.GetTwitterTags()
 				});
 				break;
 			case INFO.HEADINGS:

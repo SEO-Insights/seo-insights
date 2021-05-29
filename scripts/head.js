@@ -142,38 +142,6 @@ var Meta = (function() {
 		},
 
 		/**
-		 * Returns all found Twitter information of the website.
-		 * @returns {object[]} All the found Twitter information of the website.
-		 */
-		GetTwitter: function() {
-			let tags = [];
-
-			//iterate through all the meta information with available name attribute.
-			$('head > meta[name]').filter(function() {
-				return $(this).attr('name').toLowerCase().trim().startsWith('twitter:');
-			}).each(function() {
-				tags.push({
-					'name': ($(this).attr('name') || '').toString().trim(),
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//iterate through all the meta information with available property attribute.
-			$('head > meta[property]').filter(function() {
-				return $(this).attr('property').toLowerCase().trim().startsWith('twitter:');
-			}).each(function() {
-				tags.push({
-					'name': ($(this).attr('property') || '').toString().trim(),
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//return all the found Twitter information of the website.
-			return tags;
-		},
-
-
-		/**
 		 * Returns all found alternate links of the website.
 		 * @returns {object[]} All the found alternate links of the website.
 		 */
@@ -266,7 +234,7 @@ var Meta = (function() {
 				}
 
 				//don't add the meta information if Twitter.
-				if (name.toLowerCase().startsWith('twitter:')) {
+				if (MetaInfo.IsTwitterTag(name)) {
 					return;
 				}
 
@@ -297,7 +265,7 @@ var Meta = (function() {
 				const property = ($(this).attr('property') || '').toString().trim();
 
 				//don't add the meta information if Twitter.
-				if (property.toLowerCase().startsWith('twitter:')) {
+				if (MetaInfo.IsTwitterTag(property)) {
 					return;
 				}
 
