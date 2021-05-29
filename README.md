@@ -1,6 +1,7 @@
 ![](img/seo-insights-header.png)
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
 
 SEO Insights is a Chrome extension to display the most important information of a website at a glance.
 
