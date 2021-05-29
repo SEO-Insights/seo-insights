@@ -33,12 +33,6 @@ let tabUrlOrigin = '';
     chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
 			ViewSummary();
     });
-
-		if (chrome.runtime.id !== 'nlkopdpfkbifcibdoecnfabipofhnoom') {
-			$('body').addClass('dev');
-		} else {
-			$('body').removeClass('dev');
-		}
   });
 })();
 
