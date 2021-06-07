@@ -42,6 +42,46 @@ var Meta = (function() {
 		},
 
 		/**
+		 * Returns the information of Google Analytics Tracking.
+		 * @returns An object with information of the Google Analytics Tracking.
+		 */
+		GetAnalytics: function() {
+			const regex = /(?<=['"])UA(\-\d+){2}(?=['"])/;
+
+			//get all known JavaScript-Files of the Google Analytics Tracking.
+			let gaFiles = $("head script[src]").filter(function () {
+				const url = new URL($(this).attr('src'), GetBaseUrl());
+				return (
+					(url.host === 'www.google-analytics.com' && url.pathname.endsWith('analytics.js'))
+					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js'))
+				);
+			});
+
+			//get all Google Analytics Tracking-IDs of the inline JavaScript code.
+			let gaScripts = $("head script:not([src]), body script:not([src])").filter(function () {
+				return regex.test($(this).text());
+			});
+
+			//initialize the array for files and IDs.
+			let arrID = [];
+			let arrFile = [];
+
+			gaScripts.each(function() {
+				const match = ($(this).text() || '').toString().match(regex);
+				if (match.length > 0) {
+					arrID.push(match[0]);
+				}
+			});
+
+			gaFiles.each(function() {
+				arrFile.push(($(this).attr('src') || '').toString().trim());
+			});
+
+			console.log('tags', arrID.filter((v, i, a) => a.indexOf(v) === i));
+			console.log('files', arrFile.filter((v, i, a) => a.indexOf(v) === i));
+		},
+
+		/**
 		 * Returns all meta information of the current website.
 		 * @returns {object[]} All the found meta tags as objects.
 		 */

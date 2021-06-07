@@ -10,7 +10,8 @@ if (!IsInitializedContent) {
 		switch (message.info) {
 			case INFO.SUMMARY:
 				sendResponse({
-					'meta': Meta.GetGeneral()
+					'meta': Meta.GetGeneral(),
+					'analytics': Meta.GetAnalytics()
 				});
 				break;
 			case INFO.META:
