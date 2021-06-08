@@ -41,25 +41,76 @@ var Meta = (function() {
 			return ($('head > link[rel="canonical"]').attr('href') || '').toString().trim();
 		},
 
+		GetGoogleTagManager: function() {
+			const regexGTM = /GTM\-[0-9A-Z]{4,}/;
+
+			let arrFile = [];
+			let arrID = [];
+
+			let gtmFiles = $("head script[src]").filter(function () {
+				const url = new URL($(this).attr('src'), GetBaseUrl());
+				return (
+					(url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtm.js') && regexGTM.test(url.search))
+				);
+			});
+
+			gtmFiles.each(function() {
+				let url = ($(this).attr('src') || '').toString().trim();
+				arrFile.push(url);
+
+				if (regexGTM.test(url) ) {
+					var match = url.match(regexGTM);
+					arrID.push(match[0]);
+				}
+			});
+
+			//get all Google Analytics Tracking-IDs of the inline JavaScript code.
+			let gaScripts = $("head script:not([src]), body script:not([src])").filter(function () {
+				const regexA = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
+
+				return regexA.test($(this).text());
+			});
+
+			gaScripts.each(function() {
+				const regexA = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/g;
+				const matchA = ($(this).text() || '').toString().match(regexA);
+
+				if (matchA) {
+					for(let i = 0; i < matchA.length; i++ ) {
+						arrID.push(matchA[i]);
+					}
+				}
+			});
+
+			console.log('gtmfiles', arrFile.filter((v, i, a) => a.indexOf(v) === i));
+			console.log('gtmtags', arrID.filter((v, i, a) => a.indexOf(v) === i))
+		},
+
 		/**
 		 * Returns the information of Google Analytics Tracking.
 		 * @returns An object with information of the Google Analytics Tracking.
 		 */
 		GetAnalytics: function() {
-			const regex = /(?<=['"])UA(\-\d+){2}(?=['"])/;
+			const regexUA = /UA(\-\d+){2}/;
+			const regexQuotedUA = /(?<=['"])UA(\-\d+){2}(?=['"])/g;
 
 			//get all known JavaScript-Files of the Google Analytics Tracking.
 			let gaFiles = $("head script[src]").filter(function () {
 				const url = new URL($(this).attr('src'), GetBaseUrl());
 				return (
 					(url.host === 'www.google-analytics.com' && url.pathname.endsWith('analytics.js'))
-					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js'))
+					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js') && regexUA.test(url.search))
+					|| ((url.host === 'ssl.google-analytics.com' || url.host === 'www.google-analytics.com') && url.pathname.endsWith('ga.js'))
 				);
 			});
 
 			//get all Google Analytics Tracking-IDs of the inline JavaScript code.
 			let gaScripts = $("head script:not([src]), body script:not([src])").filter(function () {
-				return regex.test($(this).text());
+				const regexA = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+				const regexB = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+				const regexC = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+
+				return regexA.test($(this).text()) || regexB.test($(this).text()) || regexC.test($(this).text());
 			});
 
 			//initialize the array for files and IDs.
@@ -67,9 +118,30 @@ var Meta = (function() {
 			let arrFile = [];
 
 			gaScripts.each(function() {
-				const match = ($(this).text() || '').toString().match(regex);
-				if (match.length > 0) {
-					arrID.push(match[0]);
+				const regexA = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/g;
+				const regexB = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/g;
+				const regexC = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/g;
+
+				const matchA = ($(this).text() || '').toString().match(regexA);
+				const matchB = ($(this).text() || '').toString().match(regexB);
+				const matchC = ($(this).text() || '').toString().match(regexC);
+
+				if (matchA) {
+					for(let i = 0; i < matchA.length; i++ ) {
+						arrID.push(matchA[i]);
+					}
+				}
+
+				if (matchB) {
+					for(let i = 0; i < matchB.length; i++ ) {
+						arrID.push(matchB[i]);
+					}
+				}
+
+				if (matchC) {
+					for(let i = 0; i < matchC.length; i++ ) {
+						arrID.push(matchC[i]);
+					}
 				}
 			});
 
@@ -77,8 +149,8 @@ var Meta = (function() {
 				arrFile.push(($(this).attr('src') || '').toString().trim());
 			});
 
-			console.log('tags', arrID.filter((v, i, a) => a.indexOf(v) === i));
-			console.log('files', arrFile.filter((v, i, a) => a.indexOf(v) === i));
+			console.log('gatags', arrID.filter((v, i, a) => a.indexOf(v) === i));
+			console.log('gafiles', arrFile.filter((v, i, a) => a.indexOf(v) === i));
 		},
 
 		/**

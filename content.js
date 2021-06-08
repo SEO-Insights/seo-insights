@@ -11,7 +11,8 @@ if (!IsInitializedContent) {
 			case INFO.SUMMARY:
 				sendResponse({
 					'meta': Meta.GetGeneral(),
-					'analytics': Meta.GetAnalytics()
+					'analytics': Meta.GetAnalytics(),
+					'tag-manager': Meta.GetGoogleTagManager()
 				});
 				break;
 			case INFO.META:
