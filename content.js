@@ -12,7 +12,7 @@ if (!IsInitializedContent) {
 				sendResponse({
 					'meta': Meta.GetGeneral(),
 					'analytics': Meta.GetAnalytics(),
-					'tag-manager': Meta.GetGoogleTagManager()
+					'tagmanager': Meta.GetGoogleTagManager()
 				});
 				break;
 			case INFO.META:

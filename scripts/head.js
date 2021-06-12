@@ -41,116 +41,148 @@ var Meta = (function() {
 			return ($('head > link[rel="canonical"]').attr('href') || '').toString().trim();
 		},
 
+		/**
+		 * Returns the information of the Google Tag Manager used on the website.
+		 * @returns {object} The information of the Google Tag Manager used on the website.
+		 */
 		GetGoogleTagManager: function() {
-			const regexGTM = /GTM\-[0-9A-Z]{4,}/;
 
-			let arrFile = [];
-			let arrID = [];
+			//set the regular expressions to get the identifiers of the Google Tag Manager.
+			//there are two regular expression to get the identifiers of the Google Tag Manager with and without quotes.
+			const regexUnquotedGTM = /GTM\-[0-9A-Z]{4,}/;
+			const regexQuotedGTM = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
 
-			let gtmFiles = $("head script[src]").filter(function () {
+			//clear the arrays for identifier and files.
+			let identifier = [];
+			let files = [];
+
+			//get all Google Tag Manager files used on the website.
+			$('script[src]').filter(function() {
 				const url = new URL($(this).attr('src'), GetBaseUrl());
+
+				//check whether the file is a volid Google Tag Manager file.
 				return (
-					(url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtm.js') && regexGTM.test(url.search))
+					(url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtm.js') && regexUnquotedGTM.test(url.search))
 				);
-			});
+			}).each(function() {
 
-			gtmFiles.each(function() {
-				let url = ($(this).attr('src') || '').toString().trim();
-				arrFile.push(url);
+				//get the url of the Google Tag Manager file and add the url to the file array.
+				const url = ($(this).attr('src') || '').toString().trim();
+				files.push(url);
 
-				if (regexGTM.test(url) ) {
-					var match = url.match(regexGTM);
-					arrID.push(match[0]);
+				//get the identifier of the Google Tag Manager from url.
+				const match = url.match(regexUnquotedGTM);
+
+				//add the identifier of the Google Tag Manager if found on the url.
+				if (match) {
+					identifier.push({
+						id: match[0],
+						source: 'url'
+					});
 				}
 			});
 
-			//get all Google Analytics Tracking-IDs of the inline JavaScript code.
-			let gaScripts = $("head script:not([src]), body script:not([src])").filter(function () {
-				const regexA = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
+			//get all scripts of the website containing a Google Tag Manager identifier.
+			$("script:not([src])").filter(function() {
+				return regexQuotedGTM.test($(this).text());
+			}).each(function() {
 
-				return regexA.test($(this).text());
-			});
+				//get all Google Tag Manager identifier of the current script.
+				const matches = ($(this).text() || '').toString().match(new RegExp(regexQuotedGTM, 'g'));
 
-			gaScripts.each(function() {
-				const regexA = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/g;
-				const matchA = ($(this).text() || '').toString().match(regexA);
-
-				if (matchA) {
-					for(let i = 0; i < matchA.length; i++ ) {
-						arrID.push(matchA[i]);
-					}
+				//set all the found identifiers of Google Tag Manager to the array.
+				for (const id of (matches || []).filter(item => item !== null)) {
+					identifier.push({
+						id: id,
+						source: 'script'
+					});
 				}
 			});
 
-			console.log('gtmfiles', arrFile.filter((v, i, a) => a.indexOf(v) === i));
-			console.log('gtmtags', arrID.filter((v, i, a) => a.indexOf(v) === i))
+			//return all the found information (files and identifiers) of the Google Tag Manager.
+			return {
+				tags: identifier,
+				files: files
+			};
 		},
 
 		/**
-		 * Returns the information of Google Analytics Tracking.
-		 * @returns An object with information of the Google Analytics Tracking.
+		 * Returns the information of Google Analytics Tracking used on the website.
+		 * @returns {object} The information of Google Analytics Tracking used on the website.
 		 */
 		GetAnalytics: function() {
-			const regexUA = /UA(\-\d+){2}/;
-			const regexQuotedUA = /(?<=['"])UA(\-\d+){2}(?=['"])/g;
 
-			//get all known JavaScript-Files of the Google Analytics Tracking.
-			let gaFiles = $("head script[src]").filter(function () {
+			//set the regular expressions to get the identifiers of the Google Analytics Tracking.
+			//there are two regular expression to get the identifiers of the Google Analytics Tracking with and without quotes.
+			const regexUnqoutedUA = /UA(\-\d+){2}/;
+			const regexUnqoutedG = /G\-[A-Z0-9]/;
+			const regexQuotedGTAG = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+			const regexQuotedAnalytics = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+			const regexQuotedGA = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+			const regexQuotedGA4 = /(?<=['"]config['"]\,[ ]*['"])G\-[0-9A-Z]+(?=['"])/;
+
+			//clear the arrays for identifier and files.
+			let identifier = [];
+			let files = [];
+
+			//get all Google Analytics Tracking files used on the website.
+			$("script[src]").filter(function () {
 				const url = new URL($(this).attr('src'), GetBaseUrl());
+
+				//check whether the file is a volid Google Analytics Tracking file.
 				return (
 					(url.host === 'www.google-analytics.com' && url.pathname.endsWith('analytics.js'))
-					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js') && regexUA.test(url.search))
+					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js') && regexUnqoutedUA.test(url.search))
 					|| ((url.host === 'ssl.google-analytics.com' || url.host === 'www.google-analytics.com') && url.pathname.endsWith('ga.js'))
+					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js') && regexUnqoutedG.test(url.search))
 				);
-			});
+			}).each(function() {
 
-			//get all Google Analytics Tracking-IDs of the inline JavaScript code.
-			let gaScripts = $("head script:not([src]), body script:not([src])").filter(function () {
-				const regexA = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-				const regexB = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-				const regexC = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+				//get the url of the Google Analytics Tracking file and add the url to the file array.
+				const url = ($(this).attr('src') || '').toString().trim();
+				files.push(url);
 
-				return regexA.test($(this).text()) || regexB.test($(this).text()) || regexC.test($(this).text());
-			});
+				//get the identifier from url and add to the matches array.
+				let matches = [];
+				matches.push(url.match(regexUnqoutedUA));
+				matches.push(url.match(regexUnqoutedG));
 
-			//initialize the array for files and IDs.
-			let arrID = [];
-			let arrFile = [];
-
-			gaScripts.each(function() {
-				const regexA = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/g;
-				const regexB = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/g;
-				const regexC = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/g;
-
-				const matchA = ($(this).text() || '').toString().match(regexA);
-				const matchB = ($(this).text() || '').toString().match(regexB);
-				const matchC = ($(this).text() || '').toString().match(regexC);
-
-				if (matchA) {
-					for(let i = 0; i < matchA.length; i++ ) {
-						arrID.push(matchA[i]);
-					}
-				}
-
-				if (matchB) {
-					for(let i = 0; i < matchB.length; i++ ) {
-						arrID.push(matchB[i]);
-					}
-				}
-
-				if (matchC) {
-					for(let i = 0; i < matchC.length; i++ ) {
-						arrID.push(matchC[i]);
-					}
+				//set the identifiers to the array.
+				for (const id of (matches || []).filter(item => item !== null)) {
+					identifier.push({
+						id: id,
+						source: 'url'
+					});
 				}
 			});
 
-			gaFiles.each(function() {
-				arrFile.push(($(this).attr('src') || '').toString().trim());
+			//get all Google Analytics Tracking identifier of the scripts.
+			$("script:not([src])").filter(function () {
+				const script = $(this).text();
+				return regexQuotedGTAG.test(script) || regexQuotedAnalytics.test(script) || regexQuotedGA.test(script) || regexQuotedGA4.test(script);
+			}).each(function() {
+
+				//get all identifiers from scripts.
+				let matches = [];
+				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGTAG, 'g')));
+				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedAnalytics, 'g')));
+				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA, 'g')));
+				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA4, 'g')));
+
+				//set all the found identifier to the array.
+				for (const id of (matches || []).filter(item => item !== null)) {
+					identifier.push({
+						id: id,
+						source: 'script'
+					});
+				}
 			});
 
-			console.log('gatags', arrID.filter((v, i, a) => a.indexOf(v) === i));
-			console.log('gafiles', arrFile.filter((v, i, a) => a.indexOf(v) === i));
+			//return all the found information (files and identifiers) of the Google Analytics Tracking.
+			return {
+				tags: identifier,
+				files: files
+			};
 		},
 
 		/**

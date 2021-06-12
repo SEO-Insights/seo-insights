@@ -257,10 +257,25 @@ function GetToolsItem(title, description, link) {
  * @param {integer} length The resulting string length after padding.
  * @returns The string value padded with zeros to the expected length.
  */
- function PadZero(str, length) {
+function PadZero(str, length) {
 	length = length || 2;
 	const zeros = new Array(length).join('0');
 	return (zeros + str).slice(-length);
+}
+
+/**
+ * Returns the given as value or list depending of the count of values.
+ * @param {string[]} values The values to be formatted.
+ * @returns A single value or a list of values to display on the extension.
+ */
+function GetFormattedArrayValue(values) {
+	if (values.length > 1) {
+		return '<ul><li>' + values.join('</li><li>') + '</li></ul>';
+	} else if (values.length == 1) {
+		return values[0];
+	} else {
+		return '';
+	}
 }
 
 /**
@@ -672,6 +687,8 @@ function ViewSummary() {
 
 		//get the meta information from the content script.
 		const metas = (info.meta || []);
+		const analytics = (info.analytics || []);
+		const tagmanager = (info.tagmanager || []);
 
 		//get a specific order of the meta information.
 		//the important information have to be visible on top of the list.
@@ -701,6 +718,22 @@ function ViewSummary() {
 				}
 			}
 		});
+
+		//display the Google Analytics Tracking information of the website.
+		if (analytics.tags.length > 0 || analytics.files.length > 0) {
+			let info = [];
+			info = info.concat(analytics.tags.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(analytics.files.filter((v, i, a) => a.indexOf(v) === i));
+			tableSummary.children('tbody').append('<tr><td>Google Analytics</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
+		}
+
+		//display the Google Tag Manager information of the website.
+		if (tagmanager.tags.length > 0 || tagmanager.files.length > 0) {
+			let info = [];
+			info = info.concat(tagmanager.tags.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(tagmanager.files.filter((v, i, a) => a.indexOf(v) === i));
+			tableSummary.children('tbody').append('<tr><td>Google Tag Manager</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
+		}
 
 		//if there are no items display a hint.
 		SetEmptyHint(tableSummary, chrome.i18n.getMessage('no_summary_items'));
