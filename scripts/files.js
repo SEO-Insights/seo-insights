@@ -1,76 +1,184 @@
-/**
- * Module for Files
- */
-var FileModule = (function() {
-	return {
+//create the namespace of SEO Insights if the namespace doesn't exist.
+if (SEOInsights === undefined) {
+  var SEOInsights = {};
+}
+ /**
+	* The File class of SEO Insights to get information of files used on a website.
+	*/
+SEOInsights.File = class File {
+
+	/**
+	 * Checks whether a url is a Google Analytics url.
+	 * @param {URL} url The url to check for Google Analytics url.
+	 * @returns {boolean} State whether the url is a Google Analytics url.
+	 */
+	static IsGoogleAnalyticsUrl(url) {
 
 		/**
-		 * Returns all JavaScript files of the current website.
-		 * @returns An array with all found JavaScript files of the website.
+		 * How to detect Google Analytics files?
+		 *
+		 * The detection of Google Analytics files works only with the URL of the included file.
+		 * The differentiation between the different Google Analytics variants is made via the
+		 * hostname, pathname and by a possibly existing ID.
+		 *
+		 * Google Analytics using analytics.js:
+		 *   - Hostname: www.google-analytics.com
+		 *   - Pathname: analytics.js
+		 *
+		 * Google Analytics using ga.js:
+		 *   - Hostname: ssl.google-analytics.com or www.google-analytics.com
+		 *   - Pathname: ga.js
+		 *
+		 * Google Analytics using Universal Analytics:
+		 *   - Hostname: www.googletagmanager.com
+		 *   - Pathname: /gtag/js
+		 *   - There is also a Google Analytics Tracking ID (e.g. UA-XXXXX-XXXXX)
+		 *
+		 * Google Analytics using Google Analytics 4:
+		 *   - Hostname: www.googletagmanager.com
+		 *   - Pathname: /gtag/js
+		 *   - There is also a Google Analytics 4 Tracking-ID (e.g. G-XXXXXX)
 		 */
-		GetJavaScriptFiles: function() {
-			let files = [];
+		return (
+			(url.hostname === 'www.google-analytics.com' && url.pathname.toLowerCase().endsWith('analytics.js'))
+			|| (['www.google-analytics.com', 'ssl.google-analytics.com'].includes(url.hostname) && url.pathname.toLowerCase().endsWith('ga.js'))
+			|| (url.hostname === 'www.googletagmanager.com' && url.pathname.toLowerCase().endsWith('/gtag/js') && (/UA(\-\d+){2}/.test(url.search) || /G\-[A-Z0-9]/.test(url.search)))
+		);
+	}
 
-			//get all JavaScript files of the website.
-			$('script[src]').each(function() {
-
-				//get the source of the file and the url object.
-				let sourceJavaScript = ($(this).attr('src') || '').toString().trim();
-				let urlJavaScript = new URL(sourceJavaScript, GetBaseUrl());
-
-				//don't add JavaScript without file path.
-				if (sourceJavaScript === '') {
-					return;
-				}
-
-				//add the JavaScript file to the file array.
-				files.push({
-					'original': sourceJavaScript,
-					'async': $(this).attr('async') ? true : false,
-					'charset': ($(this).attr('charset') || '').toString().trim(),
-					'url': {
-						'href': urlJavaScript.href,
-						'origin': urlJavaScript.origin
-					}
-				});
-			});
-
-			//return all found JavaScript files.
-			return files;
-		},
+	/**
+	 * Checks whether a url is a Google Tag Manager url.
+	 * @param {URL} url The url to check for Google Tag Manager url.
+	 * @returns {boolean} State whether the url is a Google Tag Manager url.
+	 */
+	static IsGoogleTagManagerUrl(url) {
 
 		/**
-		 * Returns all Stylesheet files of the current website.
-		 * @returns An array with all found Stylesheet files of the website.
+		 * How to detect Google Tag Manager files?
+		 *
+		 * The detection of Google Tag Manager files works only with the URL of the included file.
+		 * The differentiation between the different Google Analytics variants is made via the
+		 * hostname, pathname and by a possibly existing ID.
 		 */
-		GetStylesheetFiles: function() {
-			let files = [];
+		return (
+			url.hostname === 'www.googletagmanager.com' && url.pathname.toLowerCase().endsWith('/gtm.js') && /GTM\-[0-9A-Z]{4,}/.test(url.search)
+		);
+	}
 
-			//get all Stylesheet files of the website.
-			$('link[rel="stylesheet"]').each(function() {
+	/**
+	 * Returns all Google Analytics files of the website.
+	 * @returns {object[]} An array with all found Google Analytics files of the website.
+	 */
+	static GetGoogleAnalyticsFiles() {
+		let files = [];
 
-				//get the source of the file and the url object.
-				let sourceStylesheet = ($(this).attr('href') || '').toString().trim();
-				let urlStylesheet = new URL(sourceStylesheet, GetBaseUrl());
+		//get all Google Analytics files of the website.
+		$('script[src]').filter(function() {
+			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+			return SEOInsights.File.IsGoogleAnalyticsUrl(url);
+		}).each(function() {
+			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
 
-				//don't add Stylesheets without file path.
-				if (sourceStylesheet === '') {
-					return;
+			//add the url of the file to the file array.
+			files.push({
+				original: ($(this).attr('src') || '').toString().trim(),
+				async: $(this).attr('async') ? true : false,
+				charset: ($(this).attr('charset') || '').toString().trim(),
+				url: {
+					href: url.href,
+					origin: url.origin
 				}
-
-				//add the Stylesheet file to the file array.
-				files.push({
-					'original': sourceStylesheet,
-					'media': ($(this).attr('media') || '').toString().trim(),
-					'url': {
-						'href': urlStylesheet.href,
-						'origin': urlStylesheet.origin
-					}
-				});
 			});
+		});
 
-			//return all found Stylesheet files.
-			return files;
-		}
-	};
-})();
+		//return all the found files.
+		return files;
+	}
+
+	/**
+	 * Returns all Google Tag Manager files of the website.
+	 * @returns {object[]} An array with all found Google Tag Manager files of the website.
+	 */
+	static GetGoogleTagManagerFiles() {
+		let files = [];
+
+		//get all Google Tag Manager files of the website.
+		$('script[src]').filter(function() {
+			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+			return SEOInsights.File.IsGoogleTagManagerUrl(url);
+		}).each(function() {
+			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+
+			//add the url of the file to the file array.
+			files.push({
+				original: ($(this).attr('src') || '').toString().trim(),
+				async: $(this).attr('async') ? true : false,
+				charset: ($(this).attr('charset') || '').toString().trim(),
+				url: {
+					href: url.href,
+					origin: url.origin
+				}
+			});
+		});
+
+		//return all the found files.
+		return files;
+	}
+
+	/**
+	 * Returns all JavaScript files of the website.
+	 * @returns {object[]} An array with all found JavaScript files of the website.
+	 */
+	static GetJavaScriptFiles() {
+		let files = [];
+
+		//get all JavaScript files of the website.
+		$('script[src]').filter(function() {
+			return (($(this).attr('src') || '').toString().trim() !== '');
+		}).each(function() {
+			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+
+			//add the url of the file to the file array.
+			files.push({
+				original: ($(this).attr('src') || '').toString().trim(),
+				async: $(this).attr('async') ? true : false,
+				charset: ($(this).attr('charset') || '').toString().trim(),
+				url: {
+					href: url.href,
+					origin: url.origin
+				}
+			});
+		});
+
+		//return all the found files.
+		return files;
+	}
+
+	/**
+	 * Returns all Stylesheet files of the website.
+	 * @returns {object[]} An array with all found Stylesheet files of the website.
+	 */
+	static GetStylesheetFiles() {
+		let files = [];
+
+		//get all Stylesheet files of the website.
+		$('link[rel="stylesheet"]').filter(function() {
+			return (($(this).attr('href') || '').toString().trim() !== '');
+		}).each(function() {
+			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+
+			//add the url of the file to the file array.
+			files.push({
+				original: ($(this).attr('href') || '').toString().trim(),
+				media: ($(this).attr('media') || '').toString().trim(),
+				url: {
+					href: url.href,
+					origin: url.origin
+				}
+			});
+		});
+
+		//return all the found files.
+		return files;
+	}
+};

@@ -47,8 +47,10 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.FILES:
 				sendResponse({
-					'javascript': FileModule.GetJavaScriptFiles(),
-					'stylesheet': FileModule.GetStylesheetFiles()
+					'javascript': SEOInsights.File.GetJavaScriptFiles(),
+					'stylesheet': SEOInsights.File.GetStylesheetFiles(),
+					'googleanalytics': SEOInsights.File.GetGoogleAnalyticsFiles(),
+					'googletagmanager': SEOInsights.File.GetGoogleTagManagerFiles()
 				});
 				break;
 		}
