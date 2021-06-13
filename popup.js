@@ -792,6 +792,10 @@ function ViewFiles() {
 			}
 		});
 
+		//get all Google Analytics and Google Tag Manager files.
+		const filesGoogleAnalytics = (info.googleanalytics || []);
+		const filesGoogleTagManager = (info.googletagmanager || []);
+
 		//set all JavaScript files to the table.
 		filesJavaScript.forEach(function(file, index) {
 			tableFilesJavaScript.children('tbody').append(`<tr id="javascript-${index}"><td><a href="${file.url.href}" target="_blank">${file.original}</a></td></tr>`);
@@ -804,6 +808,16 @@ function ViewFiles() {
 			//check whether the charset property exists and add the additional information.
 			if (file.charset) {
 				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('charset', file.charset.trim()));
+			}
+
+			//check whether the file is a Google Analytics file and add a additional information.
+			if (filesGoogleAnalytics.findIndex(fileGA => fileGA.original === file.original) > -1) {
+				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('Google Analytics', ''));
+			}
+
+			//check whether the file is a Google Tag Manager file and add a additional information.
+			if (filesGoogleTagManager.findIndex(fileGTM => fileGTM.original === file.original) > -1) {
+				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('Google Tag Manager', ''));
 			}
 		});
 
