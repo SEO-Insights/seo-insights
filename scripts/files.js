@@ -2,9 +2,10 @@
 if (SEOInsights === undefined) {
   var SEOInsights = {};
 }
- /**
-	* The File class of SEO Insights to get information of files used on a website.
-	*/
+
+/**
+ * The File class of SEO Insights to get information of files used on a website.
+ */
 SEOInsights.File = class File {
 
 	/**
@@ -67,7 +68,7 @@ SEOInsights.File = class File {
 
 	/**
 	 * Returns all Google Analytics files of the website.
-	 * @returns {object[]} An array with all found Google Analytics files of the website.
+	 * @returns {Array<object>} An array with all found Google Analytics files of the website.
 	 */
 	static GetGoogleAnalyticsFiles() {
 		let files = [];
@@ -97,7 +98,7 @@ SEOInsights.File = class File {
 
 	/**
 	 * Returns all Google Tag Manager files of the website.
-	 * @returns {object[]} An array with all found Google Tag Manager files of the website.
+	 * @returns {Array<object>} An array with all found Google Tag Manager files of the website.
 	 */
 	static GetGoogleTagManagerFiles() {
 		let files = [];
@@ -127,7 +128,7 @@ SEOInsights.File = class File {
 
 	/**
 	 * Returns all JavaScript files of the website.
-	 * @returns {object[]} An array with all found JavaScript files of the website.
+	 * @returns {Array<object>} An array with all found JavaScript files of the website.
 	 */
 	static GetJavaScriptFiles() {
 		let files = [];
@@ -156,7 +157,7 @@ SEOInsights.File = class File {
 
 	/**
 	 * Returns all Stylesheet files of the website.
-	 * @returns {object[]} An array with all found Stylesheet files of the website.
+	 * @returns {Array<object>} An array with all found Stylesheet files of the website.
 	 */
 	static GetStylesheetFiles() {
 		let files = [];
