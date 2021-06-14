@@ -1151,12 +1151,12 @@ function ViewHyperlinks() {
 		const preloads = (info.preload || []);
 		const prefetches = (info.dnsprefetch || []);
 		const preconnects = (info.preconnect || []);
-		const domains = GetDomains(hyperlinks.map(link => link.url.href));
+		const domains = GetDomains(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href));
 
 		//set all the hyperlinks with href value to the table.
 		//don't show the hyperlinks with empty href attribute.
 		hyperlinks.filter(hyperlink => hyperlink.href !== '').forEach(function(hyperlink, index) {
-			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${hyperlink.url.href}">${hyperlink.href}</a></td></tr>`);
+			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${(hyperlink.url !== undefined) ? hyperlink.url.href : ''}">${hyperlink.href}</a></td></tr>`);
 
 			//set the attribute information to the row.
 			for (let attribute of ['rel', 'target', 'title']) {
@@ -1208,11 +1208,11 @@ function ViewHyperlinks() {
 
 		//set the statistics for the hyperlinks.
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all"]').text(hyperlinks.length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all-unique"]').text(hyperlinks.map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === true).length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal-unique"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === true).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === false).length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external-unique"]').text(hyperlinks.filter(link => link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all-unique"]').text(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === true).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === true).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
 
 		//set the statistics for the attributes.
 		//get the count of the attributes to check.
@@ -1228,12 +1228,12 @@ function ViewHyperlinks() {
 		fieldHyperlinkHref.text(cntWithoutHref).removeClass('text-danger fw-bold').addClass(cntWithoutHref > 0 ? 'text-danger fw-bold' : '');
 
 		//set the statistics for the protocols of the hyperlinks.
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-http"]').text(hyperlinks.filter(link => link.url.protocol === 'http').length);
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-https"]').text(hyperlinks.filter(link => link.url.protocol === 'https').length);
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-mailto"]').text(hyperlinks.filter(link => link.url.protocol === 'mailto').length);
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-javascript"]').text(hyperlinks.filter(link => link.url.protocol === 'javascript').length);
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-whatsapp"]').text(hyperlinks.filter(link => link.url.protocol === 'whatsapp').length);
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-tel"]').text(hyperlinks.filter(link => link.url.protocol === 'tel').length);
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-others"]').text(hyperlinks.filter(link => ['http', 'https', 'mailto', 'javascript', 'whatsapp', 'tel'].includes(link.url.protocol) === false && link.href !== '').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-http"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'http').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-https"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'https').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-mailto"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'mailto').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-javascript"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'javascript').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-whatsapp"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'whatsapp').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-tel"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'tel').length);
+		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-others"]').text(hyperlinks.filter(link => link.url !== undefined && ['http', 'https', 'mailto', 'javascript', 'whatsapp', 'tel'].includes(link.url.protocol) === false && link.href !== '').length);
 	};
 }

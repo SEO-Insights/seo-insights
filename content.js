@@ -40,7 +40,7 @@ if (!IsInitializedContent) {
 				sendResponse({
 					'alternate': Meta.GetAlternateLinks(),
 					'dnsprefetch': Meta.GetDnsPrefetch(),
-					'links': LinkModule.GetLinks(),
+					'links': SEOInsights.Link.GetLinks(),
 					'preconnect': Meta.GetPreconnect(),
 					'preload': Meta.GetPreload()
 				});
