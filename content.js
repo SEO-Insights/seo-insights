@@ -27,7 +27,7 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.HEADINGS:
 				sendResponse({
-					'headings': HeadingModule.GetHeadings()
+					'headings': SEOInsights.Heading.GetHeadings()
 				});
 				break;
 			case INFO.IMAGES:
