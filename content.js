@@ -32,8 +32,8 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.IMAGES:
 				sendResponse({
-					'images': ImageModule.GetImages(),
-					'icons': ImageModule.GetIcons()
+					'images': SEOInsights.Image.GetImages(),
+					'icons': SEOInsights.Image.GetIcons()
 				});
 				break;
 			case INFO.LINKS:
