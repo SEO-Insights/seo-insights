@@ -54,33 +54,21 @@ var Meta = (function() {
 
 			//clear the arrays for identifier and files.
 			let identifier = [];
-			let files = [];
+			let files = SEOInsights.File.GetGoogleTagManagerFiles();
 
-			//get all Google Tag Manager files used on the website.
-			$('script[src]').filter(function() {
-				const url = new URL($(this).attr('src'), GetBaseUrl());
-
-				//check whether the file is a volid Google Tag Manager file.
-				return (
-					(url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtm.js') && regexUnquotedGTM.test(url.search))
-				);
-			}).each(function() {
-
-				//get the url of the Google Tag Manager file and add the url to the file array.
-				const url = ($(this).attr('src') || '').toString().trim();
-				files.push(url);
+			for (const file of files) {
 
 				//get the identifier of the Google Tag Manager from url.
-				const match = url.match(regexUnquotedGTM);
+				const matches = file.original.match(new RegExp(regexUnquotedGTM, 'g'));
 
-				//add the identifier of the Google Tag Manager if found on the url.
-				if (match) {
+				//set the identifiers to the array.
+				for (const id of (matches || []).filter(item => item !== null)) {
 					identifier.push({
-						id: match[0],
+						id: id,
 						source: 'url'
 					});
 				}
-			});
+			}
 
 			//get all scripts of the website containing a Google Tag Manager identifier.
 			$("script:not([src])").filter(function() {
@@ -123,29 +111,14 @@ var Meta = (function() {
 
 			//clear the arrays for identifier and files.
 			let identifier = [];
-			let files = [];
+			let files = SEOInsights.File.GetGoogleAnalyticsFiles();
 
-			//get all Google Analytics Tracking files used on the website.
-			$("script[src]").filter(function () {
-				const url = new URL($(this).attr('src'), GetBaseUrl());
-
-				//check whether the file is a volid Google Analytics Tracking file.
-				return (
-					(url.host === 'www.google-analytics.com' && url.pathname.endsWith('analytics.js'))
-					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js') && regexUnqoutedUA.test(url.search))
-					|| ((url.host === 'ssl.google-analytics.com' || url.host === 'www.google-analytics.com') && url.pathname.endsWith('ga.js'))
-					|| (url.host === 'www.googletagmanager.com' && url.pathname.endsWith('/gtag/js') && regexUnqoutedG.test(url.search))
-				);
-			}).each(function() {
-
-				//get the url of the Google Analytics Tracking file and add the url to the file array.
-				const url = ($(this).attr('src') || '').toString().trim();
-				files.push(url);
+			for (const file of files) {
 
 				//get the identifier from url and add to the matches array.
 				let matches = [];
-				matches.push(url.match(regexUnqoutedUA));
-				matches.push(url.match(regexUnqoutedG));
+				matches = matches.concat(file.original.match(new RegExp(regexUnqoutedUA, 'g')));
+				matches = matches.concat(file.original.match(new RegExp(regexUnqoutedG, 'g')));
 
 				//set the identifiers to the array.
 				for (const id of (matches || []).filter(item => item !== null)) {
@@ -154,7 +127,7 @@ var Meta = (function() {
 						source: 'url'
 					});
 				}
-			});
+			}
 
 			//get all Google Analytics Tracking identifier of the scripts.
 			$("script:not([src])").filter(function () {

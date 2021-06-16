@@ -723,7 +723,7 @@ function ViewSummary() {
 		if (analytics.tags.length > 0 || analytics.files.length > 0) {
 			let info = [];
 			info = info.concat(analytics.tags.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
-			info = info.concat(analytics.files.filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append('<tr><td>Google Analytics</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
 		}
 
@@ -731,7 +731,7 @@ function ViewSummary() {
 		if (tagmanager.tags.length > 0 || tagmanager.files.length > 0) {
 			let info = [];
 			info = info.concat(tagmanager.tags.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
-			info = info.concat(tagmanager.files.filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append('<tr><td>Google Tag Manager</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
 		}
 
