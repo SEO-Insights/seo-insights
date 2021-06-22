@@ -687,8 +687,8 @@ function ViewSummary() {
 
 		//get the meta information from the content script.
 		const metas = (info.meta || []);
-		const analytics = (info.analytics || []);
-		const tagmanager = (info.tagmanager || []);
+		const analytics = info.ga;
+		const tagmanager = info.gtm;
 
 		//get a specific order of the meta information.
 		//the important information have to be visible on top of the list.
@@ -720,17 +720,17 @@ function ViewSummary() {
 		});
 
 		//display the Google Analytics Tracking information of the website.
-		if (analytics.tags.length > 0 || analytics.files.length > 0) {
+		if (analytics.identifiers.length > 0 || analytics.files.length > 0) {
 			let info = [];
-			info = info.concat(analytics.tags.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(analytics.identifiers.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
 			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append('<tr><td>Google Analytics</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
 		}
 
 		//display the Google Tag Manager information of the website.
-		if (tagmanager.tags.length > 0 || tagmanager.files.length > 0) {
+		if (tagmanager.identifiers.length > 0 || tagmanager.files.length > 0) {
 			let info = [];
-			info = info.concat(tagmanager.tags.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(tagmanager.identifiers.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
 			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append('<tr><td>Google Tag Manager</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
 		}

@@ -1,389 +1,359 @@
+//create the namespace of SEO Insights if the namespace doesn't exist.
+if (SEOInsights === undefined) {
+  var SEOInsights = {};
+}
+
 /**
- * Module for common meta information.
+ * The Head class of SEO Insights to get information from the <head> of the website.
  */
-var Meta = (function() {
+SEOInsights.Head = class Head {
 
 	/**
-	 * common tags to get information from.
+	 * Returns all common names to get from <head>.
+	 * @returns {Array<string>} The common names  to get from <head>.
 	 */
-	const tagsCommon = [
-		'title'
-	];
-
-	/**
-	 * common name attribute values to get information from.
-	 */
-	const namesCommon = [
-		'application-name',
-		'author',
-		'bingbot',
-		'description',
-		'generator',
-		'google',
-		'googlebot',
-		'google-site-verification',
-		'keywords',
-		'msnbot',
-		'rating',
-		'referrer',
-		'robots',
-		'theme-color',
-		'viewport'
-	];
-
-	return {
-
-		/**
-		 * Returns the canonical information of the meta information.
-		 * @returns {string} The canonical information of the meta information.
-		 */
-		GetCanonical: function() {
-			return ($('head > link[rel="canonical"]').attr('href') || '').toString().trim();
-		},
-
-		/**
-		 * Returns the information of the Google Tag Manager used on the website.
-		 * @returns {object} The information of the Google Tag Manager used on the website.
-		 */
-		GetGoogleTagManager: function() {
-
-			//set the regular expressions to get the identifiers of the Google Tag Manager.
-			//there are two regular expression to get the identifiers of the Google Tag Manager with and without quotes.
-			const regexUnquotedGTM = /GTM\-[0-9A-Z]{4,}/;
-			const regexQuotedGTM = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
-
-			//clear the arrays for identifier and files.
-			let identifier = [];
-			let files = SEOInsights.File.GetGoogleTagManagerFiles();
-
-			for (const file of files) {
-
-				//get the identifier of the Google Tag Manager from url.
-				const matches = file.original.match(new RegExp(regexUnquotedGTM, 'g'));
-
-				//set the identifiers to the array.
-				for (const id of (matches || []).filter(item => item !== null)) {
-					identifier.push({
-						id: id,
-						source: 'url'
-					});
-				}
-			}
-
-			//get all scripts of the website containing a Google Tag Manager identifier.
-			$("script:not([src])").filter(function() {
-				return regexQuotedGTM.test($(this).text());
-			}).each(function() {
-
-				//get all Google Tag Manager identifier of the current script.
-				const matches = ($(this).text() || '').toString().match(new RegExp(regexQuotedGTM, 'g'));
-
-				//set all the found identifiers of Google Tag Manager to the array.
-				for (const id of (matches || []).filter(item => item !== null)) {
-					identifier.push({
-						id: id,
-						source: 'script'
-					});
-				}
-			});
-
-			//return all the found information (files and identifiers) of the Google Tag Manager.
-			return {
-				tags: identifier,
-				files: files
-			};
-		},
-
-		/**
-		 * Returns the information of Google Analytics Tracking used on the website.
-		 * @returns {object} The information of Google Analytics Tracking used on the website.
-		 */
-		GetAnalytics: function() {
-
-			//set the regular expressions to get the identifiers of the Google Analytics Tracking.
-			//there are two regular expression to get the identifiers of the Google Analytics Tracking with and without quotes.
-			const regexUnqoutedUA = /UA(\-\d+){2}/;
-			const regexUnqoutedG = /G\-[A-Z0-9]/;
-			const regexQuotedGTAG = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-			const regexQuotedAnalytics = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-			const regexQuotedGA = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-			const regexQuotedGA4 = /(?<=['"]config['"]\,[ ]*['"])G\-[0-9A-Z]+(?=['"])/;
-
-			//clear the arrays for identifier and files.
-			let identifier = [];
-			let files = SEOInsights.File.GetGoogleAnalyticsFiles();
-
-			for (const file of files) {
-
-				//get the identifier from url and add to the matches array.
-				let matches = [];
-				matches = matches.concat(file.original.match(new RegExp(regexUnqoutedUA, 'g')));
-				matches = matches.concat(file.original.match(new RegExp(regexUnqoutedG, 'g')));
-
-				//set the identifiers to the array.
-				for (const id of (matches || []).filter(item => item !== null)) {
-					identifier.push({
-						id: id,
-						source: 'url'
-					});
-				}
-			}
-
-			//get all Google Analytics Tracking identifier of the scripts.
-			$("script:not([src])").filter(function () {
-				const script = $(this).text();
-				return regexQuotedGTAG.test(script) || regexQuotedAnalytics.test(script) || regexQuotedGA.test(script) || regexQuotedGA4.test(script);
-			}).each(function() {
-
-				//get all identifiers from scripts.
-				let matches = [];
-				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGTAG, 'g')));
-				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedAnalytics, 'g')));
-				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA, 'g')));
-				matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA4, 'g')));
-
-				//set all the found identifier to the array.
-				for (const id of (matches || []).filter(item => item !== null)) {
-					identifier.push({
-						id: id,
-						source: 'script'
-					});
-				}
-			});
-
-			//return all the found information (files and identifiers) of the Google Analytics Tracking.
-			return {
-				tags: identifier,
-				files: files
-			};
-		},
-
-		/**
-		 * Returns all meta information of the current website.
-		 * @returns {object[]} All the found meta tags as objects.
-		 */
-		GetGeneral: function() {
-			let tags = [];
-
-			//iterate through all the meta elements with available name attribute.
-			$('head > meta[name]').each(function() {
-				const name = ($(this).attr('name') || '').toString().trim().toLowerCase();
-
-				//only add known meta information to the array.
-				if (namesCommon.includes(name)) {
-					tags.push({
-						'name': name,
-						'value': ($(this).attr('content') || '').toString().trim()
-					});
-				}
-			});
-
-			//get the language information of the website.
-			$('html[lang]').each(function() {
-				tags.push({
-					'name': 'lang',
-					'value': ($(this).attr('lang') || '').toString().trim()
-				});
-			});
-
-			//iterate through all the tags to get information from.
-			for (let tagCommon of tagsCommon) {
-				let itemTagCommon = $('head > ' + tagCommon).first();
-
-				//add the tag information to the array if available.
-				if (itemTagCommon) {
-					tags.push({
-						'name': tagCommon,
-						'value': (itemTagCommon.text() || '').toString().trim()
-					});
-				}
-			}
-
-			//try to the get canonical link of the website.
-			try {
-				const canonical = Meta.GetCanonical();
-
-				//add the canonical link to the tag array if available.
-				if (canonical !== '') {
-					tags.push({
-						'name': 'canonical',
-						'value': (new URL(canonical)).href
-					});
-				}
-			} catch(_) {}
-
-			//return all the found tags.
-			return tags;
-		},
-
-		/**
-		 * Returns all found alternate links of the website.
-		 * @returns {object[]} All the found alternate links of the website.
-		 */
-		GetAlternateLinks: function() {
-			let tags = [];
-
-			//iterate through all the meta information with alternate link information.
-			$('head > link[rel="alternate"]').each(function() {
-				tags.push({
-					'title': ($(this).attr('title') || '').toString().trim(),
-					'href': ($(this).attr('href') || '').toString().trim(),
-					'hreflang': ($(this).attr('hreflang') || '').toString().trim()
-				});
-			});
-
-			//return all the found alternate link information of the website.
-			return tags;
-		},
-
-		/**
-		 * Returns all found preload information of the website.
-		 * @returns {object[]} All the found preload information of the website.
-		 */
-		GetPreload: function() {
-			let tags = [];
-
-			//iterate through all the meta information with preload information.
-			$('head > link[rel="preload"]').each(function() {
-				tags.push({
-					'href': ($(this).attr('href') || '').toString().trim(),
-					'as': ($(this).attr('as') || '').toString().trim(),
-					'type': ($(this).attr('type') || '').toString().trim()
-				});
-			});
-
-			//return all the found preload information of the website.
-			return tags;
-		},
-
-		/**
-		 * Returns all found DNS prefetch information of the website.
-		 * @returns {object[]} All the found DNS prefetch information of the website.
-		 */
-		GetDnsPrefetch: function() {
-			let tags = [];
-
-			//iterate through all the meta information with DNS prefetch information.
-			$('head > link[rel="dns-prefetch"]').each(function() {
-				tags.push({
-					'href': ($(this).attr('href') || '').toString().trim()
-				});
-			});
-
-			//returns all the found DNS prefetch information of the website.
-			return tags;
-		},
-
-		/**
-		 * Returns all found preconnect information of the website.
-		 * @returns {object[]} All the found preconnect information of the website.
-		 */
-		GetPreconnect: function() {
-			let tags = [];
-
-			//iterate through all the meta information with preconnect information.
-			$('head > link[rel="preconnect"]').each(function() {
-				tags.push({
-					'href': ($(this).attr('href') || '').toString().trim()
-				});
-			});
-
-			//returns all the found preconnect information of the website.
-			return tags;
-		},
-
-		/**
-		 * Returns all found meta information not covered in specific groups.
-		 * @returns {object[]} All the found meta information not covered in specific groups.
-		 */
-		GetOthers: function() {
-			let tags = [];
-
-			//iterate through all meta elements with available name attribute.
-			$('head > meta[name]').each(function() {
-				const name = ($(this).attr('name') || '').toString().trim();
-
-				//don't add the meta information if Dublin Core.
-				if (MetaInfo.IsDublinCoreTag(name)) {
-					return;
-				}
-
-				//don't add the meta information if Twitter.
-				if (MetaInfo.IsTwitterTag(name)) {
-					return;
-				}
-
-				//don't add the meta information if Parse.ly.
-				if (MetaInfo.IsParselyTag(name)) {
-					return;
-				}
-
-				//don't add the meta information if Shareaholic.
-				if (MetaInfo.IsShareaholicTag(name)) {
-					return;
-				}
-
-				//don't add the meta information if Open Graph or available as common tag.
-				if (MetaInfo.IsOpenGraphTag(name) || namesCommon.includes(name)) {
-					return;
-				}
-
-				//add the tag to the array.
-				tags.push({
-					'name': name,
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//iterate through all meta elements with available property attribute.
-			$('head > meta[property]').each(function() {
-				const property = ($(this).attr('property') || '').toString().trim();
-
-				//don't add the meta information if Dublin Core.
-				if (MetaInfo.IsDublinCoreTag(property)) {
-					return;
-				}
-
-				//don't add the meta information if Twitter.
-				if (MetaInfo.IsTwitterTag(property)) {
-					return;
-				}
-
-				//don't add the meta information if Parse.ly.
-				if (MetaInfo.IsParselyTag(property)) {
-					return;
-				}
-
-				//don't add the meta information if Open Graph.
-				if (MetaInfo.IsOpenGraphTag(property)) {
-					return;
-				}
-
-				//add the tag to the array.
-				tags.push({
-					'name': property,
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//iterate through all HTTP equivalent information of the website.
-			$('head > meta[http-equiv]').each(function() {
-				tags.push({
-					'name': ($(this).attr('http-equiv') || '').toString().trim(),
-					'value': ($(this).attr('content') || '').toString().trim()
-				});
-			});
-
-			//iterate through all charset information of the website.
-			$('head > meta[charset]').each(function() {
-				tags.push({
-					'name': 'charset',
-					'value': ($(this).attr('charset') || '').toString().trim()
-				});
-			});
-
-			//return all found tags.
-			return tags;
-		}
+	static GetArrayCommonNames() {
+		return [
+			'application-name',
+			'author',
+			'bingbot',
+			'description',
+			'generator',
+			'google',
+			'googlebot',
+			'google-site-verification',
+			'keywords',
+			'msnbot',
+			'rating',
+			'referrer',
+			'robots',
+			'theme-color',
+			'viewport'
+		];
 	}
-})();
+
+	/**
+	 * Returns all common tags to get from <head>.
+	 * @returns {Array<string>} The common tags to get from <head>.
+	 */
+	static GetArrayCommonTags() {
+		return [
+			'title'
+		];
+	}
+
+	/**
+	 * Returns the canonical url of the website, defined on the <head>.
+	 * @returns {string} The canonical url of the website.
+	 */
+	static GetCanonical() {
+		return ($('head > link[rel="canonical"]').attr('href') || '').toString().trim();
+	}
+
+	/**
+	 * Returns the preconnect information of the website.
+	 * @returns {Array<object>} The found preconnect information of the website.
+	 */
+	static GetPreconnect() {
+		let tags = [];
+
+		//iterate through the preconnect information.
+		$('head > link[rel="preconnect"]').each(function() {
+			tags.push({
+				href: ($(this).attr('href') || '').toString().trim()
+			});
+		});
+
+		//return the found preconnect information.
+		return tags;
+	}
+
+	/**
+	 * Returns the DNS prefetch information of the website.
+	 * @returns {Array<object>} The found DNS prefetch information of the website.
+	 */
+	static GetDnsPrefetch() {
+		let tags = [];
+
+		//iterate through the DNS prefetch information of the website.
+		$('head > link[rel="dns-prefetch"]').each(function() {
+			tags.push({
+				href: ($(this).attr('href') || '').toString().trim()
+			});
+		});
+
+		//return the found DNS prefetch information.
+		return tags;
+	}
+
+	/**
+	 * Returns the alternate links of the website.
+	 * @returns {Array<object>} The found alternate links of the website.
+	 */
+	static GetAlternateLinks() {
+		let tags = [];
+
+		//iterate through the alternate links of the website.
+		$('head > link[rel="alternate"]').each(function() {
+			tags.push({
+				title: ($(this).attr('title') || '').toString().trim(),
+				href: ($(this).attr('href') || '').toString().trim(),
+				hreflang: ($(this).attr('hreflang') || '').toString().trim()
+			});
+		});
+
+		//return the found alternate links of the website.
+		return tags;
+	}
+
+	/**
+	 * Returns the preload information of the website.
+	 * @returns {Array<object>} The found preload information of the website.
+	 */
+	static GetPreload() {
+		let tags = [];
+
+		//iterate through the preload information of the website.
+		$('head > link[rel="preload"]').each(function() {
+			tags.push({
+				href: ($(this).attr('href') || '').toString().trim(),
+				as: ($(this).attr('as') || '').toString().trim(),
+				type: ($(this).attr('type') || '').toString().trim()
+			});
+		});
+
+		//return the found preload information.
+		return tags;
+	}
+
+	/**
+	 * Returns the common information of the website.
+	 * @returns {Array<object>} The found common information of the website.
+	 */
+	static GetCommonTags() {
+		let tags = [];
+
+		//iterate through the elements of the website to get the elements with common names.
+		$('head > meta[name]').filter(function() {
+			return SEOInsights.Head.GetArrayCommonNames().includes(($(this).attr('name') || '').toString().trim().toLowerCase())
+		}).each(function() {
+			tags.push({
+				name: ($(this).attr('name') || '').toString().trim().toLowerCase(),
+				value: ($(this).attr('content') || '').toString().trim()
+			});
+		});
+
+		//get the language information of the website.
+		$('html[lang]').each(function() {
+			tags.push({
+				name: 'lang',
+				value: ($(this).attr('lang') || '').toString().trim()
+			});
+		});
+
+		//iterate through the common tags of the website.
+		for (let tagCommon of SEOInsights.Head.GetArrayCommonTags()) {
+			let itemTagCommon = $('head > ' + tagCommon).first();
+
+			//add the tag information to the array if available.
+			if (itemTagCommon) {
+				tags.push({
+					name: tagCommon,
+					value: (itemTagCommon.text() || '').toString().trim()
+				});
+			}
+		}
+
+		//get the canonical url of the website.
+		const canonical = SEOInsights.Head.GetCanonical();
+
+		//add the canonical link to the tag array if available.
+		if (canonical !== '') {
+			tags.push({
+				name: 'canonical',
+				value: (new URL(canonical)).href
+			});
+		}
+
+		//return the found common information.
+		return tags;
+	}
+
+	/**
+	 * Returns the identifiers of the Google Tag Manager found on the website.
+	 * @returns {Array<object>} The identifiers of the Google Tag Manager found on the website.
+	 */
+	static GetGoogleTagManager() {
+		let identifier = [];
+
+		//set the regular expressions to get the identifiers of the Google Tag Manager.
+		//there are two regular expressions to get the identifiers of the Google Tag Manager with and without quotes.
+		//these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
+		const regexQuotedGTM = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
+		const regexUnquotedGTM = /GTM\-[0-9A-Z]{4,}/;
+
+		//get all files of Google Tag Manager to find identifiers.
+		const files = SEOInsights.File.GetGoogleTagManagerFiles();
+
+		//iterate through all the files to get the identifiers.
+		for (const file of files) {
+
+			//get the identifiers of the Google Tag Manager file url.
+			const matches = file.original.match(new RegExp(regexUnquotedGTM, 'g'));
+
+			//set the found identifiers of the file url to the array.
+			for (const id of (matches || []).filter(item => item !== null)) {
+				identifier.push({
+					id: id,
+					source: 'url'
+				});
+			}
+		}
+
+		//get the scripts of the website containing a Google Tag Manager identifier.
+		$("script:not([src])").filter(function() {
+			return regexQuotedGTM.test($(this).text());
+		}).each(function() {
+
+			//get the Google Tag Manager identifier of the current script.
+			const matches = ($(this).text() || '').toString().match(new RegExp(regexQuotedGTM, 'g'));
+
+			//set the found identifiers of the script to the array.
+			for (const id of (matches || []).filter(item => item !== null)) {
+				identifier.push({
+					id: id,
+					source: 'script'
+				});
+			}
+		});
+
+		//return the found identifiers of the Google Tag Manager.
+		return identifier;
+	}
+
+	/**
+	 * Returns the identifiers of Google Analytics found on the website.
+	 * @returns {Array<object>} The identifiers of Google Analytics found on the website.
+	 */
+	static GetGoogleAnalytics() {
+		let identifier = [];
+
+		//set the regular expressions to get the identifiers of Google Analytics.
+		//there are two regular expressions to get the identifiers of Google Analytics with and without quotes.
+		//these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
+		const regexUnqoutedUA = /UA(\-\d+){2}/;
+		const regexUnqoutedG = /G\-[A-Z0-9]+/;
+		const regexQuotedGTAG = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+		const regexQuotedAnalytics = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+		const regexQuotedGA = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
+		const regexQuotedGA4 = /(?<=['"]config['"]\,[ ]*['"])G\-[0-9A-Z]+(?=['"])/;
+
+		//get the files of Google Analytics to find identifiers.
+		const files = SEOInsights.File.GetGoogleAnalyticsFiles();
+
+		//iterate through the Google Analytics files to get the identifiers.
+		for (const file of files) {
+			let matches = [];
+
+			//get the identifiers of Google Analytics file url.
+			matches = matches.concat(file.original.match(new RegExp(regexUnqoutedUA, 'g')));
+			matches = matches.concat(file.original.match(new RegExp(regexUnqoutedG, 'g')));
+
+			//set the identifiers to the array.
+			for (const id of (matches || []).filter(item => item !== null)) {
+				identifier.push({
+					id: id,
+					source: 'url'
+				});
+			}
+		}
+
+		//get the scripts of the website containing Google Analytics identifier.
+		$("script:not([src])").filter(function () {
+			const script = $(this).text();
+			return regexQuotedGTAG.test(script) || regexQuotedAnalytics.test(script) || regexQuotedGA.test(script) || regexQuotedGA4.test(script);
+		}).each(function() {
+			let matches = [];
+
+			//get the identifiers from scripts using the regular expressions.
+			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGTAG, 'g')));
+			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedAnalytics, 'g')));
+			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA, 'g')));
+			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA4, 'g')));
+
+			//set the found identifiers to the array.
+			for (const id of (matches || []).filter(item => item !== null)) {
+				identifier.push({
+					id: id,
+					source: 'script'
+				});
+			}
+		});
+
+		//return the found identifiers of Google Analytics.
+		return identifier;
+	}
+
+	/**
+	 * Returns the information not found with other methods / functions of SEO Insights.
+	 * @returns {Array<object>} The information not found with other methods / functions of SEO Insights.
+	 */
+	static GetOthers() {
+		let tags = [];
+
+		//get the meta information from meta elements with name property.
+		$('head > meta[name]').filter(function() {
+			const name = ($(this).attr('name') || '').toString().trim();
+			return !MetaInfo.IsDublinCoreTag(name) &&
+				!MetaInfo.IsTwitterTag(name) &&
+				!MetaInfo.IsParselyTag(name) &&
+				!MetaInfo.IsShareaholicTag(name) &&
+				!MetaInfo.IsOpenGraphTag(name) &&
+				!SEOInsights.Head.GetArrayCommonNames().includes(name);
+		}).each(function() {
+			const name = ($(this).attr('name') || '').toString().trim();
+
+			//set the meta information to the array.
+			tags.push({
+				name: name,
+				value: ($(this).attr('content') || '').toString().trim()
+			});
+		});
+
+		//get the meta information from meta elements with property property.
+		$('head > meta[property]').filter(function() {
+			const property = ($(this).attr('property') || '').toString().trim();
+			return !MetaInfo.IsDublinCoreTag(property) &&
+				!MetaInfo.IsTwitterTag(property) &&
+				!MetaInfo.IsParselyTag(property) &&
+				!MetaInfo.IsOpenGraphTag(property);
+		}).each(function() {
+			const property = ($(this).attr('property') || '').toString().trim();
+
+			//set the meta information to the array.
+			tags.push({
+				name: property,
+				value: ($(this).attr('content') || '').toString().trim()
+			});
+		});
+
+		//iterate through the HTTP equivalent information of the website.
+		$('head > meta[http-equiv]').each(function() {
+			tags.push({
+				name: ($(this).attr('http-equiv') || '').toString().trim(),
+				value: ($(this).attr('content') || '').toString().trim()
+			});
+		});
+
+		//iterate through the charset information of the website.
+		$('head > meta[charset]').each(function() {
+			tags.push({
+				name: 'charset',
+				value: ($(this).attr('charset') || '').toString().trim()
+			});
+		});
+
+		//return the found meta information not found with other methods / functions of SEO Insights.
+		return tags;
+	}
+}

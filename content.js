@@ -10,16 +10,22 @@ if (!IsInitializedContent) {
 		switch (message.info) {
 			case INFO.SUMMARY:
 				sendResponse({
-					'meta': Meta.GetGeneral(),
-					'analytics': Meta.GetAnalytics(),
-					'tagmanager': Meta.GetGoogleTagManager()
+					'meta': SEOInsights.Head.GetCommonTags(),
+					'ga': {
+						'identifiers': SEOInsights.Head.GetGoogleAnalytics(),
+						'files': SEOInsights.File.GetGoogleAnalyticsFiles()
+					},
+					'gtm': {
+						'identifiers': SEOInsights.Head.GetGoogleTagManager(),
+						'files': SEOInsights.File.GetGoogleTagManagerFiles()
+					}
 				});
 				break;
 			case INFO.META:
 				sendResponse({
 					'dublincore': MetaInfo.GetDublineCoreTags(),
 					'opengraph': MetaInfo.GetOpenGraphTags(),
-					'others': Meta.GetOthers(),
+					'others': SEOInsights.Head.GetOthers(),
 					'parsely': MetaInfo.GetParselyTags(),
 					'shareaholic': MetaInfo.GetShareaholicTags(),
 					'twitter': MetaInfo.GetTwitterTags()
@@ -38,11 +44,11 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.LINKS:
 				sendResponse({
-					'alternate': Meta.GetAlternateLinks(),
-					'dnsprefetch': Meta.GetDnsPrefetch(),
+					'alternate': SEOInsights.Head.GetAlternateLinks(),
+					'dnsprefetch': SEOInsights.Head.GetDnsPrefetch(),
 					'links': SEOInsights.Link.GetLinks(),
-					'preconnect': Meta.GetPreconnect(),
-					'preload': Meta.GetPreload()
+					'preconnect': SEOInsights.Head.GetPreconnect(),
+					'preload': SEOInsights.Head.GetPreload()
 				});
 				break;
 			case INFO.FILES:
