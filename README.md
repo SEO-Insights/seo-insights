@@ -33,8 +33,8 @@ SEO Insights is available in the [Chrome Web Store](https://chrome.google.com/we
 
 ### :hammer_and_wrench: Used libraries
 
-* [jQuery 3.6.0](https://jquery.com/)
-* [Bootstrap 5.0.1](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* jQuery 3.6.0 ([Website](https://jquery.com/) - [GitHub](https://github.com/jquery/jquery))
+* Bootstrap 5.0.1 ([Website](https://getbootstrap.com/docs/5.0/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
 
 ### :tada: Upcoming Features
 
