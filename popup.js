@@ -632,7 +632,7 @@ function ViewMetaDetails() {
 			}
 
 			//on image information, a image preview is possible.
-			if (['msapplication-tileimage', 'forem:logo', 'aiturec:image', 'vk:image', 'shareaholic:image'].includes(item.name.toLowerCase())) {
+			if (['msapplication-tileimage', 'msapplication-square70x70logo', 'msapplication-square150x150logo', 'msapplication-square310x310logo', 'forem:logo', 'aiturec:image', 'vk:image', 'shareaholic:image'].includes(item.name.toLowerCase())) {
 				ShowImagePreview(tableOthers.find('tbody tr#others-' + index + ' td'), new URL(value, tabUrlOrigin));
 			}
 		});
