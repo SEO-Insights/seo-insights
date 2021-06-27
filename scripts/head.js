@@ -304,11 +304,11 @@ SEOInsights.Head = class Head {
 		//get the meta information from meta elements with name property.
 		$('head > meta[name]').filter(function() {
 			const name = ($(this).attr('name') || '').toString().trim();
-			return !MetaInfo.IsDublinCoreTag(name) &&
-				!MetaInfo.IsTwitterTag(name) &&
-				!MetaInfo.IsParselyTag(name) &&
-				!MetaInfo.IsShareaholicTag(name) &&
-				!MetaInfo.IsOpenGraphTag(name) &&
+			return !SEOInsights.Meta.IsDublinCoreTag(name) &&
+				!SEOInsights.Meta.IsTwitterTag(name) &&
+				!SEOInsights.Meta.IsParselyTag(name) &&
+				!SEOInsights.Meta.IsShareaholicTag(name) &&
+				!SEOInsights.Meta.IsOpenGraphTag(name) &&
 				!SEOInsights.Head.GetArrayCommonNames().includes(name);
 		}).each(function() {
 			const name = ($(this).attr('name') || '').toString().trim();
@@ -323,10 +323,10 @@ SEOInsights.Head = class Head {
 		//get the meta information from meta elements with property property.
 		$('head > meta[property]').filter(function() {
 			const property = ($(this).attr('property') || '').toString().trim();
-			return !MetaInfo.IsDublinCoreTag(property) &&
-				!MetaInfo.IsTwitterTag(property) &&
-				!MetaInfo.IsParselyTag(property) &&
-				!MetaInfo.IsOpenGraphTag(property);
+			return !SEOInsights.Meta.IsDublinCoreTag(property) &&
+				!SEOInsights.Meta.IsTwitterTag(property) &&
+				!SEOInsights.Meta.IsParselyTag(property) &&
+				!SEOInsights.Meta.IsOpenGraphTag(property);
 		}).each(function() {
 			const property = ($(this).attr('property') || '').toString().trim();
 

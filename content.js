@@ -23,12 +23,12 @@ if (!IsInitializedContent) {
 				break;
 			case INFO.META:
 				sendResponse({
-					'dublincore': MetaInfo.GetDublineCoreTags(),
-					'opengraph': MetaInfo.GetOpenGraphTags(),
+					'dublincore': SEOInsights.Meta.GetDublineCoreTags(),
+					'opengraph': SEOInsights.Meta.GetOpenGraphTags(),
 					'others': SEOInsights.Head.GetOthers(),
-					'parsely': MetaInfo.GetParselyTags(),
-					'shareaholic': MetaInfo.GetShareaholicTags(),
-					'twitter': MetaInfo.GetTwitterTags()
+					'parsely': SEOInsights.Meta.GetParselyTags(),
+					'shareaholic': SEOInsights.Meta.GetShareaholicTags(),
+					'twitter': SEOInsights.Meta.GetTwitterTags()
 				});
 				break;
 			case INFO.HEADINGS:

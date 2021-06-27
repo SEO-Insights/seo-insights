@@ -13,7 +13,7 @@ var INFO = {
 
 /**
  * Returns the base url of the website. It also considers the base url on meta information.
- * @returns The base url of the website.
+ * @returns {string} The base url of the website.
  */
 function GetBaseUrl() {
 	const baseUrl = $('head > base').first().attr('href');
@@ -25,3 +25,18 @@ function GetBaseUrl() {
 		return (new URL(location.origin + location.pathname)).href;
 	}
 }
+
+/**
+ * Returns the value of the name or property attribute of a given HTML element.
+ * @param {object} html The HTML to get the value of name or property attribute.
+ * @returns {string} The value of the name or property attribute of the given HTML element.
+ */
+function GetName(html) {
+	if ($(html).is('[property]')) {
+		return $(html).attr('property').trim().toLowerCase();
+	} else if ($(html).is('[name]')) {
+		return $(html).attr('name').trim().toLowerCase();
+	} else {
+		return null;
+	}
+};
