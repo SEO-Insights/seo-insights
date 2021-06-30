@@ -54,23 +54,70 @@ SEOInsights.Image = class Image {
 	static GetImagesOfDocument(context = null) {
 		let images = [];
 
-		//iterate through all images of the specified context.
-		$('img', context).filter(function() {
-			return (SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim()) !== null);
-		}).each(function() {
-			const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
+		//get all <picture> and <img> element of the current context.
+		$('picture, img', context).each(function() {
+			const elementTagName = ($(this).prop('tagName') || '').toString().toLowerCase();
 
-			//add the current image to the array.
-			images.push({
-				alt: ($(this).attr('alt') || '').toString().trim(),
-				filename: source.filename,
-				src: ($(this).attr('src') || '').toString().trim(),
-				source: source.source,
-				title: ($(this).attr('title') || '').toString().trim()
-			});
+			//get the image information depending on the element.
+			//it is possible to get some more information from <picture> element.
+			if (elementTagName === 'picture') {
+				let pictures = [];
+
+				//get the sources and different images and sizes.
+				$('source', $(this)).each(function() {
+					const srcset = ($(this).attr('srcset') || '').toString().trim();
+					const sources = srcset.split(/(?<=\d+w)[,]/);
+
+					//iterate through the sources.
+					for (const source of sources) {
+						pictures.push({
+							'src': SEOInsights.Image.GetImageSource(source.split(/[ ](?=\d+w)/)[0]),
+							'size': (source.split(/[ ](?=\d+w)/)[1] || '').toString().trim()
+						});
+					}
+				});
+
+				//get the <img> element inside the <picture> element.
+				$('img', $(this)).filter(function() {
+					return (SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim()) !== null);
+				}).each(function() {
+					const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
+
+					//add the current image to the array.
+					images.push({
+						alt: ($(this).attr('alt') || '').toString().trim(),
+						filename: source.filename,
+						src: ($(this).attr('src') || '').toString().trim(),
+						source: source.source,
+						title: ($(this).attr('title') || '').toString().trim(),
+						pictures: pictures
+					});
+				});
+			} else if (elementTagName === 'img') {
+				const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
+
+				//ignore images without a source.
+				if (source === null) {
+					return;
+				}
+
+				//ignore all the <img> elements inside a <picture> element.
+				if (($(this).parent().prop('tagName') || '').toString().toLowerCase() === 'picture') {
+					return;
+				}
+
+				//add the current image to the array.
+				images.push({
+					alt: ($(this).attr('alt') || '').toString().trim(),
+					filename: source.filename,
+					src: ($(this).attr('src') || '').toString().trim(),
+					source: source.source,
+					title: ($(this).attr('title') || '').toString().trim()
+				});
+			}
 		});
 
-		//return all the found images of the website.
+		//return all found images.
 		return images;
 	}
 
