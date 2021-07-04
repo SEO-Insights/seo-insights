@@ -240,3 +240,27 @@ body.not-supported div.alert-not-supported {
 	border-radius: 0;
 	margin: 15px;
 }
+
+/** toolbar for addtional actions */
+.toolbar {
+	position:fixed;
+	bottom: 0;
+	left:0;
+	right:0;
+	height:40px;
+	border:1px solid red;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	background: white;
+	padding: 0px 10px;
+	border-top: 2px solid gray;
+}
+.toolbar input.search {
+	position: relative;
+	width: 100px;
+}
+.toolbar label[for="search"] {
+	font-weight: bold;
+	padding-right: 10px;
+}

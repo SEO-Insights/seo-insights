@@ -87,6 +87,9 @@
 			}
 		}
 	},
+	"search": {
+		"message": "Suche"
+	},
 	"no_preconnect_items": {
 		"message": "Diese Website hat keine preconnect Elemente."
 	},
