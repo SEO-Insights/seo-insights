@@ -459,6 +459,7 @@ function GetInformationRow(name, value, markerName, markerValue) {
  */
 function UseToolbar(visible, table = null) {
 	if (visible) {
+		$('body > .container-fluid').addClass('with-toolbar');
 		$('.toolbar').show();
 		$('.toolbar .search').on('keyup', function() {
 			const value = $(this).val().toLowerCase();
@@ -467,6 +468,7 @@ function UseToolbar(visible, table = null) {
 			});
 		});
 	} else {
+		$('body > .container-fluid').removeClass('with-toolbar');
 		$('.toolbar').hide();
 		$('.toolbar .search').off('keyup');
 	}
