@@ -1,162 +1,13 @@
-/** main size and visibility of the extension. */
 body {
-    font-size: 14px;
-    height: 600px;
-    min-width: 600px;
-    max-width: 700px;
-}
-body > div.container-fluid > nav {
-    z-index: 999;
-}
-
-/** main areas of the extension. */
-div.container-fluid {
-    min-height: 100%;
-    padding: 0;
-    position: relative;
-}
-
-/** table to display the basic meta information of the site. */
-table.item-list {
-    border-collapse: separate;
-    border-spacing: 0 7px;
-    margin: 0;
-    width: 100%;
-}
-table.item-list tr:not(.empty-alert) td:nth-child(1) {
-    background: #f7f7f7;
-    border-color: #f0f0f0;
-    border-style: solid;
-    border-width: 1px 0 1px 1px;
-    font-weight: bolder;
-    min-width: 135px;
-    vertical-align: top;
-}
-table.item-list tr td:nth-child(1) a,
-table.item-list tr td:nth-child(1) a:link {
-    display: block;
-    word-break: break-all;
-}
-table.item-list tr td:nth-child(2) {
-    background: #f7f7f7;
-    border-color: #f0f0f0;
-    border-style: solid;
-    border-width: 1px 1px 1px 0;
-    vertical-align: top;
-    word-break: break-word;
-}
-table.item-list tr td:nth-child(2) ul {
-    margin: 0;
-    padding: 0 0 0 20px;
-}
-table.item-list tr td:nth-child(2) div.theme-color {
-    border: 1px solid #a0a0a0;
-    display: inline-block;
-    height: 20px;
-    line-height: 18px;
-    min-width: 100px;
-    padding: 0 10px;
-    text-align: center;
-    vertical-align: bottom;
-}
-table.item-list tr td:nth-child(2) div.theme-color:not(:first-child) {
-    margin-left: 10px;
-}
-table.item-list tr td:nth-child(1):last-child {
-    border-right-width: 1px;
-    font-weight: normal;
-    word-break: break-all;
-}
-
-/** design for the headings information. */
-table#list-headings tr[class^="level-"] td span:nth-of-type(1) {
-    font-weight: bolder;
-    padding-right: 7px;
-}
-table#list-headings tr[class^="level-"] {
-    word-break: keep-all;
-}
-table#list-headings tr.level-h1 td {
-    padding-left: 5px;
-}
-table#list-headings tr.level-h2 td {
-    padding-left: 15px;
-}
-table#list-headings tr.level-h3 td {
-    padding-left: 25px;
-}
-table#list-headings tr.level-h4 td {
-    padding-left: 35px;
-}
-table#list-headings tr.level-h5 td {
-    padding-left: 45px;
-}
-table#list-headings tr.level-h6 td {
-    padding-left: 55px;
-}
-td[id^="headings-h"].green {
-    background-color: green;
-}
-td[id^="headings-h"] {
-    background-color: white;
-}
-
-/** design for the images information. */
-tr[id^="img"] span.info {
-    display:block;
-}
-
-/** table for the images. */
-div.img-preview img {
-    background-image: url('img/bg-img-pattern.png');
-    border: 2px solid black;
-    bottom: 10px;
-    height: auto;
-    max-height: 200px;
-    max-width: 200px;
-    position: fixed;
-    right: 27px;
-    width: auto;
-    z-index: 100;
-}
-table#info-tools div.heading {
-    font-weight: bold;
-}
-table#info-tools .full-link {
-    color: #000;
-    text-decoration: none;
-}
-table#info-tools .full-link:hover {
-    text-decoration: none;
-}
-table#list-files-stylesheet-domains tr td:nth-child(1),
-table#list-files-javascript-domains tr td:nth-child(1) {
-    padding-left: 15px;
-}
-table#list-image-icons tr td a,
-table#list-image-icons tr td a:link {
-    display: block;
+	font-size: 14px;
+	height: 600px;
+	max-width: 600px;
+	min-width: 600px;
 }
 html, body {
-	overflow-y: scroll;
 	overflow-x: hidden;
+	overflow-y: scroll;
 }
-
-/** alerts */
-div.alert.empty-alert {
-	font-weight: bold;
-}
-
-/** tables */
-table#list-headings tr td {
-	word-break: break-word;
-}
-table[id$="stats"] th,
-table[id$="stats"] td {
-	text-align: center;
-}
-
-/** navigation / tabs of the extension. */
 nav {
 	background: #fff;
 	position: sticky;
@@ -165,27 +16,134 @@ nav {
 div.nav-pills button.nav-link {
 	border-radius: 0;
 }
+div.container-fluid {
+	padding: 0;
+}
+div.container-fluid div.tab-content {
+	padding: 0 7px 7px;
+}
+div.container-fluid div.tab-pane div.tab-content {
+	padding: 0;
+}
+div.container-fluid div.tab-pane div.tab-content table td {
+	font-weight: normal;
+}
+table[id$="stats"] th,
+table[id$="stats"] td {
+	text-align: center;
+}
 
-/** changes for tables. */
+/** common table design */
+table.item-list {
+	border-collapse: separate;
+	border-spacing: 0 7px;
+}
+table.item-list tr:not(.empty-alert) td:nth-child(1) {
+	background: #f7f7f7;
+	border-color: #f0f0f0;
+	border-width: 1px 0 1px 1px;
+	font-weight: bolder;
+	min-width: 135px;
+	vertical-align: top;
+}
+table.item-list tr:not(.empty-alert) td:nth-child(1) a,
+table.item-list tr:not(.empty-alert) td:nth-child(1) a:link {
+	display: block;
+	word-break: break-all;
+}
+table.item-list tr:not(.empty-alert) td:nth-child(2) {
+	background: #f7f7f7;
+	border-color: #f0f0f0;
+	border-width: 1px 1px 1px 0;
+	vertical-align: top;
+	word-break: break-word;
+}
+table.item-list tr:not(.empty-alert) td:nth-child(2) ul {
+	margin: 0;
+	padding: 0 0 0 20px;
+}
+table.item-list tr:not(.empty-alert) td:nth-child(2) div.theme-color {
+	border: 1px solid #a0a0a0;
+	display: inline-block;
+	line-height: 18px;
+	min-width: 100px;
+	text-align: center;
+}
+table.item-list tr:not(.empty-alert) td:nth-child(2) div.theme-color:not(:first-child) {
+	margin-left: 10px;
+}
+
+/** list of headings */
+table#list-headings tr td {
+	font-weight: normal;
+	word-break: break-word;
+}
+table#list-headings tr[class^="level-"] td span:nth-of-type(1) {
+	font-weight: bolder;
+	padding-right: 7px;
+}
+table#list-headings tr.level-h1 td {
+	padding-left: 5px;
+}
+table#list-headings tr.level-h2 td {
+	padding-left: 15px;
+}
+table#list-headings tr.level-h3 td {
+	padding-left: 25px;
+}
+table#list-headings tr.level-h4 td {
+	padding-left: 35px;
+}
+table#list-headings tr.level-h5 td {
+	padding-left: 45px;
+}
+table#list-headings tr.level-h6 td {
+	padding-left: 55px;
+}
+
+/** list of images */
+table#list-images tr span.info {
+	display: block;
+}
+
+/** image preview */
+div.img-preview img {
+	background-image: url('img/bg-img-pattern.png');
+	border: 2px solid #000;
+	bottom: 10px;
+	max-height: 250px;
+	max-width: 250px;
+	position: fixed;
+	right: 27px;
+}
+
+/** tools */
+table#info-tools a.full-link {
+	color: #000;
+	text-decoration: none;
+}
+table#info-tools div.heading {
+	font-weight: bold;
+}
+
+/** empty alert (hint for tables without content) */
 table tr.empty-alert td {
-	background: none;
 	border: 0;
 	padding: 0;
 }
 table tr.empty-alert td div.alert {
 	font-weight: bold;
-	margin: 0;
+}
+div.alert.empty-alert {
+	font-weight: bold;
 }
 
-/** formatting for the additional information. */
+/** additional information */
 td span.info strong {
-	font-style: italic;
-	font-weight: bolder;
 	margin-right: 4px;
 }
 td span.info {
 	color: grey;
-	display: inline-block;
 	font-size: 0.9em;
 	font-style: italic;
 	font-weight: normal;
@@ -195,10 +153,38 @@ td span.info:not(:last-child) {
 	margin-right: 5px;
 }
 
-/** changes to the accordion. */
-div.accordion-body {
-	padding: 0;
+/** toolbar for additional actions */
+.toolbar {
+	align-items: center;
+	background: #fff;
+	border: 1px solid red;
+	border-bottom: 0;
+	border-left: 0;
+	border-right: 0;
+	border-top: 2px solid gray;
+	bottom: 0;
+	display: flex;
+	height: 40px;
+	justify-content: flex-end;
+	left: 0;
+	padding: 0px 10px;
+	position: fixed;
+	right: 17px;
 }
+.toolbar input.search {
+	position: relative;
+	width: 100px;
+}
+.toolbar label[for="search"] {
+	font-weight: bold;
+	padding-right: 10px;
+}
+body .container-fluid.with-toolbar {
+	padding-bottom: 17px;
+}
+
+/** accordion */
+div.accordion-body,
 div.accordion-body div.tab-content {
 	padding: 0;
 }
@@ -209,22 +195,10 @@ button.accordion-button::after {
 	margin: 0;
 }
 
-/** changes to the tabs. */
-div.container-fluid div.tab-content {
-	padding: 0 7px 7px;
-}
-div.container-fluid div.tab-pane div.tab-content {
-	padding: 0;
-}
-div.container-fluid div.tab-pane div.tab-content table td {
-	font-weight: normal;
-}
-
-/** hint for not supported sites. */
+/** hint for not supported tabs */
 body.not-supported {
 	height: 100%;
 	overflow-y: hidden;
-	width: 600px;
 }
 body.not-supported div.container-fluid,
 body:not(.not-supported) div.alert-not-supported {
@@ -239,28 +213,4 @@ body.not-supported div.alert-not-supported {
 body.not-supported div.alert-not-supported {
 	border-radius: 0;
 	margin: 15px;
-}
-
-/** toolbar for addtional actions */
-.toolbar {
-	position:fixed;
-	bottom: 0;
-	left:0;
-	right:0;
-	height:40px;
-	border:1px solid red;
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	background: white;
-	padding: 0px 10px;
-	border-top: 2px solid gray;
-}
-.toolbar input.search {
-	position: relative;
-	width: 100px;
-}
-.toolbar label[for="search"] {
-	font-weight: bold;
-	padding-right: 10px;
 }
