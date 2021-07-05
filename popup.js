@@ -123,7 +123,6 @@ function TranslateHTML() {
  */
 function ShowImagePreview(hoverItem, imgUrl) {
 	$(hoverItem).on('mouseenter', function() {
-		$('body div.img-preview').remove();
 		$('body').append(`<div class="img-preview"><img src="${imgUrl}"></div>`);
 	}).on('mouseleave', function() {
 		$('body div.img-preview').remove();
@@ -458,6 +457,8 @@ function GetInformationRow(name, value, markerName, markerValue) {
  * @param {object} table The table element to be used for the filter.
  */
 function UseToolbar(visible, table = null) {
+	$('.toolbar .search').val('');
+
 	if (visible) {
 		$('body > .container-fluid').addClass('with-toolbar');
 		$('.toolbar').show();
