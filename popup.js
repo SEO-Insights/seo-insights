@@ -131,8 +131,8 @@ function ShowImagePreview(hoverItem, imgUrl) {
 
 /**
  * Returns all domains of the given urls.
- * @param {string[]} urls An array with all urls to get the domains from.
- * @returns An array with all domains of the given urls.
+ * @param {Array<string>} urls An array with all urls to get the domains from.
+ * @returns {Array<string>} An array with all domains of the given urls.
  */
  function GetDomains(urls) {
 	let domains = [];
@@ -193,7 +193,7 @@ function SetImageInfo(html, source) {
  * Returns the HTML element with the additional information.
  * @param {string} label The label value (displayed in bold letters) used on the additional information.
  * @param {string} value The value used on the additional information.
- * @returns The HTML element with the additional information.
+ * @returns {string} The HTML element with the additional information.
  */
 function GetInformation(label, value) {
 
@@ -216,7 +216,7 @@ function GetInformation(label, value) {
 /**
  * Returns the state whether the given value is a HEX color.
  * @param {string} value The value to check for a HEX color.
- * @returns State if the given value is a HEX color.
+ * @returns {boolean} State if the given value is a HEX color.
  */
 function IsColorHEX(value) {
 	return (value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i) !== null);
@@ -225,7 +225,7 @@ function IsColorHEX(value) {
 /**
  * Returns the state whether the given value is a RGB / RGBA color.
  * @param {string} value The value to check for a RGB / RGBA color.
- * @returns State if the given value is a RGB / RGBA color.
+ * @returns {boolean} State if the given value is a RGB / RGBA color.
  */
 function IsColorRGB(value) {
 	return (value.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?(,[\s+]?\d?\.?\d+)?[\s+]?\)$/i) !== null);
@@ -234,7 +234,7 @@ function IsColorRGB(value) {
 /**
  * Returns the state whether the given value is a color value.
  * @param {string} value The value to check for a color value.
- * @returns State if the given value is a color value.
+ * @returns {boolean} State if the given value is a color value.
  */
 function IsColor(value) {
 	return (IsColorHEX(value) || IsColorRGB(value));
@@ -254,7 +254,7 @@ function GetToolsItem(title, description, link) {
  * Returns a string value with leadings zeros and the expected length.
  * @param {string} str The string value padded with zeros.
  * @param {integer} length The resulting string length after padding.
- * @returns The string value padded with zeros to the expected length.
+ * @returns {string} The string value padded with zeros to the expected length.
  */
 function PadZero(str, length) {
 	length = length || 2;
@@ -264,8 +264,8 @@ function PadZero(str, length) {
 
 /**
  * Returns the given as value or list depending of the count of values.
- * @param {string[]} values The values to be formatted.
- * @returns A single value or a list of values to display on the extension.
+ * @param {Array<string>} values The values to be formatted.
+ * @returns {string} A single value or a list of values to display on the extension.
  */
 function GetFormattedArrayValue(values) {
 	if (values.length > 1) {
@@ -280,8 +280,8 @@ function GetFormattedArrayValue(values) {
 /**
  * Returns the inverted value of a given HEX value.
  * @param {string} hexValue The HEX value to be inverted.
- * @param {*} useBlackWhite State whether the HEX value should be inverted to black or white.
- * @returns The color value of the inverted HEX value.
+ * @param {boolean} useBlackWhite State whether the HEX value should be inverted to black or white.
+ * @returns {string} The color value of the inverted HEX value.
  * @see https://stackoverflow.com/a/35970186/3840840
  */
 function InvertColor(hexValue, useBlackWhite) {
@@ -324,7 +324,7 @@ function InvertColor(hexValue, useBlackWhite) {
 /**
  * Returns the HEX value of the given RGB or RGBA value.
  * @param {string} rgb The RGB / RGBA value to convert.
- * @returns The HEX value of the given RGB / RGBA value.
+ * @returns {string} The HEX value of the given RGB / RGBA value.
  */
 function RGBtoHEX(rgb) {
 	rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
@@ -337,7 +337,7 @@ function RGBtoHEX(rgb) {
 /**
  * Returns the count of words in a given string value.
  * @param {string} text The string value to get the count of words from.
- * @returns The count of words in the given string value.
+ * @returns {integer} The count of words in the given string value.
  * @see https://stackoverflow.com/a/18679657/3840840
  */
 function GetWordCount(text) {
@@ -353,7 +353,7 @@ function GetWordCount(text) {
 /**
  * Returns the count of emojis in a given string value.
  * @param {string} text The string value to get the count of emojis from.
- * @returns The count of emojis in the given string value.
+ * @returns {integer} The count of emojis in the given string value.
  * @see https://mathiasbynens.be/notes/es-unicode-property-escapes#emoji
  */
 function GetEmojiCount(text) {
@@ -363,7 +363,7 @@ function GetEmojiCount(text) {
 /**
  * Returns the information of the text of a given string value.
  * @param {string} text The string value to get the text information from.
- * @returns The object with information of the given string info.
+ * @returns {object} The object with information of the given string info.
  */
 function GetTextInformation(text) {
 	return {
@@ -376,7 +376,7 @@ function GetTextInformation(text) {
 /**
  * Returns a escaped string of the given string to also display HTML specific chars on HTML.
  * @param {string} str The string value to be escaped.
- * @returns The escaped string value to display HTML specific chars on HTML.
+ * @returns {string} The escaped string value to display HTML specific chars on HTML.
  */
 function EscapeHTML(str) {
 	return String(str).replace(/[&<>"'\/]/g, function(s) {
@@ -394,7 +394,7 @@ function EscapeHTML(str) {
 /**
  * Returns a color value as HTML element.
  * @param {string} value The color value to format.
- * @returns The formatted color value as HTML element.
+ * @returns {string} The formatted color value as HTML element.
  */
 function GetFormattedColorValue(value) {
 	const textColor = (value.toLowerCase().startsWith('rgb')) ? RGBtoHEX(value) : value;
@@ -405,7 +405,7 @@ function GetFormattedColorValue(value) {
  * Returns the formatted text information of a given text.
  * @param {string} text The text to get the formatted text information from.
  * @param {boolean} newline State whether the tags should be displayed on a new line.
- * @returns The formatted text information of the given text.
+ * @returns {string} The formatted text information of the given text.
  */
 function GetTextWordInformation(text, newline = false) {
 	text = (text || '').toString().trim();
@@ -430,9 +430,9 @@ function GetTextWordInformation(text, newline = false) {
  * Returns the row to add in a table. It is possible to add a marker.
  * @param {string} name The name to be displayed on the first column of the row.
  * @param {string} value The value to be displayed on the second column of the row.
- * @param {*} markerName The property name to mark the row (used to access the exactly same row later).
- * @param {*} markerValue The property value to mark the row (used to access the exactly same row later).
- * @returns The row containing the information in two column. There is also a marker for later access if given.
+ * @param {string} markerName The property name to mark the row (used to access the exactly same row later).
+ * @param {string} markerValue The property value to mark the row (used to access the exactly same row later).
+ * @returns {string} The row containing the information in two column. There is also a marker for later access if given.
  */
 function GetInformationRow(name, value, markerName, markerValue) {
 	const namesInfoDetailed = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title', 'twitter:image:alt'];
