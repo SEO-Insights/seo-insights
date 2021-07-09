@@ -8,16 +8,16 @@ html, body {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
-nav {
-	background: #fff;
-	position: sticky;
-	top: 0;
-}
 div.nav-pills button.nav-link {
 	border-radius: 0;
 }
 div.container-fluid {
 	padding: 0;
+}
+div.container-fluid > nav {
+	background: #fff;
+	position: sticky;
+	top: 0;
 }
 div.container-fluid div.tab-content {
 	padding: 0 7px 7px;
@@ -37,6 +37,7 @@ table[id$="stats"] td {
 table.item-list {
 	border-collapse: separate;
 	border-spacing: 0 7px;
+	width: 100%;
 }
 table.item-list tr:not(.empty-alert) td:nth-child(1) {
 	background: #f7f7f7;
@@ -115,6 +116,7 @@ div.img-preview img {
 	max-width: 250px;
 	position: fixed;
 	right: 27px;
+	z-index: 999;
 }
 
 /** tools */
