@@ -117,15 +117,16 @@ function TranslateHTML() {
 }
 
 /**
- * Shows a image when hover a specific HTML element.
+ * Shows an image when hover a specific HTML element.
  * @param {object} hoverItem The HTML element to bind the hover event to.
- * @param {string} imgUrl The image path to show on image preview.
+ * @param {string} imgUrl The image path to show on the image preview.
  */
 function ShowImagePreview(hoverItem, imgUrl) {
 	$(hoverItem).on('mouseenter', function() {
-		$('body').append(`<div class="img-preview"><img src="${imgUrl}"></div>`);
+		$('div.img-preview', hoverItem).remove();
+		$(hoverItem).append(`<div class="img-preview"><img src="${imgUrl}"></div>`);
 	}).on('mouseleave', function() {
-		$('body div.img-preview').remove();
+		$('div.img-preview', hoverItem).remove();
 	});
 }
 
