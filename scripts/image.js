@@ -133,7 +133,7 @@ SEOInsights.Image = class Image {
 
 			//there are also blocked frames so we have to try to get the document of the frame.
 			try {
-				images = images.concat(GetImagesOfDocument(window.frames[frameIndex].document));
+				images = images.concat(SEOInsights.Image.GetImagesOfDocument(window.frames[frameIndex].document));
 			} catch(_) {}
 		}
 
