@@ -108,15 +108,6 @@ function CallbackHeadingFilter(event) {
 }
 
 /**
- * Replace all placeholder for translation with translated value.
- */
-function TranslateHTML() {
-	document.body.innerHTML = document.body.innerHTML.replace(/__MSG_(\w+)__/g, function(match, word) {
-		return word ? chrome.i18n.getMessage(word) : '';
-	});
-}
-
-/**
  * Shows an image when hover a specific HTML element.
  * @param {object} hoverItem The HTML element to bind the hover event to.
  * @param {string} imgUrl The image path to show on the image preview.
@@ -135,7 +126,7 @@ function ShowImagePreview(hoverItem, imgUrl) {
  * @param {Array<string>} urls An array with all urls to get the domains from.
  * @returns {Array<string>} An array with all domains of the given urls.
  */
- function GetDomains(urls) {
+function GetDomains(urls) {
 	let domains = [];
 
 	//run through all urls to get the domain from.
@@ -990,7 +981,7 @@ function ViewTools() {
 /**
  * View for Headings.
  */
- function ViewHeadings() {
+function ViewHeadings() {
 
 	//get the current / active tab of the current window and send a message
 	//to the content script to get the information of the website.

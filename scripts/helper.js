@@ -39,4 +39,13 @@ function GetName(html) {
 	} else {
 		return null;
 	}
-};
+}
+
+/**
+ * Replace all placeholder for translation with translated value.
+ */
+function TranslateHTML() {
+	document.body.innerHTML = document.body.innerHTML.replace(/__MSG_(\w+)__/g, function(match, word) {
+		return word ? chrome.i18n.getMessage(word) : '';
+	});
+}
