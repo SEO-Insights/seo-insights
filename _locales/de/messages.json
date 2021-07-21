@@ -87,6 +87,15 @@
 			}
 		}
 	},
+	"display_toolbar": {
+		"message": "Toolbar anzeigen"
+	},
+	"options_saved": {
+		"message": "Einstellungen wurden gespeichert."
+	},
+	"save": {
+		"message": "Speichern"
+	},
 	"search": {
 		"message": "Suche"
 	},

@@ -451,20 +451,25 @@ function GetInformationRow(name, value, markerName, markerValue) {
 function UseToolbar(visible, table = null) {
 	$('.toolbar .search').val('');
 
-	if (visible) {
-		$('body > .container-fluid').addClass('with-toolbar');
-		$('.toolbar').show();
-		$('.toolbar .search').on('keyup', function() {
-			const value = $(this).val().toLowerCase();
-			$('tr', table).filter(function() {
-				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+	//just show the toolbar if the option is set.
+	chrome.storage.sync.get(['display_toolbar'], function(result) {
+
+		//show the toolbar whether it should be visible and the option is active.
+		if (visible && result.display_toolbar) {
+			$('body > .container-fluid').addClass('with-toolbar');
+			$('.toolbar').show();
+			$('.toolbar .search').on('keyup', function() {
+				const value = $(this).val().toLowerCase();
+				$('tr', table).filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+				});
 			});
-		});
-	} else {
-		$('body > .container-fluid').removeClass('with-toolbar');
-		$('.toolbar').hide();
-		$('.toolbar .search').off('keyup');
-	}
+		} else {
+			$('body > .container-fluid').removeClass('with-toolbar');
+			$('.toolbar').hide();
+			$('.toolbar .search').off('keyup');
+		}
+	});
 }
 
 /**

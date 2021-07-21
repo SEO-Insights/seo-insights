@@ -90,6 +90,15 @@
 	"search": {
 		"message": "Search"
 	},
+	"display_toolbar": {
+		"message": "Display toolbar"
+	},
+	"options_saved": {
+		"message": "Options saved."
+	},
+	"save": {
+		"message": "Save"
+	},
 	"no_preconnect_items": {
 		"message": "This website has no preconnect elements."
 	},
