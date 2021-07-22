@@ -736,14 +736,14 @@ function ViewSummary() {
 					if (IsColor(items[0].value)) {
 						tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value)));
 					} else {
-						tableSummary.children('tbody').append(GetInformationRow(name, items[0].value));
+						tableSummary.children('tbody').append(GetInformationRow(name, EscapeHTML(items[0].value)));
 					}
 				}
 			} else if (items.length > 1) {
 				if (name === 'theme-color') {
 					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td>' + items.map(metaItem => GetFormattedColorValue(metaItem.value)).join('') + '</td></tr>');
 				} else {
-					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td><ul><li>' + items.map(metaItem => metaItem.value).join('</li><li>') + '</li></ul></td></tr>');
+					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td><ul><li>' + items.map(metaItem => EscapeHTML(metaItem.value)).join('</li><li>') + '</li></ul></td></tr>');
 				}
 			}
 		});
@@ -1034,7 +1034,7 @@ function ViewHeadings() {
 
 		//add all found headings to the table.
 		headings.forEach(function(heading) {
-			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${heading.text}${GetTextWordInformation(heading.text, true)}</td></tr>`);
+			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${EscapeHTML(heading.text)}${GetTextWordInformation(heading.text, true)}</td></tr>`);
 		});
 
 		//set a hint if there are no headings on the website.
