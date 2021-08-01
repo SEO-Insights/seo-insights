@@ -359,10 +359,31 @@ function GetEmojiCount(text) {
  */
 function GetTextInformation(text) {
 	return {
-		'chars': text.length,
-		'words': GetWordCount(text),
+		'chars': ReplaceCharactersHTML(text).length,
+		'words': GetWordCount(ReplaceCharactersHTML(text)),
 		'emojis': GetEmojiCount(text)
 	};
+}
+
+/**
+ * Returns a string with all HTML characters replaced to the real characters.
+ * @param {string} str The string value to replace all HTML characters to real characters.
+ * @returns {string} The string with all replaced HTML characters.
+ */
+function ReplaceCharactersHTML(str) {
+	return String(str).replace(/&#*([^&#;]+);/g, function(match, s) {
+		if (isNaN(s)) {
+			return {
+				"amp": "&",
+				"lt": "<",
+				"gt": ">",
+				"quot": '"',
+				"x2F": "/"
+			}[s];
+		} else {
+			return String.fromCharCode(s);
+		}
+	});
 }
 
 /**
@@ -424,9 +445,10 @@ function GetTextWordInformation(text, newline = false) {
  * @param {string} value The value to be displayed on the second column of the row.
  * @param {string} markerName The property name to mark the row (used to access the exactly same row later).
  * @param {string} markerValue The property value to mark the row (used to access the exactly same row later).
+ * @param {boolean} isHtmlValue The state whether the value is formatted with HTML (so don't escape the value).
  * @returns {string} The row containing the information in two column. There is also a marker for later access if given.
  */
-function GetInformationRow(name, value, markerName, markerValue) {
+function GetInformationRow(name, value, markerName, markerValue, isHtmlValue = false) {
 	const namesInfoDetailed = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title', 'twitter:image:alt'];
 	let info = '';
 
@@ -437,9 +459,9 @@ function GetInformationRow(name, value, markerName, markerValue) {
 
 	//return a new information row with or without the row marker.
 	if (markerName && markerValue) {
-		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${value}</td></tr>`;
+		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${(isHtmlValue) ? value : EscapeHTML(ReplaceCharactersHTML(value))}</td></tr>`;
 	} else {
-		return `<tr><td>${name} ${info}</td><td>${value}</td></tr>`;
+		return `<tr><td>${name} ${info}</td><td>${(isHtmlValue) ? value : EscapeHTML(ReplaceCharactersHTML(value))}</td></tr>`;
 	}
 }
 
@@ -557,31 +579,28 @@ function ViewMetaDetails() {
 
 		//set Open Graph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
-			const value = (item.value || '').toString().trim();
-
-			//some information can be displayed with additional information.
-			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-basic-' + index));
+			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim(), 'id', 'og-basic-' + index));
 		});
 
 		//set Open Graph article information to the table.
 		itemsOpenGraphArticle.forEach(function(item) {
-			tableOpenGraphArticle.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+			tableOpenGraphArticle.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		//set Open Graph audio information to the table.
 		itemsOpenGraphAudio.forEach(function(item) {
-			tableOpenGraphAudio.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+			tableOpenGraphAudio.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		//set Open Graph book information to the table.
 		itemsOpenGraphBook.forEach(function(item) {
-			tableOpenGraphBook.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+			tableOpenGraphBook.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		//set Open Graph image information to the table.
 		itemsOpenGraphImage.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'og-image-' + index));
+			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, value, 'id', 'og-image-' + index));
 
 			//on image information, a image preview is possible.
 			if (['og:image', 'og:image:url', 'og:image:secure_url'].includes(item.name.toLowerCase())) {
@@ -591,22 +610,22 @@ function ViewMetaDetails() {
 
 		//set Open Graph profile information to the table.
 		itemsOpenGraphProfile.forEach(function(item) {
-			tableOpenGraphProfile.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+			tableOpenGraphProfile.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		//set Open Graph video information to the table.
 		itemsOpenGraphVideo.forEach(function(item) {
-			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		//set Parsely information to the table.
 		itemsParsely.forEach(function(item) {
-			tableParsely.children('tbody').append(GetInformationRow(item.name, EscapeHTML((item.value || '').toString().trim())));
+			tableParsely.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		//set Dublin Core information to the table.
 		itemsDublinCore.forEach(function(item) {
-			tableDublinCore.children('tbody').append(GetInformationRow(item.name,((item.value || '').toString().trim())));
+			tableDublinCore.children('tbody').append(GetInformationRow(item.name, ((item.value || '').toString().trim())));
 		});
 
 		//set Twitter information to the table.
@@ -614,7 +633,7 @@ function ViewMetaDetails() {
 			const value = (item.value || '').toString().trim();
 
 			//some information can be displayed with additional information.
-			tableTwitter.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'twitter-' + index));
+			tableTwitter.children('tbody').append(GetInformationRow(item.name, value, 'id', 'twitter-' + index));
 
 			//on image information, a image preview is possible.
 			if (['twitter:image:src', 'twitter:image'].includes(item.name.toLowerCase())) {
@@ -625,8 +644,7 @@ function ViewMetaDetails() {
 		//set Shareaholic content information to the table.
 		itemsShareaholicContent.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-
-			tableShareaholicContent.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'shareaholic-' + index));
+			tableShareaholicContent.children('tbody').append(GetInformationRow(item.name, value, 'id', 'shareaholic-' + index));
 
 			//on image information, a image preview is possible.
 			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
@@ -637,8 +655,7 @@ function ViewMetaDetails() {
 		//set Shareaholic content information to the table.
 		itemsShareaholicFeature.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-
-			tableShareaholicFeature.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'shareaholic-' + index));
+			tableShareaholicFeature.children('tbody').append(GetInformationRow(item.name, value, 'id', 'shareaholic-' + index));
 
 			//on image information, a image preview is possible.
 			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
@@ -652,9 +669,9 @@ function ViewMetaDetails() {
 
 			//depending on the value of the meta property format the value.
 			if (IsColor(value)) {
-				tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value)));
+				tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value), undefined, undefined, true));
 			} else {
-				tableOthers.children('tbody').append(GetInformationRow(item.name, EscapeHTML(value), 'id', 'others-' + index));
+				tableOthers.children('tbody').append(GetInformationRow(item.name, value, 'id', 'others-' + index));
 			}
 
 			//on image information, a image preview is possible.
@@ -734,9 +751,9 @@ function ViewSummary() {
 					tableSummary.children('tbody').append(GetInformationRow(name + (items[0].value === tabUrl ? '<span class="info d-block">self-referential</span>' : ''), items[0].value));
 				} else {
 					if (IsColor(items[0].value)) {
-						tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value)));
+						tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value), undefined, undefined, true));
 					} else {
-						tableSummary.children('tbody').append(GetInformationRow(name, EscapeHTML(items[0].value)));
+						tableSummary.children('tbody').append(GetInformationRow(name, items[0].value));
 					}
 				}
 			} else if (items.length > 1) {
