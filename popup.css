@@ -73,10 +73,11 @@ table.item-list tr:not(.empty-alert) td:nth-child(2) div.theme-color {
 	display: inline-block;
 	line-height: 18px;
 	min-width: 100px;
+	padding: 0 5px;
 	text-align: center;
 }
-table.item-list tr:not(.empty-alert) td:nth-child(2) div.theme-color:not(:first-child) {
-	margin-left: 10px;
+table.item-list tr:not(.empty-alert) td:nth-child(2) div.theme-color:not(:last-child) {
+	margin-right: 10px;
 }
 
 /** list of headings */
