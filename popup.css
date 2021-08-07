@@ -164,36 +164,6 @@ td span.info:not(:last-child) {
 	margin-right: 5px;
 }
 
-/** toolbar for additional actions */
-.toolbar {
-	align-items: center;
-	background: #fff;
-	border: 1px solid red;
-	border-bottom: 0;
-	border-left: 0;
-	border-right: 0;
-	border-top: 2px solid gray;
-	bottom: 0;
-	display: flex;
-	height: 40px;
-	justify-content: flex-end;
-	left: 0;
-	padding: 0px 10px;
-	position: fixed;
-	right: 17px;
-}
-.toolbar input.search {
-	position: relative;
-	width: 100px;
-}
-.toolbar label[for="search"] {
-	font-weight: bold;
-	padding-right: 10px;
-}
-body .container-fluid.with-toolbar {
-	padding-bottom: 32px;
-}
-
 /** accordion */
 div.accordion-body,
 div.accordion-body div.tab-content {

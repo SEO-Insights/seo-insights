@@ -632,35 +632,6 @@ function GetInformationRow(name, value, markerName, markerValue, isHtmlValue = f
 }
 
 /**
- * Enables / Disables the toolbar.
- * @param {boolean} visible State whether the toolbar is visible.
- * @param {object} table The table element to be used for the filter.
- */
-function UseToolbar(visible, table = null) {
-	$('.toolbar .search').val('');
-
-	//just show the toolbar if the option is set.
-	chrome.storage.sync.get(['display_toolbar'], function(result) {
-
-		//show the toolbar whether it should be visible and the option is active.
-		if (visible && result.display_toolbar) {
-			$('body > .container-fluid').addClass('with-toolbar');
-			$('.toolbar').show();
-			$('.toolbar .search').on('keyup', function() {
-				const value = $(this).val().toLowerCase();
-				$('tr', table).filter(function() {
-					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-				});
-			});
-		} else {
-			$('body > .container-fluid').removeClass('with-toolbar');
-			$('.toolbar').hide();
-			$('.toolbar .search').off('keyup');
-		}
-	});
-}
-
-/**
  * Initialize the extension on load (register events, translate extension).
  */
 jQuery(function() {
@@ -680,9 +651,6 @@ jQuery(function() {
 		$('button#view-headers-tab').on('click', ViewHeader);
 		$('button#view-tools-tab').on('click', ViewTools);
 	}
-
-	//disable the toolbar by default.
-	UseToolbar(false);
 });
 
 /**
@@ -721,9 +689,6 @@ function ViewMetaDetails() {
 		const tableDublinCore = $('table#meta-details-dublin-core', tabMetaDetails);
 		const tableShareaholicContent = $('table#meta-details-shareaholic-content', tabMetaDetails);
 		const tableShareaholicFeature = $('table#meta-details-shareaholic-feature', tabMetaDetails);
-
-		//disable the toolbar.
-		UseToolbar(false);
 
 		//remove all rows of all meta tables.
 		$('table[id^=meta-details-]').children('tbody').empty();
@@ -894,9 +859,6 @@ function ViewSummary() {
 		//remove all rows of the summary table.
 		tableSummary.children('tbody').empty();
 
-		//disable the toolbar.
-		UseToolbar(false);
-
 		//get the meta information from the content script.
 		const metas = (info.meta || []);
 		const analytics = info.ga;
@@ -980,9 +942,6 @@ function ViewFiles() {
 		const tableFilesSpecial = $('table#files-special', tabFiles);
 		const tableStylesheetDomains = $('table#list-files-stylesheet-domains', tabFiles);
 		const tableJavaScriptDomains = $('table#list-files-javascript-domains', tabFiles);
-
-		//disable the toolbar.
-		UseToolbar(false);
 
 		//get the files from the content script.
 		const filesStylesheet = (info.stylesheet || []);
@@ -1084,9 +1043,6 @@ function ViewHeader() {
 	const tabHeaders = $('div#view-headers');
 	const tableHeaders = $('table#info-headers', tabHeaders);
 
-	//disbale the toolbar.
-	UseToolbar(false);
-
 	//remove all available header information.
 	tableHeaders.children('tbody').empty();
 
@@ -1113,9 +1069,6 @@ function ViewTools() {
 	//get the tab and table of the tools list.
 	const tabTools = $('div#view-tools');
   const tableTools = $('table#info-tools', tabTools);
-
-	//disable the toolbar.
-	UseToolbar(false);
 
 	//remove all available tools.
 	tableTools.children('tbody').empty();
@@ -1193,9 +1146,6 @@ function ViewHeadings() {
 		const tableHeadingsStatistics = $('table#heading-stats', tabHeadings);
 		const tableHeadingsErrors = $('table#list-headings-errors', tabHeadings);
 
-		//enable the toolbar for headings.
-		UseToolbar(true, tableHeadings);
-
 		//get the headings from the content script.
 		const headings = (info.headings || []);
 
@@ -1255,9 +1205,6 @@ function ViewImages() {
 		const tableImagesStatistics = $('table#image-stats', tabImages);
 		const tableImagesDomains = $('table#list-image-domains', tabImages);
 		const tableImagesIcons = $('table#list-image-icons', tabImages);
-
-		//enable the toolbar for images.
-		UseToolbar(true, tableImages);
 
 		//get the images and icons from the content script.
 		const images = (info.images || []);
@@ -1363,9 +1310,6 @@ function ViewHyperlinks() {
 		const tablePreload = $('table#list-preload', tabHyperlinks);
 		const tableDnsPrefetch = $('table#list-dns-prefetch', tabHyperlinks);
 		const tablePreconnect = $('table#list-preconnect', tabHyperlinks);
-
-		//enable the toolbar for hyperlinks.
-		UseToolbar(true, tableHyperlinks);
 
 		//remove all rows of the tables.
 		tableHyperlinks.children('tbody').empty();

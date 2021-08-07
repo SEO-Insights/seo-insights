@@ -87,15 +87,6 @@
 			}
 		}
 	},
-	"search": {
-		"message": "Search"
-	},
-	"display_toolbar": {
-		"message": "Display toolbar"
-	},
-	"options_saved": {
-		"message": "Options saved."
-	},
 	"save": {
 		"message": "Save"
 	},
