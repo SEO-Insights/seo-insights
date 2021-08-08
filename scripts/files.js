@@ -166,7 +166,7 @@ SEOInsights.File = class File {
 		$('link[rel="stylesheet"]').filter(function() {
 			return (($(this).attr('href') || '').toString().trim() !== '');
 		}).each(function() {
-			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+			const url = new URL(($(this).attr('href') || '').toString().trim(), GetBaseUrl());
 
 			//add the url of the file to the file array.
 			files.push({
