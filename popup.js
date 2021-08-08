@@ -9,8 +9,8 @@ let tabUrlOrigin = '';
     const tab = tabs[0];
 
 		//set the common information about the website.
-		tabUrl = tab.url;
-    tabUrlOrigin = (new URL(tab.url)).origin;
+		tabUrl = decodeURI(tab.url);
+    tabUrlOrigin = decodeURI((new URL(tab.url)).origin);
 
     //check whether it is possible to inject a content script to the current tab.
 		//there are some protocols and sites where no content script can be injected.
