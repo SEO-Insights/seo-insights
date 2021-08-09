@@ -1392,17 +1392,20 @@ function ViewHyperlinks() {
 		//get the count of the attributes to check.
 		const cntWithoutTitle = hyperlinks.filter(link => link.title === '').length;
 		const cntWithoutHref = hyperlinks.filter(link => link.href === '').length;
+		const cntProtocolHttp = hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'http').length;
 
 		//get the fields of the attributes to check.
 		const fieldHyperlinkTitle = tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-title"]');
 		const fieldHyperlinkHref = tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-href"]');
+		const fieldHyperlinkProtocolHttp = tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-http"]');
 
 		//set the count to the fields and format the count based on the value.
 		fieldHyperlinkTitle.text(cntWithoutTitle).removeClass('text-danger fw-bold').addClass(cntWithoutTitle > 0 ? 'text-danger fw-bold' : '');
 		fieldHyperlinkHref.text(cntWithoutHref).removeClass('text-danger fw-bold').addClass(cntWithoutHref > 0 ? 'text-danger fw-bold' : '');
+		fieldHyperlinkProtocolHttp.text(cntProtocolHttp).removeClass('text-warning fw-bold').addClass(cntProtocolHttp > 0 ? 'text-warning fw-bold' : '');
 
 		//set the statistics for the protocols of the hyperlinks.
-		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-http"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'http').length);
+		//HTTP protocol statistics are covered above because a number will be shown as warning.
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-https"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'https').length);
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-mailto"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'mailto').length);
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-javascript"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'javascript').length);
