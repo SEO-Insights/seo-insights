@@ -893,10 +893,19 @@ function ViewSummary() {
 			}
 		});
 
+		//function to group by a specific property.
+		//this function will be used to group the identifiers of Google Analytics and Google Tag Manager.
+		const GroupBy = key => array =>
+  		array.reduce((objectsByKeyValue, obj) => {
+    		objectsByKeyValue[obj[key]] = (objectsByKeyValue[obj[key]] || []).concat(obj.source).filter((v, i, a) => a.indexOf(v) === i);
+    		return objectsByKeyValue;
+  		}, {});
+
 		//display the Google Analytics Tracking information of the website.
 		if (analytics.identifiers.length > 0 || analytics.files.length > 0) {
 			let info = [];
-			info = info.concat(analytics.identifiers.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
+			let groups = GroupBy('id')(analytics.identifiers);
+			info = info.concat(Object.keys(groups).map(identifier => identifier + ' ' + '(<i>' + groups[identifier].join(' / ') + '</i>)'));
 			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append('<tr><td>Google Analytics</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
 		}
@@ -904,7 +913,8 @@ function ViewSummary() {
 		//display the Google Tag Manager information of the website.
 		if (tagmanager.identifiers.length > 0 || tagmanager.files.length > 0) {
 			let info = [];
-			info = info.concat(tagmanager.identifiers.map(item => item.id + ' (<i>' + item.source + '</i>)').filter((v, i, a) => a.indexOf(v) === i));
+			let groups =  GroupBy('id')(tagmanager.identifiers);
+			info = info.concat(Object.keys(groups).map(identifier => identifier + ' ' + '(<i>' + groups[identifier].join(' / ') + '</i>)'));
 			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append('<tr><td>Google Tag Manager</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
 		}
