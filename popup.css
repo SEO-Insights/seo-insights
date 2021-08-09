@@ -1,7 +1,7 @@
 body {
 	font-size: 14px;
 	height: 600px;
-	max-width: 600px;
+	max-width: 700px;
 	min-width: 600px;
 }
 html, body {
@@ -10,6 +10,9 @@ html, body {
 }
 div.nav-pills button.nav-link {
 	border-radius: 0;
+}
+nav.nav-main {
+	z-index: 999;
 }
 div.container-fluid {
 	padding: 0;
@@ -155,6 +158,7 @@ td span.info strong {
 }
 td span.info {
 	color: grey;
+	display: inline-block;
 	font-size: 0.9em;
 	font-style: italic;
 	font-weight: normal;
