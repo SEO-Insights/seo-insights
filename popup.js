@@ -602,7 +602,7 @@ function GetTextWordInformation(text, newline = false) {
 	return ((newline === true) ? '<br>' : '')
 		+ GetInformation('', info.chars + ' ' + chrome.i18n.getMessage('chars'))
 		+ GetInformation('', info.words + ' ' + chrome.i18n.getMessage('words'))
-		+ ((info.emojis > 0) ? GetInformation('', info.emojis + ' ' + 'emojis') : '');
+		+ ((info.emojis > 0) ? GetInformation('', info.emojis + ' ' + chrome.i18n.getMessage('emojis')) : '');
 }
 
 /**

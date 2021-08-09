@@ -38,6 +38,9 @@
 	"chars": {
 		"message": "Zeichen"
 	},
+	"emojis": {
+		"message": "Emojis"
+	},
 	"items": {
 		"message": "Elemente"
 	},
