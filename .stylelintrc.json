@@ -1,0 +1,11 @@
+{
+	"extends": "stylelint-config-standard",
+	"rules": {
+		"block-no-empty": true,
+		"color-no-invalid-hex": true,
+		"indentation": "tab",
+		"no-descending-specificity": null,
+		"rule-empty-line-before": "never",
+		"selector-list-comma-newline-after": "always"
+	}
+}

@@ -8,5 +8,5 @@ tab_width = 2
 end_of_line = crlf
 trim_trailing_whitespace = true
 
-[{*.json,*.js}]
+[{*.json,*.js,*.css}]
 insert_final_newline = true

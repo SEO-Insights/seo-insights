@@ -4,7 +4,8 @@ body {
 	max-width: 700px;
 	min-width: 600px;
 }
-html, body {
+html,
+body {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
