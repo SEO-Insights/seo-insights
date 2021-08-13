@@ -171,7 +171,7 @@ SEOInsights.Head = class Head {
 		if (canonical !== '') {
 			tags.push({
 				name: 'canonical',
-				value: decodeURI((new URL(canonical)).href)
+				value: decodeURI((new URL(canonical, GetBaseUrl())).href)
 			});
 		}
 
