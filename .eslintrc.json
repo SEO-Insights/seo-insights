@@ -34,6 +34,6 @@
 		"space-before-blocks": ["error", "always"],
 		"space-before-function-paren": ["error", "never"],
 		"spaced-comment": ["error", "always"],
-		"template-curly-spacing": ["error", "always"]
+		"template-curly-spacing": ["error", "never"]
 	}
 }

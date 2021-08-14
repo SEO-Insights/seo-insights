@@ -1,39 +1,39 @@
-//common information about the website.
+// common information about the website.
 let tabUrl = '';
 let tabUrlOrigin = '';
 
-//start the chrome extension and inject the scripts to the website.
-//the injected scripts are used to get the needed information about the website.
+// start the chrome extension and inject the scripts to the website.
+// the injected scripts are used to get the needed information about the website.
 (function() {
-  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    const tab = tabs[0];
+	chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+		const tab = tabs[0];
 
-		//set the common information about the website.
+		// set the common information about the website.
 		tabUrl = decodeURI(tab.url);
-    tabUrlOrigin = decodeURI((new URL(tab.url)).origin);
+		tabUrlOrigin = decodeURI((new URL(tab.url)).origin);
 
-    //check whether it is possible to inject a content script to the current tab.
-		//there are some protocols and sites where no content script can be injected.
-    if (!CanInjectContentScript(tab)) {
-      $('body').addClass('not-supported');
-      return false;
-    } else {
-      $('body').removeClass('not-supported');
-    }
+		// check whether it is possible to inject a content script to the current tab.
+		// there are some protocols and sites where no content script can be injected.
+		if (!CanInjectContentScript(tab)) {
+			$('body').addClass('not-supported');
+			return false;
+		} else {
+			$('body').removeClass('not-supported');
+		}
 
-    //programmatically inject the content scripts to the current tab.
-    chrome.scripting.executeScript({files: ['libs/jquery-3.6.0.min.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
+		// programmatically inject the content scripts to the current tab.
+		chrome.scripting.executeScript({files: ['libs/jquery-3.6.0.min.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
 		chrome.scripting.executeScript({files: ['scripts/meta.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tab.id}});
-    chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
+		chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tab.id}});
+		chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
 			ViewSummary();
-    });
-  });
+		});
+	});
 })();
 
 /**
@@ -43,13 +43,13 @@ let tabUrlOrigin = '';
  */
 function CanInjectContentScript(tab) {
 
-	//it is not possible to inject content scripts to the chrome webstore.
+	// it is not possible to inject content scripts to the chrome webstore.
 	if (tab.url.startsWith('https://chrome.google.com')) {
 		return false;
 	}
 
-	//it is possible to inject content scripts to url's with HTTP / HTTPS.
-  return (tab.url.startsWith('http://') || tab.url.startsWith('https://'));
+	// it is possible to inject content scripts to url's with HTTP / HTTPS.
+	return (tab.url.startsWith('http://') || tab.url.startsWith('https://'));
 }
 
 /**
@@ -61,14 +61,14 @@ function SetTableCountOnCardHeader(cardHeader, table) {
 	const count = $(table).find('tr').length;
 	const cardHeaderButton = $(cardHeader).find('button');
 
-	//first remove the info on the HTML element.
+	// first remove the info on the HTML element.
 	$('span.badge', cardHeaderButton).remove();
 
-	//set the count of items to the card header.
+	// set the count of items to the card header.
 	$(cardHeaderButton).append(`<span class="badge ${count > 0 ? 'bg-info' : 'bg-secondary'} ms-auto me-3 rounded-0">${count} ${chrome.i18n.getMessage('items')}</span>`);
 	$(cardHeaderButton).prop('disabled', (count === 0));
 
-	//hide all accordion items if there are no items.
+	// hide all accordion items if there are no items.
 	if (count === 0) {
 		$(cardHeaderButton).parent().parent().hide();
 	} else {
@@ -92,17 +92,17 @@ function ResetHeadingFilter() {
  */
 function CallbackHeadingFilter(event) {
 
-	//don't use the filter on not existing elements.
+	// don't use the filter on not existing elements.
 	if ($(this).text() === '0') {
 		return;
 	}
 
-	//toggle the filter depending on filter state.
-	if ($('tr.level-h' + event.data.level).is(':hidden')) {
-		$('tr.level-h' + event.data.level).show();
+	// toggle the filter depending on filter state.
+	if ($(`tr.level-h${event.data.level}`).is(':hidden')) {
+		$(`tr.level-h${event.data.level}`).show();
 		$(this).css('color', '#000');
 	} else {
-		$('tr.level-h' + event.data.level).hide();
+		$(`tr.level-h${event.data.level}`).hide();
 		$(this).css('color', '#ccc');
 	}
 }
@@ -129,17 +129,17 @@ function ShowImagePreview(hoverItem, imgUrl) {
 function GetDomains(urls) {
 	let domains = [];
 
-	//run through all urls to get the domain from.
+	// run through all urls to get the domain from.
 	urls.filter(url => (url || '').toString().trim() !== '').forEach(function(url) {
 		const domain = (new URL(url, tabUrlOrigin).host || '').toString().trim();
 
-		//only add existing domains. don't add empty domains..
+		// only add existing domains. don't add empty domains..
 		if (domain !== '') {
 			domains.push(domain);
 		}
 	});
 
-	//return all found domains of the urls.
+	// return all found domains of the urls.
 	return domains;
 }
 
@@ -162,7 +162,7 @@ function SetEmptyHint(table, hint) {
 function SetEmptyHintOnTabAccordion(tab, hint) {
 	if ($('div.accordion-item table tbody', tab).children().length === 0) {
 		$('div.alert.empty-alert', tab).remove();
-		$(tab).append('<div class="alert alert-primary empty-alert rounded-0" role="alert">' + hint + '</div>');
+		$(tab).append(`<div class="alert alert-primary empty-alert rounded-0" role="alert">${hint}</div>`);
 	} else {
 		$('div.alert.empty-alert', tab).remove();
 	}
@@ -176,7 +176,7 @@ function SetEmptyHintOnTabAccordion(tab, hint) {
 function SetImageInfo(html, source) {
 	let image = new Image;
 	image.onload = function() {
-		html.append(GetInformation('size', (image.width + ' x ' + image.height)));
+		html.append(GetInformation('size', `${image.width} x ${image.height}`));
 	};
 	image.src = source;
 }
@@ -189,11 +189,11 @@ function SetImageInfo(html, source) {
  */
 function GetInformation(label, value) {
 
-	//normalize the label and value.
+	// normalize the label and value.
 	const strLabel = (label || '').toString().trim();
 	const strValue = (value || '').toString().trim();
 
-	//the format of the additional information depends on the available label and / or value.
+	// the format of the additional information depends on the available label and / or value.
 	if (strLabel !== '' && strValue !== '') {
 		return `<span class="info"><strong>${strLabel}:</strong>${strValue}</span>`;
 	} else if (strLabel !== '') {
@@ -270,7 +270,7 @@ function PadZero(str, length) {
  */
 function GetFormattedArrayValue(values) {
 	if (values.length > 1) {
-		return '<ul><li>' + values.join('</li><li>') + '</li></ul>';
+		return `<ul><li>${values.join('</li><li>')}</li></ul>`;
 	} else if (values.length == 1) {
 		return values[0];
 	} else {
@@ -287,39 +287,39 @@ function GetFormattedArrayValue(values) {
  */
 function InvertColor(hexValue, useBlackWhite) {
 
-	//remove the hash of the hex value.
+	// remove the hash of the hex value.
 	if (hexValue.indexOf('#') === 0) {
 		hexValue = hexValue.slice(1);
 	}
 
-	//convert the 3-digit hex value to 6-digits.
+	// convert the 3-digit hex value to 6-digits.
 	if (hexValue.length === 3) {
 		hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
 	}
 
-	//check whether the hex value is valid.
+	// check whether the hex value is valid.
 	if (hexValue.length !== 6) {
 		return null;
 	}
 
-	//get the red, green and blue part of the color.
+	// get the red, green and blue part of the color.
 	let r = parseInt(hexValue.slice(0, 2), 16);
 	let g = parseInt(hexValue.slice(2, 4), 16);
 	let b = parseInt(hexValue.slice(4, 6), 16);
 
-	//it is possible to invert to black or white.
-	//https://stackoverflow.com/a/3943023/3840840
+	// it is possible to invert to black or white.
+	// https://stackoverflow.com/a/3943023/3840840
 	if (useBlackWhite) {
 		return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
 	}
 
-	//invert the red, green and blue value.
+	// invert the red, green and blue value.
 	r = (255 - r).toString(16);
 	g = (255 - g).toString(16);
 	b = (255 - b).toString(16);
 
-	//pad each color component with zeros and return the hex value.
-	return "#" + PadZero(r) + PadZero(g) + PadZero(b);
+	// pad each color component with zeros and return the hex value.
+	return `#${PadZero(r)}${PadZero(g)}${PadZero(b)}`;
 }
 
 /**
@@ -330,9 +330,9 @@ function InvertColor(hexValue, useBlackWhite) {
 function RGBtoHEX(rgb) {
 	rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
 	return (rgb && rgb.length === 4) ? "#" +
-		("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-	 	("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-	 	("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+		("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+	 	("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+	 	("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
 }
 
 /**
@@ -342,12 +342,12 @@ function RGBtoHEX(rgb) {
  * @see https://stackoverflow.com/a/18679657/3840840
  */
 function GetWordCount(text) {
-	text = text.replace(/(^\s*)|(\s*$)/gi, ''); //remove all starting and ending spaces.
-	text = text.replace(/-\s/gi, ''); //remove dash with empty string to detect the two parts as single word.
-	text = text.replace(/\s/gi, ' '); //replace all space characters with a single space char.
-	text = text.replace(/\s{2,}/gi, ' '); //replace multiple space characters with a single char.
+	text = text.replace(/(^\s*)|(\s*$)/gi, ''); // remove all starting and ending spaces.
+	text = text.replace(/-\s/gi, ''); // remove dash with empty string to detect the two parts as single word.
+	text = text.replace(/\s/gi, ' '); // replace all space characters with a single space char.
+	text = text.replace(/\s{2,}/gi, ' '); // replace multiple space characters with a single char.
 
-	//now split the text by space and get only the items without special chars.
+	// now split the text by space and get only the items without special chars.
 	return text.split(' ').filter(word => word.match(/[0-9a-z\u00C0-\u017F]/gi)).length;
 }
 
@@ -589,20 +589,20 @@ function GetFormattedColorValue(value) {
 function GetTextWordInformation(text, newline = false) {
 	text = (text || '').toString().trim();
 
-	//don't get the text information of a empty string value.
+	// don't get the text information of a empty string value.
 	if (text.length === 0) {
 		return '';
 	}
 
-	//get the text information of the given text.
+	// get the text information of the given text.
 	const info = GetTextInformation(text);
 
-	//return the formatted text information.
-	//display the count of emojis only if there are emojis.
+	// return the formatted text information.
+	// display the count of emojis only if there are emojis.
 	return ((newline === true) ? '<br>' : '')
-		+ GetInformation('', info.chars + ' ' + chrome.i18n.getMessage('chars'))
-		+ GetInformation('', info.words + ' ' + chrome.i18n.getMessage('words'))
-		+ ((info.emojis > 0) ? GetInformation('', info.emojis + ' ' + chrome.i18n.getMessage('emojis')) : '');
+		+ GetInformation('', `${info.chars} ${chrome.i18n.getMessage('chars')}`)
+		+ GetInformation('', `${info.words} ${chrome.i18n.getMessage('words')}`)
+		+ ((info.emojis > 0) ? GetInformation('', `${info.emojis} ${chrome.i18n.getMessage('emojis')}`) : '');
 }
 
 /**
@@ -618,12 +618,12 @@ function GetInformationRow(name, value, markerName, markerValue, isHtmlValue = f
 	const namesInfoDetailed = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title', 'twitter:image:alt'];
 	let info = '';
 
-	//get the additional information on specific information.
+	// get the additional information on specific information.
 	if (namesInfoDetailed.includes(name)) {
 		info = GetTextWordInformation(value, true);
 	}
 
-	//return a new information row with or without the row marker.
+	// return a new information row with or without the row marker.
 	if (markerName && markerValue) {
 		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${(isHtmlValue) ? value : EscapeHTML(ReplaceCharactersHTML(value))}</td></tr>`;
 	} else {
@@ -637,15 +637,15 @@ function GetInformationRow(name, value, markerName, markerValue, isHtmlValue = f
 jQuery(function() {
 	$.fx.off = true;
 
-	//translate all placeholder of the extension.
+	// translate all placeholder of the extension.
 	TranslateHTML();
 
-	//only register the events if the extension can be used.
+	// only register the events if the extension can be used.
 	if ($('body').hasClass('not-supported') === false) {
 		$('button#view-summary-tab').on('click', ViewSummary);
 		$('button#view-meta-details-tab').on('click', ViewMetaDetails);
 		$('button#view-headings-tab').on('click', ViewHeadings);
-    $('button#view-images-tab').on('click', ViewImages);
+		$('button#view-images-tab').on('click', ViewImages);
 		$('button#view-hyperlinks-tab').on('click', ViewHyperlinks);
 		$('button#view-files-tab').on('click', ViewFiles);
 		$('button#view-headers-tab').on('click', ViewHeader);
@@ -658,8 +658,8 @@ jQuery(function() {
  */
 function ViewMetaDetails() {
 
-	//get the current / active tab of the current window and send a message
-	//to the content script to get the information from website.
+	// get the current / active tab of the current window and send a message
+	// to the content script to get the information from website.
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
@@ -668,14 +668,14 @@ function ViewMetaDetails() {
 		);
 	});
 
-	//the callback function executed by the content script to show meta information.
+	// the callback function executed by the content script to show meta information.
 	const LoadMetaDetails = info => {
 		$('html, body').animate({scrollTop: '0px'}, 0);
 
-		//get the HTML container of the meta tab.
+		// get the HTML container of the meta tab.
 		const tabMetaDetails = $('div#view-meta-details');
 
-		//get the table to show the meta information.
+		// get the table to show the meta information.
 		const tableOthers = $('table#meta-details-others', tabMetaDetails);
 		const tableOpenGraphBasic = $('table#meta-details-opengraph-basic', tabMetaDetails);
 		const tableOpenGraphArticle = $('table#meta-details-opengraph-article', tabMetaDetails);
@@ -690,10 +690,10 @@ function ViewMetaDetails() {
 		const tableShareaholicContent = $('table#meta-details-shareaholic-content', tabMetaDetails);
 		const tableShareaholicFeature = $('table#meta-details-shareaholic-feature', tabMetaDetails);
 
-		//remove all rows of all meta tables.
+		// remove all rows of all meta tables.
 		$('table[id^=meta-details-]').children('tbody').empty();
 
-		//get all the meta information from the content script.
+		// get all the meta information from the content script.
 		const itemsOpenGraphBasic = (info.opengraph.basic || []);
 		const itemsOpenGraphArticle = (info.opengraph.article || []);
 		const itemsOpenGraphAudio = (info.opengraph.audio || []);
@@ -708,110 +708,110 @@ function ViewMetaDetails() {
 		const itemsShareaholicContent = (info.shareaholic.content || []);
 		const itemsShareaholicFeature = (info.shareaholic.feature || []);
 
-		//set Open Graph basic information to the table.
+		// set Open Graph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
-			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim(), 'id', 'og-basic-' + index));
+			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim(), 'id', `og-basic-${index}`));
 		});
 
-		//set Open Graph article information to the table.
+		// set Open Graph article information to the table.
 		itemsOpenGraphArticle.forEach(function(item) {
 			tableOpenGraphArticle.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
-		//set Open Graph audio information to the table.
+		// set Open Graph audio information to the table.
 		itemsOpenGraphAudio.forEach(function(item) {
 			tableOpenGraphAudio.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
-		//set Open Graph book information to the table.
+		// set Open Graph book information to the table.
 		itemsOpenGraphBook.forEach(function(item) {
 			tableOpenGraphBook.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
-		//set Open Graph image information to the table.
+		// set Open Graph image information to the table.
 		itemsOpenGraphImage.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, value, 'id', 'og-image-' + index));
+			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, value, 'id', `og-image-${index}`));
 
-			//on image information, a image preview is possible.
+			// on image information, a image preview is possible.
 			if (['og:image', 'og:image:url', 'og:image:secure_url'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableOpenGraphImage.find('tbody tr#og-image-' + index + ' td'), new URL(value, tabUrlOrigin));
+				ShowImagePreview(tableOpenGraphImage.find(`tbody tr#og-image-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
-		//set Open Graph profile information to the table.
+		// set Open Graph profile information to the table.
 		itemsOpenGraphProfile.forEach(function(item) {
 			tableOpenGraphProfile.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
-		//set Open Graph video information to the table.
+		// set Open Graph video information to the table.
 		itemsOpenGraphVideo.forEach(function(item) {
 			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
-		//set Parsely information to the table.
+		// set Parsely information to the table.
 		itemsParsely.forEach(function(item) {
 			tableParsely.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
-		//set Dublin Core information to the table.
+		// set Dublin Core information to the table.
 		itemsDublinCore.forEach(function(item) {
 			tableDublinCore.children('tbody').append(GetInformationRow(item.name, ((item.value || '').toString().trim())));
 		});
 
-		//set Twitter information to the table.
+		// set Twitter information to the table.
 		itemsTwitter.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
 
-			//some information can be displayed with additional information.
-			tableTwitter.children('tbody').append(GetInformationRow(item.name, value, 'id', 'twitter-' + index));
+			// some information can be displayed with additional information.
+			tableTwitter.children('tbody').append(GetInformationRow(item.name, value, 'id', `twitter-${index}`));
 
-			//on image information, a image preview is possible.
+			// on image information, a image preview is possible.
 			if (['twitter:image:src', 'twitter:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableTwitter.find('tbody tr#twitter-' + index + ' td'), new URL(value, tabUrlOrigin));
+				ShowImagePreview(tableTwitter.find(`tbody tr#twitter-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
-		//set Shareaholic content information to the table.
+		// set Shareaholic content information to the table.
 		itemsShareaholicContent.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableShareaholicContent.children('tbody').append(GetInformationRow(item.name, value, 'id', 'shareaholic-' + index));
+			tableShareaholicContent.children('tbody').append(GetInformationRow(item.name, value, 'id', `shareaholic-${index}`));
 
-			//on image information, a image preview is possible.
+			// on image information, a image preview is possible.
 			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableShareaholicContent.find('tbody tr#shareaholic-' + index + ' td'), new URL(value, tabUrlOrigin));
+				ShowImagePreview(tableShareaholicContent.find(`tbody tr#shareaholic-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
-		//set Shareaholic content information to the table.
+		// set Shareaholic content information to the table.
 		itemsShareaholicFeature.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableShareaholicFeature.children('tbody').append(GetInformationRow(item.name, value, 'id', 'shareaholic-' + index));
+			tableShareaholicFeature.children('tbody').append(GetInformationRow(item.name, value, 'id', `shareaholic-${index}`));
 
-			//on image information, a image preview is possible.
+			// on image information, a image preview is possible.
 			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableShareaholicFeature.find('tbody tr#shareaholic-' + index + ' td'), new URL(value, tabUrlOrigin));
+				ShowImagePreview(tableShareaholicFeature.find(`tbody tr#shareaholic-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
-		//set other meta tags (not found above) to the table.
+		// set other meta tags (not found above) to the table.
 		itemsOthers.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
 
-			//depending on the value of the meta property format the value.
+			// depending on the value of the meta property format the value.
 			if (IsColor(value)) {
 				tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value), undefined, undefined, true));
 			} else {
-				tableOthers.children('tbody').append(GetInformationRow(item.name, value, 'id', 'others-' + index));
+				tableOthers.children('tbody').append(GetInformationRow(item.name, value, 'id', `others-${index}`));
 			}
 
-			//on image information, a image preview is possible.
+			// on image information, a image preview is possible.
 			if (['msapplication-tileimage', 'msapplication-square70x70logo', 'msapplication-square150x150logo', 'msapplication-square310x310logo', 'forem:logo', 'aiturec:image', 'vk:image', 'shareaholic:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableOthers.find('tbody tr#others-' + index + ' td'), new URL(value, tabUrlOrigin));
+				ShowImagePreview(tableOthers.find(`tbody tr#others-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
-		//now all lists are created so it is possible to count the items of each list.
+		// now all lists are created so it is possible to count the items of each list.
 		SetTableCountOnCardHeader($('#meta-details-opengraph-basic-heading'), tableOpenGraphBasic);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-article-heading'), tableOpenGraphArticle);
 		SetTableCountOnCardHeader($('#meta-details-opengraph-audio-heading'), tableOpenGraphAudio);
@@ -826,9 +826,9 @@ function ViewMetaDetails() {
 		SetTableCountOnCardHeader($('#meta-details-shareaholic-feature-heading'), tableShareaholicFeature);
 		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
 
-		//display a hint if there are no meta elements (no accordions).
+		// display a hint if there are no meta elements (no accordions).
 		SetEmptyHintOnTabAccordion($('div#view-meta-details'), chrome.i18n.getMessage('no_meta_items'));
-	}
+	};
 }
 
 /**
@@ -836,8 +836,8 @@ function ViewMetaDetails() {
  */
 function ViewSummary() {
 
-	//get the current / active tab of the current window and send a message
-	//to the content script to get the information from website.
+	// get the current / active tab of the current window and send a message
+	// to the content script to get the information from website.
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
@@ -846,34 +846,34 @@ function ViewSummary() {
 		);
 	});
 
-	//the callback function executed by the content script to show summary information.
+	// the callback function executed by the content script to show summary information.
 	const LoadSummary = info => {
 		$('html, body').animate({scrollTop: '0px'}, 0);
 
-		//get the HTML container of the summary tab.
+		// get the HTML container of the summary tab.
 		const tabSummary = $('div#view-summary');
 
-		//get the table to show the summary information.
+		// get the table to show the summary information.
 		const tableSummary = $('table#meta-head-info', tabSummary);
 
-		//remove all rows of the summary table.
+		// remove all rows of the summary table.
 		tableSummary.children('tbody').empty();
 
-		//get the meta information from the content script.
+		// get the meta information from the content script.
 		const metas = (info.meta || []);
 		const analytics = info.ga;
 		const tagmanager = info.gtm;
 
-		//get a specific order of the meta information.
-		//the important information have to be visible on top of the list.
+		// get a specific order of the meta information.
+		// the important information have to be visible on top of the list.
 		const metaOrder = ['title', 'description', 'robots'];
 		const metasDisplay = (metas.filter(meta => metaOrder.indexOf(meta.name) > -1).sort((a, b) => metaOrder.indexOf(a.name) - metaOrder.indexOf(b.name)) || []).concat((metas.filter(meta => metaOrder.indexOf(meta.name) === -1) || []));
 
-		//iterate through all meta items to set on table with specific formatting and information if needed.
+		// iterate through all meta items to set on table with specific formatting and information if needed.
 		metasDisplay.map(meta => meta.name).filter((v, i, a) => a.indexOf(v) === i).forEach(function(name) {
 			const items = metasDisplay.filter(meta => meta.name === name);
 
-			//check how many items are available. on multiple values display the values as list.
+			// check how many items are available. on multiple values display the values as list.
 			if (items.length === 1) {
 				if (name === 'canonical') {
 					tableSummary.children('tbody').append(GetInformationRow(name + (items[0].value === tabUrl ? '<span class="info d-block">self-referential</span>' : ''), items[0].value));
@@ -886,40 +886,40 @@ function ViewSummary() {
 				}
 			} else if (items.length > 1) {
 				if (name === 'theme-color') {
-					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td>' + items.map(metaItem => GetFormattedColorValue(metaItem.value)).join('') + '</td></tr>');
+					tableSummary.children('tbody').append(`<tr><td>${name}</td><td>${items.map(metaItem => GetFormattedColorValue(metaItem.value)).join('')}</td></tr>`);
 				} else {
-					tableSummary.children('tbody').append('<tr><td>' + name + '</td><td><ul><li>' + items.map(metaItem => EscapeHTML(metaItem.value)).join('</li><li>') + '</li></ul></td></tr>');
+					tableSummary.children('tbody').append(`<tr><td>${name}</td><td><ul><li>${items.map(metaItem => EscapeHTML(metaItem.value)).join('</li><li>')}</li></ul></td></tr>`);
 				}
 			}
 		});
 
-		//function to group by a specific property.
-		//this function will be used to group the identifiers of Google Analytics and Google Tag Manager.
+		// function to group by a specific property.
+		// this function will be used to group the identifiers of Google Analytics and Google Tag Manager.
 		const GroupBy = key => array =>
-  		array.reduce((objectsByKeyValue, obj) => {
-    		objectsByKeyValue[obj[key]] = (objectsByKeyValue[obj[key]] || []).concat(obj.source).filter((v, i, a) => a.indexOf(v) === i);
-    		return objectsByKeyValue;
-  		}, {});
+			array.reduce((objectsByKeyValue, obj) => {
+				objectsByKeyValue[obj[key]] = (objectsByKeyValue[obj[key]] || []).concat(obj.source).filter((v, i, a) => a.indexOf(v) === i);
+				return objectsByKeyValue;
+			}, {});
 
-		//display the Google Analytics Tracking information of the website.
+		// display the Google Analytics Tracking information of the website.
 		if (analytics.identifiers.length > 0 || analytics.files.length > 0) {
 			let info = [];
 			let groups = GroupBy('id')(analytics.identifiers);
-			info = info.concat(Object.keys(groups).map(identifier => identifier + ' ' + '(<i>' + groups[identifier].join(' / ') + '</i>)'));
+			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
 			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
-			tableSummary.children('tbody').append('<tr><td>Google Analytics</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
+			tableSummary.children('tbody').append(`<tr><td>Google Analytics</td><td>${GetFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
 		}
 
-		//display the Google Tag Manager information of the website.
+		// display the Google Tag Manager information of the website.
 		if (tagmanager.identifiers.length > 0 || tagmanager.files.length > 0) {
 			let info = [];
-			let groups =  GroupBy('id')(tagmanager.identifiers);
-			info = info.concat(Object.keys(groups).map(identifier => identifier + ' ' + '(<i>' + groups[identifier].join(' / ') + '</i>)'));
+			let groups = GroupBy('id')(tagmanager.identifiers);
+			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
 			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
-			tableSummary.children('tbody').append('<tr><td>Google Tag Manager</td><td>' + GetFormattedArrayValue(info.filter(item => item !== null)) + '</td></tr>');
+			tableSummary.children('tbody').append(`<tr><td>Google Tag Manager</td><td>${GetFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
 		}
 
-		//if there are no items display a hint.
+		// if there are no items display a hint.
 		SetEmptyHint(tableSummary, chrome.i18n.getMessage('no_summary_items'));
 	};
 }
@@ -929,8 +929,8 @@ function ViewSummary() {
  */
 function ViewFiles() {
 
-	//get the current / active tab of the current window and send a message
-	//to the content script to get the information from website.
+	// get the current / active tab of the current window and send a message
+	// to the content script to get the information from website.
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
@@ -939,106 +939,106 @@ function ViewFiles() {
 		);
 	});
 
-	//the callback function executed by the content script to show files information.
+	// the callback function executed by the content script to show files information.
 	const LoadFiles = info => {
 		$('html, body').animate({scrollTop: '0px'}, 0);
 
-		//get the HTML container of the files tab.
+		// get the HTML container of the files tab.
 		const tabFiles = $('div#view-files');
 
-		//get the tables to show the files information.
+		// get the tables to show the files information.
 		const tableFilesStylesheet = $('table#files-stylesheet', tabFiles);
 		const tableFilesJavaScript = $('table#files-javascript', tabFiles);
 		const tableFilesSpecial = $('table#files-special', tabFiles);
 		const tableStylesheetDomains = $('table#list-files-stylesheet-domains', tabFiles);
 		const tableJavaScriptDomains = $('table#list-files-javascript-domains', tabFiles);
 
-		//get the files from the content script.
+		// get the files from the content script.
 		const filesStylesheet = (info.stylesheet || []);
 		const filesJavaScript = (info.javascript || []);
 		const domainsStylesheet = GetDomains(filesStylesheet.map(file => file.url.href));
 		const domainsJavaScript = GetDomains(filesJavaScript.map(file => file.url.href));
 
-		//remove all rows of the files tables.
+		// remove all rows of the files tables.
 		tableFilesStylesheet.children('tbody').empty();
 		tableFilesJavaScript.children('tbody').empty();
 		tableFilesSpecial.children('tbody').empty();
 		tableStylesheetDomains.children('tbody').empty();
 		tableJavaScriptDomains.children('tbody').empty();
 
-		//set all stylesheets to the table.
+		// set all stylesheets to the table.
 		filesStylesheet.forEach(function(file, index) {
 			tableFilesStylesheet.children('tbody').append(`<tr id="stylesheet-${index}"><td><a href="${file.url.href}" target="_blank">${file.original}</a></td></tr>`);
 
-			//check whether the media property exists and add the additional information.
+			// check whether the media property exists and add the additional information.
 			if (file.media.trim() !== '') {
-				tableFilesStylesheet.find('tbody > tr#stylesheet-' + index + ' td').append(GetInformation('media', file.media.trim()));
+				tableFilesStylesheet.find(`tbody > tr#stylesheet-${index} td`).append(GetInformation('media', file.media.trim()));
 			}
 		});
 
-		//get all Google Analytics and Google Tag Manager files.
+		// get all Google Analytics and Google Tag Manager files.
 		const filesGoogleAnalytics = (info.googleanalytics || []);
 		const filesGoogleTagManager = (info.googletagmanager || []);
 
-		//set all JavaScript files to the table.
+		// set all JavaScript files to the table.
 		filesJavaScript.forEach(function(file, index) {
 			tableFilesJavaScript.children('tbody').append(`<tr id="javascript-${index}"><td><a href="${file.url.href}" target="_blank">${file.original}</a></td></tr>`);
 
-			//check whether the async property exists and add the additional information.
+			// check whether the async property exists and add the additional information.
 			if (file.async === true) {
-				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('async'));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('async'));
 			}
 
-			//check whether the charset property exists and add the additional information.
+			// check whether the charset property exists and add the additional information.
 			if (file.charset) {
-				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('charset', file.charset.trim()));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('charset', file.charset.trim()));
 			}
 
-			//check whether the file is a Google Analytics file and add a additional information.
+			// check whether the file is a Google Analytics file and add a additional information.
 			if (filesGoogleAnalytics.findIndex(fileGA => fileGA.original === file.original) > -1) {
-				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('Google Analytics', ''));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('Google Analytics', ''));
 			}
 
-			//check whether the file is a Google Tag Manager file and add a additional information.
+			// check whether the file is a Google Tag Manager file and add a additional information.
 			if (filesGoogleTagManager.findIndex(fileGTM => fileGTM.original === file.original) > -1) {
-				tableFilesJavaScript.find('tbody tr#javascript-' + index + ' td').append(GetInformation('Google Tag Manager', ''));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('Google Tag Manager', ''));
 			}
 		});
 
-		//set all the stylesheet domains to the table.
+		// set all the stylesheet domains to the table.
 		domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
 			tableStylesheetDomains.children('tbody').append(GetInformationRow(domain, domainsStylesheet.filter(domainItem => domainItem === domain).length));
 		});
 
-		//set all the JavaScript domains to the table.
+		// set all the JavaScript domains to the table.
 		domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
 			tableJavaScriptDomains.children('tbody').append(GetInformationRow(domain, domainsJavaScript.filter(domainItem => domainItem === domain).length));
 		});
 
-		//create an array with all special files.
+		// create an array with all special files.
 		let filesSpecial = [];
-		filesSpecial.push((new URL(tabUrl)).origin + '/sitemap.xml');
-		filesSpecial.push((new URL(tabUrl)).origin + '/robots.txt');
+		filesSpecial.push(`${(new URL(tabUrl)).origin}/sitemap.xml`);
+		filesSpecial.push(`${(new URL(tabUrl)).origin}/robots.txt`);
 
-		//check for the special files and add to the table if available.
+		// check for the special files and add to the table if available.
 		filesSpecial.forEach(function(file, index) {
 			fetch(file).then(function(response) {
 				if (response.status == 200) {
 					tableFilesSpecial.children('tbody').append(`<tr id="special-${index}"><td><a href="${file}" target="_blank">${file}</a></td></tr>`);
 					SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
 
-					//display a hint if there are no meta elements (no accordions).
+					// display a hint if there are no meta elements (no accordions).
 					SetEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
 				}
 			});
 		});
 
-		//set the count of rows / items to the card header.
+		// set the count of rows / items to the card header.
 		SetTableCountOnCardHeader($('#stylesheet-heading'), tableFilesStylesheet);
 		SetTableCountOnCardHeader($('#javascript-heading'), tableFilesJavaScript);
 		SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
 
-		//display a hint if there are no meta elements (no accordions).
+		// display a hint if there are no meta elements (no accordions).
 		SetEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
 	};
 }
@@ -1049,22 +1049,22 @@ function ViewFiles() {
 function ViewHeader() {
 	$('html, body').animate({scrollTop: '0px'}, 0);
 
-	//get the tab and table of the headers list.
+	// get the tab and table of the headers list.
 	const tabHeaders = $('div#view-headers');
 	const tableHeaders = $('table#info-headers', tabHeaders);
 
-	//remove all available header information.
+	// remove all available header information.
 	tableHeaders.children('tbody').empty();
 
-	//fetch the header information of the current url.
+	// fetch the header information of the current url.
 	fetch(tabUrl).then(function(response) {
 
-		//set every information of the header to the table.
+		// set every information of the header to the table.
 		for (let header of response.headers.entries()) {
 			tableHeaders.children('tbody').append(GetInformationRow(header[0], header[1]));
 		}
 
-		//set the status of the response to the table.
+		// set the status of the response to the table.
 		tableHeaders.children('tbody').append(GetInformationRow('HTTP Status', response.status));
 		tableHeaders.children('tbody').append(GetInformationRow('HTTP Version', response.statusText.trim() === '' ? 'HTTP/2' : 'HTTP/1'));
 	});
@@ -1076,56 +1076,56 @@ function ViewHeader() {
 function ViewTools() {
 	$('html, body').animate({scrollTop: '0px'}, 0);
 
-	//get the tab and table of the tools list.
+	// get the tab and table of the tools list.
 	const tabTools = $('div#view-tools');
-  const tableTools = $('table#info-tools', tabTools);
+	const tableTools = $('table#info-tools', tabTools);
 
-	//remove all available tools.
+	// remove all available tools.
 	tableTools.children('tbody').empty();
 
-	//get the encoded url to set on a url as parameter.
+	// get the encoded url to set on a url as parameter.
 	const encodedUrl = encodeURIComponent(tabUrl);
 
-	//add the tool "Page Speed Insights" to the table.
+	// add the tool "Page Speed Insights" to the table.
 	tableTools.children('tbody').append(GetToolsItem(
 		chrome.i18n.getMessage('tools_pagespeed_insights_title'),
 		chrome.i18n.getMessage('tools_pagespeed_insights_description'),
-		'https://developers.google.com/speed/pagespeed/insights/?url=' + encodedUrl
+		`https://developers.google.com/speed/pagespeed/insights/?url=${encodedUrl}`
 	));
 
-	//add the tool "W3C CSS Validation" to the table.
+	// add the tool "W3C CSS Validation" to the table.
 	tableTools.children('tbody').append(GetToolsItem(
 		chrome.i18n.getMessage('tools_w3c_css_validation_title'),
 		chrome.i18n.getMessage('tools_w3c_css_validation_description'),
-		'https://jigsaw.w3.org/css-validator/validator?uri=' + encodedUrl
+		`https://jigsaw.w3.org/css-validator/validator?uri=${encodedUrl}`
 	));
 
-	//add the tool "Nu HTML checker" to the table.
+	// add the tool "Nu HTML checker" to the table.
 	tableTools.children('tbody').append(GetToolsItem(
 		chrome.i18n.getMessage('tools_nu_html_checker_title'),
 		chrome.i18n.getMessage('tools_nu_html_checker_description'),
-		'https://validator.w3.org/nu/?doc=' + encodedUrl
+		`https://validator.w3.org/nu/?doc=${encodedUrl}`
 	));
 
-	//add the tool "GTmetrix" to the table.
+	// add the tool "GTmetrix" to the table.
 	tableTools.children('tbody').append(GetToolsItem(
 		chrome.i18n.getMessage('tools_gtmetrix_title'),
 		chrome.i18n.getMessage('tools_gtmetrix_description'),
-		'https://gtmetrix.com/?url=' + encodedUrl
+		`https://gtmetrix.com/?url=${encodedUrl}`
 	));
 
-	//add the tool "Google Search Console Rich Result Test" to the table.
+	// add the tool "Google Search Console Rich Result Test" to the table.
 	tableTools.children('tbody').append(GetToolsItem(
 		chrome.i18n.getMessage('tools_gsc_rich_results_title'),
 		chrome.i18n.getMessage('tools_gsc_rich_results_description'),
-		'https://search.google.com/test/rich-results?url=' + encodedUrl
+		`https://search.google.com/test/rich-results?url=${encodedUrl}`
 	));
 
-	//add the tool "Google Search Console Mobile Friendly Test" to the table.
+	// add the tool "Google Search Console Mobile Friendly Test" to the table.
 	tableTools.children('tbody').append(GetToolsItem(
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_title'),
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'),
-		'https://search.google.com/test/mobile-friendly?url=' + encodedUrl
+		`https://search.google.com/test/mobile-friendly?url=${encodedUrl}`
 	));
 }
 
@@ -1134,8 +1134,8 @@ function ViewTools() {
  */
 function ViewHeadings() {
 
-	//get the current / active tab of the current window and send a message
-	//to the content script to get the information of the website.
+	// get the current / active tab of the current window and send a message
+	// to the content script to get the information of the website.
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
@@ -1144,46 +1144,46 @@ function ViewHeadings() {
 		);
 	});
 
-	//the callback function executed by the content script to show heading information.
+	// the callback function executed by the content script to show heading information.
 	const LoadHeadings = info => {
 		$('html, body').animate({scrollTop: '0px'}, 0);
 
-		//get the HTML container of the headings tab.
+		// get the HTML container of the headings tab.
 		const tabHeadings = $('div#view-headings');
 
-		//get the tables to show the headings information.
+		// get the tables to show the headings information.
 		const tableHeadings = $('table#list-headings', tabHeadings);
 		const tableHeadingsStatistics = $('table#heading-stats', tabHeadings);
 		const tableHeadingsErrors = $('table#list-headings-errors', tabHeadings);
 
-		//get the headings from the content script.
+		// get the headings from the content script.
 		const headings = (info.headings || []);
 
-		//remove all rows of the headings table.
+		// remove all rows of the headings table.
 		tableHeadings.children('tbody').empty();
 		tableHeadingsErrors.children('tbody').empty();
 
-		//reset the filter on the heading tab.
+		// reset the filter on the heading tab.
 		ResetHeadingFilter();
 
-		//iterate through the different levels of the headings and set the stats.
+		// iterate through the different levels of the headings and set the stats.
 		for (level = 1; level <= 6; level++) {
-			tableHeadingsStatistics.find('td[id="headings-h' + level + '"]').text(headings.filter(heading => heading.type === 'h' + level).length);
-			$('td[id="headings-h' + level + '"]').on('click', {'level': level}, CallbackHeadingFilter);
+			tableHeadingsStatistics.find(`td[id="headings-h${level}"]`).text(headings.filter(heading => heading.type === `h${level}`).length);
+			$(`td[id="headings-h${level}"]`).on('click', {'level': level}, CallbackHeadingFilter);
 		}
 
-		//set the total count of headings to the table.
+		// set the total count of headings to the table.
 		tableHeadingsStatistics.find('td[id="headings-all"]').text(headings.length);
 
-		//add all found headings to the table.
+		// add all found headings to the table.
 		headings.forEach(function(heading) {
 			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${EscapeHTML(heading.text)}${GetTextWordInformation(heading.text, true)}</td></tr>`);
 		});
 
-		//set a hint if there are no headings on the website.
+		// set a hint if there are no headings on the website.
 		SetEmptyHint(tableHeadings, chrome.i18n.getMessage('no_heading_items'));
 
-		//set the count of found errors and warnings.
+		// set the count of found errors and warnings.
 		SetTableCountOnCardHeader($('#headings-errors-heading'), tableHeadingsErrors);
 	};
 }
@@ -1193,8 +1193,8 @@ function ViewHeadings() {
  */
 function ViewImages() {
 
-	//get the current / active tab of the current window and send a message
-	//to the content script to get the information of the website.
+	// get the current / active tab of the current window and send a message
+	// to the content script to get the information of the website.
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
@@ -1203,85 +1203,85 @@ function ViewImages() {
 		);
 	});
 
-	//the callback function executed by the content script to show image information.
+	// the callback function executed by the content script to show image information.
 	const LoadImages = info => {
 		$('html, body').animate({scrollTop: '0px'}, 0);
 
-		//get the HTML container of the images tab.
+		// get the HTML container of the images tab.
 		const tabImages = $('div#view-images');
 
-		//get the tables to show the images information.
+		// get the tables to show the images information.
 		const tableImages = $('table#list-images', tabImages);
 		const tableImagesStatistics = $('table#image-stats', tabImages);
 		const tableImagesDomains = $('table#list-image-domains', tabImages);
 		const tableImagesIcons = $('table#list-image-icons', tabImages);
 
-		//get the images and icons from the content script.
+		// get the images and icons from the content script.
 		const images = (info.images || []);
 		const icons = (info.icons || []);
 		const domains = GetDomains(images.map(image => image.source));
 
-		//remove all rows of the images, icons and domains table.
+		// remove all rows of the images, icons and domains table.
 		tableImages.children('tbody').empty();
 		tableImagesIcons.children('tbody').empty();
 		tableImagesDomains.children('tbody').empty();
 
-		//set all the images to the table.
+		// set all the images to the table.
 		images.filter(image => (image.source || '').toString().trim() !== '').forEach(function(image, index) {
 			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${image.src}</a></td></tr>`);
 			ShowImagePreview($(`tbody tr#img-${index} td`, tableImages), image.source);
 
-			//set the attribute information to the row.
+			// set the attribute information to the row.
 			for (let attribute of ['alt', 'title']) {
 				if ((image[attribute] || '').toString().trim() !== '') {
 					tableImages.find(`tbody tr#img-${index} td`).append(GetInformation(attribute, (image[attribute] || '').toString().trim()));
 				}
 			}
 
-			//set the image information of the image itself.
+			// set the image information of the image itself.
 			SetImageInfo(tableImages.find(`tbody tr#img-${index} td`), image.source);
 		});
 
-		//set all the domains to the table.
+		// set all the domains to the table.
 		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
 			tableImagesDomains.children('tbody').append(GetInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
 		});
 
-		//set all the icons to the table.
+		// set all the icons to the table.
 		icons.filter(icon => (icon.href || '').toString().trim() !== '').forEach(function(icon, index) {
 			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${icon.href}</a></td></tr>`);
 			ShowImagePreview($(`tr#icon-${index} td`, tableImagesIcons), icon.source);
 
-			//set the attribute information to the row.
+			// set the attribute information to the row.
 			for (let attribute of ['type', 'sizes']) {
 				if ((icon[attribute] || '').toString().trim() !== '') {
 					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(GetInformation(attribute, (icon[attribute] || '').toString().trim()));
 				}
 			}
 
-			//set the image information of the icon itself.
-			SetImageInfo(tableImagesIcons.find(`tbody tr#icon-${index} td`), icon.source)
+			// set the image information of the icon itself.
+			SetImageInfo(tableImagesIcons.find(`tbody tr#icon-${index} td`), icon.source);
 		});
 
-		//set hints on empty tables.
+		// set hints on empty tables.
 		SetEmptyHint(tableImages, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('images_lc')));
 		SetEmptyHint(tableImagesDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('images_lc')));
 		SetEmptyHint(tableImagesIcons, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('icons_lc')));
 
-		//set the image statistics to the table.
+		// set the image statistics to the table.
 		tableImagesStatistics.find('td[id="image-stats-all"]').text(images.length);
 
-		//get the count of the attributes to check.
+		// get the count of the attributes to check.
 		const cntWithoutAlt = images.filter(image => image.alt === '').length;
 		const cntWithoutSrc = images.filter(image => image.src === '').length;
 		const cntWithoutTitle = images.filter(image => image.title === '').length;
 
-		//get the fields of the attributes to check.
+		// get the fields of the attributes to check.
 		const fieldWithoutAlt = tableImagesStatistics.find('td[id="image-stats-without-alt"]');
 		const fieldWithoutSrc = tableImagesStatistics.find('td[id="image-stats-without-src"]');
 		const fieldWithoutTitle = tableImagesStatistics.find('td[id="image-stats-without-title"]');
 
-		//set the count of the attributes to the fields and format the value based on the count.
+		// set the count of the attributes to the fields and format the value based on the count.
 		fieldWithoutAlt.text(cntWithoutAlt).removeClass('text-danger fw-bold').addClass(cntWithoutAlt > 0 ? 'text-danger fw-bold' : '');
 		fieldWithoutSrc.text(cntWithoutSrc).removeClass('text-danger fw-bold').addClass(cntWithoutSrc > 0 ? 'text-danger fw-bold' : '');
 		fieldWithoutTitle.text(cntWithoutTitle).removeClass('text-danger fw-bold').addClass(cntWithoutTitle > 0 ? 'text-danger fw-bold' : '');
@@ -1293,8 +1293,8 @@ function ViewImages() {
  */
 function ViewHyperlinks() {
 
-	//get the current / active tab of the current window and send a message
-	//to the content script to get the information of the website.
+	// get the current / active tab of the current window and send a message
+	// to the content script to get the information of the website.
 	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
@@ -1303,14 +1303,14 @@ function ViewHyperlinks() {
 		);
 	});
 
-	//the callback function executed by the content script to show hyperlink information.
+	// the callback function executed by the content script to show hyperlink information.
 	const LoadHyperlinks = info => {
 		$('html, body').animate({scrollTop: '0px'}, 0);
 
-		//get the HTML container of the hyperlinks tab.
+		// get the HTML container of the hyperlinks tab.
 		const tabHyperlinks = $('div#view-hyperlinks');
 
-		//get the table objects to organize the content.
+		// get the table objects to organize the content.
 		const tableHyperlinks = $('table#list-hyperlink', tabHyperlinks);
 		const tableAlternate = $('table#list-alternate', tabHyperlinks);
 		const tableHyperlinksStatistics = $('table#hyperlink-stats', tabHyperlinks);
@@ -1321,7 +1321,7 @@ function ViewHyperlinks() {
 		const tableDnsPrefetch = $('table#list-dns-prefetch', tabHyperlinks);
 		const tablePreconnect = $('table#list-preconnect', tabHyperlinks);
 
-		//remove all rows of the tables.
+		// remove all rows of the tables.
 		tableHyperlinks.children('tbody').empty();
 		tableAlternate.children('tbody').empty();
 		tableDomains.children('tbody').empty();
@@ -1329,7 +1329,7 @@ function ViewHyperlinks() {
 		tableDnsPrefetch.children('tbody').empty();
 		tablePreconnect.children('tbody').empty();
 
-		//get the information from the content script.
+		// get the information from the content script.
 		const hyperlinks = (info.links || []);
 		const alternates = (info.alternate || []);
 		const preloads = (info.preload || []);
@@ -1337,52 +1337,52 @@ function ViewHyperlinks() {
 		const preconnects = (info.preconnect || []);
 		const domains = GetDomains(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href));
 
-		//set all the hyperlinks with href value to the table.
-		//don't show the hyperlinks with empty href attribute.
+		// set all the hyperlinks with href value to the table.
+		// don't show the hyperlinks with empty href attribute.
 		hyperlinks.filter(hyperlink => hyperlink.href !== '').forEach(function(hyperlink, index) {
 			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${(hyperlink.url !== undefined) ? hyperlink.url.href : ''}">${hyperlink.href}</a></td></tr>`);
 
-			//set the attribute information to the row.
+			// set the attribute information to the row.
 			for (let attribute of ['rel', 'target', 'title']) {
 				if ((hyperlink[attribute] || '').toString().trim() !== '') {
-					tableHyperlinks.find('tbody tr#link-' + index + ' td').append(GetInformation(attribute, (hyperlink[attribute] || '').toString().trim()));
+					tableHyperlinks.find(`tbody tr#link-${index} td`).append(GetInformation(attribute, (hyperlink[attribute] || '').toString().trim()));
 				}
 			}
 		});
 
-		//set all the hyperlink domains to the table.
+		// set all the hyperlink domains to the table.
 		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
 			tableDomains.children('tbody').append(GetInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
 		});
 
-		//set all the preloads to the table.
+		// set all the preloads to the table.
 		preloads.forEach(function(preload) {
 			tablePreload.children('tbody').append(`<tr><td>${preload.href}</td></tr>`);
 		});
 
-		//set all the DNS prefetches to the table.
+		// set all the DNS prefetches to the table.
 		prefetches.forEach(function(prefetch) {
 			tableDnsPrefetch.children('tbody').append(`<tr><td>${prefetch.href}</td></tr>`);
 		});
 
-		//set all the preconnects to the table.
+		// set all the preconnects to the table.
 		preconnects.forEach(function(preconnect) {
 			tablePreconnect.children('tbody').append(`<tr><td>${preconnect.href}</td></tr>`);
 		});
 
-		//set all the alternates to the table.
+		// set all the alternates to the table.
 		alternates.forEach(function(alternate, index) {
 			tableAlternate.children('tbody').append(`<tr id="alternate-${index}"><td><a href="${alternate.href}" target="_blank">${alternate.href}</a></td></tr>`);
 
-			//set the attribute information to the row.
+			// set the attribute information to the row.
 			for (let attribute of ['title', 'hreflang']) {
 				if ((alternates[attribute] || '').toString().trim() !== '') {
-					tableAlternate.find('tbody tr#alternate-' + index + ' td').append(GetInformation(attribute, (alternates[attribute] || '').toString().trim()));
+					tableAlternate.find(`tbody tr#alternate-${index} td`).append(GetInformation(attribute, (alternates[attribute] || '').toString().trim()));
 				}
 			}
 		});
 
-		//set hints on empty tables.
+		// set hints on empty tables.
 		SetEmptyHint(tableHyperlinks, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('links_lc')));
 		SetEmptyHint(tableAlternate, chrome.i18n.getMessage('no_alternate_items'));
 		SetEmptyHint(tableDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('links_lc')));
@@ -1390,7 +1390,7 @@ function ViewHyperlinks() {
 		SetEmptyHint(tableDnsPrefetch, chrome.i18n.getMessage('no_dns_prefetch_items'));
 		SetEmptyHint(tablePreload, chrome.i18n.getMessage('no_preload_items'));
 
-		//set the statistics for the hyperlinks.
+		// set the statistics for the hyperlinks.
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all"]').text(hyperlinks.length);
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all-unique"]').text(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === true).length);
@@ -1398,24 +1398,24 @@ function ViewHyperlinks() {
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).length);
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
 
-		//set the statistics for the attributes.
-		//get the count of the attributes to check.
+		// set the statistics for the attributes.
+		// get the count of the attributes to check.
 		const cntWithoutTitle = hyperlinks.filter(link => link.title === '').length;
 		const cntWithoutHref = hyperlinks.filter(link => link.href === '').length;
 		const cntProtocolHttp = hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'http').length;
 
-		//get the fields of the attributes to check.
+		// get the fields of the attributes to check.
 		const fieldHyperlinkTitle = tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-title"]');
 		const fieldHyperlinkHref = tableAttributesStatistics.find('td[id="hyperlink-attribute-stats-without-href"]');
 		const fieldHyperlinkProtocolHttp = tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-http"]');
 
-		//set the count to the fields and format the count based on the value.
+		// set the count to the fields and format the count based on the value.
 		fieldHyperlinkTitle.text(cntWithoutTitle).removeClass('text-danger fw-bold').addClass(cntWithoutTitle > 0 ? 'text-danger fw-bold' : '');
 		fieldHyperlinkHref.text(cntWithoutHref).removeClass('text-danger fw-bold').addClass(cntWithoutHref > 0 ? 'text-danger fw-bold' : '');
 		fieldHyperlinkProtocolHttp.text(cntProtocolHttp).removeClass('text-warning fw-bold').addClass(cntProtocolHttp > 0 ? 'text-warning fw-bold' : '');
 
-		//set the statistics for the protocols of the hyperlinks.
-		//HTTP protocol statistics are covered above because a number will be shown as warning.
+		// set the statistics for the protocols of the hyperlinks.
+		// HTTP protocol statistics are covered above because a number will be shown as warning.
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-https"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'https').length);
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-mailto"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'mailto').length);
 		tableProtocolsStatistics.find('td[id="hyperlink-protocol-stats-javascript"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.protocol === 'javascript').length);

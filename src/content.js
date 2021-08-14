@@ -1,11 +1,11 @@
 var IsInitializedContent;
 
-//don't initialize this content script more than once.
+// don't initialize this content script more than once.
 if (!IsInitializedContent) {
-  IsInitializedContent = true;
+	IsInitializedContent = true;
 
-	//listen to message from the popup script.
-	//every tab of the extension send a message to this script to get the information.
+	// listen to message from the popup script.
+	// every tab of the extension send a message to this script to get the information.
 	chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 		switch (message.info) {
 			case INFO.SUMMARY:
