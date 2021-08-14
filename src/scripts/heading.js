@@ -1,7 +1,5 @@
-//create the namespace of SEO Insights if the namespace doesn't exist.
-if (SEOInsights === undefined) {
-  var SEOInsights = {};
-}
+// create the namespace of SEO Insights if the namespace doesn't exist.
+var SEOInsights = (SEOInsights || {});
 
 /**
  * The Heading class of SEO Insights to get information of headings used on a website.
@@ -16,8 +14,8 @@ SEOInsights.Heading = class Heading {
 	static GetHeadingsOfDocument(context = null) {
 		let headings = [];
 
-		//iterate through all headings of the specified context.
-		//add all the headings of the specified context.
+		// iterate through all headings of the specified context.
+		// add all the headings of the specified context.
 		$('h1, h2, h3, h4, h5, h6', context).each(function() {
 			headings.push({
 				text: ($(this).text() || '').toString().trim(),
@@ -25,7 +23,7 @@ SEOInsights.Heading = class Heading {
 			});
 		});
 
-		//return all the found headings.
+		// return all the found headings.
 		return headings;
 	}
 
@@ -36,15 +34,15 @@ SEOInsights.Heading = class Heading {
 	static GetHeadings() {
 		let headings = SEOInsights.Heading.GetHeadingsOfDocument();
 
-		//iterate through the frames of the page to get the headings of the available frames.
-		//there are also blocked frames so we have to try to get the document of the frame.
+		// iterate through the frames of the page to get the headings of the available frames.
+		// there are also blocked frames so we have to try to get the document of the frame.
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 			try {
 				headings = headings.concat(SEOInsights.Heading.GetHeadingsOfDocument(window.frames[frameIndex].document));
 			} catch(_) {}
 		}
 
-		//return all the found headings of the website.
+		// return all the found headings of the website.
 		return headings;
 	}
-}
+};

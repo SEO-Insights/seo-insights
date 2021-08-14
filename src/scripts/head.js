@@ -1,7 +1,5 @@
-//create the namespace of SEO Insights if the namespace doesn't exist.
-if (SEOInsights === undefined) {
-  var SEOInsights = {};
-}
+// create the namespace of SEO Insights if the namespace doesn't exist.
+var SEOInsights = (SEOInsights || {});
 
 /**
  * The Head class of SEO Insights to get information from the <head> of the website.
@@ -57,14 +55,14 @@ SEOInsights.Head = class Head {
 	static GetPreconnect() {
 		let tags = [];
 
-		//iterate through the preconnect information.
+		// iterate through the preconnect information.
 		$('head > link[rel="preconnect"]').each(function() {
 			tags.push({
 				href: ($(this).attr('href') || '').toString().trim()
 			});
 		});
 
-		//return the found preconnect information.
+		// return the found preconnect information.
 		return tags;
 	}
 
@@ -75,14 +73,14 @@ SEOInsights.Head = class Head {
 	static GetDnsPrefetch() {
 		let tags = [];
 
-		//iterate through the DNS prefetch information of the website.
+		// iterate through the DNS prefetch information of the website.
 		$('head > link[rel="dns-prefetch"]').each(function() {
 			tags.push({
 				href: ($(this).attr('href') || '').toString().trim()
 			});
 		});
 
-		//return the found DNS prefetch information.
+		// return the found DNS prefetch information.
 		return tags;
 	}
 
@@ -93,7 +91,7 @@ SEOInsights.Head = class Head {
 	static GetAlternateLinks() {
 		let tags = [];
 
-		//iterate through the alternate links of the website.
+		// iterate through the alternate links of the website.
 		$('head > link[rel="alternate"]').each(function() {
 			tags.push({
 				title: ($(this).attr('title') || '').toString().trim(),
@@ -102,7 +100,7 @@ SEOInsights.Head = class Head {
 			});
 		});
 
-		//return the found alternate links of the website.
+		// return the found alternate links of the website.
 		return tags;
 	}
 
@@ -113,7 +111,7 @@ SEOInsights.Head = class Head {
 	static GetPreload() {
 		let tags = [];
 
-		//iterate through the preload information of the website.
+		// iterate through the preload information of the website.
 		$('head > link[rel="preload"]').each(function() {
 			tags.push({
 				href: ($(this).attr('href') || '').toString().trim(),
@@ -122,7 +120,7 @@ SEOInsights.Head = class Head {
 			});
 		});
 
-		//return the found preload information.
+		// return the found preload information.
 		return tags;
 	}
 
@@ -133,9 +131,9 @@ SEOInsights.Head = class Head {
 	static GetCommonTags() {
 		let tags = [];
 
-		//iterate through the elements of the website to get the elements with common names.
+		// iterate through the elements of the website to get the elements with common names.
 		$('head > meta[name]').filter(function() {
-			return SEOInsights.Head.GetArrayCommonNames().includes(($(this).attr('name') || '').toString().trim().toLowerCase())
+			return SEOInsights.Head.GetArrayCommonNames().includes(($(this).attr('name') || '').toString().trim().toLowerCase());
 		}).each(function() {
 			tags.push({
 				name: ($(this).attr('name') || '').toString().trim().toLowerCase(),
@@ -143,7 +141,7 @@ SEOInsights.Head = class Head {
 			});
 		});
 
-		//get the language information of the website.
+		// get the language information of the website.
 		$('html[lang]').each(function() {
 			tags.push({
 				name: 'lang',
@@ -151,11 +149,11 @@ SEOInsights.Head = class Head {
 			});
 		});
 
-		//iterate through the common tags of the website.
+		// iterate through the common tags of the website.
 		for (let tagCommon of SEOInsights.Head.GetArrayCommonTags()) {
-			let itemTagCommon = $('head > ' + tagCommon).first();
+			let itemTagCommon = $(`head > ${tagCommon}`).first();
 
-			//add the tag information to the array if available.
+			// add the tag information to the array if available.
 			if (itemTagCommon) {
 				tags.push({
 					name: tagCommon,
@@ -164,10 +162,10 @@ SEOInsights.Head = class Head {
 			}
 		}
 
-		//get the canonical url of the website.
+		// get the canonical url of the website.
 		const canonical = SEOInsights.Head.GetCanonical();
 
-		//add the canonical link to the tag array if available.
+		// add the canonical link to the tag array if available.
 		if (canonical !== '') {
 			tags.push({
 				name: 'canonical',
@@ -175,7 +173,7 @@ SEOInsights.Head = class Head {
 			});
 		}
 
-		//return the found common information.
+		// return the found common information.
 		return tags;
 	}
 
@@ -186,22 +184,22 @@ SEOInsights.Head = class Head {
 	static GetGoogleTagManager() {
 		let identifier = [];
 
-		//set the regular expressions to get the identifiers of the Google Tag Manager.
-		//there are two regular expressions to get the identifiers of the Google Tag Manager with and without quotes.
-		//these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
+		// set the regular expressions to get the identifiers of the Google Tag Manager.
+		// there are two regular expressions to get the identifiers of the Google Tag Manager with and without quotes.
+		// these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
 		const regexQuotedGTM = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
 		const regexUnquotedGTM = /GTM\-[0-9A-Z]{4,}/;
 
-		//get all files of Google Tag Manager to find identifiers.
+		// get all files of Google Tag Manager to find identifiers.
 		const files = SEOInsights.File.GetGoogleTagManagerFiles();
 
-		//iterate through all the files to get the identifiers.
+		// iterate through all the files to get the identifiers.
 		for (const file of files) {
 
-			//get the identifiers of the Google Tag Manager file url.
+			// get the identifiers of the Google Tag Manager file url.
 			const matches = file.original.match(new RegExp(regexUnquotedGTM, 'g'));
 
-			//set the found identifiers of the file url to the array.
+			// set the found identifiers of the file url to the array.
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
@@ -210,15 +208,15 @@ SEOInsights.Head = class Head {
 			}
 		}
 
-		//get the scripts of the website containing a Google Tag Manager identifier.
+		// get the scripts of the website containing a Google Tag Manager identifier.
 		$("script:not([src])").filter(function() {
 			return regexQuotedGTM.test($(this).text());
 		}).each(function() {
 
-			//get the Google Tag Manager identifier of the current script.
+			// get the Google Tag Manager identifier of the current script.
 			const matches = ($(this).text() || '').toString().match(new RegExp(regexQuotedGTM, 'g'));
 
-			//set the found identifiers of the script to the array.
+			// set the found identifiers of the script to the array.
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
@@ -227,7 +225,7 @@ SEOInsights.Head = class Head {
 			}
 		});
 
-		//return the found identifiers of the Google Tag Manager.
+		// return the found identifiers of the Google Tag Manager.
 		return identifier;
 	}
 
@@ -238,9 +236,9 @@ SEOInsights.Head = class Head {
 	static GetGoogleAnalytics() {
 		let identifier = [];
 
-		//set the regular expressions to get the identifiers of Google Analytics.
-		//there are two regular expressions to get the identifiers of Google Analytics with and without quotes.
-		//these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
+		// set the regular expressions to get the identifiers of Google Analytics.
+		// there are two regular expressions to get the identifiers of Google Analytics with and without quotes.
+		// these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
 		const regexUnqoutedUA = /UA(\-\d+){2}/;
 		const regexUnqoutedG = /G\-[A-Z0-9]+/;
 		const regexQuotedGTAG = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
@@ -248,18 +246,18 @@ SEOInsights.Head = class Head {
 		const regexQuotedGA = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
 		const regexQuotedGA4 = /(?<=['"]config['"]\,[ ]*['"])G\-[0-9A-Z]+(?=['"])/;
 
-		//get the files of Google Analytics to find identifiers.
+		// get the files of Google Analytics to find identifiers.
 		const files = SEOInsights.File.GetGoogleAnalyticsFiles();
 
-		//iterate through the Google Analytics files to get the identifiers.
+		// iterate through the Google Analytics files to get the identifiers.
 		for (const file of files) {
 			let matches = [];
 
-			//get the identifiers of Google Analytics file url.
+			// get the identifiers of Google Analytics file url.
 			matches = matches.concat(file.original.match(new RegExp(regexUnqoutedUA, 'g')));
 			matches = matches.concat(file.original.match(new RegExp(regexUnqoutedG, 'g')));
 
-			//set the identifiers to the array.
+			// set the identifiers to the array.
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
@@ -268,20 +266,20 @@ SEOInsights.Head = class Head {
 			}
 		}
 
-		//get the scripts of the website containing Google Analytics identifier.
-		$("script:not([src])").filter(function () {
+		// get the scripts of the website containing Google Analytics identifier.
+		$("script:not([src])").filter(function() {
 			const script = $(this).text();
 			return regexQuotedGTAG.test(script) || regexQuotedAnalytics.test(script) || regexQuotedGA.test(script) || regexQuotedGA4.test(script);
 		}).each(function() {
 			let matches = [];
 
-			//get the identifiers from scripts using the regular expressions.
+			// get the identifiers from scripts using the regular expressions.
 			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGTAG, 'g')));
 			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedAnalytics, 'g')));
 			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA, 'g')));
 			matches = matches.concat(($(this).text() || '').toString().match(new RegExp(regexQuotedGA4, 'g')));
 
-			//set the found identifiers to the array.
+			// set the found identifiers to the array.
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
@@ -290,7 +288,7 @@ SEOInsights.Head = class Head {
 			}
 		});
 
-		//return the found identifiers of Google Analytics.
+		// return the found identifiers of Google Analytics.
 		return identifier;
 	}
 
@@ -301,7 +299,7 @@ SEOInsights.Head = class Head {
 	static GetOthers() {
 		let tags = [];
 
-		//get the meta information from meta elements with name property.
+		// get the meta information from meta elements with name property.
 		$('head > meta[name]').filter(function() {
 			const name = ($(this).attr('name') || '').toString().trim();
 			return !SEOInsights.Meta.IsDublinCoreTag(name) &&
@@ -313,14 +311,14 @@ SEOInsights.Head = class Head {
 		}).each(function() {
 			const name = ($(this).attr('name') || '').toString().trim();
 
-			//set the meta information to the array.
+			// set the meta information to the array.
 			tags.push({
 				name: name,
 				value: ($(this).attr('content') || '').toString().trim()
 			});
 		});
 
-		//get the meta information from meta elements with property property.
+		// get the meta information from meta elements with property property.
 		$('head > meta[property]').filter(function() {
 			const property = ($(this).attr('property') || '').toString().trim();
 			return !SEOInsights.Meta.IsDublinCoreTag(property) &&
@@ -330,14 +328,14 @@ SEOInsights.Head = class Head {
 		}).each(function() {
 			const property = ($(this).attr('property') || '').toString().trim();
 
-			//set the meta information to the array.
+			// set the meta information to the array.
 			tags.push({
 				name: property,
 				value: ($(this).attr('content') || '').toString().trim()
 			});
 		});
 
-		//iterate through the HTTP equivalent information of the website.
+		// iterate through the HTTP equivalent information of the website.
 		$('head > meta[http-equiv]').each(function() {
 			tags.push({
 				name: ($(this).attr('http-equiv') || '').toString().trim(),
@@ -345,7 +343,7 @@ SEOInsights.Head = class Head {
 			});
 		});
 
-		//iterate through the charset information of the website.
+		// iterate through the charset information of the website.
 		$('head > meta[charset]').each(function() {
 			tags.push({
 				name: 'charset',
@@ -353,7 +351,7 @@ SEOInsights.Head = class Head {
 			});
 		});
 
-		//return the found meta information not found with other methods / functions of SEO Insights.
+		// return the found meta information not found with other methods / functions of SEO Insights.
 		return tags;
 	}
-}
+};

@@ -1,7 +1,5 @@
-//create the namespace of SEO Insights if the namespace doesn't exist.
-if (SEOInsights === undefined) {
-  var SEOInsights = {};
-}
+// create the namespace of SEO Insights if the namespace doesn't exist.
+var SEOInsights = (SEOInsights || {});
 
 /**
  * The File class of SEO Insights to get information of files used on a website.
@@ -73,14 +71,14 @@ SEOInsights.File = class File {
 	static GetGoogleAnalyticsFiles() {
 		let files = [];
 
-		//get all Google Analytics files of the website.
+		// get all Google Analytics files of the website.
 		$('script[src]').filter(function() {
 			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
 			return SEOInsights.File.IsGoogleAnalyticsUrl(url);
 		}).each(function() {
 			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
 
-			//add the url of the file to the file array.
+			// add the url of the file to the file array.
 			files.push({
 				original: ($(this).attr('src') || '').toString().trim(),
 				async: $(this).attr('async') ? true : false,
@@ -92,7 +90,7 @@ SEOInsights.File = class File {
 			});
 		});
 
-		//return all the found files.
+		// return all the found files.
 		return files;
 	}
 
@@ -103,14 +101,14 @@ SEOInsights.File = class File {
 	static GetGoogleTagManagerFiles() {
 		let files = [];
 
-		//get all Google Tag Manager files of the website.
+		// get all Google Tag Manager files of the website.
 		$('script[src]').filter(function() {
 			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
 			return SEOInsights.File.IsGoogleTagManagerUrl(url);
 		}).each(function() {
 			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
 
-			//add the url of the file to the file array.
+			// add the url of the file to the file array.
 			files.push({
 				original: ($(this).attr('src') || '').toString().trim(),
 				async: $(this).attr('async') ? true : false,
@@ -122,7 +120,7 @@ SEOInsights.File = class File {
 			});
 		});
 
-		//return all the found files.
+		// return all the found files.
 		return files;
 	}
 
@@ -133,13 +131,13 @@ SEOInsights.File = class File {
 	static GetJavaScriptFiles() {
 		let files = [];
 
-		//get all JavaScript files of the website.
+		// get all JavaScript files of the website.
 		$('script[src]').filter(function() {
 			return (($(this).attr('src') || '').toString().trim() !== '');
 		}).each(function() {
 			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
 
-			//add the url of the file to the file array.
+			// add the url of the file to the file array.
 			files.push({
 				original: ($(this).attr('src') || '').toString().trim(),
 				async: $(this).attr('async') ? true : false,
@@ -151,7 +149,7 @@ SEOInsights.File = class File {
 			});
 		});
 
-		//return all the found files.
+		// return all the found files.
 		return files;
 	}
 
@@ -162,13 +160,13 @@ SEOInsights.File = class File {
 	static GetStylesheetFiles() {
 		let files = [];
 
-		//get all Stylesheet files of the website.
+		// get all Stylesheet files of the website.
 		$('link[rel="stylesheet"]').filter(function() {
 			return (($(this).attr('href') || '').toString().trim() !== '');
 		}).each(function() {
 			const url = new URL(($(this).attr('href') || '').toString().trim(), GetBaseUrl());
 
-			//add the url of the file to the file array.
+			// add the url of the file to the file array.
 			files.push({
 				original: ($(this).attr('href') || '').toString().trim(),
 				media: ($(this).attr('media') || '').toString().trim(),
@@ -179,7 +177,7 @@ SEOInsights.File = class File {
 			});
 		});
 
-		//return all the found files.
+		// return all the found files.
 		return files;
 	}
 };

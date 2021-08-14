@@ -1,7 +1,5 @@
-//create the namespace of SEO Insights if the namespace doesn't exist.
-if (SEOInsights === undefined) {
-  var SEOInsights = {};
-}
+// create the namespace of SEO Insights if the namespace doesn't exist.
+var SEOInsights = (SEOInsights || {});
 
 /**
  * The Image class of SEO Insights to get information of images used on a website.
@@ -15,8 +13,8 @@ SEOInsights.Image = class Image {
 	 */
 	static GetImageSource(src) {
 
-		//if there is no image source or a data source the value can be returned.
-		//there is no possibility to get a url object with advanced information.
+		// if there is no image source or a data source the value can be returned.
+		// there is no possibility to get a url object with advanced information.
 		if (src.trim() === '' || src.startsWith('data:')) {
 			return {
 				filename: '',
@@ -24,19 +22,19 @@ SEOInsights.Image = class Image {
 			};
 		}
 
-		//try to get a url object with advanced information.
+		// try to get a url object with advanced information.
 		try {
 
-			//get the image source as url object to get the advanced information.
-			//if there is no protocol, the current protocol of the website is used (relative protocol).
+			// get the image source as url object to get the advanced information.
+			// if there is no protocol, the current protocol of the website is used (relative protocol).
 			const srcUrl = new URL(src, GetBaseUrl());
 
-			//ignore images of other extensions. chrome and edge use the same protocol.
+			// ignore images of other extensions. chrome and edge use the same protocol.
 			if (srcUrl.protocol === 'chrome-extension:') {
 				return null;
 			}
 
-			//return the image url and filename of the image source.
+			// return the image url and filename of the image source.
 			return {
 				filename: srcUrl.href.substring(srcUrl, srcUrl.href.lastIndexOf('/') + 1),
 				source: srcUrl.href
@@ -54,21 +52,21 @@ SEOInsights.Image = class Image {
 	static GetImagesOfDocument(context = null) {
 		let images = [];
 
-		//get all <picture> and <img> element of the current context.
+		// get all <picture> and <img> element of the current context.
 		$('picture, img', context).each(function() {
 			const elementTagName = ($(this).prop('tagName') || '').toString().toLowerCase();
 
-			//get the image information depending on the element.
-			//it is possible to get some more information from <picture> element.
+			// get the image information depending on the element.
+			// it is possible to get some more information from <picture> element.
 			if (elementTagName === 'picture') {
 				let pictures = [];
 
-				//get the sources and different images and sizes.
+				// get the sources and different images and sizes.
 				$('source', $(this)).each(function() {
 					const srcset = ($(this).attr('srcset') || '').toString().trim();
 					const sources = srcset.split(/(?<=\d+w)[,]/);
 
-					//iterate through the sources.
+					// iterate through the sources.
 					for (const source of sources) {
 						pictures.push({
 							'src': SEOInsights.Image.GetImageSource(source.split(/[ ](?=\d+w)/)[0]),
@@ -77,13 +75,13 @@ SEOInsights.Image = class Image {
 					}
 				});
 
-				//get the <img> element inside the <picture> element.
+				// get the <img> element inside the <picture> element.
 				$('img', $(this)).filter(function() {
 					return (SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim()) !== null);
 				}).each(function() {
 					const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
 
-					//add the current image to the array.
+					// add the current image to the array.
 					images.push({
 						alt: ($(this).attr('alt') || '').toString().trim(),
 						filename: source.filename,
@@ -96,17 +94,17 @@ SEOInsights.Image = class Image {
 			} else if (elementTagName === 'img') {
 				const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
 
-				//ignore images without a source.
+				// ignore images without a source.
 				if (source === null) {
 					return;
 				}
 
-				//ignore all the <img> elements inside a <picture> element.
+				// ignore all the <img> elements inside a <picture> element.
 				if (($(this).parent().prop('tagName') || '').toString().toLowerCase() === 'picture') {
 					return;
 				}
 
-				//add the current image to the array.
+				// add the current image to the array.
 				images.push({
 					alt: ($(this).attr('alt') || '').toString().trim(),
 					filename: source.filename,
@@ -117,7 +115,7 @@ SEOInsights.Image = class Image {
 			}
 		});
 
-		//return all found images.
+		// return all found images.
 		return images;
 	}
 
@@ -128,16 +126,16 @@ SEOInsights.Image = class Image {
 	static GetImages() {
 		let images = SEOInsights.Image.GetImagesOfDocument();
 
-		//iterate through the frames of the page to get the images of the available frames.
+		// iterate through the frames of the page to get the images of the available frames.
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 
-			//there are also blocked frames so we have to try to get the document of the frame.
+			// there are also blocked frames so we have to try to get the document of the frame.
 			try {
 				images = images.concat(SEOInsights.Image.GetImagesOfDocument(window.frames[frameIndex].document));
 			} catch(_) {}
 		}
 
-		//return all found images of the website.
+		// return all found images of the website.
 		return images;
 	}
 
@@ -148,13 +146,13 @@ SEOInsights.Image = class Image {
 	static GetIcons() {
 		let icons = [];
 
-		//iterate through all icons of the website header.
+		// iterate through all icons of the website header.
 		$('head > link[rel*="icon"]').filter(function() {
 			return (SEOInsights.Image.GetImageSource(($(this).attr('href') || '').toString().trim()) !== null);
 		}).each(function() {
 			const source = SEOInsights.Image.GetImageSource(($(this).attr('href') || '').toString().trim());
 
-			//add the icon to the array.
+			// add the icon to the array.
 			icons.push({
 				href: ($(this).attr('href') || '').toString().trim(),
 				filename: source.filename,
@@ -164,7 +162,7 @@ SEOInsights.Image = class Image {
 			});
 		});
 
-		//return all found icons of the website.
+		// return all found icons of the website.
 		return icons;
 	}
-}
+};

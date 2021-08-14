@@ -18,7 +18,7 @@ var INFO = {
 function GetBaseUrl() {
 	const baseUrl = $('head > base').first().attr('href');
 
-	//use the base url of the meta information if available.
+	// use the base url of the meta information if available.
 	if (baseUrl) {
 		return (new URL(baseUrl, (location.origin + location.pathname))).href;
 	} else {

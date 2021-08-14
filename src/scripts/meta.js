@@ -1,7 +1,5 @@
-//create the namespace of SEO Insights if the namespace doesn't exist.
-if (SEOInsights === undefined) {
-  var SEOInsights = {};
-}
+// create the namespace of SEO Insights if the namespace doesn't exist.
+var SEOInsights = (SEOInsights || {});
 
 /**
  * The Meta class of SEO Insights to get information of Meta used on a website.
@@ -243,7 +241,7 @@ SEOInsights.Meta = class Meta {
 	static GetDublineCoreTags() {
 		let tagsDublinCore = [];
 
-		//get all the Dublin Core meta tags from <head>.
+		// get all the Dublin Core meta tags from <head>.
 		$('head meta[name^="DC."], head meta[name^="DCTERMS."], head meta[property^="DC."], head meta[property^="DCTERMS."]').each(function() {
 			tagsDublinCore.push({
 				name: (GetName(this) || '').toString().trim(),
@@ -251,7 +249,7 @@ SEOInsights.Meta = class Meta {
 			});
 		});
 
-		//return all found Dublin Core tags.
+		// return all found Dublin Core tags.
 		return tagsDublinCore;
 	}
 
@@ -287,11 +285,11 @@ SEOInsights.Meta = class Meta {
 		 * - "profile:"
 		 */
 
-		//get all the Open Graph tags of the website (using the name attribute on meta element).
+		// get all the Open Graph tags of the website (using the name attribute on meta element).
 		$('head meta[name^="og:"], head meta[name^="article:"], head meta[name^="book:"], head meta[name^="profile:"], head meta[property^="og:"], head meta[property^="article:"], head meta[property^="book:"], head meta[property^="profile:"]').each(function() {
 			const tagName = (GetName(this) || '').toString().trim();
 
-			//check the tag name to set the information to the correct array.
+			// check the tag name to set the information to the correct array.
 			if (SEOInsights.Meta.IsOpenGraphArticleTag(tagName)) {
 				tagsArticle.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
 			} else if (SEOInsights.Meta.IsOpenGraphAudioTag(tagName)) {
@@ -309,7 +307,7 @@ SEOInsights.Meta = class Meta {
 			}
 		});
 
-		//return all found Open Graph tags.
+		// return all found Open Graph tags.
 		return {
 			article: tagsArticle,
 			audio: tagsAudio,
@@ -328,7 +326,7 @@ SEOInsights.Meta = class Meta {
 	static GetParselyTags() {
 		let tagsParsely = [];
 
-		//get all the Parse.ly tags of the website (starting with Parsely-).
+		// get all the Parse.ly tags of the website (starting with Parsely-).
 		$('head meta[name^="Parsely-"], head meta[property^="Parsely-"]').each(function() {
 			tagsParsely.push({
 				name: (GetName(this) || '').toString().trim(),
@@ -336,7 +334,7 @@ SEOInsights.Meta = class Meta {
 			});
 		});
 
-		//return all found Parse.ly tags.
+		// return all found Parse.ly tags.
 		return tagsParsely;
 	}
 
@@ -348,11 +346,11 @@ SEOInsights.Meta = class Meta {
 		let tagsContent = [];
 		let tagsFeature = [];
 
-		//get all the Shareaholic tags of the website (starting with shareaholic:).
+		// get all the Shareaholic tags of the website (starting with shareaholic:).
 		$('head meta[name^="shareaholic:"]').each(function() {
 			const tagName = ($(this).attr('name') || '').toString().trim();
 
-			//check whether the current tag is a known Shareaholic Content tag.
+			// check whether the current tag is a known Shareaholic Content tag.
 			if (SEOInsights.Meta.IsShareaholicContentTag(tagName)) {
 				tagsContent.push({
 					name: tagName,
@@ -366,7 +364,7 @@ SEOInsights.Meta = class Meta {
 			}
 		});
 
-		//return all found Shareaholic tags.
+		// return all found Shareaholic tags.
 		return {
 			content: tagsContent,
 			feature: tagsFeature
@@ -380,7 +378,7 @@ SEOInsights.Meta = class Meta {
 	static GetTwitterTags() {
 		let tagsTwitter = [];
 
-		//get all the Twitter tags of the website (starting with twitter:).
+		// get all the Twitter tags of the website (starting with twitter:).
 		$('head meta[name^="twitter:"], head meta[property^="twitter:"]').each(function() {
 			tagsTwitter.push({
 				name: (GetName(this) || '').toString().trim(),
@@ -388,7 +386,7 @@ SEOInsights.Meta = class Meta {
 			});
 		});
 
-		//return all found Twitter tags.
+		// return all found Twitter tags.
 		return tagsTwitter;
 	}
-}
+};
