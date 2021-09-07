@@ -35,8 +35,8 @@ SEO Insights steht im [Chrome Web Store](https://chrome.google.com/webstore/deta
 ### :hammer_and_wrench: Verwendete Bibliotheken
 
 * jQuery 3.6.0 ([Website](https://jquery.com/) - [GitHub](https://github.com/jquery/jquery))
-* Bootstrap 5.0.2 ([Website](https://getbootstrap.com/docs/5.0/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
+* Bootstrap 5.1.1 ([Website](https://getbootstrap.com/docs/5.1/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
 
 ### :tada: Neue Funktionen
 
-SEO Insights befindet sich in aktiver Entwicklung und erhält mit der Zeit Verbesserungen und neue Funktionen. Sie können kommende Funktionen unter dem [aktuellen Milestone](https://github.com/SEO-Insights/seo-insights/milestone/1) oder in der [Übersicht der Issues](https://github.com/SEO-Insights/seo-insights/issues) einsehen.
+SEO Insights befindet sich in aktiver Entwicklung und erhält mit der Zeit Verbesserungen und neue Funktionen. Sie können kommende Funktionen unter dem [aktuellen Milestone](https://github.com/SEO-Insights/seo-insights/milestone/2) oder in der [Übersicht der Issues](https://github.com/SEO-Insights/seo-insights/issues) einsehen.
