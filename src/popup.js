@@ -128,7 +128,7 @@ function ShowImagePreview(hoverItem, imgUrl) {
  * @returns {Array<string>} An array with all domains of the given urls.
  */
 function GetDomains(urls) {
-	let domains = [];
+	const domains = [];
 
 	// run through all urls to get the domain from.
 	urls.filter(url => (url || '').toString().trim() !== '').forEach(function(url) {
@@ -175,7 +175,7 @@ function SetEmptyHintOnTabAccordion(tab, hint) {
  * @param {string} source The url of the image to get the information from.
  */
 function SetImageInfo(html, source) {
-	let image = new Image;
+	const image = new Image;
 	image.onload = function() {
 		html.append(GetInformation('size', `${image.width} x ${image.height}`));
 	};
@@ -304,23 +304,23 @@ function InvertColor(hexValue, useBlackWhite) {
 	}
 
 	// get the red, green and blue part of the color.
-	let r = parseInt(hexValue.slice(0, 2), 16);
-	let g = parseInt(hexValue.slice(2, 4), 16);
-	let b = parseInt(hexValue.slice(4, 6), 16);
+	let red = parseInt(hexValue.slice(0, 2), 16);
+	let green = parseInt(hexValue.slice(2, 4), 16);
+	let blue = parseInt(hexValue.slice(4, 6), 16);
 
 	// it is possible to invert to black or white.
 	// https://stackoverflow.com/a/3943023/3840840
 	if (useBlackWhite) {
-		return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+		return (red * 0.299 + green * 0.587 + blue * 0.114) > 186 ? '#000000' : '#FFFFFF';
 	}
 
 	// invert the red, green and blue value.
-	r = (255 - r).toString(16);
-	g = (255 - g).toString(16);
-	b = (255 - b).toString(16);
+	red = (255 - red).toString(16);
+	green = (255 - green).toString(16);
+	blue = (255 - blue).toString(16);
 
 	// pad each color component with zeros and return the hex value.
-	return `#${PadZero(r)}${PadZero(g)}${PadZero(b)}`;
+	return `#${PadZero(red)}${PadZero(green)}${PadZero(blue)}`;
 }
 
 /**
@@ -905,7 +905,7 @@ function ViewSummary() {
 		// display the Google Analytics Tracking information of the website.
 		if (analytics.identifiers.length > 0 || analytics.files.length > 0) {
 			let info = [];
-			let groups = GroupBy('id')(analytics.identifiers);
+			const groups = GroupBy('id')(analytics.identifiers);
 			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
 			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append(`<tr><td>Google Analytics</td><td>${GetFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
@@ -914,7 +914,7 @@ function ViewSummary() {
 		// display the Google Tag Manager information of the website.
 		if (tagmanager.identifiers.length > 0 || tagmanager.files.length > 0) {
 			let info = [];
-			let groups = GroupBy('id')(tagmanager.identifiers);
+			const groups = GroupBy('id')(tagmanager.identifiers);
 			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
 			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
 			tableSummary.children('tbody').append(`<tr><td>Google Tag Manager</td><td>${GetFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
@@ -1017,7 +1017,7 @@ function ViewFiles() {
 		});
 
 		// create an array with all special files.
-		let filesSpecial = [];
+		const filesSpecial = [];
 		filesSpecial.push(`${(new URL(tabUrl)).origin}/sitemap.xml`);
 		filesSpecial.push(`${(new URL(tabUrl)).origin}/robots.txt`);
 
@@ -1061,7 +1061,7 @@ function ViewHeader() {
 	fetch(tabUrl).then(function(response) {
 
 		// set every information of the header to the table.
-		for (let header of response.headers.entries()) {
+		for (const header of response.headers.entries()) {
 			tableHeaders.children('tbody').append(GetInformationRow(header[0], header[1]));
 		}
 
@@ -1238,7 +1238,7 @@ function ViewImages() {
 			ShowImagePreview($(`tbody tr#img-${index} td`, tableImages), image.source);
 
 			// set the attribute information to the row.
-			for (let attribute of ['alt', 'title']) {
+			for (const attribute of ['alt', 'title']) {
 				if ((image[attribute] || '').toString().trim() !== '') {
 					tableImages.find(`tbody tr#img-${index} td`).append(GetInformation(attribute, (image[attribute] || '').toString().trim()));
 				}
@@ -1259,7 +1259,7 @@ function ViewImages() {
 			ShowImagePreview($(`tr#icon-${index} td`, tableImagesIcons), icon.source);
 
 			// set the attribute information to the row.
-			for (let attribute of ['type', 'sizes']) {
+			for (const attribute of ['type', 'sizes']) {
 				if ((icon[attribute] || '').toString().trim() !== '') {
 					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(GetInformation(attribute, (icon[attribute] || '').toString().trim()));
 				}
@@ -1349,7 +1349,7 @@ function ViewHyperlinks() {
 			tableHyperlinks.children('tbody').append(`<tr id="link-${index}"><td><a target="_blank" href="${(hyperlink.url !== undefined) ? hyperlink.url.href : ''}">${hyperlink.href}</a></td></tr>`);
 
 			// set the attribute information to the row.
-			for (let attribute of ['rel', 'target', 'title']) {
+			for (const attribute of ['rel', 'target', 'title']) {
 				if ((hyperlink[attribute] || '').toString().trim() !== '') {
 					tableHyperlinks.find(`tbody tr#link-${index} td`).append(GetInformation(attribute, (hyperlink[attribute] || '').toString().trim()));
 				}
@@ -1381,7 +1381,7 @@ function ViewHyperlinks() {
 			tableAlternate.children('tbody').append(`<tr id="alternate-${index}"><td><a href="${alternate.href}" target="_blank">${alternate.href}</a></td></tr>`);
 
 			// set the attribute information to the row.
-			for (let attribute of ['title', 'hreflang']) {
+			for (const attribute of ['title', 'hreflang']) {
 				if ((alternates[attribute] || '').toString().trim() !== '') {
 					tableAlternate.find(`tbody tr#alternate-${index} td`).append(GetInformation(attribute, (alternates[attribute] || '').toString().trim()));
 				}

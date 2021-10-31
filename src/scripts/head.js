@@ -53,7 +53,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The found preconnect information of the website.
 	 */
 	static GetPreconnect() {
-		let tags = [];
+		const tags = [];
 
 		// iterate through the preconnect information.
 		$('head > link[rel="preconnect"]').each(function() {
@@ -71,7 +71,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The found DNS prefetch information of the website.
 	 */
 	static GetDnsPrefetch() {
-		let tags = [];
+		const tags = [];
 
 		// iterate through the DNS prefetch information of the website.
 		$('head > link[rel="dns-prefetch"]').each(function() {
@@ -89,7 +89,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The found alternate links of the website.
 	 */
 	static GetAlternateLinks() {
-		let tags = [];
+		const tags = [];
 
 		// iterate through the alternate links of the website.
 		$('head > link[rel="alternate"]').each(function() {
@@ -109,7 +109,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The found preload information of the website.
 	 */
 	static GetPreload() {
-		let tags = [];
+		const tags = [];
 
 		// iterate through the preload information of the website.
 		$('head > link[rel="preload"]').each(function() {
@@ -129,7 +129,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The found common information of the website.
 	 */
 	static GetCommonTags() {
-		let tags = [];
+		const tags = [];
 
 		// iterate through the elements of the website to get the elements with common names.
 		$('head > meta[name]').filter(function() {
@@ -150,8 +150,8 @@ SEOInsights.Head = class Head {
 		});
 
 		// iterate through the common tags of the website.
-		for (let tagCommon of SEOInsights.Head.GetArrayCommonTags()) {
-			let itemTagCommon = $(`head > ${tagCommon}`).first();
+		for (const tagCommon of SEOInsights.Head.GetArrayCommonTags()) {
+			const itemTagCommon = $(`head > ${tagCommon}`).first();
 
 			// add the tag information to the array if available.
 			if (itemTagCommon) {
@@ -182,7 +182,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The identifiers of the Google Tag Manager found on the website.
 	 */
 	static GetGoogleTagManager() {
-		let identifier = [];
+		const identifier = [];
 
 		// set the regular expressions to get the identifiers of the Google Tag Manager.
 		// there are two regular expressions to get the identifiers of the Google Tag Manager with and without quotes.
@@ -234,7 +234,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The identifiers of Google Analytics found on the website.
 	 */
 	static GetGoogleAnalytics() {
-		let identifier = [];
+		const identifier = [];
 
 		// set the regular expressions to get the identifiers of Google Analytics.
 		// there are two regular expressions to get the identifiers of Google Analytics with and without quotes.
@@ -297,7 +297,7 @@ SEOInsights.Head = class Head {
 	 * @returns {Array<object>} The information not found with other methods / functions of SEO Insights.
 	 */
 	static GetOthers() {
-		let tags = [];
+		const tags = [];
 
 		// get the meta information from meta elements with name property.
 		$('head > meta[name]').filter(function() {

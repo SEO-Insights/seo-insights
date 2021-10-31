@@ -12,7 +12,7 @@ SEOInsights.Heading = class Heading {
 	 * @returns {Array<object>} An array with all found headings of the specified context.
 	 */
 	static GetHeadingsOfDocument(context = null) {
-		let headings = [];
+		const headings = [];
 
 		// iterate through all headings of the specified context.
 		// add all the headings of the specified context.

@@ -12,7 +12,7 @@ SEOInsights.Link = class Link {
 	 * @returns {Array<object>} An array with all found links of the specified context.
 	 */
 	static GetLinksOfDocument(context = null) {
-		let links = [];
+		const links = [];
 
 		// iterate through all links of the specified context.
 		// add all the links of the specified context (also links without target).
@@ -21,7 +21,7 @@ SEOInsights.Link = class Link {
 
 			// set all the basic information into the link object.
 			// the basic information is located at the link element directly.
-			let link = {
+			const link = {
 				href: href,
 				rel: ($(this).attr('rel') || '').toString().trim(),
 				target: ($(this).attr('target') || '').toString().trim(),

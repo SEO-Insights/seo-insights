@@ -50,7 +50,7 @@ SEOInsights.Image = class Image {
 	 * @returns {Array<object>} An array with all found images of the specified context.
 	 */
 	static GetImagesOfDocument(context = null) {
-		let images = [];
+		const images = [];
 
 		// get all <picture> and <img> element of the current context.
 		$('picture, img', context).each(function() {
@@ -59,7 +59,7 @@ SEOInsights.Image = class Image {
 			// get the image information depending on the element.
 			// it is possible to get some more information from <picture> element.
 			if (elementTagName === 'picture') {
-				let pictures = [];
+				const pictures = [];
 
 				// get the sources and different images and sizes.
 				$('source', $(this)).each(function() {
@@ -144,7 +144,7 @@ SEOInsights.Image = class Image {
 	 * @returns {Array<object>} An array with all found icons of the website.
 	 */
 	static GetIcons() {
-		let icons = [];
+		const icons = [];
 
 		// iterate through all icons of the website header.
 		$('head > link[rel*="icon"]').filter(function() {

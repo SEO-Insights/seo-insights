@@ -69,7 +69,7 @@ SEOInsights.File = class File {
 	 * @returns {Array<object>} An array with all found Google Analytics files of the website.
 	 */
 	static GetGoogleAnalyticsFiles() {
-		let files = [];
+		const files = [];
 
 		// get all Google Analytics files of the website.
 		$('script[src]').filter(function() {
@@ -99,7 +99,7 @@ SEOInsights.File = class File {
 	 * @returns {Array<object>} An array with all found Google Tag Manager files of the website.
 	 */
 	static GetGoogleTagManagerFiles() {
-		let files = [];
+		const files = [];
 
 		// get all Google Tag Manager files of the website.
 		$('script[src]').filter(function() {
@@ -129,7 +129,7 @@ SEOInsights.File = class File {
 	 * @returns {Array<object>} An array with all found JavaScript files of the website.
 	 */
 	static GetJavaScriptFiles() {
-		let files = [];
+		const files = [];
 
 		// get all JavaScript files of the website.
 		$('script[src]').filter(function() {
@@ -158,7 +158,7 @@ SEOInsights.File = class File {
 	 * @returns {Array<object>} An array with all found Stylesheet files of the website.
 	 */
 	static GetStylesheetFiles() {
-		let files = [];
+		const files = [];
 
 		// get all Stylesheet files of the website.
 		$('link[rel="stylesheet"]').filter(function() {

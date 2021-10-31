@@ -239,7 +239,7 @@ SEOInsights.Meta = class Meta {
 	 * @returns {Array<object>} An array with all found Dublin Core tags of the website.
 	 */
 	static GetDublineCoreTags() {
-		let tagsDublinCore = [];
+		const tagsDublinCore = [];
 
 		// get all the Dublin Core meta tags from <head>.
 		$('head meta[name^="DC."], head meta[name^="DCTERMS."], head meta[property^="DC."], head meta[property^="DCTERMS."]').each(function() {
@@ -258,13 +258,13 @@ SEOInsights.Meta = class Meta {
 	 * @returns {Array<object>} An array with all found Open Graph tags of the website.
 	 */
 	static GetOpenGraphTags() {
-		let tagsArticle = [];
-		let tagsAudio = [];
-		let tagsBasic = [];
-		let tagsBook = [];
-		let tagsImage = [];
-		let tagsProfile = [];
-		let tagsVideo = [];
+		const tagsArticle = [];
+		const tagsAudio = [];
+		const tagsBasic = [];
+		const tagsBook = [];
+		const tagsImage = [];
+		const tagsProfile = [];
+		const tagsVideo = [];
 
 		/**
 		 * There are different groups on the Open Graph tags. They are starting as described in this list:
@@ -324,7 +324,7 @@ SEOInsights.Meta = class Meta {
 	 * @returns {Array<object>} An array with all found Parse.ly tags of the website.
 	 */
 	static GetParselyTags() {
-		let tagsParsely = [];
+		const tagsParsely = [];
 
 		// get all the Parse.ly tags of the website (starting with Parsely-).
 		$('head meta[name^="Parsely-"], head meta[property^="Parsely-"]').each(function() {
@@ -343,8 +343,8 @@ SEOInsights.Meta = class Meta {
 	 * @returns {Array<object>} An array with all found Shareaholic tags of the website.
 	 */
 	static GetShareaholicTags() {
-		let tagsContent = [];
-		let tagsFeature = [];
+		const tagsContent = [];
+		const tagsFeature = [];
 
 		// get all the Shareaholic tags of the website (starting with shareaholic:).
 		$('head meta[name^="shareaholic:"]').each(function() {
@@ -376,7 +376,7 @@ SEOInsights.Meta = class Meta {
 	 * @returns {Array<object>} An array with all found Twitter tags of the website.
 	 */
 	static GetTwitterTags() {
-		let tagsTwitter = [];
+		const tagsTwitter = [];
 
 		// get all the Twitter tags of the website (starting with twitter:).
 		$('head meta[name^="twitter:"], head meta[property^="twitter:"]').each(function() {
