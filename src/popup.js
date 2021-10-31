@@ -1,6 +1,7 @@
 // common information about the website.
 let tabUrl = '';
 let tabUrlOrigin = '';
+const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 
 // start the chrome extension and inject the scripts to the website.
 // the injected scripts are used to get the needed information about the website.
@@ -1127,6 +1128,11 @@ function ViewTools() {
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'),
 		`https://search.google.com/test/mobile-friendly?url=${encodedUrl}`
 	));
+
+	// set the font color of the about links to red if the chrome extension is in development environment.
+	if (chrome.runtime.id !== storeId) {
+		$('div.about a').css('color', '#f00');
+	}
 }
 
 /**

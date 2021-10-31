@@ -140,6 +140,24 @@ table#info-tools td:hover {
 table#info-tools div.heading {
 	font-weight: bold;
 }
+#view-tools .about {
+	border-top: 1px solid #777;
+	bottom: 0;
+	display: flex;
+	left: 0;
+	padding: 0 10px;
+	position: absolute;
+	right: 17px;
+}
+#view-tools .about a {
+	color: #777;
+	font-size: 0.8em;
+	margin: 3px 0;
+}
+#view-tools .about a:not(:last-child):after {
+	content: "|";
+	margin: 0 7px;
+}
 
 /** empty alert (hint for tables without content) */
 table tr.empty-alert td {
