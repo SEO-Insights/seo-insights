@@ -41,7 +41,7 @@ SEOInsights.File = class File {
 		return (
 			(url.hostname === 'www.google-analytics.com' && url.pathname.toLowerCase().endsWith('analytics.js'))
 			|| (['www.google-analytics.com', 'ssl.google-analytics.com'].includes(url.hostname) && url.pathname.toLowerCase().endsWith('ga.js'))
-			|| (url.hostname === 'www.googletagmanager.com' && url.pathname.toLowerCase().endsWith('/gtag/js') && (/UA(\-\d+){2}/.test(url.search) || /G\-[A-Z0-9]/.test(url.search)))
+			|| (url.hostname === 'www.googletagmanager.com' && url.pathname.toLowerCase().endsWith('/gtag/js') && (/UA(-\d+){2}/.test(url.search) || /G-[A-Z0-9]/.test(url.search)))
 		);
 	}
 
@@ -60,7 +60,7 @@ SEOInsights.File = class File {
 		 * hostname, pathname and by a possibly existing ID.
 		 */
 		return (
-			url.hostname === 'www.googletagmanager.com' && url.pathname.toLowerCase().endsWith('/gtm.js') && /GTM\-[0-9A-Z]{4,}/.test(url.search)
+			url.hostname === 'www.googletagmanager.com' && url.pathname.toLowerCase().endsWith('/gtm.js') && /GTM-[0-9A-Z]{4,}/.test(url.search)
 		);
 	}
 

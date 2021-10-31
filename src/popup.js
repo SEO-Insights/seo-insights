@@ -330,10 +330,7 @@ function InvertColor(hexValue, useBlackWhite) {
  */
 function RGBtoHEX(rgb) {
 	rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-	return (rgb && rgb.length === 4) ? "#" +
-		("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-	 	("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-	 	("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+	return (rgb && rgb.length === 4) ? `#${`0${parseInt(rgb[1], 10).toString(16)}`.slice(-2)}${`0${parseInt(rgb[2], 10).toString(16)}`.slice(-2)}${`0${parseInt(rgb[3], 10).toString(16)}`.slice(-2)}` : '';
 }
 
 /**
@@ -402,7 +399,7 @@ function ReplaceCharactersHTML(str) {
  * @returns {string} The escaped string value to display HTML specific chars on HTML.
  */
 function EscapeHTML(str) {
-	return String(str).replace(/[&<>"'\/]/g, function(s) {
+	return String(str).replace(/[&<>"'/]/g, function(s) {
 		return {
 			"&": "&amp;",
 			"<": "&lt;",

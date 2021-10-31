@@ -50,7 +50,7 @@ SEOInsights.Link = class Link {
 						path: (url.pathname || '').toString().trim(),
 						protocol: (url.protocol || '').toString().trim().replace(':', '')
 					};
-				} catch(_) {}
+				} catch(_e) {}
 			}
 
 			// add the link information to the array.
@@ -73,7 +73,7 @@ SEOInsights.Link = class Link {
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 			try {
 				links = links.concat(SEOInsights.Link.GetLinksOfDocument(window.frames[frameIndex].document));
-			} catch(_) {}
+			} catch(_e) {}
 		}
 
 		// return all the found links of the website.

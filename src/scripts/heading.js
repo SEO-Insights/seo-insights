@@ -39,7 +39,7 @@ SEOInsights.Heading = class Heading {
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 			try {
 				headings = headings.concat(SEOInsights.Heading.GetHeadingsOfDocument(window.frames[frameIndex].document));
-			} catch(_) {}
+			} catch(_e) {}
 		}
 
 		// return all the found headings of the website.

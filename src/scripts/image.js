@@ -39,7 +39,7 @@ SEOInsights.Image = class Image {
 				filename: srcUrl.href.substring(srcUrl, srcUrl.href.lastIndexOf('/') + 1),
 				source: srcUrl.href
 			};
-		} catch(_) {
+		} catch(_e) {
 			return null;
 		}
 	}
@@ -132,7 +132,7 @@ SEOInsights.Image = class Image {
 			// there are also blocked frames so we have to try to get the document of the frame.
 			try {
 				images = images.concat(SEOInsights.Image.GetImagesOfDocument(window.frames[frameIndex].document));
-			} catch(_) {}
+			} catch(_e) {}
 		}
 
 		// return all found images of the website.

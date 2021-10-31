@@ -187,8 +187,8 @@ SEOInsights.Head = class Head {
 		// set the regular expressions to get the identifiers of the Google Tag Manager.
 		// there are two regular expressions to get the identifiers of the Google Tag Manager with and without quotes.
 		// these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
-		const regexQuotedGTM = /(?<=['"])GTM\-[0-9A-Z]{4,}(?=['"])/;
-		const regexUnquotedGTM = /GTM\-[0-9A-Z]{4,}/;
+		const regexQuotedGTM = /(?<=['"])GTM-[0-9A-Z]{4,}(?=['"])/;
+		const regexUnquotedGTM = /GTM-[0-9A-Z]{4,}/;
 
 		// get all files of Google Tag Manager to find identifiers.
 		const files = SEOInsights.File.GetGoogleTagManagerFiles();
@@ -239,12 +239,12 @@ SEOInsights.Head = class Head {
 		// set the regular expressions to get the identifiers of Google Analytics.
 		// there are two regular expressions to get the identifiers of Google Analytics with and without quotes.
 		// these regular expressions are defined without modifiers. the modifiers are set on usage if needed.
-		const regexUnqoutedUA = /UA(\-\d+){2}/;
-		const regexUnqoutedG = /G\-[A-Z0-9]+/;
-		const regexQuotedGTAG = /(?<=['"]config['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-		const regexQuotedAnalytics = /(?<=['"]create['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-		const regexQuotedGA = /(?<=['"]_setAccount['"]\,[ ]*['"])UA(\-\d+){2}(?=['"])/;
-		const regexQuotedGA4 = /(?<=['"]config['"]\,[ ]*['"])G\-[0-9A-Z]+(?=['"])/;
+		const regexUnqoutedUA = /UA(-\d+){2}/;
+		const regexUnqoutedG = /G-[A-Z0-9]+/;
+		const regexQuotedGTAG = /(?<=['"]config['"],[ ]*['"])UA(-\d+){2}(?=['"])/;
+		const regexQuotedAnalytics = /(?<=['"]create['"],[ ]*['"])UA(-\d+){2}(?=['"])/;
+		const regexQuotedGA = /(?<=['"]_setAccount['"],[ ]*['"])UA(-\d+){2}(?=['"])/;
+		const regexQuotedGA4 = /(?<=['"]config['"],[ ]*['"])G-[0-9A-Z]+(?=['"])/;
 
 		// get the files of Google Analytics to find identifiers.
 		const files = SEOInsights.File.GetGoogleAnalyticsFiles();
