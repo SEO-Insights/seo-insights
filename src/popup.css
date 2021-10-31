@@ -154,7 +154,7 @@ table#info-tools div.heading {
 	font-size: 0.8em;
 	margin: 3px 0;
 }
-#view-tools .about a:not(:last-child):after {
+#view-tools .about a:not(:last-child)::after {
 	content: "|";
 	margin: 0 7px;
 }
