@@ -15,7 +15,7 @@ var INFO = {
  * Returns the base url of the website. It also considers the base url on meta information.
  * @returns {string} The base url of the website.
  */
-function GetBaseUrl() {
+function getBaseUrl() {
 	const baseUrl = $('head > base').first().attr('href');
 
 	// use the base url of the meta information if available.
@@ -31,7 +31,7 @@ function GetBaseUrl() {
  * @param {object} html The HTML to get the value of name or property attribute.
  * @returns {string} The value of the name or property attribute of the given HTML element.
  */
-function GetName(html) {
+function getName(html) {
 	if ($(html).is('[property]')) {
 		return $(html).attr('property').trim().toLowerCase();
 	} else if ($(html).is('[name]')) {
@@ -44,7 +44,7 @@ function GetName(html) {
 /**
  * Replace all placeholder for translation with translated value.
  */
-function TranslateHTML() {
+function translateHTML() {
 	document.body.innerHTML = document.body.innerHTML.replace(/__MSG_(\w+)__/g, function(match, word) {
 		return word ? chrome.i18n.getMessage(word) : '';
 	});

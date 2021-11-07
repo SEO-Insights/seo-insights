@@ -11,7 +11,7 @@ SEOInsights.Meta = class Meta {
 	 * @returns {object} An object with information of Open Graph tags.
 	 * @see https://ogp.me/
 	 */
-	static TagsOpenGraph() {
+	static tagsOpenGraph() {
 		return {
 			article: [
 				{ name: 'article:author', description: 'Writers of the article.' },
@@ -75,7 +75,7 @@ SEOInsights.Meta = class Meta {
 	 * @returns {object} An object with information of Shareaholic tags.
 	 * @see https://github.com/shareaholic/shareaholic-api-docs/blob/master/shareaholic_meta_tags.md
 	 */
-	static TagsShareaholic() {
+	static tagsShareaholic() {
 		return {
 			content: [
 				{ name: 'shareaholic:url', description: 'The canonical URL for the webpage.' },
@@ -106,7 +106,7 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a Dublin Core tag.
 	 * @returns {boolean} State whether the given tag name is a Dublin Core tag.
 	 */
-	static IsDublinCoreTag(tagName) {
+	static isDublinCoreTag(tagName) {
 		tagName = (tagName || '').toString().trim().toUpperCase();
 		return (tagName.startsWith('DC.') || tagName.startsWith('DCTERMS.'));
 	}
@@ -116,8 +116,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Article tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph Article tag.
 	 */
-	static IsOpenGraphArticleTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().article.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphArticleTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().article.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -125,8 +125,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Audio tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph Audio tag.
 	 */
-	static IsOpenGraphAudioTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().audio.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphAudioTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().audio.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -134,8 +134,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Basic tag.
 	 * @returns {boolean} State whether the given tag name is known Open Graph Basic tag.
 	 */
-	static IsOpenGraphBasicTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().basic.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphBasicTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().basic.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -143,8 +143,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Book tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph Book tag.
 	 */
-	static IsOpenGraphBookTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().book.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphBookTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().book.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -152,8 +152,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Image tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph Image tag.
 	 */
-	static IsOpenGraphImageTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().image.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphImageTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().image.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -161,8 +161,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Profile tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph Profile tag.
 	 */
-	static IsOpenGraphProfileTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().profile.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphProfileTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().profile.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -170,8 +170,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph Video tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph Video tag.
 	 */
-	static IsOpenGraphVideoTag(tagName) {
-		return (SEOInsights.Meta.TagsOpenGraph().video.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isOpenGraphVideoTag(tagName) {
+		return (SEOInsights.Meta.tagsOpenGraph().video.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -179,14 +179,14 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Open Graph tag.
 	 * @returns {boolean} State whether the given tag name is a known Open Graph tag.
 	 */
-	static IsOpenGraphTag(tagName) {
-		return (SEOInsights.Meta.IsOpenGraphArticleTag(tagName) ||
-			SEOInsights.Meta.IsOpenGraphAudioTag(tagName) ||
-			SEOInsights.Meta.IsOpenGraphBasicTag(tagName) ||
-			SEOInsights.Meta.IsOpenGraphBookTag(tagName) ||
-			SEOInsights.Meta.IsOpenGraphImageTag(tagName) ||
-			SEOInsights.Meta.IsOpenGraphProfileTag(tagName) ||
-			SEOInsights.Meta.IsOpenGraphVideoTag(tagName));
+	static isOpenGraphTag(tagName) {
+		return (SEOInsights.Meta.isOpenGraphArticleTag(tagName) ||
+			SEOInsights.Meta.isOpenGraphAudioTag(tagName) ||
+			SEOInsights.Meta.isOpenGraphBasicTag(tagName) ||
+			SEOInsights.Meta.isOpenGraphBookTag(tagName) ||
+			SEOInsights.Meta.isOpenGraphImageTag(tagName) ||
+			SEOInsights.Meta.isOpenGraphProfileTag(tagName) ||
+			SEOInsights.Meta.isOpenGraphVideoTag(tagName));
 	}
 
 	/**
@@ -194,7 +194,7 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a Parse.ly tag.
 	 * @returns {boolean} State whether the given tag name is a Parse.ly tag.
 	 */
-	static IsParselyTag(tagName) {
+	static isParselyTag(tagName) {
 		return (tagName || '').toString().trim().toLowerCase().startsWith('parsely-');
 	}
 
@@ -203,8 +203,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Shareaholic Content tag.
 	 * @returns {boolean} State whether the given tag name is a known Shareaholic Content tag.
 	 */
-	static IsShareaholicContentTag(tagName) {
-		return (SEOInsights.Meta.TagsShareaholic().content.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isShareaholicContentTag(tagName) {
+		return (SEOInsights.Meta.tagsShareaholic().content.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -212,8 +212,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Shareaholic Feature tag.
 	 * @returns {boolean} State whether the given tag name is a known Shareaholic Feature tag.
 	 */
-	static IsShareaholicFeatureTag(tagName) {
-		return (SEOInsights.Meta.TagsShareaholic().feature.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
+	static isShareaholicFeatureTag(tagName) {
+		return (SEOInsights.Meta.tagsShareaholic().feature.filter(tag => tag.name === (tagName || '').toString().trim().toLowerCase()).length > 0);
 	}
 
 	/**
@@ -221,8 +221,8 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Shareaholic tag.
 	 * @returns {boolean} State whether the given tag name is a known Shareaholic tag.
 	 */
-	static IsShareaholicTag(tagName) {
-		return (SEOInsights.Meta.IsShareaholicContentTag(tagName) || SEOInsights.Meta.IsShareaholicFeatureTag(tagName));
+	static isShareaholicTag(tagName) {
+		return (SEOInsights.Meta.isShareaholicContentTag(tagName) || SEOInsights.Meta.isShareaholicFeatureTag(tagName));
 	}
 
 	/**
@@ -230,7 +230,7 @@ SEOInsights.Meta = class Meta {
 	 * @param {string} tagName The tag name to check whether it is a known Twitter tag.
 	 * @returns {boolean} State whether the given tag name is a known Twitter tag.
 	 */
-	static IsTwitterTag(tagName) {
+	static isTwitterTag(tagName) {
 		return (tagName || '').toString().trim().toLowerCase().startsWith('twitter:');
 	}
 
@@ -238,13 +238,13 @@ SEOInsights.Meta = class Meta {
 	 * Returns all found Dublin Core tags of the website.
 	 * @returns {Array<object>} An array with all found Dublin Core tags of the website.
 	 */
-	static GetDublineCoreTags() {
+	static getDublineCoreTags() {
 		const tagsDublinCore = [];
 
 		// get all the Dublin Core meta tags from <head>.
 		$('head meta[name^="DC."], head meta[name^="DCTERMS."], head meta[property^="DC."], head meta[property^="DCTERMS."]').each(function() {
 			tagsDublinCore.push({
-				name: (GetName(this) || '').toString().trim(),
+				name: (getName(this) || '').toString().trim(),
 				value: ($(this).attr('content') || '').toString().trim()
 			});
 		});
@@ -257,7 +257,7 @@ SEOInsights.Meta = class Meta {
 	 * Returns all found Open Graph tags of the website.
 	 * @returns {Array<object>} An array with all found Open Graph tags of the website.
 	 */
-	static GetOpenGraphTags() {
+	static getOpenGraphTags() {
 		const tagsArticle = [];
 		const tagsAudio = [];
 		const tagsBasic = [];
@@ -287,22 +287,22 @@ SEOInsights.Meta = class Meta {
 
 		// get all the Open Graph tags of the website (using the name attribute on meta element).
 		$('head meta[name^="og:"], head meta[name^="article:"], head meta[name^="book:"], head meta[name^="profile:"], head meta[property^="og:"], head meta[property^="article:"], head meta[property^="book:"], head meta[property^="profile:"]').each(function() {
-			const tagName = (GetName(this) || '').toString().trim();
+			const tagName = (getName(this) || '').toString().trim();
 
 			// check the tag name to set the information to the correct array.
-			if (SEOInsights.Meta.IsOpenGraphArticleTag(tagName)) {
+			if (SEOInsights.Meta.isOpenGraphArticleTag(tagName)) {
 				tagsArticle.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
-			} else if (SEOInsights.Meta.IsOpenGraphAudioTag(tagName)) {
+			} else if (SEOInsights.Meta.isOpenGraphAudioTag(tagName)) {
 				tagsAudio.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
-			} else if (SEOInsights.Meta.IsOpenGraphBasicTag(tagName)) {
+			} else if (SEOInsights.Meta.isOpenGraphBasicTag(tagName)) {
 				tagsBasic.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
-			} else if (SEOInsights.Meta.IsOpenGraphBookTag(tagName)) {
+			} else if (SEOInsights.Meta.isOpenGraphBookTag(tagName)) {
 				tagsBook.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
-			} else if (SEOInsights.Meta.IsOpenGraphImageTag(tagName)) {
+			} else if (SEOInsights.Meta.isOpenGraphImageTag(tagName)) {
 				tagsImage.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
-			} else if (SEOInsights.Meta.IsOpenGraphProfileTag(tagName)) {
+			} else if (SEOInsights.Meta.isOpenGraphProfileTag(tagName)) {
 				tagsProfile.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
-			} else if (SEOInsights.Meta.IsOpenGraphVideoTag(tagName)) {
+			} else if (SEOInsights.Meta.isOpenGraphVideoTag(tagName)) {
 				tagsVideo.push({ name: tagName, value: ($(this).attr('content') || '').toString().trim() });
 			}
 		});
@@ -323,13 +323,13 @@ SEOInsights.Meta = class Meta {
 	 * Returns all found Parse.ly tags of the website.
 	 * @returns {Array<object>} An array with all found Parse.ly tags of the website.
 	 */
-	static GetParselyTags() {
+	static getParselyTags() {
 		const tagsParsely = [];
 
 		// get all the Parse.ly tags of the website (starting with Parsely-).
 		$('head meta[name^="Parsely-"], head meta[property^="Parsely-"]').each(function() {
 			tagsParsely.push({
-				name: (GetName(this) || '').toString().trim(),
+				name: (getName(this) || '').toString().trim(),
 				value: ($(this).attr('content') || '').toString().trim()
 			});
 		});
@@ -342,7 +342,7 @@ SEOInsights.Meta = class Meta {
 	 * Returns all found Shareaholic tags of the website.
 	 * @returns {Array<object>} An array with all found Shareaholic tags of the website.
 	 */
-	static GetShareaholicTags() {
+	static getShareaholicTags() {
 		const tagsContent = [];
 		const tagsFeature = [];
 
@@ -351,12 +351,12 @@ SEOInsights.Meta = class Meta {
 			const tagName = ($(this).attr('name') || '').toString().trim();
 
 			// check whether the current tag is a known Shareaholic Content tag.
-			if (SEOInsights.Meta.IsShareaholicContentTag(tagName)) {
+			if (SEOInsights.Meta.isShareaholicContentTag(tagName)) {
 				tagsContent.push({
 					name: tagName,
 					value: ($(this).attr('content') || '').toString().trim()
 				});
-			} else if (SEOInsights.Meta.IsShareaholicFeatureTag(tagName)) {
+			} else if (SEOInsights.Meta.isShareaholicFeatureTag(tagName)) {
 				tagsFeature.push({
 					name: tagName,
 					value: ($(this).attr('content') || '').toString().trim()
@@ -375,13 +375,13 @@ SEOInsights.Meta = class Meta {
 	 * Returns all found Twitter tags of the website.
 	 * @returns {Array<object>} An array with all found Twitter tags of the website.
 	 */
-	static GetTwitterTags() {
+	static getTwitterTags() {
 		const tagsTwitter = [];
 
 		// get all the Twitter tags of the website (starting with twitter:).
 		$('head meta[name^="twitter:"], head meta[property^="twitter:"]').each(function() {
 			tagsTwitter.push({
-				name: (GetName(this) || '').toString().trim(),
+				name: (getName(this) || '').toString().trim(),
 				value: ($(this).attr('content') || '').toString().trim()
 			});
 		});

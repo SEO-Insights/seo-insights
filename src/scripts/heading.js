@@ -11,7 +11,7 @@ SEOInsights.Heading = class Heading {
 	 * @param {object} context The specified context to get all the headings.
 	 * @returns {Array<object>} An array with all found headings of the specified context.
 	 */
-	static GetHeadingsOfDocument(context = null) {
+	static getHeadingsOfDocument(context = null) {
 		const headings = [];
 
 		// iterate through all headings of the specified context.
@@ -31,14 +31,14 @@ SEOInsights.Heading = class Heading {
 	 * Returns all headings of the current website.
 	 * @returns {Array<object>} An array with all found headings of the website.
 	 */
-	static GetHeadings() {
-		let headings = SEOInsights.Heading.GetHeadingsOfDocument();
+	static getHeadings() {
+		let headings = SEOInsights.Heading.getHeadingsOfDocument();
 
 		// iterate through the frames of the page to get the headings of the available frames.
 		// there are also blocked frames so we have to try to get the document of the frame.
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 			try {
-				headings = headings.concat(SEOInsights.Heading.GetHeadingsOfDocument(window.frames[frameIndex].document));
+				headings = headings.concat(SEOInsights.Heading.getHeadingsOfDocument(window.frames[frameIndex].document));
 			} catch(_e) {}
 		}
 

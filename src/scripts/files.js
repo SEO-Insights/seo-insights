@@ -11,7 +11,7 @@ SEOInsights.File = class File {
 	 * @param {URL} url The url to check for Google Analytics url.
 	 * @returns {boolean} State whether the url is a Google Analytics url.
 	 */
-	static IsGoogleAnalyticsUrl(url) {
+	static isGoogleAnalyticsUrl(url) {
 
 		/**
 		 * How to detect Google Analytics files?
@@ -50,7 +50,7 @@ SEOInsights.File = class File {
 	 * @param {URL} url The url to check for Google Tag Manager url.
 	 * @returns {boolean} State whether the url is a Google Tag Manager url.
 	 */
-	static IsGoogleTagManagerUrl(url) {
+	static isGoogleTagManagerUrl(url) {
 
 		/**
 		 * How to detect Google Tag Manager files?
@@ -68,15 +68,15 @@ SEOInsights.File = class File {
 	 * Returns all Google Analytics files of the website.
 	 * @returns {Array<object>} An array with all found Google Analytics files of the website.
 	 */
-	static GetGoogleAnalyticsFiles() {
+	static getGoogleAnalyticsFiles() {
 		const files = [];
 
 		// get all Google Analytics files of the website.
 		$('script[src]').filter(function() {
-			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
-			return SEOInsights.File.IsGoogleAnalyticsUrl(url);
+			const url = new URL(($(this).attr('src') || '').toString().trim(), getBaseUrl());
+			return SEOInsights.File.isGoogleAnalyticsUrl(url);
 		}).each(function() {
-			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+			const url = new URL(($(this).attr('src') || '').toString().trim(), getBaseUrl());
 
 			// add the url of the file to the file array.
 			files.push({
@@ -98,15 +98,15 @@ SEOInsights.File = class File {
 	 * Returns all Google Tag Manager files of the website.
 	 * @returns {Array<object>} An array with all found Google Tag Manager files of the website.
 	 */
-	static GetGoogleTagManagerFiles() {
+	static getGoogleTagManagerFiles() {
 		const files = [];
 
 		// get all Google Tag Manager files of the website.
 		$('script[src]').filter(function() {
-			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
-			return SEOInsights.File.IsGoogleTagManagerUrl(url);
+			const url = new URL(($(this).attr('src') || '').toString().trim(), getBaseUrl());
+			return SEOInsights.File.isGoogleTagManagerUrl(url);
 		}).each(function() {
-			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+			const url = new URL(($(this).attr('src') || '').toString().trim(), getBaseUrl());
 
 			// add the url of the file to the file array.
 			files.push({
@@ -128,14 +128,14 @@ SEOInsights.File = class File {
 	 * Returns all JavaScript files of the website.
 	 * @returns {Array<object>} An array with all found JavaScript files of the website.
 	 */
-	static GetJavaScriptFiles() {
+	static getJavaScriptFiles() {
 		const files = [];
 
 		// get all JavaScript files of the website.
 		$('script[src]').filter(function() {
 			return (($(this).attr('src') || '').toString().trim() !== '');
 		}).each(function() {
-			const url = new URL(($(this).attr('src') || '').toString().trim(), GetBaseUrl());
+			const url = new URL(($(this).attr('src') || '').toString().trim(), getBaseUrl());
 
 			// add the url of the file to the file array.
 			files.push({
@@ -157,14 +157,14 @@ SEOInsights.File = class File {
 	 * Returns all Stylesheet files of the website.
 	 * @returns {Array<object>} An array with all found Stylesheet files of the website.
 	 */
-	static GetStylesheetFiles() {
+	static getStylesheetFiles() {
 		const files = [];
 
 		// get all Stylesheet files of the website.
 		$('link[rel="stylesheet"]').filter(function() {
 			return (($(this).attr('href') || '').toString().trim() !== '');
 		}).each(function() {
-			const url = new URL(($(this).attr('href') || '').toString().trim(), GetBaseUrl());
+			const url = new URL(($(this).attr('href') || '').toString().trim(), getBaseUrl());
 
 			// add the url of the file to the file array.
 			files.push({

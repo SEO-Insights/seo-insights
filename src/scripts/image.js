@@ -11,7 +11,7 @@ SEOInsights.Image = class Image {
 	 * @param {string} src The source of the image to get detailed information.
 	 * @returns {object} An object with the source and the filename (if available).
 	 */
-	static GetImageSource(src) {
+	static getImageSource(src) {
 
 		// if there is no image source or a data source the value can be returned.
 		// there is no possibility to get a url object with advanced information.
@@ -27,7 +27,7 @@ SEOInsights.Image = class Image {
 
 			// get the image source as url object to get the advanced information.
 			// if there is no protocol, the current protocol of the website is used (relative protocol).
-			const srcUrl = new URL(src, GetBaseUrl());
+			const srcUrl = new URL(src, getBaseUrl());
 
 			// ignore images of other extensions. chrome and edge use the same protocol.
 			if (srcUrl.protocol === 'chrome-extension:') {
@@ -49,7 +49,7 @@ SEOInsights.Image = class Image {
 	 * @param {object} context The specified context to get all the images.
 	 * @returns {Array<object>} An array with all found images of the specified context.
 	 */
-	static GetImagesOfDocument(context = null) {
+	static getImagesOfDocument(context = null) {
 		const images = [];
 
 		// get all <picture> and <img> element of the current context.
@@ -69,7 +69,7 @@ SEOInsights.Image = class Image {
 					// iterate through the sources.
 					for (const source of sources) {
 						pictures.push({
-							'src': SEOInsights.Image.GetImageSource(source.split(/[ ](?=\d+w)/)[0]),
+							'src': SEOInsights.Image.getImageSource(source.split(/[ ](?=\d+w)/)[0]),
 							'size': (source.split(/[ ](?=\d+w)/)[1] || '').toString().trim()
 						});
 					}
@@ -77,9 +77,9 @@ SEOInsights.Image = class Image {
 
 				// get the <img> element inside the <picture> element.
 				$('img', $(this)).filter(function() {
-					return (SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim()) !== null);
+					return (SEOInsights.Image.getImageSource(($(this).attr('src') || '').toString().trim()) !== null);
 				}).each(function() {
-					const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
+					const source = SEOInsights.Image.getImageSource(($(this).attr('src') || '').toString().trim());
 
 					// add the current image to the array.
 					images.push({
@@ -92,7 +92,7 @@ SEOInsights.Image = class Image {
 					});
 				});
 			} else if (elementTagName === 'img') {
-				const source = SEOInsights.Image.GetImageSource(($(this).attr('src') || '').toString().trim());
+				const source = SEOInsights.Image.getImageSource(($(this).attr('src') || '').toString().trim());
 
 				// ignore images without a source.
 				if (source === null) {
@@ -123,15 +123,15 @@ SEOInsights.Image = class Image {
 	 * Returns all images of the current website.
 	 * @returns {Array<object>} An array with all found images of the website.
 	 */
-	static GetImages() {
-		let images = SEOInsights.Image.GetImagesOfDocument();
+	static getImages() {
+		let images = SEOInsights.Image.getImagesOfDocument();
 
 		// iterate through the frames of the page to get the images of the available frames.
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 
 			// there are also blocked frames so we have to try to get the document of the frame.
 			try {
-				images = images.concat(SEOInsights.Image.GetImagesOfDocument(window.frames[frameIndex].document));
+				images = images.concat(SEOInsights.Image.getImagesOfDocument(window.frames[frameIndex].document));
 			} catch(_e) {}
 		}
 
@@ -143,14 +143,14 @@ SEOInsights.Image = class Image {
 	 * Returns all icons of the current website.
 	 * @returns {Array<object>} An array with all found icons of the website.
 	 */
-	static GetIcons() {
+	static getIcons() {
 		const icons = [];
 
 		// iterate through all icons of the website header.
 		$('head > link[rel*="icon"]').filter(function() {
-			return (SEOInsights.Image.GetImageSource(($(this).attr('href') || '').toString().trim()) !== null);
+			return (SEOInsights.Image.getImageSource(($(this).attr('href') || '').toString().trim()) !== null);
 		}).each(function() {
-			const source = SEOInsights.Image.GetImageSource(($(this).attr('href') || '').toString().trim());
+			const source = SEOInsights.Image.getImageSource(($(this).attr('href') || '').toString().trim());
 
 			// add the icon to the array.
 			icons.push({

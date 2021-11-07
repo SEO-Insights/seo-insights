@@ -11,7 +11,7 @@ SEOInsights.Link = class Link {
 	 * @param {object} context The specified context to get all the links.
 	 * @returns {Array<object>} An array with all found links of the specified context.
 	 */
-	static GetLinksOfDocument(context = null) {
+	static getLinksOfDocument(context = null) {
 		const links = [];
 
 		// iterate through all links of the specified context.
@@ -34,7 +34,7 @@ SEOInsights.Link = class Link {
 
 					// get the url object of the current link.
 					// this can also be used to make sure the link is a valid url.
-					const url = new URL(href, GetBaseUrl());
+					const url = new URL(href, getBaseUrl());
 
 					// ignore the current link if it is a link of an extension.
 					// an extension can also set elements to the website.
@@ -65,14 +65,14 @@ SEOInsights.Link = class Link {
 	 * Returns all links of the current website.
 	 * @returns {Array<object>} An array with all found links of the website.
 	 */
-	static GetLinks() {
-		let links = SEOInsights.Link.GetLinksOfDocument();
+	static getLinks() {
+		let links = SEOInsights.Link.getLinksOfDocument();
 
 		// iterate through the frames of the page to get the links of the available frames.
 		// there are also blocked frames so we have to try to get the document of the frame.
 		for (let frameIndex = 0; frameIndex < window.frames.length; frameIndex++) {
 			try {
-				links = links.concat(SEOInsights.Link.GetLinksOfDocument(window.frames[frameIndex].document));
+				links = links.concat(SEOInsights.Link.getLinksOfDocument(window.frames[frameIndex].document));
 			} catch(_e) {}
 		}
 

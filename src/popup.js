@@ -15,7 +15,7 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 
 		// check whether it is possible to inject a content script to the current tab.
 		// there are some protocols and sites where no content script can be injected.
-		if (!CanInjectContentScript(tab)) {
+		if (!canInjectContentScript(tab)) {
 			$('body').addClass('not-supported');
 			return false;
 		} else {
@@ -32,7 +32,7 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 		chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tab.id}});
 		chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tab.id}});
 		chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
-			ViewSummary();
+			viewSummary();
 		});
 	});
 })();
@@ -42,7 +42,7 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
  * @param {chrome.tabs.Tab} tab The tab which should be checked whether a content script can be injected.
  * @returns {boolean} The state whether a content script can be injected.
  */
-function CanInjectContentScript(tab) {
+function canInjectContentScript(tab) {
 
 	// it is not possible to inject content scripts to the chrome webstore.
 	if (tab.url.startsWith('https://chrome.google.com')) {
@@ -58,7 +58,7 @@ function CanInjectContentScript(tab) {
  * @param {object} cardHeader The card header to set the count of table items.
  * @param {object} table The table container to get the count of items.
  */
-function SetTableCountOnCardHeader(cardHeader, table) {
+function setTableCountOnCardHeader(cardHeader, table) {
 	const count = $(table).find('tr').length;
 	const cardHeaderButton = $(cardHeader).find('button');
 
@@ -80,7 +80,7 @@ function SetTableCountOnCardHeader(cardHeader, table) {
 /**
  * Resets all filter controls on the headings tab.
  */
-function ResetHeadingFilter() {
+function resetHeadingFilter() {
 	$('tr.filter td[id^="headings-h"]').each(function() {
 		$(this).off('click');
 		$(this).css('color', '#000');
@@ -91,7 +91,7 @@ function ResetHeadingFilter() {
  * Callback function of the heading filter items.
  * @param {object} event The event object.
  */
-function CallbackHeadingFilter(event) {
+function callbackHeadingFilter(event) {
 
 	// don't use the filter on not existing elements.
 	if ($(this).text() === '0') {
@@ -113,7 +113,7 @@ function CallbackHeadingFilter(event) {
  * @param {object} hoverItem The HTML element to bind the hover event to.
  * @param {string} imgUrl The image path to show on the image preview.
  */
-function ShowImagePreview(hoverItem, imgUrl) {
+function showImagePreview(hoverItem, imgUrl) {
 	$(hoverItem).on('mouseenter', function() {
 		$('div.img-preview', hoverItem).remove();
 		$(hoverItem).append(`<div class="img-preview"><img src="${imgUrl}"></div>`);
@@ -127,7 +127,7 @@ function ShowImagePreview(hoverItem, imgUrl) {
  * @param {Array<string>} urls An array with all urls to get the domains from.
  * @returns {Array<string>} An array with all domains of the given urls.
  */
-function GetDomains(urls) {
+function getDomains(urls) {
 	const domains = [];
 
 	// run through all urls to get the domain from.
@@ -149,7 +149,7 @@ function GetDomains(urls) {
  * @param {object} table The HTML object of the table.
  * @param {string} hint The hint to be shown on the empty table.
  */
-function SetEmptyHint(table, hint) {
+function setEmptyHint(table, hint) {
 	if (table.children('tbody').children().length === 0) {
 		table.children('tbody').append(`<tr class="empty-alert"><td><div class="alert alert-primary rounded-0" role="alert">${hint}</div></td></tr>`);
 	}
@@ -160,7 +160,7 @@ function SetEmptyHint(table, hint) {
  * @param {object} tab The HTML object of the tab.
  * @param {string} hint The hint to be shown on the empty tab.
  */
-function SetEmptyHintOnTabAccordion(tab, hint) {
+function setEmptyHintOnTabAccordion(tab, hint) {
 	if ($('div.accordion-item table tbody', tab).children().length === 0) {
 		$('div.alert.empty-alert', tab).remove();
 		$(tab).append(`<div class="alert alert-primary empty-alert rounded-0" role="alert">${hint}</div>`);
@@ -174,10 +174,10 @@ function SetEmptyHintOnTabAccordion(tab, hint) {
  * @param {object} html The HTML object to append the image information.
  * @param {string} source The url of the image to get the information from.
  */
-function SetImageInfo(html, source) {
+function setImageInfo(html, source) {
 	const image = new Image;
 	image.onload = function() {
-		html.append(GetInformation('size', `${image.width} x ${image.height}`));
+		html.append(getInformation('size', `${image.width} x ${image.height}`));
 	};
 	image.src = source;
 }
@@ -188,7 +188,7 @@ function SetImageInfo(html, source) {
  * @param {string} value The value used on the additional information.
  * @returns {string} The HTML element with the additional information.
  */
-function GetInformation(label, value) {
+function getInformation(label, value) {
 
 	// normalize the label and value.
 	const strLabel = (label || '').toString().trim();
@@ -211,7 +211,7 @@ function GetInformation(label, value) {
  * @param {string} value The value to check for a HEX color.
  * @returns {boolean} State whether the given value is a HEX color.
  */
-function IsColorHEX(value) {
+function isColorHEX(value) {
 	return (value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i) !== null);
 }
 
@@ -220,7 +220,7 @@ function IsColorHEX(value) {
  * @param {string} value The value to check for a RGB / RGBA color.
  * @returns {boolean} State whether the given value is a RGB / RGBA color.
  */
-function IsColorRGB(value) {
+function isColorRGB(value) {
 	return (value.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?(,[\s+]?\d?\.?\d+)?[\s+]?\)$/i) !== null);
 }
 
@@ -229,8 +229,8 @@ function IsColorRGB(value) {
  * @param {string} value The value to check for a color keyword.
  * @returns {boolean} State whether the given value is a color keyword.
  */
-function IsColorKeyword(value) {
-	return Object.keys(GetColorKeywords()).includes(value.toLowerCase());
+function isColorKeyword(value) {
+	return Object.keys(getColorKeywords()).includes(value.toLowerCase());
 }
 
 /**
@@ -238,8 +238,8 @@ function IsColorKeyword(value) {
  * @param {string} value The value to check for a color value.
  * @returns {boolean} State whether the given value is a color value.
  */
-function IsColor(value) {
-	return (IsColorHEX(value) || IsColorRGB(value) || IsColorKeyword(value));
+function isColor(value) {
+	return (isColorHEX(value) || isColorRGB(value) || isColorKeyword(value));
 }
 
 /**
@@ -248,7 +248,7 @@ function IsColor(value) {
  * @param {string} description The description of the tool.
  * @param {string} link The link to the tool website with website specific parameter.
  */
-function GetToolsItem(title, description, link) {
+function getToolsItem(title, description, link) {
 	return `<tr><td><a class="full-link" href="${link}" target="_blank"><div class="heading">${title}</div><span class="info">${description}</span></a></td></tr>`;
 }
 
@@ -258,7 +258,7 @@ function GetToolsItem(title, description, link) {
  * @param {integer} length The resulting string length after padding.
  * @returns {string} The string value padded with zeros to the expected length.
  */
-function PadZero(str, length) {
+function padZero(str, length) {
 	length = length || 2;
 	const zeros = new Array(length).join('0');
 	return (zeros + str).slice(-length);
@@ -269,7 +269,7 @@ function PadZero(str, length) {
  * @param {Array<string>} values The values to be formatted.
  * @returns {string} A single value or a list of values to display on the extension.
  */
-function GetFormattedArrayValue(values) {
+function getFormattedArrayValue(values) {
 	if (values.length > 1) {
 		return `<ul><li>${values.join('</li><li>')}</li></ul>`;
 	} else if (values.length == 1) {
@@ -286,7 +286,7 @@ function GetFormattedArrayValue(values) {
  * @returns {string} The color value of the inverted HEX value.
  * @see https://stackoverflow.com/a/35970186/3840840
  */
-function InvertColor(hexValue, useBlackWhite) {
+function invertColor(hexValue, useBlackWhite) {
 
 	// remove the hash of the hex value.
 	if (hexValue.indexOf('#') === 0) {
@@ -320,7 +320,7 @@ function InvertColor(hexValue, useBlackWhite) {
 	blue = (255 - blue).toString(16);
 
 	// pad each color component with zeros and return the hex value.
-	return `#${PadZero(red)}${PadZero(green)}${PadZero(blue)}`;
+	return `#${padZero(red)}${padZero(green)}${padZero(blue)}`;
 }
 
 /**
@@ -328,7 +328,7 @@ function InvertColor(hexValue, useBlackWhite) {
  * @param {string} rgb The RGB / RGBA value to convert.
  * @returns {string} The HEX value of the given RGB / RGBA value.
  */
-function RGBtoHEX(rgb) {
+function convertRGBtoHEX(rgb) {
 	rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
 	return (rgb && rgb.length === 4) ? `#${`0${parseInt(rgb[1], 10).toString(16)}`.slice(-2)}${`0${parseInt(rgb[2], 10).toString(16)}`.slice(-2)}${`0${parseInt(rgb[3], 10).toString(16)}`.slice(-2)}` : '';
 }
@@ -339,7 +339,7 @@ function RGBtoHEX(rgb) {
  * @returns {integer} The count of words in the given string value.
  * @see https://stackoverflow.com/a/18679657/3840840
  */
-function GetWordCount(text) {
+function getWordCount(text) {
 	text = text.replace(/(^\s*)|(\s*$)/gi, ''); // remove all starting and ending spaces.
 	text = text.replace(/-\s/gi, ''); // remove dash with empty string to detect the two parts as single word.
 	text = text.replace(/\s/gi, ' '); // replace all space characters with a single space char.
@@ -355,7 +355,7 @@ function GetWordCount(text) {
  * @returns {integer} The count of emojis in the given string value.
  * @see https://mathiasbynens.be/notes/es-unicode-property-escapes#emoji
  */
-function GetEmojiCount(text) {
+function getEmojiCount(text) {
 	return (text.match(/\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}|\p{So}|\p{Emoji}\uFE0F/gu) || []).length;
 }
 
@@ -364,11 +364,11 @@ function GetEmojiCount(text) {
  * @param {string} text The string value to get the text information from.
  * @returns {object} The object with information of the given string info.
  */
-function GetTextInformation(text) {
+function getTextInformation(text) {
 	return {
-		'chars': ReplaceCharactersHTML(text).length,
-		'words': GetWordCount(ReplaceCharactersHTML(text)),
-		'emojis': GetEmojiCount(text)
+		'chars': replaceCharactersHTML(text).length,
+		'words': getWordCount(replaceCharactersHTML(text)),
+		'emojis': getEmojiCount(text)
 	};
 }
 
@@ -377,7 +377,7 @@ function GetTextInformation(text) {
  * @param {string} str The string value to replace all HTML characters to real characters.
  * @returns {string} The string with all replaced HTML characters.
  */
-function ReplaceCharactersHTML(str) {
+function replaceCharactersHTML(str) {
 	return String(str).replace(/&#*([^&#;]+);/g, function(match, s) {
 		if (isNaN(s)) {
 			return {
@@ -398,7 +398,7 @@ function ReplaceCharactersHTML(str) {
  * @param {string} str The string value to be escaped.
  * @returns {string} The escaped string value to display HTML specific chars on HTML.
  */
-function EscapeHTML(str) {
+function escapeHTML(str) {
 	return String(str).replace(/[&<>"'/]/g, function(s) {
 		return {
 			"&": "&amp;",
@@ -416,7 +416,7 @@ function EscapeHTML(str) {
  * @returns {object} An object with all color keywords and their hex value.
  * @see https://drafts.csswg.org/css-color-3/#svg-color
  */
-function GetColorKeywords() {
+function getColorKeywords() {
 	return {
 		'aliceblue': 'f0f8ff',
 		'antiquewhite': 'faebd7',
@@ -573,9 +573,9 @@ function GetColorKeywords() {
  * @param {string} value The color value to format.
  * @returns {string} The formatted color value as HTML element.
  */
-function GetFormattedColorValue(value) {
-	const textColor = (IsColorKeyword(value)) ? GetColorKeywords()[value.toLowerCase()] : ((value.toLowerCase().startsWith('rgb')) ? RGBtoHEX(value) : value);
-	return `<div class="theme-color" style="background: ${value}; color: ${InvertColor(textColor, true)}">${value}</div>`;
+function getFormattedColorValue(value) {
+	const textColor = (isColorKeyword(value)) ? getColorKeywords()[value.toLowerCase()] : ((value.toLowerCase().startsWith('rgb')) ? convertRGBtoHEX(value) : value);
+	return `<div class="theme-color" style="background: ${value}; color: ${invertColor(textColor, true)}">${value}</div>`;
 }
 
 /**
@@ -584,7 +584,7 @@ function GetFormattedColorValue(value) {
  * @param {boolean} newline State whether the tags should be displayed on a new line.
  * @returns {string} The formatted text information of the given text.
  */
-function GetTextWordInformation(text, newline = false) {
+function getTextWordInformation(text, newline = false) {
 	text = (text || '').toString().trim();
 
 	// don't get the text information of a empty string value.
@@ -593,14 +593,14 @@ function GetTextWordInformation(text, newline = false) {
 	}
 
 	// get the text information of the given text.
-	const info = GetTextInformation(text);
+	const info = getTextInformation(text);
 
 	// return the formatted text information.
 	// display the count of emojis only if there are emojis.
 	return ((newline === true) ? '<br>' : '')
-		+ GetInformation('', `${info.chars} ${chrome.i18n.getMessage('chars')}`)
-		+ GetInformation('', `${info.words} ${chrome.i18n.getMessage('words')}`)
-		+ ((info.emojis > 0) ? GetInformation('', `${info.emojis} ${chrome.i18n.getMessage('emojis')}`) : '');
+		+ getInformation('', `${info.chars} ${chrome.i18n.getMessage('chars')}`)
+		+ getInformation('', `${info.words} ${chrome.i18n.getMessage('words')}`)
+		+ ((info.emojis > 0) ? getInformation('', `${info.emojis} ${chrome.i18n.getMessage('emojis')}`) : '');
 }
 
 /**
@@ -612,20 +612,20 @@ function GetTextWordInformation(text, newline = false) {
  * @param {boolean} isHtmlValue The state whether the value is formatted with HTML (so don't escape the value).
  * @returns {string} The row containing the information in two column. There is also a marker for later access if given.
  */
-function GetInformationRow(name, value, markerName, markerValue, isHtmlValue = false) {
+function getInformationRow(name, value, markerName, markerValue, isHtmlValue = false) {
 	const namesInfoDetailed = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title', 'twitter:image:alt'];
 	let info = '';
 
 	// get the additional information on specific information.
 	if (namesInfoDetailed.includes(name)) {
-		info = GetTextWordInformation(value, true);
+		info = getTextWordInformation(value, true);
 	}
 
 	// return a new information row with or without the row marker.
 	if (markerName && markerValue) {
-		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${(isHtmlValue) ? value : EscapeHTML(ReplaceCharactersHTML(value))}</td></tr>`;
+		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${(isHtmlValue) ? value : escapeHTML(replaceCharactersHTML(value))}</td></tr>`;
 	} else {
-		return `<tr><td>${name} ${info}</td><td>${(isHtmlValue) ? value : EscapeHTML(ReplaceCharactersHTML(value))}</td></tr>`;
+		return `<tr><td>${name} ${info}</td><td>${(isHtmlValue) ? value : escapeHTML(replaceCharactersHTML(value))}</td></tr>`;
 	}
 }
 
@@ -636,25 +636,25 @@ jQuery(function() {
 	$.fx.off = true;
 
 	// translate all placeholder of the extension.
-	TranslateHTML();
+	translateHTML();
 
 	// only register the events if the extension can be used.
 	if ($('body').hasClass('not-supported') === false) {
-		$('button#view-summary-tab').on('click', ViewSummary);
-		$('button#view-meta-details-tab').on('click', ViewMetaDetails);
-		$('button#view-headings-tab').on('click', ViewHeadings);
-		$('button#view-images-tab').on('click', ViewImages);
-		$('button#view-hyperlinks-tab').on('click', ViewHyperlinks);
-		$('button#view-files-tab').on('click', ViewFiles);
-		$('button#view-headers-tab').on('click', ViewHeader);
-		$('button#view-tools-tab').on('click', ViewTools);
+		$('button#view-summary-tab').on('click', viewSummary);
+		$('button#view-meta-details-tab').on('click', viewMetaDetails);
+		$('button#view-headings-tab').on('click', viewHeadings);
+		$('button#view-images-tab').on('click', viewImages);
+		$('button#view-hyperlinks-tab').on('click', viewHyperlinks);
+		$('button#view-files-tab').on('click', viewFiles);
+		$('button#view-headers-tab').on('click', viewHeader);
+		$('button#view-tools-tab').on('click', viewTools);
 	}
 });
 
 /**
  * View for Meta.
  */
-function ViewMetaDetails() {
+function viewMetaDetails() {
 
 	// get the current / active tab of the current window and send a message
 	// to the content script to get the information from website.
@@ -708,53 +708,53 @@ function ViewMetaDetails() {
 
 		// set Open Graph basic information to the table.
 		itemsOpenGraphBasic.forEach(function(item, index) {
-			tableOpenGraphBasic.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim(), 'id', `og-basic-${index}`));
+			tableOpenGraphBasic.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim(), 'id', `og-basic-${index}`));
 		});
 
 		// set Open Graph article information to the table.
 		itemsOpenGraphArticle.forEach(function(item) {
-			tableOpenGraphArticle.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
+			tableOpenGraphArticle.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		// set Open Graph audio information to the table.
 		itemsOpenGraphAudio.forEach(function(item) {
-			tableOpenGraphAudio.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
+			tableOpenGraphAudio.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		// set Open Graph book information to the table.
 		itemsOpenGraphBook.forEach(function(item) {
-			tableOpenGraphBook.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
+			tableOpenGraphBook.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		// set Open Graph image information to the table.
 		itemsOpenGraphImage.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableOpenGraphImage.children('tbody').append(GetInformationRow(item.name, value, 'id', `og-image-${index}`));
+			tableOpenGraphImage.children('tbody').append(getInformationRow(item.name, value, 'id', `og-image-${index}`));
 
 			// on image information, a image preview is possible.
 			if (['og:image', 'og:image:url', 'og:image:secure_url'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableOpenGraphImage.find(`tbody tr#og-image-${index} td`), new URL(value, tabUrlOrigin));
+				showImagePreview(tableOpenGraphImage.find(`tbody tr#og-image-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
 		// set Open Graph profile information to the table.
 		itemsOpenGraphProfile.forEach(function(item) {
-			tableOpenGraphProfile.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
+			tableOpenGraphProfile.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		// set Open Graph video information to the table.
 		itemsOpenGraphVideo.forEach(function(item) {
-			tableOpenGraphVideo.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
+			tableOpenGraphVideo.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		// set Parsely information to the table.
 		itemsParsely.forEach(function(item) {
-			tableParsely.children('tbody').append(GetInformationRow(item.name, (item.value || '').toString().trim()));
+			tableParsely.children('tbody').append(getInformationRow(item.name, (item.value || '').toString().trim()));
 		});
 
 		// set Dublin Core information to the table.
 		itemsDublinCore.forEach(function(item) {
-			tableDublinCore.children('tbody').append(GetInformationRow(item.name, ((item.value || '').toString().trim())));
+			tableDublinCore.children('tbody').append(getInformationRow(item.name, ((item.value || '').toString().trim())));
 		});
 
 		// set Twitter information to the table.
@@ -762,33 +762,33 @@ function ViewMetaDetails() {
 			const value = (item.value || '').toString().trim();
 
 			// some information can be displayed with additional information.
-			tableTwitter.children('tbody').append(GetInformationRow(item.name, value, 'id', `twitter-${index}`));
+			tableTwitter.children('tbody').append(getInformationRow(item.name, value, 'id', `twitter-${index}`));
 
 			// on image information, a image preview is possible.
 			if (['twitter:image:src', 'twitter:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableTwitter.find(`tbody tr#twitter-${index} td`), new URL(value, tabUrlOrigin));
+				showImagePreview(tableTwitter.find(`tbody tr#twitter-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
 		// set Shareaholic content information to the table.
 		itemsShareaholicContent.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableShareaholicContent.children('tbody').append(GetInformationRow(item.name, value, 'id', `shareaholic-${index}`));
+			tableShareaholicContent.children('tbody').append(getInformationRow(item.name, value, 'id', `shareaholic-${index}`));
 
 			// on image information, a image preview is possible.
 			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableShareaholicContent.find(`tbody tr#shareaholic-${index} td`), new URL(value, tabUrlOrigin));
+				showImagePreview(tableShareaholicContent.find(`tbody tr#shareaholic-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
 		// set Shareaholic content information to the table.
 		itemsShareaholicFeature.forEach(function(item, index) {
 			const value = (item.value || '').toString().trim();
-			tableShareaholicFeature.children('tbody').append(GetInformationRow(item.name, value, 'id', `shareaholic-${index}`));
+			tableShareaholicFeature.children('tbody').append(getInformationRow(item.name, value, 'id', `shareaholic-${index}`));
 
 			// on image information, a image preview is possible.
 			if (['shareaholic:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableShareaholicFeature.find(`tbody tr#shareaholic-${index} td`), new URL(value, tabUrlOrigin));
+				showImagePreview(tableShareaholicFeature.find(`tbody tr#shareaholic-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
@@ -797,42 +797,42 @@ function ViewMetaDetails() {
 			const value = (item.value || '').toString().trim();
 
 			// depending on the value of the meta property format the value.
-			if (IsColor(value)) {
-				tableOthers.children('tbody').append(GetInformationRow(item.name, GetFormattedColorValue(value), undefined, undefined, true));
+			if (isColor(value)) {
+				tableOthers.children('tbody').append(getInformationRow(item.name, getFormattedColorValue(value), undefined, undefined, true));
 			} else {
-				tableOthers.children('tbody').append(GetInformationRow(item.name, value, 'id', `others-${index}`));
+				tableOthers.children('tbody').append(getInformationRow(item.name, value, 'id', `others-${index}`));
 			}
 
 			// on image information, a image preview is possible.
 			if (['msapplication-tileimage', 'msapplication-square70x70logo', 'msapplication-square150x150logo', 'msapplication-square310x310logo', 'forem:logo', 'aiturec:image', 'vk:image', 'shareaholic:image'].includes(item.name.toLowerCase())) {
-				ShowImagePreview(tableOthers.find(`tbody tr#others-${index} td`), new URL(value, tabUrlOrigin));
+				showImagePreview(tableOthers.find(`tbody tr#others-${index} td`), new URL(value, tabUrlOrigin));
 			}
 		});
 
 		// now all lists are created so it is possible to count the items of each list.
-		SetTableCountOnCardHeader($('#meta-details-opengraph-basic-heading'), tableOpenGraphBasic);
-		SetTableCountOnCardHeader($('#meta-details-opengraph-article-heading'), tableOpenGraphArticle);
-		SetTableCountOnCardHeader($('#meta-details-opengraph-audio-heading'), tableOpenGraphAudio);
-		SetTableCountOnCardHeader($('#meta-details-opengraph-book-heading'), tableOpenGraphBook);
-		SetTableCountOnCardHeader($('#meta-details-opengraph-image-heading'), tableOpenGraphImage);
-		SetTableCountOnCardHeader($('#meta-details-opengraph-profile-heading'), tableOpenGraphProfile);
-		SetTableCountOnCardHeader($('#meta-details-opengraph-video-heading'), tableOpenGraphVideo);
-		SetTableCountOnCardHeader($('#meta-details-twitter-heading'), tableTwitter);
-		SetTableCountOnCardHeader($('#meta-details-dublincore-heading'), tableDublinCore);
-		SetTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
-		SetTableCountOnCardHeader($('#meta-details-shareaholic-content-heading'), tableShareaholicContent);
-		SetTableCountOnCardHeader($('#meta-details-shareaholic-feature-heading'), tableShareaholicFeature);
-		SetTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
+		setTableCountOnCardHeader($('#meta-details-opengraph-basic-heading'), tableOpenGraphBasic);
+		setTableCountOnCardHeader($('#meta-details-opengraph-article-heading'), tableOpenGraphArticle);
+		setTableCountOnCardHeader($('#meta-details-opengraph-audio-heading'), tableOpenGraphAudio);
+		setTableCountOnCardHeader($('#meta-details-opengraph-book-heading'), tableOpenGraphBook);
+		setTableCountOnCardHeader($('#meta-details-opengraph-image-heading'), tableOpenGraphImage);
+		setTableCountOnCardHeader($('#meta-details-opengraph-profile-heading'), tableOpenGraphProfile);
+		setTableCountOnCardHeader($('#meta-details-opengraph-video-heading'), tableOpenGraphVideo);
+		setTableCountOnCardHeader($('#meta-details-twitter-heading'), tableTwitter);
+		setTableCountOnCardHeader($('#meta-details-dublincore-heading'), tableDublinCore);
+		setTableCountOnCardHeader($('#meta-details-parsely-heading'), tableParsely);
+		setTableCountOnCardHeader($('#meta-details-shareaholic-content-heading'), tableShareaholicContent);
+		setTableCountOnCardHeader($('#meta-details-shareaholic-feature-heading'), tableShareaholicFeature);
+		setTableCountOnCardHeader($('#meta-details-others-heading'), tableOthers);
 
 		// display a hint if there are no meta elements (no accordions).
-		SetEmptyHintOnTabAccordion($('div#view-meta-details'), chrome.i18n.getMessage('no_meta_items'));
+		setEmptyHintOnTabAccordion($('div#view-meta-details'), chrome.i18n.getMessage('no_meta_items'));
 	};
 }
 
 /**
  * View for Summary.
  */
-function ViewSummary() {
+function viewSummary() {
 
 	// get the current / active tab of the current window and send a message
 	// to the content script to get the information from website.
@@ -874,26 +874,26 @@ function ViewSummary() {
 			// check how many items are available. on multiple values display the values as list.
 			if (items.length === 1) {
 				if (name === 'canonical') {
-					tableSummary.children('tbody').append(GetInformationRow(name + (items[0].value === tabUrl ? '<span class="info d-block">self-referential</span>' : ''), items[0].value));
+					tableSummary.children('tbody').append(getInformationRow(name + (items[0].value === tabUrl ? '<span class="info d-block">self-referential</span>' : ''), items[0].value));
 				} else {
-					if (IsColor(items[0].value)) {
-						tableSummary.children('tbody').append(GetInformationRow(name, GetFormattedColorValue(items[0].value), undefined, undefined, true));
+					if (isColor(items[0].value)) {
+						tableSummary.children('tbody').append(getInformationRow(name, getFormattedColorValue(items[0].value), undefined, undefined, true));
 					} else {
-						tableSummary.children('tbody').append(GetInformationRow(name, items[0].value));
+						tableSummary.children('tbody').append(getInformationRow(name, items[0].value));
 					}
 				}
 			} else if (items.length > 1) {
 				if (name === 'theme-color') {
-					tableSummary.children('tbody').append(`<tr><td>${name}</td><td>${items.map(metaItem => GetFormattedColorValue(metaItem.value)).join('')}</td></tr>`);
+					tableSummary.children('tbody').append(`<tr><td>${name}</td><td>${items.map(metaItem => getFormattedColorValue(metaItem.value)).join('')}</td></tr>`);
 				} else {
-					tableSummary.children('tbody').append(`<tr><td>${name}</td><td><ul><li>${items.map(metaItem => EscapeHTML(metaItem.value)).join('</li><li>')}</li></ul></td></tr>`);
+					tableSummary.children('tbody').append(`<tr><td>${name}</td><td><ul><li>${items.map(metaItem => escapeHTML(metaItem.value)).join('</li><li>')}</li></ul></td></tr>`);
 				}
 			}
 		});
 
 		// function to group by a specific property.
 		// this function will be used to group the identifiers of Google Analytics and Google Tag Manager.
-		const GroupBy = key => array =>
+		const groupBy = key => array =>
 			array.reduce((objectsByKeyValue, obj) => {
 				objectsByKeyValue[obj[key]] = (objectsByKeyValue[obj[key]] || []).concat(obj.source).filter((v, i, a) => a.indexOf(v) === i);
 				return objectsByKeyValue;
@@ -902,30 +902,30 @@ function ViewSummary() {
 		// display the Google Analytics Tracking information of the website.
 		if (analytics.identifiers.length > 0 || analytics.files.length > 0) {
 			let info = [];
-			const groups = GroupBy('id')(analytics.identifiers);
+			const groups = groupBy('id')(analytics.identifiers);
 			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
 			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
-			tableSummary.children('tbody').append(`<tr><td>Google Analytics</td><td>${GetFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
+			tableSummary.children('tbody').append(`<tr><td>Google Analytics</td><td>${getFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
 		}
 
 		// display the Google Tag Manager information of the website.
 		if (tagmanager.identifiers.length > 0 || tagmanager.files.length > 0) {
 			let info = [];
-			const groups = GroupBy('id')(tagmanager.identifiers);
+			const groups = groupBy('id')(tagmanager.identifiers);
 			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
 			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
-			tableSummary.children('tbody').append(`<tr><td>Google Tag Manager</td><td>${GetFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
+			tableSummary.children('tbody').append(`<tr><td>Google Tag Manager</td><td>${getFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
 		}
 
 		// if there are no items display a hint.
-		SetEmptyHint(tableSummary, chrome.i18n.getMessage('no_summary_items'));
+		setEmptyHint(tableSummary, chrome.i18n.getMessage('no_summary_items'));
 	};
 }
 
 /**
  * View for Files.
  */
-function ViewFiles() {
+function viewFiles() {
 
 	// get the current / active tab of the current window and send a message
 	// to the content script to get the information from website.
@@ -954,8 +954,8 @@ function ViewFiles() {
 		// get the files from the content script.
 		const filesStylesheet = (info.stylesheet || []);
 		const filesJavaScript = (info.javascript || []);
-		const domainsStylesheet = GetDomains(filesStylesheet.map(file => file.url.href));
-		const domainsJavaScript = GetDomains(filesJavaScript.map(file => file.url.href));
+		const domainsStylesheet = getDomains(filesStylesheet.map(file => file.url.href));
+		const domainsJavaScript = getDomains(filesJavaScript.map(file => file.url.href));
 
 		// remove all rows of the files tables.
 		tableFilesStylesheet.children('tbody').empty();
@@ -970,7 +970,7 @@ function ViewFiles() {
 
 			// check whether the media property exists and add the additional information.
 			if (file.media.trim() !== '') {
-				tableFilesStylesheet.find(`tbody > tr#stylesheet-${index} td`).append(GetInformation('media', file.media.trim()));
+				tableFilesStylesheet.find(`tbody > tr#stylesheet-${index} td`).append(getInformation('media', file.media.trim()));
 			}
 		});
 
@@ -984,33 +984,33 @@ function ViewFiles() {
 
 			// check whether the async property exists and add the additional information.
 			if (file.async === true) {
-				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('async'));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(getInformation('async'));
 			}
 
 			// check whether the charset property exists and add the additional information.
 			if (file.charset) {
-				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('charset', file.charset.trim()));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(getInformation('charset', file.charset.trim()));
 			}
 
 			// check whether the file is a Google Analytics file and add a additional information.
 			if (filesGoogleAnalytics.findIndex(fileGA => fileGA.original === file.original) > -1) {
-				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('Google Analytics', ''));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(getInformation('Google Analytics', ''));
 			}
 
 			// check whether the file is a Google Tag Manager file and add a additional information.
 			if (filesGoogleTagManager.findIndex(fileGTM => fileGTM.original === file.original) > -1) {
-				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(GetInformation('Google Tag Manager', ''));
+				tableFilesJavaScript.find(`tbody tr#javascript-${index} td`).append(getInformation('Google Tag Manager', ''));
 			}
 		});
 
 		// set all the stylesheet domains to the table.
 		domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
-			tableStylesheetDomains.children('tbody').append(GetInformationRow(domain, domainsStylesheet.filter(domainItem => domainItem === domain).length));
+			tableStylesheetDomains.children('tbody').append(getInformationRow(domain, domainsStylesheet.filter(domainItem => domainItem === domain).length));
 		});
 
 		// set all the JavaScript domains to the table.
 		domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
-			tableJavaScriptDomains.children('tbody').append(GetInformationRow(domain, domainsJavaScript.filter(domainItem => domainItem === domain).length));
+			tableJavaScriptDomains.children('tbody').append(getInformationRow(domain, domainsJavaScript.filter(domainItem => domainItem === domain).length));
 		});
 
 		// create an array with all special files.
@@ -1023,28 +1023,28 @@ function ViewFiles() {
 			fetch(file).then(function(response) {
 				if (response.status == 200) {
 					tableFilesSpecial.children('tbody').append(`<tr id="special-${index}"><td><a href="${file}" target="_blank">${file}</a></td></tr>`);
-					SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
+					setTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
 
 					// display a hint if there are no meta elements (no accordions).
-					SetEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
+					setEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
 				}
 			});
 		});
 
 		// set the count of rows / items to the card header.
-		SetTableCountOnCardHeader($('#stylesheet-heading'), tableFilesStylesheet);
-		SetTableCountOnCardHeader($('#javascript-heading'), tableFilesJavaScript);
-		SetTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
+		setTableCountOnCardHeader($('#stylesheet-heading'), tableFilesStylesheet);
+		setTableCountOnCardHeader($('#javascript-heading'), tableFilesJavaScript);
+		setTableCountOnCardHeader($('#special-heading'), tableFilesSpecial);
 
 		// display a hint if there are no meta elements (no accordions).
-		SetEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
+		setEmptyHintOnTabAccordion($('div#view-files'), chrome.i18n.getMessage('no_file_items'));
 	};
 }
 
 /**
  * View for Header.
  */
-function ViewHeader() {
+function viewHeader() {
 	$('html, body').animate({scrollTop: '0px'}, 0);
 
 	// get the tab and table of the headers list.
@@ -1059,19 +1059,19 @@ function ViewHeader() {
 
 		// set every information of the header to the table.
 		for (const header of response.headers.entries()) {
-			tableHeaders.children('tbody').append(GetInformationRow(header[0], header[1]));
+			tableHeaders.children('tbody').append(getInformationRow(header[0], header[1]));
 		}
 
 		// set the status of the response to the table.
-		tableHeaders.children('tbody').append(GetInformationRow('HTTP Status', response.status));
-		tableHeaders.children('tbody').append(GetInformationRow('HTTP Version', response.statusText.trim() === '' ? 'HTTP/2' : 'HTTP/1'));
+		tableHeaders.children('tbody').append(getInformationRow('HTTP Status', response.status));
+		tableHeaders.children('tbody').append(getInformationRow('HTTP Version', response.statusText.trim() === '' ? 'HTTP/2' : 'HTTP/1'));
 	});
 }
 
 /**
  * View for Tools.
  */
-function ViewTools() {
+function viewTools() {
 	$('html, body').animate({scrollTop: '0px'}, 0);
 
 	// get the tab and table of the tools list.
@@ -1085,42 +1085,42 @@ function ViewTools() {
 	const encodedUrl = encodeURIComponent(tabUrl);
 
 	// add the tool "Page Speed Insights" to the table.
-	tableTools.children('tbody').append(GetToolsItem(
+	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_pagespeed_insights_title'),
 		chrome.i18n.getMessage('tools_pagespeed_insights_description'),
 		`https://developers.google.com/speed/pagespeed/insights/?url=${encodedUrl}`
 	));
 
 	// add the tool "W3C CSS Validation" to the table.
-	tableTools.children('tbody').append(GetToolsItem(
+	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_w3c_css_validation_title'),
 		chrome.i18n.getMessage('tools_w3c_css_validation_description'),
 		`https://jigsaw.w3.org/css-validator/validator?uri=${encodedUrl}`
 	));
 
 	// add the tool "Nu HTML checker" to the table.
-	tableTools.children('tbody').append(GetToolsItem(
+	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_nu_html_checker_title'),
 		chrome.i18n.getMessage('tools_nu_html_checker_description'),
 		`https://validator.w3.org/nu/?doc=${encodedUrl}`
 	));
 
 	// add the tool "GTmetrix" to the table.
-	tableTools.children('tbody').append(GetToolsItem(
+	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_gtmetrix_title'),
 		chrome.i18n.getMessage('tools_gtmetrix_description'),
 		`https://gtmetrix.com/?url=${encodedUrl}`
 	));
 
 	// add the tool "Google Search Console Rich Result Test" to the table.
-	tableTools.children('tbody').append(GetToolsItem(
+	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_gsc_rich_results_title'),
 		chrome.i18n.getMessage('tools_gsc_rich_results_description'),
 		`https://search.google.com/test/rich-results?url=${encodedUrl}`
 	));
 
 	// add the tool "Google Search Console Mobile Friendly Test" to the table.
-	tableTools.children('tbody').append(GetToolsItem(
+	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_title'),
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'),
 		`https://search.google.com/test/mobile-friendly?url=${encodedUrl}`
@@ -1135,7 +1135,7 @@ function ViewTools() {
 /**
  * View for Headings.
  */
-function ViewHeadings() {
+function viewHeadings() {
 
 	// get the current / active tab of the current window and send a message
 	// to the content script to get the information of the website.
@@ -1167,12 +1167,12 @@ function ViewHeadings() {
 		tableHeadingsErrors.children('tbody').empty();
 
 		// reset the filter on the heading tab.
-		ResetHeadingFilter();
+		resetHeadingFilter();
 
 		// iterate through the different levels of the headings and set the stats.
 		for (level = 1; level <= 6; level++) {
 			tableHeadingsStatistics.find(`td[id="headings-h${level}"]`).text(headings.filter(heading => heading.type === `h${level}`).length);
-			$(`td[id="headings-h${level}"]`).on('click', {'level': level}, CallbackHeadingFilter);
+			$(`td[id="headings-h${level}"]`).on('click', {'level': level}, callbackHeadingFilter);
 		}
 
 		// set the total count of headings to the table.
@@ -1180,21 +1180,21 @@ function ViewHeadings() {
 
 		// add all found headings to the table.
 		headings.forEach(function(heading) {
-			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${EscapeHTML(heading.text)}${GetTextWordInformation(heading.text, true)}</td></tr>`);
+			tableHeadings.children('tbody').append(`<tr class="level-${heading.type} is-empty"><td><span>${heading.type}</span>${escapeHTML(heading.text)}${getTextWordInformation(heading.text, true)}</td></tr>`);
 		});
 
 		// set a hint if there are no headings on the website.
-		SetEmptyHint(tableHeadings, chrome.i18n.getMessage('no_heading_items'));
+		setEmptyHint(tableHeadings, chrome.i18n.getMessage('no_heading_items'));
 
 		// set the count of found errors and warnings.
-		SetTableCountOnCardHeader($('#headings-errors-heading'), tableHeadingsErrors);
+		setTableCountOnCardHeader($('#headings-errors-heading'), tableHeadingsErrors);
 	};
 }
 
 /**
  * View for Images.
  */
-function ViewImages() {
+function viewImages() {
 
 	// get the current / active tab of the current window and send a message
 	// to the content script to get the information of the website.
@@ -1222,7 +1222,7 @@ function ViewImages() {
 		// get the images and icons from the content script.
 		const images = (info.images || []);
 		const icons = (info.icons || []);
-		const domains = GetDomains(images.map(image => image.source));
+		const domains = getDomains(images.map(image => image.source));
 
 		// remove all rows of the images, icons and domains table.
 		tableImages.children('tbody').empty();
@@ -1232,44 +1232,44 @@ function ViewImages() {
 		// set all the images to the table.
 		images.filter(image => (image.source || '').toString().trim() !== '').forEach(function(image, index) {
 			tableImages.children('tbody').append(`<tr id="img-${index}"><td><a target="_blank" href="${image.source}">${image.src}</a></td></tr>`);
-			ShowImagePreview($(`tbody tr#img-${index} td`, tableImages), image.source);
+			showImagePreview($(`tbody tr#img-${index} td`, tableImages), image.source);
 
 			// set the attribute information to the row.
 			for (const attribute of ['alt', 'title']) {
 				if ((image[attribute] || '').toString().trim() !== '') {
-					tableImages.find(`tbody tr#img-${index} td`).append(GetInformation(attribute, (image[attribute] || '').toString().trim()));
+					tableImages.find(`tbody tr#img-${index} td`).append(getInformation(attribute, (image[attribute] || '').toString().trim()));
 				}
 			}
 
 			// set the image information of the image itself.
-			SetImageInfo(tableImages.find(`tbody tr#img-${index} td`), image.source);
+			setImageInfo(tableImages.find(`tbody tr#img-${index} td`), image.source);
 		});
 
 		// set all the domains to the table.
 		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
-			tableImagesDomains.children('tbody').append(GetInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
+			tableImagesDomains.children('tbody').append(getInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
 		});
 
 		// set all the icons to the table.
 		icons.filter(icon => (icon.href || '').toString().trim() !== '').forEach(function(icon, index) {
 			tableImagesIcons.children('tbody').append(`<tr id="icon-${index}"><td><a target="_blank" href="${icon.source}">${icon.href}</a></td></tr>`);
-			ShowImagePreview($(`tr#icon-${index} td`, tableImagesIcons), icon.source);
+			showImagePreview($(`tr#icon-${index} td`, tableImagesIcons), icon.source);
 
 			// set the attribute information to the row.
 			for (const attribute of ['type', 'sizes']) {
 				if ((icon[attribute] || '').toString().trim() !== '') {
-					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(GetInformation(attribute, (icon[attribute] || '').toString().trim()));
+					tableImagesIcons.find(`tbody tr#icon-${index} td`).append(getInformation(attribute, (icon[attribute] || '').toString().trim()));
 				}
 			}
 
 			// set the image information of the icon itself.
-			SetImageInfo(tableImagesIcons.find(`tbody tr#icon-${index} td`), icon.source);
+			setImageInfo(tableImagesIcons.find(`tbody tr#icon-${index} td`), icon.source);
 		});
 
 		// set hints on empty tables.
-		SetEmptyHint(tableImages, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('images_lc')));
-		SetEmptyHint(tableImagesDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('images_lc')));
-		SetEmptyHint(tableImagesIcons, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('icons_lc')));
+		setEmptyHint(tableImages, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('images_lc')));
+		setEmptyHint(tableImagesDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('images_lc')));
+		setEmptyHint(tableImagesIcons, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('icons_lc')));
 
 		// set the image statistics to the table.
 		tableImagesStatistics.find('td[id="image-stats-all"]').text(images.length);
@@ -1294,7 +1294,7 @@ function ViewImages() {
 /**
  * View for Hyperlinks.
  */
-function ViewHyperlinks() {
+function viewHyperlinks() {
 
 	// get the current / active tab of the current window and send a message
 	// to the content script to get the information of the website.
@@ -1338,7 +1338,7 @@ function ViewHyperlinks() {
 		const preloads = (info.preload || []);
 		const prefetches = (info.dnsprefetch || []);
 		const preconnects = (info.preconnect || []);
-		const domains = GetDomains(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href));
+		const domains = getDomains(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href));
 
 		// set all the hyperlinks with href value to the table.
 		// don't show the hyperlinks with empty href attribute.
@@ -1348,14 +1348,14 @@ function ViewHyperlinks() {
 			// set the attribute information to the row.
 			for (const attribute of ['rel', 'target', 'title']) {
 				if ((hyperlink[attribute] || '').toString().trim() !== '') {
-					tableHyperlinks.find(`tbody tr#link-${index} td`).append(GetInformation(attribute, (hyperlink[attribute] || '').toString().trim()));
+					tableHyperlinks.find(`tbody tr#link-${index} td`).append(getInformation(attribute, (hyperlink[attribute] || '').toString().trim()));
 				}
 			}
 		});
 
 		// set all the hyperlink domains to the table.
 		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
-			tableDomains.children('tbody').append(GetInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
+			tableDomains.children('tbody').append(getInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
 		});
 
 		// set all the preloads to the table.
@@ -1380,18 +1380,18 @@ function ViewHyperlinks() {
 			// set the attribute information to the row.
 			for (const attribute of ['title', 'hreflang']) {
 				if ((alternates[attribute] || '').toString().trim() !== '') {
-					tableAlternate.find(`tbody tr#alternate-${index} td`).append(GetInformation(attribute, (alternates[attribute] || '').toString().trim()));
+					tableAlternate.find(`tbody tr#alternate-${index} td`).append(getInformation(attribute, (alternates[attribute] || '').toString().trim()));
 				}
 			}
 		});
 
 		// set hints on empty tables.
-		SetEmptyHint(tableHyperlinks, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('links_lc')));
-		SetEmptyHint(tableAlternate, chrome.i18n.getMessage('no_alternate_items'));
-		SetEmptyHint(tableDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('links_lc')));
-		SetEmptyHint(tablePreconnect, chrome.i18n.getMessage('no_preconnect_items'));
-		SetEmptyHint(tableDnsPrefetch, chrome.i18n.getMessage('no_dns_prefetch_items'));
-		SetEmptyHint(tablePreload, chrome.i18n.getMessage('no_preload_items'));
+		setEmptyHint(tableHyperlinks, chrome.i18n.getMessage('no_items', chrome.i18n.getMessage('links_lc')));
+		setEmptyHint(tableAlternate, chrome.i18n.getMessage('no_alternate_items'));
+		setEmptyHint(tableDomains, chrome.i18n.getMessage('no_domain_items', chrome.i18n.getMessage('links_lc')));
+		setEmptyHint(tablePreconnect, chrome.i18n.getMessage('no_preconnect_items'));
+		setEmptyHint(tableDnsPrefetch, chrome.i18n.getMessage('no_dns_prefetch_items'));
+		setEmptyHint(tablePreload, chrome.i18n.getMessage('no_preload_items'));
 
 		// set the statistics for the hyperlinks.
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all"]').text(hyperlinks.length);
