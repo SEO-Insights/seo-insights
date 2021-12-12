@@ -378,17 +378,17 @@ function getTextInformation(text) {
  * @returns {string} The string with all replaced HTML characters.
  */
 function replaceCharactersHTML(str) {
-	return String(str).replace(/&#*([^&#;]+);/g, function(match, s) {
-		if (isNaN(s)) {
+	return String(str).replace(/&#*([^&#;]+);/g, function(match, code) {
+		if (isNaN(code)) {
 			return {
 				"amp": "&",
 				"lt": "<",
 				"gt": ">",
 				"quot": '"',
 				"x2F": "/"
-			}[s];
+			}[code];
 		} else {
-			return String.fromCharCode(s);
+			return String.fromCharCode(code);
 		}
 	});
 }
@@ -399,7 +399,7 @@ function replaceCharactersHTML(str) {
  * @returns {string} The escaped string value to display HTML specific chars on HTML.
  */
 function escapeHTML(str) {
-	return String(str).replace(/[&<>"'/]/g, function(s) {
+	return String(str).replace(/[&<>"'/]/g, function(char) {
 		return {
 			"&": "&amp;",
 			"<": "&lt;",
@@ -407,7 +407,7 @@ function escapeHTML(str) {
 			'"': '&quot;',
 			"'": '&#39;',
 			"/": '&#x2F;'
-		}[s];
+		}[char];
 	});
 }
 
@@ -865,10 +865,10 @@ function viewSummary() {
 		// get a specific order of the meta information.
 		// the important information have to be visible on top of the list.
 		const metaOrder = ['title', 'description', 'robots'];
-		const metasDisplay = (metas.filter(meta => metaOrder.indexOf(meta.name) > -1).sort((a, b) => metaOrder.indexOf(a.name) - metaOrder.indexOf(b.name)) || []).concat((metas.filter(meta => metaOrder.indexOf(meta.name) === -1) || []));
+		const metasDisplay = (metas.filter(meta => metaOrder.indexOf(meta.name) > -1).sort((first, second) => metaOrder.indexOf(first.name) - metaOrder.indexOf(second.name)) || []).concat((metas.filter(meta => metaOrder.indexOf(meta.name) === -1) || []));
 
 		// iterate through all meta items to set on table with specific formatting and information if needed.
-		metasDisplay.map(meta => meta.name).filter((v, i, a) => a.indexOf(v) === i).forEach(function(name) {
+		metasDisplay.map(meta => meta.name).filter((value, index, self) => self.indexOf(value) === index).forEach(function(name) {
 			const items = metasDisplay.filter(meta => meta.name === name);
 
 			// check how many items are available. on multiple values display the values as list.
@@ -895,7 +895,7 @@ function viewSummary() {
 		// this function will be used to group the identifiers of Google Analytics and Google Tag Manager.
 		const groupBy = key => array =>
 			array.reduce((objectsByKeyValue, obj) => {
-				objectsByKeyValue[obj[key]] = (objectsByKeyValue[obj[key]] || []).concat(obj.source).filter((v, i, a) => a.indexOf(v) === i);
+				objectsByKeyValue[obj[key]] = (objectsByKeyValue[obj[key]] || []).concat(obj.source).filter((value, index, self) => self.indexOf(value) === index);
 				return objectsByKeyValue;
 			}, {});
 
@@ -904,7 +904,7 @@ function viewSummary() {
 			let info = [];
 			const groups = groupBy('id')(analytics.identifiers);
 			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
-			info = info.concat(analytics.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(analytics.files.map(item => item.original).filter((value, index, self) => self.indexOf(value) === index));
 			tableSummary.children('tbody').append(`<tr><td>Google Analytics</td><td>${getFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
 		}
 
@@ -913,7 +913,7 @@ function viewSummary() {
 			let info = [];
 			const groups = groupBy('id')(tagmanager.identifiers);
 			info = info.concat(Object.keys(groups).map(identifier => `${identifier} (<i>${groups[identifier].join(' / ')}</i>)`));
-			info = info.concat(tagmanager.files.map(item => item.original).filter((v, i, a) => a.indexOf(v) === i));
+			info = info.concat(tagmanager.files.map(item => item.original).filter((value, index, self) => self.indexOf(value) === index));
 			tableSummary.children('tbody').append(`<tr><td>Google Tag Manager</td><td>${getFormattedArrayValue(info.filter(item => item !== null))}</td></tr>`);
 		}
 
@@ -1004,12 +1004,12 @@ function viewFiles() {
 		});
 
 		// set all the stylesheet domains to the table.
-		domainsStylesheet.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
+		domainsStylesheet.filter((value, index, self) => self.indexOf(value) === index).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
 			tableStylesheetDomains.children('tbody').append(getInformationRow(domain, domainsStylesheet.filter(domainItem => domainItem === domain).length));
 		});
 
 		// set all the JavaScript domains to the table.
-		domainsJavaScript.filter((v, i, a) => a.indexOf(v) === i).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
+		domainsJavaScript.filter((value, index, self) => self.indexOf(value) === index).filter(domain => domain.trim() !== '').sort().forEach(function(domain) {
 			tableJavaScriptDomains.children('tbody').append(getInformationRow(domain, domainsJavaScript.filter(domainItem => domainItem === domain).length));
 		});
 
@@ -1246,7 +1246,7 @@ function viewImages() {
 		});
 
 		// set all the domains to the table.
-		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
+		domains.filter((value, index, self) => self.indexOf(value) === index).sort().forEach(function(domain) {
 			tableImagesDomains.children('tbody').append(getInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
 		});
 
@@ -1354,7 +1354,7 @@ function viewHyperlinks() {
 		});
 
 		// set all the hyperlink domains to the table.
-		domains.filter((v, i, a) => a.indexOf(v) === i).sort().forEach(function(domain) {
+		domains.filter((value, index, self) => self.indexOf(value) === index).sort().forEach(function(domain) {
 			tableDomains.children('tbody').append(getInformationRow(domain, domains.filter(domainItem => domainItem === domain).length));
 		});
 
@@ -1395,11 +1395,11 @@ function viewHyperlinks() {
 
 		// set the statistics for the hyperlinks.
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all"]').text(hyperlinks.length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all-unique"]').text(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-all-unique"]').text(hyperlinks.filter(link => link.url !== undefined).map(link => link.url.href).filter((value, index, self) => self.indexOf(value) === index).length);
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === true).length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === true).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-internal-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === true).map(link => link.url.href).filter((value, index, self) => self.indexOf(value) === index).length);
 		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).length);
-		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((v, i, a) => a.indexOf(v) === i).length);
+		tableHyperlinksStatistics.find('td[id="hyperlink-stats-external-unique"]').text(hyperlinks.filter(link => link.url !== undefined && link.url.href.startsWith(tabUrlOrigin) === false).map(link => link.url.href).filter((value, index, self) => self.indexOf(value) === index).length);
 
 		// set the statistics for the attributes.
 		// get the count of the attributes to check.
