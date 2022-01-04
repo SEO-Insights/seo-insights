@@ -13,12 +13,12 @@ if (!IsInitializedContent) {
 					'meta': SEOInsights.Head.getCommonTags(),
 					'ga': {
 						'identifiers': SEOInsights.Head.getGoogleAnalytics(),
-						'files': SEOInsights.File.getGoogleAnalyticsFiles()
+						'files': SEOInsights.File.getGoogleAnalyticsFiles(),
 					},
 					'gtm': {
 						'identifiers': SEOInsights.Head.getGoogleTagManager(),
-						'files': SEOInsights.File.getGoogleTagManagerFiles()
-					}
+						'files': SEOInsights.File.getGoogleTagManagerFiles(),
+					},
 				});
 				break;
 			case INFO.META:
@@ -28,18 +28,18 @@ if (!IsInitializedContent) {
 					'others': SEOInsights.Head.getOthers(),
 					'parsely': SEOInsights.Meta.getParselyTags(),
 					'shareaholic': SEOInsights.Meta.getShareaholicTags(),
-					'twitter': SEOInsights.Meta.getTwitterTags()
+					'twitter': SEOInsights.Meta.getTwitterTags(),
 				});
 				break;
 			case INFO.HEADINGS:
 				sendResponse({
-					'headings': SEOInsights.Heading.getHeadings()
+					'headings': SEOInsights.Heading.getHeadings(),
 				});
 				break;
 			case INFO.IMAGES:
 				sendResponse({
 					'images': SEOInsights.Image.getImages(),
-					'icons': SEOInsights.Image.getIcons()
+					'icons': SEOInsights.Image.getIcons(),
 				});
 				break;
 			case INFO.LINKS:
@@ -48,7 +48,7 @@ if (!IsInitializedContent) {
 					'dnsprefetch': SEOInsights.Head.getDnsPrefetch(),
 					'links': SEOInsights.Link.getLinks(),
 					'preconnect': SEOInsights.Head.getPreconnect(),
-					'preload': SEOInsights.Head.getPreload()
+					'preload': SEOInsights.Head.getPreload(),
 				});
 				break;
 			case INFO.FILES:
@@ -56,7 +56,7 @@ if (!IsInitializedContent) {
 					'javascript': SEOInsights.File.getJavaScriptFiles(),
 					'stylesheet': SEOInsights.File.getStylesheetFiles(),
 					'googleanalytics': SEOInsights.File.getGoogleAnalyticsFiles(),
-					'googletagmanager': SEOInsights.File.getGoogleTagManagerFiles()
+					'googletagmanager': SEOInsights.File.getGoogleTagManagerFiles(),
 				});
 				break;
 		}

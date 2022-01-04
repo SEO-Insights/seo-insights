@@ -19,7 +19,7 @@ SEOInsights.Heading = class Heading {
 		$('h1, h2, h3, h4, h5, h6', context).each(function() {
 			headings.push({
 				text: ($(this).text() || '').toString().trim(),
-				type: ($(this).prop('tagName') || '').toString().trim().toLowerCase()
+				type: ($(this).prop('tagName') || '').toString().trim().toLowerCase(),
 			});
 		});
 

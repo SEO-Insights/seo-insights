@@ -20,12 +20,12 @@ SEOInsights.Meta = class Meta {
 				{ name: 'article:publisher', description: '' },
 				{ name: 'article:published_time', description: 'When the article was first published.' },
 				{ name: 'article:section', description: 'A high-level section name.' },
-				{ name: 'article:tag', description: 'Tag words associated with this article.' }
+				{ name: 'article:tag', description: 'Tag words associated with this article.' },
 			],
 			audio: [
 				{ name: 'og:audio', description: 'A relevant audio URL for your object.' },
 				{ name: 'og:audio:secure_url', description: 'A relevant, secure audio URL for your object.' },
-				{ name: 'og:audio:type', description: 'The mime type of an audio file.' }
+				{ name: 'og:audio:type', description: 'The mime type of an audio file.' },
 			],
 			basic: [
 				{ name: 'og:description', description: 'A one to two sentence description of your object.' },
@@ -37,13 +37,13 @@ SEOInsights.Meta = class Meta {
 				{ name: 'og:title', description: 'The title of the object as it should appear within the graph.' },
 				{ name: 'og:type', description: 'The type of your object, e.g., "movie".  Depending on the type you specify, other properties may also be required.' },
 				{ name: 'og:updated_time', description: '' },
-				{ name: 'og:url', description: 'The canonical URL of your object that will be used as its permanent ID in the graph.' }
+				{ name: 'og:url', description: 'The canonical URL of your object that will be used as its permanent ID in the graph.' },
 			],
 			book: [
 				{ name: 'book:author', description: 'Who wrote this book.' },
 				{ name: 'book:isbn', description: 'The ISBN.' },
 				{ name: 'book:release_date', description: 'The date the book was released.' },
-				{ name: 'book:tag', description: 'Tag words associated with this book.' }
+				{ name: 'book:tag', description: 'Tag words associated with this book.' },
 			],
 			image: [
 				{ name: 'og:image', description: 'An image URL which should represent your object within the graph.' },
@@ -52,21 +52,21 @@ SEOInsights.Meta = class Meta {
 				{ name: 'og:image:secure_url', description: 'A secure image URL which should represent your object within the graph.' },
 				{ name: 'og:image:type', description: 'The mime type of an image.' },
 				{ name: 'og:image:url', description: 'An image URL which should represent your object within the graph.' },
-				{ name: 'og:image:width', description: 'The width of an image.' }
+				{ name: 'og:image:width', description: 'The width of an image.' },
 			],
 			profile: [
 				{ name: 'profile:first_name', description: 'A name normally given to an individual by a parent or self-chosen.' },
 				{ name: 'profile:last_name', description: 'A name inherited from a family or marriage and by which the individual is commonly known.' },
 				{ name: 'profile:username', description: 'A short unique string to identify them.' },
-				{ name: 'profile:gender', description: 'Their gender.' }
+				{ name: 'profile:gender', description: 'Their gender.' },
 			],
 			video: [
 				{ name: 'og:video', description: 'A relevant video URL for your object.' },
 				{ name: 'og:video:height', description: 'The height of a video.' },
 				{ name: 'og:video:secure_url', description: 'A relevant, secure video URL for your object.' },
 				{ name: 'og:video:type', description: 'The mime type of a video.' },
-				{ name: 'og:video:width', description: 'The width of a video.' }
-			]
+				{ name: 'og:video:width', description: 'The width of a video.' },
+			],
 		};
 	}
 
@@ -87,7 +87,7 @@ SEOInsights.Meta = class Meta {
 				{ name: 'shareaholic:language', description: 'Language of the content of the webpage.' },
 				{ name: 'shareaholic:article_published_time', description: '(ISO 8601) - Timestamp for when the content of the webpage was first published.' },
 				{ name: 'shareaholic:article_modified_time', description: '(ISO 8601) - Timestamp for when the content on the webpage was last modified.' },
-				{ name: 'shareaholic:site_name', description: 'The site name which should be displayed for the overall site.' }
+				{ name: 'shareaholic:site_name', description: 'The site name which should be displayed for the overall site.' },
 			],
 			feature: [
 				{ name: 'shareaholic:site_id', description: 'Your Shareaholic API Key / Site ID.' },
@@ -96,8 +96,8 @@ SEOInsights.Meta = class Meta {
 				{ name: 'shareaholic:shareable_page', description: 'Whether the webpage is shareable.' },
 				{ name: 'shareaholic:outstreamads', description: 'Disables Outstream Video Ads.' },
 				{ name: 'shareaholic:drupal_version', description: 'Shareaholic for Drupal module version (automatically added by module).' },
-				{ name: 'shareaholic:wp_version', description: 'Shareaholic for WordPress plugin version (automatically added by plugin).' }
-			]
+				{ name: 'shareaholic:wp_version', description: 'Shareaholic for WordPress plugin version (automatically added by plugin).' },
+			],
 		};
 	}
 
@@ -245,7 +245,7 @@ SEOInsights.Meta = class Meta {
 		$('head meta[name^="DC."], head meta[name^="DCTERMS."], head meta[property^="DC."], head meta[property^="DCTERMS."]').each(function() {
 			tagsDublinCore.push({
 				name: (getName(this) || '').toString().trim(),
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 
@@ -315,7 +315,7 @@ SEOInsights.Meta = class Meta {
 			book: tagsBook,
 			image: tagsImage,
 			profile: tagsProfile,
-			video: tagsVideo
+			video: tagsVideo,
 		};
 	}
 
@@ -330,7 +330,7 @@ SEOInsights.Meta = class Meta {
 		$('head meta[name^="Parsely-"], head meta[property^="Parsely-"]').each(function() {
 			tagsParsely.push({
 				name: (getName(this) || '').toString().trim(),
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 
@@ -354,12 +354,12 @@ SEOInsights.Meta = class Meta {
 			if (SEOInsights.Meta.isShareaholicContentTag(tagName)) {
 				tagsContent.push({
 					name: tagName,
-					value: ($(this).attr('content') || '').toString().trim()
+					value: ($(this).attr('content') || '').toString().trim(),
 				});
 			} else if (SEOInsights.Meta.isShareaholicFeatureTag(tagName)) {
 				tagsFeature.push({
 					name: tagName,
-					value: ($(this).attr('content') || '').toString().trim()
+					value: ($(this).attr('content') || '').toString().trim(),
 				});
 			}
 		});
@@ -367,7 +367,7 @@ SEOInsights.Meta = class Meta {
 		// return all found Shareaholic tags.
 		return {
 			content: tagsContent,
-			feature: tagsFeature
+			feature: tagsFeature,
 		};
 	}
 
@@ -382,7 +382,7 @@ SEOInsights.Meta = class Meta {
 		$('head meta[name^="twitter:"], head meta[property^="twitter:"]').each(function() {
 			tagsTwitter.push({
 				name: (getName(this) || '').toString().trim(),
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 

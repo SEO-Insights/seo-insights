@@ -26,7 +26,7 @@ SEOInsights.Head = class Head {
 			'referrer',
 			'robots',
 			'theme-color',
-			'viewport'
+			'viewport',
 		];
 	}
 
@@ -36,7 +36,7 @@ SEOInsights.Head = class Head {
 	 */
 	static getArrayCommonTags() {
 		return [
-			'title'
+			'title',
 		];
 	}
 
@@ -58,7 +58,7 @@ SEOInsights.Head = class Head {
 		// iterate through the preconnect information.
 		$('head > link[rel="preconnect"]').each(function() {
 			tags.push({
-				href: ($(this).attr('href') || '').toString().trim()
+				href: ($(this).attr('href') || '').toString().trim(),
 			});
 		});
 
@@ -76,7 +76,7 @@ SEOInsights.Head = class Head {
 		// iterate through the DNS prefetch information of the website.
 		$('head > link[rel="dns-prefetch"]').each(function() {
 			tags.push({
-				href: ($(this).attr('href') || '').toString().trim()
+				href: ($(this).attr('href') || '').toString().trim(),
 			});
 		});
 
@@ -96,7 +96,7 @@ SEOInsights.Head = class Head {
 			tags.push({
 				title: ($(this).attr('title') || '').toString().trim(),
 				href: ($(this).attr('href') || '').toString().trim(),
-				hreflang: ($(this).attr('hreflang') || '').toString().trim()
+				hreflang: ($(this).attr('hreflang') || '').toString().trim(),
 			});
 		});
 
@@ -116,7 +116,7 @@ SEOInsights.Head = class Head {
 			tags.push({
 				href: ($(this).attr('href') || '').toString().trim(),
 				as: ($(this).attr('as') || '').toString().trim(),
-				type: ($(this).attr('type') || '').toString().trim()
+				type: ($(this).attr('type') || '').toString().trim(),
 			});
 		});
 
@@ -137,7 +137,7 @@ SEOInsights.Head = class Head {
 		}).each(function() {
 			tags.push({
 				name: ($(this).attr('name') || '').toString().trim().toLowerCase(),
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 
@@ -145,7 +145,7 @@ SEOInsights.Head = class Head {
 		$('html[lang]').each(function() {
 			tags.push({
 				name: 'lang',
-				value: ($(this).attr('lang') || '').toString().trim()
+				value: ($(this).attr('lang') || '').toString().trim(),
 			});
 		});
 
@@ -157,7 +157,7 @@ SEOInsights.Head = class Head {
 			if (itemTagCommon) {
 				tags.push({
 					name: tagCommon,
-					value: (itemTagCommon.text() || '').toString().trim()
+					value: (itemTagCommon.text() || '').toString().trim(),
 				});
 			}
 		}
@@ -169,7 +169,7 @@ SEOInsights.Head = class Head {
 		if (canonical !== '') {
 			tags.push({
 				name: 'canonical',
-				value: decodeURI((new URL(canonical, getBaseUrl())).href)
+				value: decodeURI((new URL(canonical, getBaseUrl())).href),
 			});
 		}
 
@@ -203,7 +203,7 @@ SEOInsights.Head = class Head {
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
-					source: 'url'
+					source: 'url',
 				});
 			}
 		}
@@ -220,7 +220,7 @@ SEOInsights.Head = class Head {
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
-					source: 'script'
+					source: 'script',
 				});
 			}
 		});
@@ -261,7 +261,7 @@ SEOInsights.Head = class Head {
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
-					source: 'url'
+					source: 'url',
 				});
 			}
 		}
@@ -283,7 +283,7 @@ SEOInsights.Head = class Head {
 			for (const id of (matches || []).filter(item => item !== null)) {
 				identifier.push({
 					id: id,
-					source: 'script'
+					source: 'script',
 				});
 			}
 		});
@@ -314,7 +314,7 @@ SEOInsights.Head = class Head {
 			// set the meta information to the array.
 			tags.push({
 				name: name,
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 
@@ -331,7 +331,7 @@ SEOInsights.Head = class Head {
 			// set the meta information to the array.
 			tags.push({
 				name: property,
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 
@@ -339,7 +339,7 @@ SEOInsights.Head = class Head {
 		$('head > meta[http-equiv]').each(function() {
 			tags.push({
 				name: ($(this).attr('http-equiv') || '').toString().trim(),
-				value: ($(this).attr('content') || '').toString().trim()
+				value: ($(this).attr('content') || '').toString().trim(),
 			});
 		});
 
@@ -347,7 +347,7 @@ SEOInsights.Head = class Head {
 		$('head > meta[charset]').each(function() {
 			tags.push({
 				name: 'charset',
-				value: ($(this).attr('charset') || '').toString().trim()
+				value: ($(this).attr('charset') || '').toString().trim(),
 			});
 		});
 

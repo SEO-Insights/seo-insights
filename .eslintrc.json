@@ -12,9 +12,12 @@
 		"block-scoped-var": "error",
 		"camelcase": "error",
 		"comma-dangle": ["error", {
-			"arrays": "only-multiline",
-			"objects": "only-multiline"
-		}],
+			"arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "always-multiline"
+    }],
 		"comma-spacing": ["error", { "before": false, "after": true }],
 		"id-length": "error",
 		"indent": ["error", "tab", { "SwitchCase": 1 }],

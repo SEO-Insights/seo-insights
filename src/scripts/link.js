@@ -25,7 +25,7 @@ SEOInsights.Link = class Link {
 				href: href,
 				rel: ($(this).attr('rel') || '').toString().trim(),
 				target: ($(this).attr('target') || '').toString().trim(),
-				title: ($(this).attr('title') || '').toString().trim()
+				title: ($(this).attr('title') || '').toString().trim(),
 			};
 
 			// set the url information to the link object if a target is available.
@@ -48,7 +48,7 @@ SEOInsights.Link = class Link {
 						href: (url.href || '').toString().trim(),
 						origin: (url.origin || '').toString().trim(),
 						path: (url.pathname || '').toString().trim(),
-						protocol: (url.protocol || '').toString().trim().replace(':', '')
+						protocol: (url.protocol || '').toString().trim().replace(':', ''),
 					};
 				} catch(_e) {}
 			}

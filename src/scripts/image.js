@@ -18,7 +18,7 @@ SEOInsights.Image = class Image {
 		if (src.trim() === '' || src.startsWith('data:')) {
 			return {
 				filename: '',
-				source: src
+				source: src,
 			};
 		}
 
@@ -37,7 +37,7 @@ SEOInsights.Image = class Image {
 			// return the image url and filename of the image source.
 			return {
 				filename: srcUrl.href.substring(srcUrl, srcUrl.href.lastIndexOf('/') + 1),
-				source: srcUrl.href
+				source: srcUrl.href,
 			};
 		} catch(_e) {
 			return null;
@@ -70,7 +70,7 @@ SEOInsights.Image = class Image {
 					for (const source of sources) {
 						pictures.push({
 							'src': SEOInsights.Image.getImageSource(source.split(/[ ](?=\d+w)/)[0]),
-							'size': (source.split(/[ ](?=\d+w)/)[1] || '').toString().trim()
+							'size': (source.split(/[ ](?=\d+w)/)[1] || '').toString().trim(),
 						});
 					}
 				});
@@ -88,7 +88,7 @@ SEOInsights.Image = class Image {
 						src: ($(this).attr('src') || '').toString().trim(),
 						source: source.source,
 						title: ($(this).attr('title') || '').toString().trim(),
-						pictures: pictures
+						pictures: pictures,
 					});
 				});
 			} else if (elementTagName === 'img') {
@@ -110,7 +110,7 @@ SEOInsights.Image = class Image {
 					filename: source.filename,
 					src: ($(this).attr('src') || '').toString().trim(),
 					source: source.source,
-					title: ($(this).attr('title') || '').toString().trim()
+					title: ($(this).attr('title') || '').toString().trim(),
 				});
 			}
 		});
@@ -158,7 +158,7 @@ SEOInsights.Image = class Image {
 				filename: source.filename,
 				sizes: ($(this).attr('sizes') || '').toString().trim(),
 				source: source.source,
-				type: ($(this).attr('type') || '').toString().trim()
+				type: ($(this).attr('type') || '').toString().trim(),
 			});
 		});
 

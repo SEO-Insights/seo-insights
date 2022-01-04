@@ -13,7 +13,7 @@ var INFO = {
 	IMAGES: 'images',
 	LINKS: 'links',
 	META: 'meta',
-	SUMMARY: 'summary'
+	SUMMARY: 'summary',
 };
 
 /**

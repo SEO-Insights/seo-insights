@@ -368,7 +368,7 @@ function getTextInformation(text) {
 	return {
 		'chars': replaceCharactersHTML(text).length,
 		'words': getWordCount(replaceCharactersHTML(text)),
-		'emojis': getEmojiCount(text)
+		'emojis': getEmojiCount(text),
 	};
 }
 
@@ -385,7 +385,7 @@ function replaceCharactersHTML(str) {
 				"lt": "<",
 				"gt": ">",
 				"quot": '"',
-				"x2F": "/"
+				"x2F": "/",
 			}[code];
 		} else {
 			return String.fromCharCode(code);
@@ -406,7 +406,7 @@ function escapeHTML(str) {
 			">": "&gt;",
 			'"': '&quot;',
 			"'": '&#39;',
-			"/": '&#x2F;'
+			"/": '&#x2F;',
 		}[char];
 	});
 }
@@ -564,7 +564,7 @@ function getColorKeywords() {
 		'white': 'ffffff',
 		'whitesmoke': 'f5f5f5',
 		'yellow': 'ffff00',
-		'yellowgreen': '9acd32'
+		'yellowgreen': '9acd32',
 	};
 }
 
@@ -662,7 +662,7 @@ function viewMetaDetails() {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
 			{info: INFO.META},
-			LoadMetaDetails
+			LoadMetaDetails,
 		);
 	});
 
@@ -840,7 +840,7 @@ function viewSummary() {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
 			{info: INFO.SUMMARY},
-			LoadSummary
+			LoadSummary,
 		);
 	});
 
@@ -933,7 +933,7 @@ function viewFiles() {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
 			{info: INFO.FILES},
-			LoadFiles
+			LoadFiles,
 		);
 	});
 
@@ -1088,42 +1088,42 @@ function viewTools() {
 	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_pagespeed_insights_title'),
 		chrome.i18n.getMessage('tools_pagespeed_insights_description'),
-		`https://developers.google.com/speed/pagespeed/insights/?url=${encodedUrl}`
+		`https://developers.google.com/speed/pagespeed/insights/?url=${encodedUrl}`,
 	));
 
 	// add the tool "W3C CSS Validation" to the table.
 	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_w3c_css_validation_title'),
 		chrome.i18n.getMessage('tools_w3c_css_validation_description'),
-		`https://jigsaw.w3.org/css-validator/validator?uri=${encodedUrl}`
+		`https://jigsaw.w3.org/css-validator/validator?uri=${encodedUrl}`,
 	));
 
 	// add the tool "Nu HTML checker" to the table.
 	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_nu_html_checker_title'),
 		chrome.i18n.getMessage('tools_nu_html_checker_description'),
-		`https://validator.w3.org/nu/?doc=${encodedUrl}`
+		`https://validator.w3.org/nu/?doc=${encodedUrl}`,
 	));
 
 	// add the tool "GTmetrix" to the table.
 	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_gtmetrix_title'),
 		chrome.i18n.getMessage('tools_gtmetrix_description'),
-		`https://gtmetrix.com/?url=${encodedUrl}`
+		`https://gtmetrix.com/?url=${encodedUrl}`,
 	));
 
 	// add the tool "Google Search Console Rich Result Test" to the table.
 	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_gsc_rich_results_title'),
 		chrome.i18n.getMessage('tools_gsc_rich_results_description'),
-		`https://search.google.com/test/rich-results?url=${encodedUrl}`
+		`https://search.google.com/test/rich-results?url=${encodedUrl}`,
 	));
 
 	// add the tool "Google Search Console Mobile Friendly Test" to the table.
 	tableTools.children('tbody').append(getToolsItem(
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_title'),
 		chrome.i18n.getMessage('tools_gsc_mobile_friendly_description'),
-		`https://search.google.com/test/mobile-friendly?url=${encodedUrl}`
+		`https://search.google.com/test/mobile-friendly?url=${encodedUrl}`,
 	));
 
 	// set the font color of the about links to red if the chrome extension is in development environment.
@@ -1143,7 +1143,7 @@ function viewHeadings() {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
 			{info: INFO.HEADINGS},
-			LoadHeadings
+			LoadHeadings,
 		);
 	});
 
@@ -1202,7 +1202,7 @@ function viewImages() {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
 			{info: INFO.IMAGES},
-			LoadImages
+			LoadImages,
 		);
 	});
 
@@ -1302,7 +1302,7 @@ function viewHyperlinks() {
 		chrome.tabs.sendMessage(
 			tabs[0].id,
 			{info: INFO.LINKS},
-			LoadHyperlinks
+			LoadHyperlinks,
 		);
 	});
 

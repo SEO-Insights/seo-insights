@@ -85,8 +85,8 @@ SEOInsights.File = class File {
 				charset: ($(this).attr('charset') || '').toString().trim(),
 				url: {
 					href: url.href,
-					origin: url.origin
-				}
+					origin: url.origin,
+				},
 			});
 		});
 
@@ -115,8 +115,8 @@ SEOInsights.File = class File {
 				charset: ($(this).attr('charset') || '').toString().trim(),
 				url: {
 					href: url.href,
-					origin: url.origin
-				}
+					origin: url.origin,
+				},
 			});
 		});
 
@@ -144,8 +144,8 @@ SEOInsights.File = class File {
 				charset: ($(this).attr('charset') || '').toString().trim(),
 				url: {
 					href: url.href,
-					origin: url.origin
-				}
+					origin: url.origin,
+				},
 			});
 		});
 
@@ -172,8 +172,8 @@ SEOInsights.File = class File {
 				media: ($(this).attr('media') || '').toString().trim(),
 				url: {
 					href: url.href,
-					origin: url.origin
-				}
+					origin: url.origin,
+				},
 			});
 		});
 
