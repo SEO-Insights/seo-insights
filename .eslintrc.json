@@ -22,7 +22,7 @@
 		"id-length": "error",
 		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"key-spacing": ["error", { "beforeColon": false }],
-		"linebreak-style": ["error", "windows"],
+		"linebreak-style": ["error", "unix"],
 		"new-cap": "error",
 		"no-array-constructor": "error",
 		"no-eval": "error",
