@@ -5,6 +5,12 @@
 	"summary": {
 		"message": "Übersicht"
 	},
+	"hint": {
+		"message": "Hinweis"
+	},
+	"cant_use": {
+		"message": "SEO Insights kann in diesem Tab nicht verwendet werden."
+	},
 	"headings": {
 		"message": "Überschriften"
 	},
