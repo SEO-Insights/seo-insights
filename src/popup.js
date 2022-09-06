@@ -636,7 +636,7 @@ jQuery(function() {
 	$.fx.off = true;
 
 	// translate all placeholder of the extension.
-	translateHTML();
+	translateTextContent();
 
 	// only register the events if the extension can be used.
 	if ($('body').hasClass('not-supported') === false) {
