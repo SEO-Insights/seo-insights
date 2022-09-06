@@ -143,5 +143,11 @@
 	},
 	"tools_pagespeed_insights_description": {
 		"message": "PageSpeed Insights analyzes the content of a web page, then generates suggestions to make that page faster."
+	},
+	"tools_securityheaders_title": {
+		"message": "Security Headers"
+	},
+	"tools_securityheaders_description": {
+		"message": "Security Headers is a tool for determining the HTTP response headers. It also checks whether the most important headers are present."
 	}
 }

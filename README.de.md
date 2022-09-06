@@ -24,6 +24,7 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
   - [GTmetrix](https://gtmetrix.com/)
   - [Test für Rich-Suchergebnisse](https://search.google.com/test/rich-results)
   - [Test auf Optimierung für Mobilgeräte](https://search.google.com/test/mobile-friendly)
+  - [Security Headers](https://securityheaders.com/)
 * Verfügbar in Englisch und Deutsch
 
 ### :rocket: Chrome Web Store

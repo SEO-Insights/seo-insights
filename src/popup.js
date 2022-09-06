@@ -1126,6 +1126,13 @@ function viewTools() {
 		`https://search.google.com/test/mobile-friendly?url=${encodedUrl}`,
 	));
 
+	// add the tool "Security Headers" to the table.
+	tableTools.children('tbody').append(getToolsItem(
+		chrome.i18n.getMessage('tools_securityheaders_title'),
+		chrome.i18n.getMessage('tools_securityheaders_description'),
+		`https://securityheaders.com/?q=${encodedUrl}&hide=on&followRedirects=on`,
+	));
+
 	// set the font color of the about links to red if the chrome extension is in development environment.
 	if (chrome.runtime.id !== storeId) {
 		$('div.about a').css('color', '#f00');
