@@ -1,7 +1,7 @@
 /* exported INFO */
 /* exported getBaseUrl */
 /* exported getName */
-/* exported translateHTML */
+/* exported translateTextContent */
 
 /*
  * The enum for the different information areas of this chrome extension.
