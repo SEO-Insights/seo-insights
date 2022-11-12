@@ -31,12 +31,12 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
 
 SEO Insights steht im [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de) zur Verfügung und kann darüber in Google Chrome sowie dem Microsoft Edge installiert werden. Um die aktuelle Entwicklungsversion testen zu können, steht [hier eine Anleitung](https://github.com/SEO-Insights/seo-insights/wiki/Development-de-DE) zur Verfügung.
 
-[![](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
+[![Available in the Chrome Web Store](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
 
 ### :hammer_and_wrench: Verwendete Bibliotheken
 
 * jQuery 3.6.1 ([Website](https://jquery.com/) - [GitHub](https://github.com/jquery/jquery))
-* Bootstrap 5.2.0 ([Website](https://getbootstrap.com/docs/5.2/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
+* Bootstrap 5.2.2 ([Website](https://getbootstrap.com/docs/5.2/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
 
 ### :tada: Neue Funktionen
 
