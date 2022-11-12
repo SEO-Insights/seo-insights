@@ -4,12 +4,12 @@ let tabUrlOrigin = '';
 const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 
 // start the chrome extension and inject the scripts to the website.
-// the injected scripts are used to get the needed information about the website.
+// the injected scripts are used to get the needed information of the website.
 (function() {
 	chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
 		const tab = tabs[0];
 
-		// set the common information about the website.
+		// set the common information of the website.
 		tabUrl = decodeURI(tab.url);
 		tabUrlOrigin = decodeURI((new URL(tab.url)).origin);
 
@@ -23,15 +23,17 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 		}
 
 		// programmatically inject the content scripts to the current tab.
-		chrome.scripting.executeScript({files: ['libs/jquery-3.6.1.min.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/helper.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/meta.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/head.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/image.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/heading.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/link.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['scripts/files.js'], target: {tabId: tab.id}});
-		chrome.scripting.executeScript({files: ['content.js'], target: {tabId: tab.id}}, () => {
+		chrome.scripting.executeScript({files: [
+			'libs/jquery-3.6.1.min.js',
+			'scripts/helper.js',
+			'scripts/meta.js',
+			'scripts/head.js',
+			'scripts/image.js',
+			'scripts/heading.js',
+			'scripts/link.js',
+			'scripts/files.js',
+			'content.js',
+		], target: {tabId: tab.id}}, () => {
 			viewSummary();
 		});
 	});
