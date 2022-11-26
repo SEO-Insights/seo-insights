@@ -53,7 +53,6 @@ function translateTextContent() {
 	$("body").find("*").contents().each(function() {
 		if (this.nodeType === 3) {
 			this.textContent = this.textContent.replace(/__MSG_(\w+)__/g, function(match, word) {
-				console.log(word);
 				return word ? chrome.i18n.getMessage(word) : '';
 			});
 		}
