@@ -24,7 +24,7 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 
 		// programmatically inject the content scripts to the current tab.
 		chrome.scripting.executeScript({files: [
-			'libs/jquery-3.6.1.min.js',
+			'libs/jquery-3.6.2.min.js',
 			'scripts/helper.js',
 			'scripts/meta.js',
 			'scripts/head.js',
