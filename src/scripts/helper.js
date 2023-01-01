@@ -57,4 +57,9 @@ function translateTextContent() {
 			});
 		}
 	});
+	$("body").find('a[href*="__MSG_"]').each(function() {
+		this.href = this.href.replace(/__MSG_(@@\w+)__/g, function(match, word) {
+			return word ? chrome.i18n.getMessage(word) : '';
+		});
+	});
 }
