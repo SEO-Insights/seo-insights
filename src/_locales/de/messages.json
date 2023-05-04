@@ -149,5 +149,11 @@
 	},
 	"tools_securityheaders_description": {
 		"message": "Security Headers ist ein Tool zur Ermittlung der HTTP Response Header. Es wird dabei auch überprüft ob die wichtigsten Header vorhanden sind."
+	},
+	"tools_ssl_server_test_title": {
+		"message": "SSL Server Test (Powered by Qualys SSL Labs)"
+	},
+	"tools_ssl_server_test_description": {
+		"message": "Der SSL-Server-Test ist ein Online-Dienst, mit dem Sie die Konfiguration jedes öffentlichen SSL-Webservers überprüfen können."
 	}
 }

@@ -30,6 +30,7 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 		// set the common information of the website.
 		tabUrl = decodeURI(tab.url);
 		tabUrlOrigin = decodeURI((new URL(tab.url)).origin);
+		tabUrlDomain = decodeURI((new URL(tab.url)).hostname);
 
 		// check whether it is possible to inject a content script to the current tab.
 		// there are some protocols and sites where no content script can be injected.
@@ -1103,6 +1104,7 @@ function viewTools() {
 
 	// get the encoded url to set on a url as parameter.
 	const encodedUrl = encodeURIComponent(tabUrl);
+	const encodedUrlDomain = encodeURIComponent(tabUrlDomain);
 
 	// add the tool "Page Speed Insights" to the table.
 	tableTools.children('tbody').append(getToolsItem(
@@ -1151,6 +1153,13 @@ function viewTools() {
 		chrome.i18n.getMessage('tools_securityheaders_title'),
 		chrome.i18n.getMessage('tools_securityheaders_description'),
 		`https://securityheaders.com/?q=${encodedUrl}&hide=on&followRedirects=on`,
+	));
+
+	// add the tool "SSL Server Test (Powered by Qualys SSL Labs)" to the table.
+	tableTools.children('tbody').append(getToolsItem(
+		chrome.i18n.getMessage('tools_ssl_server_test_title'),
+		chrome.i18n.getMessage('tools_ssl_server_test_description'),
+		`https://www.ssllabs.com/ssltest/analyze.html?d=${encodedUrlDomain}&hideResults=on&latest`,
 	));
 
 	// set the font color of the about links to red if the chrome extension is in development environment.

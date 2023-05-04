@@ -140,7 +140,11 @@ table#info-tools td:hover {
 table#info-tools div.heading {
 	font-weight: bold;
 }
+#view-tools {
+	padding-bottom: 18px;
+}
 #view-tools .about {
+	background: #fff;
 	border-top: 1px solid #777;
 	bottom: 0;
 	display: flex;
