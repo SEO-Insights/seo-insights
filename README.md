@@ -25,6 +25,7 @@ SEO Insights is a Chrome extension to display the most important information of 
   - [Rich Results Test](https://search.google.com/test/rich-results)
   - [Mobile-Friendly Test](https://search.google.com/test/mobile-friendly)
   - [Security Headers](https://securityheaders.com/)
+  - [SSL Server Test (Powered by Qualys SSL Labs)](https://www.ssllabs.com/ssltest/)
 * Available in English and German
 
 ### :rocket: Chrome Web Store
