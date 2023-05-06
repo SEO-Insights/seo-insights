@@ -9,6 +9,14 @@ body {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
+::-webkit-scrollbar {
+	background: #eee;
+	position: absolute;
+	width: 8px;
+}
+::-webkit-scrollbar-thumb {
+	background: #ddd;
+}
 div.nav-pills button.nav-link {
 	border-radius: 0;
 }
@@ -151,7 +159,7 @@ table#info-tools div.heading {
 	left: 0;
 	padding: 0 10px;
 	position: absolute;
-	right: 17px;
+	right: 8px;
 }
 #view-tools .about a {
 	color: #777;
