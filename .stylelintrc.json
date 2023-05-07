@@ -5,22 +5,15 @@
 	],
 	"rules": {
 		"block-no-empty": true,
-		"color-hex-case": "lower",
 		"color-no-invalid-hex": true,
 		"declaration-no-important": true,
-		"indentation": "tab",
+		"declaration-property-value-no-unknown": true,
 		"no-descending-specificity": null,
-		"no-extra-semicolons": true,
-		"number-leading-zero": "always",
 		"order/properties-alphabetical-order": true,
-		"property-case": "lower",
 		"rule-empty-line-before": "never",
-		"selector-list-comma-newline-after": "always",
 		"selector-pseudo-class-no-unknown": true,
 		"selector-pseudo-element-no-unknown": true,
 		"shorthand-property-no-redundant-values": true,
-		"string-quotes": "double",
-		"unit-case": "lower",
 		"unit-no-unknown": true,
 		"value-keyword-case": "lower"
 	}
