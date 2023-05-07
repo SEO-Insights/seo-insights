@@ -1,6 +1,6 @@
 {
   "name": "seo-insights",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "SEO Insights is a Chrome extension to display the most important information of a website at a glance.",
   "scripts": {
     "css-stylelint": "stylelint src/**/*.{css,scss}",
