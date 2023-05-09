@@ -23,6 +23,9 @@ div.nav-pills button.nav-link {
 nav.nav-main {
 	z-index: 999;
 }
+nav.nav-main div.nav-pills button.nav-link {
+	width: 100%;
+}
 div.container-fluid {
 	padding: 0;
 }
@@ -133,7 +136,7 @@ div.img-preview img {
 	max-height: 250px;
 	max-width: 250px;
 	position: fixed;
-	right: 27px;
+	right: 18px;
 	z-index: 999;
 }
 
