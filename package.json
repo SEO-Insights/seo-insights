@@ -29,10 +29,10 @@
   },
   "homepage": "https://github.com/SEO-Insights/seo-insights#readme",
   "devDependencies": {
-    "eslint": "^8.44.0",
+    "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "stylelint": "^15.10.0",
-    "stylelint-config-standard": "^34.0.0",
+    "stylelint": "^16.2.0",
+    "stylelint-config-standard": "^36.0.0",
     "stylelint-order": "^6.0.0"
   }
 }
