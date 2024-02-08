@@ -6,7 +6,7 @@
 
 SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Informationen einer Website anzeigen zu können.
 
-*Read this in other languages: [English](README.md), [Deutsch](README.de.md)*
+*Read this in other languages: [English](README.md), [Deutsch](README.de.md), [Español](README.es.md)*
 
 ### :star: Funktionen
 
@@ -26,7 +26,7 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
   - [Test auf Optimierung für Mobilgeräte](https://search.google.com/test/mobile-friendly)
   - [Security Headers](https://securityheaders.com/)
   - [SSL Server Test (Powered by Qualys SSL Labs)](https://www.ssllabs.com/ssltest/)
-* Verfügbar in Englisch und Deutsch
+* Verfügbar in Englisch, Deutsch und Spanisch
 
 ### :rocket: Chrome Web Store
 
