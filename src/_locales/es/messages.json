@@ -1,0 +1,159 @@
+{
+	"manifest_description": {
+		"message": "SEO Insights es una extensión que obtiene información para el análisis y optimización del sitio web."
+	},
+	"summary": {
+		"message": "Resumen"
+	},
+	"hint": {
+		"message": "Sugerencia"
+	},
+	"cant_use": {
+		"message": "SEO Insights no se puede utilizar en esta pestaña."
+	},
+	"headings": {
+		"message": "Encabezados"
+	},
+	"images": {
+		"message": "Imágenes"
+	},
+	"images_lc": {
+		"message": "imágenes"
+	},
+	"icons_lc": {
+		"message": "íconos"
+	},
+	"links_lc": {
+		"message": "enlaces"
+	},
+	"files": {
+		"message": "Archivos"
+	},
+	"errors_warnings_hints": {
+		"message": "Errores, advertencias y sugerencias"
+	},
+	"others": {
+		"message": "Otro"
+	},
+	"others_lc": {
+		"message": "otro"
+	},
+	"words": {
+		"message": "palabras"
+	},
+	"chars": {
+		"message": "caracteres"
+	},
+	"emojis": {
+		"message": "emojis"
+	},
+	"items": {
+		"message": "elementos"
+	},
+	"all": {
+		"message": "todos"
+	},
+	"without": {
+		"message": "no disponible"
+	},
+	"internal": {
+		"message": "interno"
+	},
+	"external": {
+		"message": "externo"
+	},
+	"unique": {
+		"message": "único"
+	},
+	"no_heading_items": {
+		"message": "Este sitio web no tiene encabezados."
+	},
+	"no_summary_items": {
+		"message": "Este sitio web no tiene meta para mostrar en el resumen."
+	},
+	"no_file_items": {
+		"message": "Este sitio web no tiene elementos de archivo."
+	},
+	"no_meta_items": {
+		"message": "Este sitio web no tiene elementos meta."
+	},
+	"no_items": {
+		"message": "Este sitio web no tiene $type$.",
+		"placeholders": {
+			"type": {
+				"content": "$1"
+			}
+		}
+	},
+	"no_alternate_items": {
+		"message": "Este sitio web no tiene enlaces alternativos."
+	},
+	"no_domain_items": {
+		"message": "Este sitio web no tiene $type$ con dominios.",
+		"placeholders": {
+			"type": {
+				"content": "$1"
+			}
+		}
+	},
+	"save": {
+		"message": "Guardar"
+	},
+	"no_preconnect_items": {
+		"message": "Este sitio web no tiene elementos preconnect."
+	},
+	"no_dns_prefetch_items": {
+		"message": "Este sitio web no tiene elementos DNS prefetch."
+	},
+	"no_preload_items": {
+		"message": "Este sitio web no tiene elementos de precargados."
+	},
+	"tools_gsc_mobile_friendly_title": {
+		"message": "Prueba de compatibilidad con móviles"
+	},
+	"tools_gsc_mobile_friendly_description": {
+		"message": "Pruebe si su sitio web es accesible para dispositivos móviles."
+	},
+	"tools_gsc_rich_results_title": {
+		"message": "Prueba de resultados enriquecidos"
+	},
+	"tools_gsc_rich_results_description": {
+		"message": "Prueba una página a la que pueda acceder todo el mundo para descubrir qué resultados enriquecidos se pueden generar con los datos estructurados que contiene."
+	},
+	"tools_gtmetrix_title": {
+		"message": "GTmetrix | Pruebas y Monitoreo del Rendimiento del Sitio Web"
+	},
+	"tools_gtmetrix_description": {
+		"message": "GTmetrix es una herramienta gratuita para probar y monitorear el rendimiento de su página. Utilizando Lighthouse, GTmetrix genera puntuaciones para sus páginas y ofrece recomendaciones prácticas sobre cómo optimizarlas."
+	},
+	"tools_nu_html_checker_title": {
+		"message": "Nu Html Checker"
+	},
+	"tools_nu_html_checker_description": {
+		"message": "Esta herramienta se puede utilizar para refinar y mejorar los marcadores HTML de un sitio web."
+	},
+	"tools_w3c_css_validation_title": {
+		"message": "W3C CSS Validation Service"
+	},
+	"tools_w3c_css_validation_description": {
+		"message": "El W3C CSS Validator es un software gratuito del W3C que está diseñado para ayudar a los diseñadores y desarrolladores web a verificar sus hojas de estilo en cascada (CSS)."
+	},
+	"tools_pagespeed_insights_title": {
+		"message": "PageSpeed Insights"
+	},
+	"tools_pagespeed_insights_description": {
+		"message": "PageSpeed Insights analiza el contenido de una página web y genera sugerencias para mejorar su velocidad de carga."
+	},
+	"tools_securityheaders_title": {
+		"message": "Security Headers"
+	},
+	"tools_securityheaders_description": {
+		"message": "Security Headers es una herramienta que determina las respuestas de cabeceras HTTP. También verifica si las cabeceras más importantes están definidas."
+	},
+	"tools_ssl_server_test_title": {
+		"message": "Prueba del Servidor SSL (Desarrollado por Qualys SSL Labs)"
+	},
+	"tools_ssl_server_test_description": {
+		"message": "El SSL server test es un servicio en línea que le permite inspeccionar la configuración de cualquier servidor web SSL público."
+	}
+}
