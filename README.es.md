@@ -41,4 +41,4 @@ SEO Insights está disponible en la [Chrome Web Store](https://chrome.google.com
 
 ### :tada: Próximas características
 
-SEO Insights está en desarrollo constante, por lo que recibe mejoras y nuevas funciones con el tiempo. Puedes ver las próximas características en [el hito actual](https://github.com/SEO-Insights/seo-insights/milestone/6) o en [la vista general de incidencias](https://github.com/SEO-Insights/seo-insights/issues).
+SEO Insights está en desarrollo constante, por lo que recibe mejoras y nuevas funciones con el tiempo. Puedes ver las próximas características en [el hito actual](https://github.com/SEO-Insights/seo-insights/milestone/7) o en [la vista general de incidencias](https://github.com/SEO-Insights/seo-insights/issues).

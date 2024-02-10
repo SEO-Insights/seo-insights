@@ -41,4 +41,4 @@ SEO Insights steht im [Chrome Web Store](https://chrome.google.com/webstore/deta
 
 ### :tada: Neue Funktionen
 
-SEO Insights befindet sich in aktiver Entwicklung und erhält mit der Zeit Verbesserungen und neue Funktionen. Sie können kommende Funktionen unter dem [aktuellen Milestone](https://github.com/SEO-Insights/seo-insights/milestone/6) oder in der [Übersicht der Issues](https://github.com/SEO-Insights/seo-insights/issues) einsehen.
+SEO Insights befindet sich in aktiver Entwicklung und erhält mit der Zeit Verbesserungen und neue Funktionen. Sie können kommende Funktionen unter dem [aktuellen Milestone](https://github.com/SEO-Insights/seo-insights/milestone/7) oder in der [Übersicht der Issues](https://github.com/SEO-Insights/seo-insights/issues) einsehen.
