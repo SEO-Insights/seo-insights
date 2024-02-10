@@ -635,19 +635,48 @@ function getTextWordInformation(text, newline = false) {
  */
 function getInformationRow(name, value, markerName, markerValue, isHtmlValue = false) {
 	const namesInfoDetailed = ['title', 'description', 'og:description', 'og:title', 'twitter:description', 'twitter:title', 'twitter:image:alt'];
+	const colorsSEOAdvice = ['title', 'description'];
 	let info = '';
+	let color = '';
 
 	// get the additional information on specific information.
 	if (namesInfoDetailed.includes(name)) {
 		info = getTextWordInformation(value, true);
 	}
 
+	// get the color to visually support the advice of value length in SEO.
+	if (colorsSEOAdvice.includes(name)) {
+		switch (name) {
+			case 'title':
+				color = getInformationColor(value, [{max: 9, color: 'red'}, {min: 10, max: 49, color: 'orange'}, {min: 50, max: 65, color: 'green'}, {min: 66, max: 69, color: 'orange'}, {min: 70, color: 'red'}]);
+				break;
+			case 'description':
+				color = getInformationColor(value, [{max: 40, color: 'red'}, {min: 41, max: 144, color: 'orange'}, {min: 145, max: 160, color: 'green'}, {min: 161, max: 165, color: 'orange'}, {min: 166, color: 'red'}]);
+				break;
+			default:
+				color = 'color-default';
+				break;
+		}
+	}
+
 	// return a new information row with or without the row marker.
 	if (markerName && markerValue) {
-		return `<tr ${markerName}="${markerValue}"><td>${name} ${info}</td><td>${(isHtmlValue) ? value : escapeHTML(replaceCharactersHTML(value))}</td></tr>`;
+		return `<tr ${markerName}="${markerValue}"><td class="${color}">${name} ${info}</td><td>${(isHtmlValue) ? value : escapeHTML(replaceCharactersHTML(value))}</td></tr>`;
 	} else {
-		return `<tr><td>${name} ${info}</td><td>${(isHtmlValue) ? value : escapeHTML(replaceCharactersHTML(value))}</td></tr>`;
+		return `<tr><td class="${color}">${name} ${info}</td><td>${(isHtmlValue) ? value : escapeHTML(replaceCharactersHTML(value))}</td></tr>`;
 	}
+}
+
+/**
+ * Returns the color defined by the rules and depending on the length of the value.
+ * @param {string} value The value whose length is to be determined.
+ * @param {*} colors An array with the rules to determine the color depending on the length of the value.
+ * @returns {string} The color defined by the rules depending on the length of the value.
+ */
+function getInformationColor(value, colors) {
+	value = replaceCharactersHTML(value);
+	const color = colors.filter(rule => ((rule.min === undefined) ? 0 : rule.min) <= value.length && value.length <= ((rule.max === undefined) ? value.length : rule.max)).map(rule => rule.color);
+	return (color.length === 1) ? `color-${color[0]}` : 'color-default';
 }
 
 /**

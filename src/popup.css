@@ -197,6 +197,15 @@ td span.info {
 	font-weight: normal;
 	word-break: keep-all;
 }
+td.color-green span.info {
+	color: #2db83d;
+}
+td.color-orange span.info {
+	color: #f39f18;
+}
+td.color-red span.info {
+	color: #f00;
+}
 td span.info:not(:last-child) {
 	margin-right: 5px;
 }
