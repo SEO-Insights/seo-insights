@@ -20,14 +20,20 @@
 	"images_lc": {
 		"message": "Bilder"
 	},
-	"icons_lc": {
+	"icons": {
 		"message": "Icons"
+	},
+	"icons_lc": {
+		"message": "icons"
 	},
 	"links_lc": {
 		"message": "Links"
 	},
 	"files": {
 		"message": "Dateien"
+	},
+	"tools": {
+		"message": "Tools"
 	},
 	"errors_warnings_hints": {
 		"message": "Fehler, Warnungen und Hinweise"

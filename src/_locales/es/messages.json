@@ -20,6 +20,9 @@
 	"images_lc": {
 		"message": "imágenes"
 	},
+	"icons": {
+		"message": "Íconos"
+	},
 	"icons_lc": {
 		"message": "íconos"
 	},
@@ -28,6 +31,9 @@
 	},
 	"files": {
 		"message": "Archivos"
+	},
+	"tools": {
+		"message": "Herramientas"
 	},
 	"errors_warnings_hints": {
 		"message": "Errores, advertencias y sugerencias"
