@@ -66,7 +66,7 @@ const storeId = 'nlkopdpfkbifcibdoecnfabipofhnoom';
 function canInjectContentScript(tab) {
 
 	// it is not possible to inject content scripts to the chrome webstore.
-	if (tab.url.startsWith('https://chrome.google.com')) {
+	if (tab.url.startsWith('https://chrome.google.com') || tab.url.startsWith('https://chromewebstore.google.com')) {
 		return false;
 	}
 
