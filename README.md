@@ -1,7 +1,7 @@
 ![](img/seo-insights-header.png)
 
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
 [![GitHub](https://img.shields.io/github/license/seo-insights/seo-insights?style=flat-square)](https://github.com/SEO-Insights/seo-insights/blob/main/LICENSE)
 
 SEO Insights is a Chrome extension to display the most important information of a website at a glance.
@@ -30,9 +30,9 @@ SEO Insights is a Chrome extension to display the most important information of 
 
 ### :rocket: Chrome Web Store
 
-SEO Insights is available in the [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en) and can be installed in Google Chrome and Microsoft Edge. To test the current development version, instructions are [available here](https://github.com/SEO-Insights/seo-insights/wiki/Development).
+SEO Insights is available in the [Chrome Web Store](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en) and can be installed in Google Chrome and Microsoft Edge. To test the current development version, instructions are [available here](https://github.com/SEO-Insights/seo-insights/wiki/Development).
 
-[![Available in the Chrome Web Store](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
+[![Available in the Chrome Web Store](img/available-in-the-chrome-web-store.png)](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=en)
 
 ### :hammer_and_wrench: Used libraries
 

@@ -1,7 +1,7 @@
 ![](img/seo-insights-header.png)
 
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/nlkopdpfkbifcibdoecnfabipofhnoom?style=flat-square)](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
 [![GitHub](https://img.shields.io/github/license/seo-insights/seo-insights?style=flat-square)](https://github.com/SEO-Insights/seo-insights/blob/main/LICENSE)
 
 SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Informationen einer Website anzeigen zu können.
@@ -30,9 +30,9 @@ SEO Insights ist eine Chrome Extension um auf einen Blick die wichtigsten Inform
 
 ### :rocket: Chrome Web Store
 
-SEO Insights steht im [Chrome Web Store](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de) zur Verfügung und kann darüber in Google Chrome sowie dem Microsoft Edge installiert werden. Um die aktuelle Entwicklungsversion testen zu können, steht [hier eine Anleitung](https://github.com/SEO-Insights/seo-insights/wiki/Development-de-DE) zur Verfügung.
+SEO Insights steht im [Chrome Web Store](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de) zur Verfügung und kann darüber in Google Chrome sowie dem Microsoft Edge installiert werden. Um die aktuelle Entwicklungsversion testen zu können, steht [hier eine Anleitung](https://github.com/SEO-Insights/seo-insights/wiki/Development-de-DE) zur Verfügung.
 
-[![Available in the Chrome Web Store](img/available-in-the-chrome-web-store.png)](https://chrome.google.com/webstore/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
+[![Available in the Chrome Web Store](img/available-in-the-chrome-web-store.png)](https://chromewebstore.google.com/detail/seo-insights/nlkopdpfkbifcibdoecnfabipofhnoom?hl=de)
 
 ### :hammer_and_wrench: Verwendete Bibliotheken
 
