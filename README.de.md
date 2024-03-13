@@ -37,7 +37,7 @@ SEO Insights steht im [Chrome Web Store](https://chromewebstore.google.com/detai
 ### :hammer_and_wrench: Verwendete Bibliotheken
 
 * jQuery 3.7.1 ([Website](https://jquery.com/) - [GitHub](https://github.com/jquery/jquery))
-* Bootstrap 5.3.2 ([Website](https://getbootstrap.com/docs/5.3/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
+* Bootstrap 5.3.3 ([Website](https://getbootstrap.com/docs/5.3/getting-started/introduction/) - [GitHub](https://github.com/twbs/bootstrap))
 
 ### :tada: Neue Funktionen
 
